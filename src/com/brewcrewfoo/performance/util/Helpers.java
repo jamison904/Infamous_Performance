@@ -140,19 +140,21 @@ public class Helpers implements Constants {
      * @return line
      */
     public static String readOneLine(String fname) {
-        BufferedReader br;
         String line = null;
-        try {
-            br = new BufferedReader(new FileReader(fname), 512);
-            try {
-                line = br.readLine();
-            } finally {
-                br.close();
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "IO Exception when reading sys file", e);
-            // attempt to do magic!
-            return readFileViaShell(fname, true);
+        if (new File(fname).exists()) {
+        	BufferedReader br;
+	        try {
+	            br = new BufferedReader(new FileReader(fname), 512);
+	            try {
+	                line = br.readLine();
+	            } finally {
+	                br.close();
+	            }
+	        } catch (Exception e) {
+	            Log.e(TAG, "IO Exception when reading sys file", e);
+	            // attempt to do magic!
+	            return readFileViaShell(fname, true);
+	        }
         }
         return line;
     }
@@ -184,6 +186,7 @@ public class Helpers implements Constants {
      * @return if line was written
      */
     public static boolean writeOneLine(String fname, String value) {
+    	if (!new File(fname).exists()) {return false;}
         try {
             FileWriter fw = new FileWriter(fname);
             try {
@@ -356,8 +359,7 @@ public class Helpers implements Constants {
      */
     public static void updateAppWidget(Context context) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-        ComponentName widgetComponent = new ComponentName(context,
-                PCWidget.class);
+        ComponentName widgetComponent = new ComponentName(context, PCWidget.class);
         int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
         Intent update = new Intent();
         update.setAction("com.brewcrewfoo.performance.ACTION_FREQS_CHANGED");
@@ -384,4 +386,24 @@ public class Helpers implements Constants {
             return null;
         }
     }
+    /**
+     * Get total number of mmcblk*
+     *
+     * @return total number of blocks
+     */
+    public static int getNmmcblk() {
+    	int i = 0;
+		String f = IO_SCHEDULER_PATH;
+		boolean flag=true;
+		do{
+			if (new File(f.replace("mmcblk0","mmcblk"+i)).exists()) {
+				i++;
+			}
+			else{
+				flag=false;
+			}
+		}while(flag);
+        return i;
+    }
 }
+
