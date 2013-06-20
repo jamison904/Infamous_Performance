@@ -255,6 +255,18 @@ public class Helpers implements Constants {
         }
         return scheduler;
     }
+/*
+     * @return available performance scheduler
+     */
+    public static Boolean GovernorExist(String gov) {
+
+if(Helpers.readOneLine(GOVERNORS_LIST_PATH).indexOf(gov)>-1){
+return true;
+}
+else{
+return false;
+}
+    }
 
     /**
      * Get total number of cpus
@@ -386,9 +398,8 @@ public class Helpers implements Constants {
             return null;
         }
     }
-    /**
+    /*
      * Get total number of mmcblk*
-     *
      * @return total number of blocks
      */
     public static int getNmmcblk() {
@@ -405,5 +416,20 @@ public class Helpers implements Constants {
 		}while(flag);
         return i;
     }
-}
+	public static void shCreate(){
+	//create shell script file
+		if (! new File(SH_PATH).exists()) {
+			new CMDProcessor().su.runWaitFor("busybox touch "+SH_PATH );	
+			new CMDProcessor().su.runWaitFor("busybox chmod 755 "+SH_PATH );
+		}
+	}
+	public static void shExec(StringBuilder s){
+	//exec shell script file
+		if (new File(SH_PATH).exists()) {
+			s.insert(0,"#!/system/bin/sh\n");
+			new CMDProcessor().su.runWaitFor("busybox echo \""+s.toString()+"\" > " + SH_PATH );
+			new CMDProcessor().su.runWaitFor(SH_PATH);
+		}
+	}
 
+}

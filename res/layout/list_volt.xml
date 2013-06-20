@@ -19,9 +19,11 @@ Copyright (C) 2012  James Roberts
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp">
 
     <TextView
             android:id="@+id/Freq"
@@ -33,6 +35,7 @@ Copyright (C) 2012  James Roberts
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
+            android:padding="2dp"
             android:text="@string/current"/>
 
     <TextView
@@ -41,6 +44,7 @@ Copyright (C) 2012  James Roberts
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dip"
             android:layout_marginTop="3dip"
+            android:padding="2dp"
             android:text="@string/saved"/>
 
 </LinearLayout>

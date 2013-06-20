@@ -73,14 +73,12 @@ public class Advanced extends PreferenceFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPreferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.layout.advanced);
 
         final int minFree = getMinFreeValue();
-        final String values[] = getResources().getStringArray(
-                R.array.minfree_values);
+        final String values[] = getResources().getStringArray(R.array.minfree_values);
         String closestValue = mPreferences.getString(PREF_MINFREE, values[0]);
 
         if (minFree < 37)
@@ -103,12 +101,12 @@ public class Advanced extends PreferenceFragment implements
         mReadAhead.setSummary(getString(R.string.ps_read_ahead,
                 Helpers.readOneLine(READ_AHEAD_PATH) + " kb"));
 
-     mFastCharge = (CheckBoxPreference) findPreference(PREF_FASTCHARGE);
+     	mFastCharge = (CheckBoxPreference) findPreference(PREF_FASTCHARGE);
         mFastCharge.setChecked(mPreferences.getBoolean(PREF_FASTCHARGE, false));
         //mFastCharge.setSummary(getString(R.string.pt_fast_charge_boot,Helpers.readOneLine(FASTCHARGE_PATH) ));
 
-		mBlx=(Preference) findPreference(PREF_BLX);
-		mBlx.setSummary(Helpers.readOneLine(BLX_PATH));
+	mBlx=(Preference) findPreference(PREF_BLX);
+	mBlx.setSummary(Helpers.readOneLine(BLX_PATH)+"%");
 
         mDirtyRatio = (Preference) findPreference(PREF_DIRTY_RATIO);
         mDirtyBackground = (Preference) findPreference(PREF_DIRTY_BACKGROUND);
@@ -129,23 +127,20 @@ public class Advanced extends PreferenceFragment implements
         mSwappiness.setSummary(Helpers.readOneLine(SWAPPINESS_PATH));
         mVfs.setSummary(Helpers.readOneLine(VFS_CACHE_PRESSURE_PATH));
 
-        boolean fChargeExists = new File(FASTCHARGE_PATH).exists();
-        if (!fChargeExists) {
+        if (!new File(FASTCHARGE_PATH).exists()) {
             PreferenceCategory kernelCat = (PreferenceCategory) findPreference("kernel");
             getPreferenceScreen().removePreference(kernelCat);
         }
-		else{
-			Boolean bv=Helpers.readOneLine(FASTCHARGE_PATH).equals("1");
-			if(bv){
-				mFastCharge.setSummary(getString(R.string.ps_fast_charge_active));
-			}
-			else{
-				mFastCharge.setSummary(getString(R.string.ps_fast_charge_inactive));
-			}
+	else{
+		if(Helpers.readOneLine(FASTCHARGE_PATH).equals("1")){
+			mFastCharge.setSummary(getString(R.string.ps_fast_charge_active));
 		}
+		else{
+			mFastCharge.setSummary(getString(R.string.ps_fast_charge_inactive));
+		}
+	}
 
-        boolean fblxExists = new File(BLX_PATH).exists();
-        if (!fblxExists) {
+        if (!new File(BLX_PATH).exists()) {
             PreferenceCategory kernelCat = (PreferenceCategory) findPreference("blx");
             getPreferenceScreen().removePreference(kernelCat);
         }
@@ -173,8 +168,7 @@ public class Advanced extends PreferenceFragment implements
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-                                         Preference preference) {
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         String key = preference.getKey();
         if (PREF_FASTCHARGE.equals(key)) {
             if (mPreferences.getBoolean(PREF_FASTCHARGE, false)) {
@@ -185,8 +179,7 @@ public class Advanced extends PreferenceFragment implements
                         .setNegativeButton("Cancel",
                                 new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         mPreferences
                                                 .edit()
                                                 .putBoolean(PREF_FASTCHARGE,
@@ -197,8 +190,7 @@ public class Advanced extends PreferenceFragment implements
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         mPreferences
                                                 .edit()
                                                 .putBoolean(PREF_FASTCHARGE,
@@ -209,7 +201,7 @@ public class Advanced extends PreferenceFragment implements
                 return true;
             }
         } else if (preference == mBlx){
-            String title = getString(R.string.blx_title);
+            String title = getString(R.string.blx_title)+" (%)";
             int currentProgress = Integer.parseInt(Helpers
                     .readOneLine(BLX_PATH));
             int max = 100;
@@ -291,18 +283,18 @@ public class Advanced extends PreferenceFragment implements
         if (key.equals(PREF_MINFREE)) {
             String values = mPreferences.getString(key, null);
             if (!values.equals(null))
-                new CMDProcessor().su.runWaitFor("busybox echo " + values
-                        + " > " + MINFREE_PATH);
-            mFreeMem.setSummary(getString(R.string.ps_free_memory,
-                    getMinFreeValue() + "mb"));
-        } else if (key.equals(PREF_READ_AHEAD)) {
+                new CMDProcessor().su.runWaitFor("busybox echo " + values + " > " + MINFREE_PATH);
+            mFreeMem.setSummary(getString(R.string.ps_free_memory,getMinFreeValue() + "mb"));
+        }
+        else if (key.equals(PREF_READ_AHEAD)) {
             String values = mPreferences.getString(key, null);
             if (!values.equals(null))
-                new CMDProcessor().su.runWaitFor("busybox echo " + values
-                        + " > " + READ_AHEAD_PATH);
-            mReadAhead.setSummary(getString(R.string.ps_read_ahead,
-                    Helpers.readOneLine(READ_AHEAD_PATH) + " kb"));
+                new CMDProcessor().su.runWaitFor("busybox echo " + values + " > " + READ_AHEAD_PATH);
+            mReadAhead.setSummary(getString(R.string.ps_read_ahead,Helpers.readOneLine(READ_AHEAD_PATH) + " kb"));
         }
+	else if (key.equals(PREF_BLX)) {
+		mBlx.setSummary(Helpers.readOneLine(BLX_PATH)+"%");
+	}
     }
 
     private int getMinFreeValue() {
@@ -358,8 +350,7 @@ public class Advanced extends PreferenceFragment implements
         settingText.setText(Integer.toString(currentProgress));
         settingText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
             @Override
