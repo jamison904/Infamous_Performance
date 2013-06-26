@@ -59,6 +59,9 @@ public class Advanced extends PreferenceFragment implements
 	private Preference mBlx;
 	
 	private CheckBoxPreference mDsync;
+	
+	private Preference mBltimeout;
+	private CheckBoxPreference mBltouch;	
 //--------
 	private CheckBoxPreference mHomeOn;
 	private CheckBoxPreference mMenuBackOn;
@@ -79,6 +82,8 @@ public class Advanced extends PreferenceFragment implements
 	
 	private int mSeekbarProgress;
 	private EditText settingText;
+	private String sminfree;
+	private String sreadahead;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,9 @@ public class Advanced extends PreferenceFragment implements
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.layout.advanced);
+        
+        sminfree=getResources().getString(R.string.ps_free_memory,"");
+        sreadahead=getResources().getString(R.string.ps_read_ahead,"");
 
         final int minFree = getMinFreeValue();
         final String values[] = getResources().getStringArray(R.array.minfree_values);
@@ -120,6 +128,11 @@ public class Advanced extends PreferenceFragment implements
 	mDsync=(CheckBoxPreference) findPreference(PREF_DSYNC);
 	mDsync.setChecked(Helpers.readOneLine(DSYNC_PATH).equals("1")?true:false);
 	//----------
+	mBltimeout=(Preference) findPreference(PREF_BLTIMEOUT);
+	mBltimeout.setSummary(Helpers.readOneLine(BL_TIMEOUT_PATH)+"ms");
+	mBltouch=(CheckBoxPreference) findPreference(PREF_BLTOUCH);
+	mBltouch.setChecked(Helpers.readOneLine(BL_TOUCH_ON_PATH).equals("1")?true:false);	
+		//----------	
 	mHomeOn=(CheckBoxPreference) findPreference(PFK_HOME_ON);
 	mHomeOn.setChecked(Helpers.readOneLine(PFK_HOME_ENABLED).equals("1")?true:false);
 	mHomeOn.setSummary(getString(R.string.ps_home_enabled,Helpers.readOneLine(PFK_HOME_IGNORED_KP)));
@@ -180,6 +193,14 @@ public class Advanced extends PreferenceFragment implements
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("pfk");
             getPreferenceScreen().removePreference(hideCat);
         }
+        if (!new File(BL_TIMEOUT_PATH).exists()) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("bltimeout");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        if (!new File(BL_TOUCH_ON_PATH).exists()) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("bltouch");
+            getPreferenceScreen().removePreference(hideCat);
+        }        
         setHasOptionsMenu(true);
     }
 
@@ -208,10 +229,13 @@ public class Advanced extends PreferenceFragment implements
         if (PREF_FASTCHARGE.equals(key)) {
             if (mPreferences.getBoolean(PREF_FASTCHARGE, false)) {
                 String warningMessage = getString(R.string.fast_charge_warning);
-
+                //----------------
+        	String cancel = getString(R.string.cancel);
+        	String ok = getString(R.string.ok);
+        	//-----------------
                 new AlertDialog.Builder(getActivity())
 				.setMessage(warningMessage)
-				.setNegativeButton("Cancel",
+				.setNegativeButton(cancel,
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog,int which) {
@@ -219,7 +243,7 @@ public class Advanced extends PreferenceFragment implements
 						mFastCharge.setChecked(false);
 					}
 				})
-				.setPositiveButton("OK",
+				.setPositiveButton(ok,
 					new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog,int which) {
@@ -234,6 +258,12 @@ public class Advanced extends PreferenceFragment implements
             String title = getString(R.string.blx_title)+" (%)";
             int currentProgress = Integer.parseInt(Helpers.readOneLine(BLX_PATH));
             openDialog(currentProgress, title, 50,100, mBlx,BLX_PATH, PREF_BLX);
+            return true;
+	}
+	else if (preference == mBltimeout){
+            String title = getString(R.string.bltimeout_title)+" (ms)";
+            int currentProgress = Integer.parseInt(Helpers.readOneLine(BL_TIMEOUT_PATH));
+            openDialog(currentProgress, title, 0,5000, mBltimeout,BL_TIMEOUT_PATH, PREF_BLTIMEOUT);
             return true;
 	}
 	else if (preference == mHomeAllowedIrqs) {
@@ -324,13 +354,13 @@ public class Advanced extends PreferenceFragment implements
             String values = mPreferences.getString(key, null);
             if (!values.equals(null))
                 new CMDProcessor().su.runWaitFor("busybox echo " + values + " > " + MINFREE_PATH);
-            mFreeMem.setSummary(getString(R.string.ps_free_memory,getMinFreeValue() + "mb"));
+            mFreeMem.setSummary(sminfree+getMinFreeValue() + "mb");
         }
 	else if (key.equals(PREF_READ_AHEAD)) {
             String values = mPreferences.getString(key, null);
             if (!values.equals(null))
                 new CMDProcessor().su.runWaitFor("busybox echo " + values + " > " + READ_AHEAD_PATH);
-            mReadAhead.setSummary(getString(R.string.ps_read_ahead, Helpers.readOneLine(READ_AHEAD_PATH) + " kb"));
+            mReadAhead.setSummary(sreadahead+Helpers.readOneLine(READ_AHEAD_PATH) + " kb");
         }
 	else if (key.equals(PREF_BLX)) {
 		mBlx.setSummary(Helpers.readOneLine(BLX_PATH)+"%");
@@ -341,6 +371,17 @@ public class Advanced extends PreferenceFragment implements
 		}
 		else{
 		new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DSYNC_PATH);
+		}
+	}
+	else if (key.equals(PREF_BLTIMEOUT)) {
+		mBltimeout.setSummary(Helpers.readOneLine(BL_TIMEOUT_PATH)+"ms");
+	}
+	else if (key.equals(PREF_BLTOUCH)) {
+		if (mPreferences.getBoolean(key, false)){
+			new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BL_TOUCH_ON_PATH);
+		}
+		else{
+			new CMDProcessor().su.runWaitFor("busybox echo 0 > " + BL_TOUCH_ON_PATH);
 		}
 	}	
 	else if (key.equals(PREF_HOME_REPORT_WAIT)){
