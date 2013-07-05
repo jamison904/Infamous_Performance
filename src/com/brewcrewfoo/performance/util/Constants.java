@@ -78,11 +78,12 @@ public interface Constants {
     public static final String PREF_DSYNC= "pref_dsync";
     //-------BL----
     public static final String PREF_BLTIMEOUT= "pref_bltimeout";
-	public static final String BLTIMEOUT_SOB= "bltimeout_sob";
-	public static final String PREF_BLTOUCH= "pref_bltouch";
+    public static final String BLTIMEOUT_SOB= "bltimeout_sob";
+    public static final String PREF_BLTOUCH= "pref_bltouch";
     public static final String BL_TIMEOUT_PATH="/sys/class/misc/notification/bl_timeout";
     public static final String BL_TOUCH_ON_PATH="/sys/class/misc/notification/touchlight_enabled";
     //-------PFK---------
+    public static final String PFK_VER = "/sys/class/misc/phantom_kp_filter/version";
     public static final String PFK_HOME_ON = "pfk_home_on";
     public static final String PREF_HOME_ALLOWED_IRQ= "pref_home_allowed_irq";
     public static final String PREF_HOME_REPORT_WAIT = "pref_home_report_wait";
@@ -100,7 +101,15 @@ public interface Constants {
     public static final String PFK_MENUBACK_FIRST_ERR_WAIT = "/sys/class/misc/phantom_kp_filter/menuback_first_err_wait";
     public static final String PFK_MENUBACK_LAST_ERR_WAIT = "/sys/class/misc/phantom_kp_filter/menuback_last_err_wait";
     public static final String PFK_MENUBACK_IGNORED_KP = "/sys/class/misc/phantom_kp_filter/menuback_ignored_kp";
-    public static final String PFK_SOB = "pfk_sob";    
+    public static final String PFK_SOB = "pfk_sob";
+    //------------------
+    public static final String DYNAMIC_DIRTY_WRITEBACK_PATH = "/proc/sys/vm/dynamic_dirty_writeback";
+    public static final String DIRTY_WRITEBACK_ACTIVE_PATH = "/proc/sys/vm/dirty_writeback_active_centisecs";
+    public static final String DIRTY_WRITEBACK_SUSPEND_PATH = "/proc/sys/vm/dirty_writeback_suspend_centisecs";
+    public static final String PREF_DYNAMIC_DIRTY_WRITEBACK = "pref_dynamic_dirty_writeback";
+    public static final String PREF_DIRTY_WRITEBACK_ACTIVE = "pref_dynamic_writeback_active";
+    public static final String PREF_DIRTY_WRITEBACK_SUSPEND = "pref_dynamic_writeback_suspend";
+    public static final String DYNAMIC_DIRTY_WRITEBACK_SOB = "dynamic_write_back_sob";
 
     // VM settings
     public static final String PREF_DIRTY_RATIO = "pref_dirty_ratio";
@@ -132,6 +141,6 @@ public interface Constants {
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";
     public static final String PREF_WIDGET_BG_COLOR = "widget_bg_color";
     public static final String PREF_WIDGET_TEXT_COLOR = "widget_text_color";
-    public static final String VERSION_NUM = "2.0";
+    public static final String VERSION_NUM = "2.0.1";
 }
 

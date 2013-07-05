@@ -26,10 +26,9 @@ import android.widget.TextView;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.util.Constants;
+import com.brewcrewfoo.performance.util.Helpers;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class CPUInfo extends Fragment implements Constants {
 
@@ -55,11 +54,30 @@ public class CPUInfo extends Fragment implements Constants {
     }
 
     public void updateData() {
-        String newInfo = "";
-        mKernelInfo.setText(newInfo);
-        mCPUInfo.setText(newInfo);
-        mMemInfo.setText(newInfo);
+        mKernelInfo.setText("");
+        mCPUInfo.setText("");
+        mMemInfo.setText("");
         readFile(mKernelInfo, KERNEL_INFO_PATH);
+        if (new File(PFK_VER).exists()) {
+            mKernelInfo.append("\n");
+            mKernelInfo.append(getString(R.string.pfk_info,Helpers.readOneLine(PFK_VER)));
+            mKernelInfo.append("\n");
+        }
+        if (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists()) {
+            mKernelInfo.append("\n");
+            mKernelInfo.append(getString(R.string.dynamic_writeback_info));
+            mKernelInfo.append("\n");
+        }
+        if (new File(DSYNC_PATH).exists()) {
+            mKernelInfo.append("\n");
+            mKernelInfo.append(getString(R.string.dsync_info));
+            mKernelInfo.append("\n");
+        }
+        if (new File(BLX_PATH).exists()) {
+            mKernelInfo.append("\n");
+            mKernelInfo.append(getString(R.string.blx_info));
+            mKernelInfo.append("\n");
+        }
         readFile(mCPUInfo, CPU_INFO_PATH);
         readFile(mMemInfo, MEM_INFO_PATH);
     }
