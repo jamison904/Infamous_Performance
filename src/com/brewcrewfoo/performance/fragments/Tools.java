@@ -19,36 +19,58 @@
 package com.brewcrewfoo.performance.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Resources;
+import android.os.Handler;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
+import android.preference.*;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.*;
-import android.widget.*;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
-import java.io.File;
 
 
-public class Tools extends Fragment implements
-Constants {
+public class Tools extends PreferenceFragment implements
+        OnSharedPreferenceChangeListener, OnPreferenceChangeListener, Constants {
 
     private SharedPreferences mPreferences;
+    private EditText settingText;
+    private Preference mWipe_Cache;
+    private String pcache;
+    private Handler handler;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-  	mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+  	    mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mPreferences.registerOnSharedPreferenceChangeListener(this);
+        addPreferencesFromResource(R.layout.tools);
+
+        mWipe_Cache=(Preference) findPreference(PREF_WIPE_CACHE);
+        pcache=Helpers.getCachePartition();
+
+
         setHasOptionsMenu(true);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -65,13 +87,138 @@ Constants {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup root,Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tools, root, false);
+    public boolean onPreferenceChange(Preference preference, Object o) {
+        return false;
+    }
 
-        return view;
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+    }
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        String key = preference.getKey();
+        if (key.equals(PREF_SH)) {
+            shEditDialog(key,getString(R.string.sh_title));
+        }
+        else if(key.equals(PREF_WIPE_CACHE)) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.wipe_cache_title))
+                    .setMessage(getString(R.string.wipe_cache_msg))
+                    .setNegativeButton(getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    //dialog.cancel();
+
+                                }
+                            })
+                    .setPositiveButton(getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    dialog.cancel();
+                                }
+                            });
+            ;
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            theButton.setOnClickListener(new CustomListener(alertDialog));
+
+            //-----------------
+
+        }
+
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
+    }
+
+    class CustomListener implements View.OnClickListener {
+        private final Dialog dialog;
+        public CustomListener(Dialog dialog) {
+            this.dialog = dialog;
+        }
+        @Override
+        public void onClick(View v) {
+            ((AlertDialog)dialog).setMessage(getString(R.string.wait));
+            handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    final StringBuilder sb = new StringBuilder();
+                    sb.append("busybox rm -rf /data/dalvik-cache/*\n");
+                    sb.append("busybox rm -rf /cache/*\n");
+                    sb.append("reboot\n");
+                    Helpers.shExec(sb);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            new Thread(runnable).start();
+
+        }
     }
 
 
+    public void shEditDialog(final String key,String title) {
+        Resources res = getActivity().getResources();
+        String cancel = res.getString(R.string.cancel);
+        String ok = res.getString(R.string.ps_volt_save);
+
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View alphaDialog = factory.inflate(R.layout.sh_dialog, null);
+
+
+        settingText = (EditText) alphaDialog.findViewById(R.id.shText);
+        settingText.setText(mPreferences.getString(key,""));
+        settingText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                return true;
+            }
+        });
+
+        settingText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                   // s.toString();
+                } catch (NumberFormatException ex) {
+                }
+            }
+        });
+        new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.sh_title))
+                .setMessage(getString(R.string.sh_msg))
+                .setView(alphaDialog)
+                .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,int which) {
+                        /* nothing */
+                    }
+                })
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final SharedPreferences.Editor editor = mPreferences.edit();
+                        editor.putString(key, settingText.getText().toString()).commit();
+
+                    }
+                })
+                .create()
+                .show();
+    }
 
 
 }

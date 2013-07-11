@@ -254,7 +254,7 @@ public class Helpers implements Constants {
      * @return available performance scheduler
      */
     public static Boolean GovernorExist(String gov) {
-		if(Helpers.readOneLine(GOVERNORS_LIST_PATH).indexOf(gov)>-1){
+		if(readOneLine(GOVERNORS_LIST_PATH).indexOf(gov)>-1){
 			return true;
 		}
 		else{
@@ -382,6 +382,19 @@ public class Helpers implements Constants {
             return null;
         }
     }
+    public static String binExist(String b) {
+        CMDProcessor.CommandResult cr = null;
+        cr = new CMDProcessor().sh.runWaitFor("busybox which " + b);
+        if (cr.success()){ return  cr.stdout; }
+        else{ return NOT_FOUND;}
+    }
+
+    public static String getCachePartition() {
+        CMDProcessor.CommandResult cr = null;
+        cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox mount | busybox grep cache | busybox cut -d' ' -f1`");
+        if(cr.success()&& !cr.stdout.equals("") ){return cr.stdout;}
+        else{return NOT_FOUND;}
+    }
 
     public static boolean showBattery() {
 	return ((new File(BLX_PATH).exists()) || (new File(FASTCHARGE_PATH).exists()));
@@ -394,18 +407,19 @@ public class Helpers implements Constants {
 			Log.d(TAG, "create: /data/PerformanceControl");
 		}
 	}
-	public static void shExec(StringBuilder s){
+	public static String shExec(StringBuilder s){
 		if (new File(SH_PATH).exists()) {
-			CMDProcessor.CommandResult cr = null;
-            		cr = new CMDProcessor().su.runWaitFor("busybox which sh");
-			s.insert(0,"#!"+cr.stdout+"\n\n");
+			s.insert(0,"#!"+binExist("sh")+"\n\n");
 			new CMDProcessor().su.runWaitFor("busybox echo \""+s.toString()+"\" > " + SH_PATH );
-			new CMDProcessor().su.runWaitFor(SH_PATH);
+            CMDProcessor.CommandResult cr = null;
+			cr=new CMDProcessor().su.runWaitFor(SH_PATH);
 			Log.d(TAG, "execute: "+s.toString());
+            if(cr.success()){return cr.stdout;}
 		}
 		else{
 			Log.d(TAG, "missing file: /data/PerformanceControl");
 		}
+        return "";
 	}
 
 }
