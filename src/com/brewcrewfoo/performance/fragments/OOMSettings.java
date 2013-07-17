@@ -69,6 +69,11 @@ public class OOMSettings extends PreferenceFragment implements
 	private Preference mVeryaggressive;
 	
 	private String values[];
+
+    private CheckBoxPreference mUserON;
+    private CheckBoxPreference mSysON;
+    private Preference mUserNames;
+    private Preference mSysNames;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,28 +84,48 @@ public class OOMSettings extends PreferenceFragment implements
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.layout.oom_settings);
 	
-	values = Helpers.readOneLine(MINFREE_PATH).split(",");
-	
-	mForegroundApp=(Preference) findPreference(OOM_FOREGROUND_APP);
-	mVisibleApp=(Preference) findPreference(OOM_VISIBLE_APP);
-	mSecondaryServer=(Preference) findPreference(OOM_SECONDARY_SERVER);
-	mHiddenApp=(Preference) findPreference(OOM_HIDDEN_APP);
-	mContentProviders=(Preference) findPreference(OOM_CONTENT_PROVIDERS);
-	mEmptyApp=(Preference) findPreference(OOM_EMPTY_APP);
-		
-	mVerylight=(Preference) findPreference("oom_verylight");
-	mVerylight.setSummary( getString(R.string.pref_verylight));
-	mLight=(Preference) findPreference("oom_light");
-	mLight.setSummary( getString(R.string.pref_light));
-	mMedium=(Preference) findPreference("oom_medium");
-	mMedium.setSummary( getString(R.string.pref_medium));
-	mAggressive=(Preference) findPreference("oom_aggressive");
-	mAggressive.setSummary( getString(R.string.pref_aggressive));
-	mVeryaggressive=(Preference) findPreference("oom_veryaggressive");
-	mVeryaggressive.setSummary( getString(R.string.pref_veryaggressive));
+        values = Helpers.readOneLine(MINFREE_PATH).split(",");
 
-	updateOOM(values);
+        mForegroundApp=(Preference) findPreference(OOM_FOREGROUND_APP);
+        mVisibleApp=(Preference) findPreference(OOM_VISIBLE_APP);
+        mSecondaryServer=(Preference) findPreference(OOM_SECONDARY_SERVER);
+        mHiddenApp=(Preference) findPreference(OOM_HIDDEN_APP);
+        mContentProviders=(Preference) findPreference(OOM_CONTENT_PROVIDERS);
+        mEmptyApp=(Preference) findPreference(OOM_EMPTY_APP);
 
+        mVerylight=(Preference) findPreference("oom_verylight");
+        mVerylight.setSummary( getString(R.string.pref_verylight));
+        mLight=(Preference) findPreference("oom_light");
+        mLight.setSummary( getString(R.string.pref_light));
+        mMedium=(Preference) findPreference("oom_medium");
+        mMedium.setSummary( getString(R.string.pref_medium));
+        mAggressive=(Preference) findPreference("oom_aggressive");
+        mAggressive.setSummary( getString(R.string.pref_aggressive));
+        mVeryaggressive=(Preference) findPreference("oom_veryaggressive");
+        mVeryaggressive.setSummary( getString(R.string.pref_veryaggressive));
+
+        updateOOM(values);
+
+        mUserON=(CheckBoxPreference) findPreference(PREF_USER_PROC);
+        mSysON=(CheckBoxPreference) findPreference(PREF_SYS_PROC);
+        mUserNames=(Preference) findPreference(PREF_USER_NAMES);
+        mSysNames=(Preference) findPreference(PREF_SYS_NAMES);
+        if (!new File(USER_PROC_PATH).exists()) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("notkill_user_proc");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            mUserON.setChecked(Helpers.readOneLine(USER_PROC_PATH).equals("1"));
+            mPreferences.edit().putString(PREF_USER_NAMES, Helpers.readOneLine(USER_PROC_NAMES_PATH)).apply();
+        }
+        if (!new File(SYS_PROC_PATH).exists()) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("notkill_sys_proc");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            mSysON.setChecked(Helpers.readOneLine(SYS_PROC_PATH).equals("1"));
+            mPreferences.edit().putString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH)).apply();
+        }
     }
 
     @Override
@@ -201,6 +226,30 @@ public class OOMSettings extends PreferenceFragment implements
 			updateOOM(values);
 			return true;
 		}
+        else if (preference == mUserON){
+            if (Integer.parseInt(Helpers.readOneLine(USER_PROC_PATH))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + USER_PROC_PATH);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + USER_PROC_PATH);
+            }
+            return true;
+        }
+        else if (preference == mSysON){
+            if (Integer.parseInt(Helpers.readOneLine(SYS_PROC_PATH))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + SYS_PROC_PATH);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + SYS_PROC_PATH);
+            }
+            return true;
+        }
+        else if (preference == mUserNames){
+            ProcEditDialog(key,getString(R.string.pt_user_names_proc),"",USER_PROC_NAMES_PATH,false);
+        }
+        else if (preference == mSysNames){
+            ProcEditDialog(key,getString(R.string.pt_sys_names_proc),"",USER_SYS_NAMES_PATH,true);
+        }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
@@ -209,12 +258,13 @@ public class OOMSettings extends PreferenceFragment implements
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key) {
     	if (key.equals(PREF_MINFREE_BOOT)) {
     		if(sharedPreferences.getBoolean(key,false)){
-			sharedPreferences.edit().putString(PREF_MINFREE, Helpers.readOneLine(MINFREE_PATH)).apply();
+			    sharedPreferences.edit().putString(PREF_MINFREE, Helpers.readOneLine(MINFREE_PATH)).apply();
     		}
     		else{
     			sharedPreferences.edit().remove(PREF_MINFREE).apply();
     		}
-	}
+	    }
+
     }
 
 	private void updateOOM(String[] v) {
@@ -241,7 +291,6 @@ public class OOMSettings extends PreferenceFragment implements
     }
 	
 	private static String implodeArray(String[] inputArray, String glueString) {
-
 		String output = "";
 		if (inputArray.length > 0) {
 			StringBuilder sb = new StringBuilder();
@@ -259,6 +308,63 @@ public class OOMSettings extends PreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         return false;
     }
+
+
+    public void ProcEditDialog(final String key,String title,String msg,String path,Boolean type) {
+        Resources res = getActivity().getResources();
+        final String cancel = res.getString(R.string.cancel);
+        final String ok = res.getString(R.string.ps_volt_save);
+
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View alphaDialog = factory.inflate(R.layout.sh_dialog, null);
+        final String namespath = path;
+
+
+        settingText = (EditText) alphaDialog.findViewById(R.id.shText);
+        settingText.setText(mPreferences.getString(key,""));
+        settingText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                return true;
+            }
+        });
+
+        settingText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        new AlertDialog.Builder(getActivity())
+                .setTitle(title)
+                .setMessage(msg)
+                .setView(alphaDialog)
+                .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,int which) {
+                        /* nothing */
+                    }
+                })
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final SharedPreferences.Editor editor = mPreferences.edit();
+                        editor.putString(key, settingText.getText().toString()).commit();
+                        new CMDProcessor().su.runWaitFor("busybox echo "+mPreferences.getString(key, Helpers.readOneLine(namespath))+" > " + namespath);
+
+                    }
+                })
+                .create()
+                .show();
+    }
+
 
     public void openDialog(final int idx,int currentProgress, String title, final int min, final int max,
                            final Preference pref, final String path, final String key) {

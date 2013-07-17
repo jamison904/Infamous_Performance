@@ -29,15 +29,12 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
-import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Voltage;
 
-import java.io.BufferedWriter;
+
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -118,7 +115,15 @@ public class BootService extends Service implements Constants {
 					}
 				}
 			}
-		}			
+		}
+
+        if (preferences.getBoolean(PREF_READ_AHEAD_BOOT, false)) {
+            final String values = preferences.getString(PREF_READ_AHEAD,Helpers.readOneLine(READ_AHEAD_PATH[0]));
+            for(int i=0; i<READ_AHEAD_PATH.length; i++){
+                sb.append("busybox echo "+values+" > " + READ_AHEAD_PATH[i] + "\n");
+            }
+        }
+
 		if (new File(FASTCHARGE_PATH).exists()) {
 			if(preferences.getBoolean(PREF_FASTCHARGE, false)){
 				sb.append("busybox echo 1 > " + FASTCHARGE_PATH + " \n");
@@ -166,15 +171,6 @@ public class BootService extends Service implements Constants {
 			}
 			else{
 				sb.append("busybox echo 0 > " + BL_TOUCH_ON_PATH + " \n");
-			}
-		}	
-		if (preferences.getBoolean(PREF_MINFREE_BOOT, false)) {
-			sb.append("busybox echo " + preferences.getString(PREF_MINFREE, Helpers.readOneLine(MINFREE_PATH)) + " > " + MINFREE_PATH + " \n");
-		}
-		if (preferences.getBoolean(PREF_READ_AHEAD_BOOT, false)) {
-			final String values = preferences.getString(PREF_READ_AHEAD,Helpers.readOneLine(READ_AHEAD_PATH[0]));
-			for(int i=0; i<READ_AHEAD_PATH.length; i++){
-				sb.append("busybox echo "+values+" > " + READ_AHEAD_PATH[i] + "\n");
 			}
 		}
 
@@ -241,7 +237,31 @@ public class BootService extends Service implements Constants {
 			sb.append("busybox echo " + preferences.getInt(PREF_VFS, Integer.parseInt(Helpers.readOneLine(VFS_CACHE_PRESSURE_PATH)))
 				+ " > " + VFS_CACHE_PRESSURE_PATH + " \n");
 		}
-
+        if (preferences.getBoolean(PREF_MINFREE_BOOT, false)) {
+                sb.append("busybox echo " + preferences.getString(PREF_MINFREE, Helpers.readOneLine(MINFREE_PATH)) + " > " + MINFREE_PATH + " \n");
+        }
+        if (new File(USER_PROC_PATH).exists()) {
+                if (preferences.getBoolean(USER_PROC_SOB, false)) {
+                    if (preferences.getBoolean(PREF_USER_PROC, false)) {
+                        sb.append("busybox echo 1 > " + USER_PROC_PATH + " \n");
+                    }
+                    else{
+                        sb.append("busybox echo 0 > " + USER_PROC_PATH + " \n");
+                    }
+                    sb.append("busybox echo " + preferences.getString(PREF_USER_NAMES, Helpers.readOneLine(USER_PROC_NAMES_PATH)) + " > " + USER_PROC_NAMES_PATH + " \n");
+                }
+        }
+        if (new File(SYS_PROC_PATH).exists()) {
+                if (preferences.getBoolean(SYS_PROC_SOB, false)) {
+                    if (preferences.getBoolean(PREF_SYS_PROC, false)) {
+                        sb.append("busybox echo 1 > " + SYS_PROC_PATH + " \n");
+                    }
+                    else{
+                        sb.append("busybox echo 0 > " + SYS_PROC_PATH + " \n");
+                    }
+                    sb.append("busybox echo " + preferences.getString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH)) + " > " + USER_SYS_NAMES_PATH + " \n");
+                }
+        }
         sb.append(preferences.getString(PREF_SH,"# no custom shell command")+"\n");
 
 		Helpers.shExec(sb);

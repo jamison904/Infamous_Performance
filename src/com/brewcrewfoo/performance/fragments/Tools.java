@@ -20,7 +20,6 @@ package com.brewcrewfoo.performance.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -99,7 +98,7 @@ public class Tools extends PreferenceFragment implements
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         String key = preference.getKey();
         if (key.equals(PREF_SH)) {
-            shEditDialog(key,getString(R.string.sh_title));
+            shEditDialog(key,getString(R.string.sh_title),getString(R.string.sh_msg));
         }
         else if(key.equals(PREF_WIPE_CACHE)) {
 
@@ -110,13 +109,11 @@ public class Tools extends PreferenceFragment implements
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,int id) {
                                     //dialog.cancel();
-
                                 }
                             })
                     .setPositiveButton(getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-
                                     dialog.cancel();
                                 }
                             });
@@ -163,7 +160,7 @@ public class Tools extends PreferenceFragment implements
     }
 
 
-    public void shEditDialog(final String key,String title) {
+    public void shEditDialog(final String key,String title,String msg) {
         Resources res = getActivity().getResources();
         String cancel = res.getString(R.string.cancel);
         String ok = res.getString(R.string.ps_volt_save);
@@ -192,15 +189,11 @@ public class Tools extends PreferenceFragment implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                try {
-                   // s.toString();
-                } catch (NumberFormatException ex) {
-                }
             }
         });
         new AlertDialog.Builder(getActivity())
-                .setTitle(getString(R.string.sh_title))
-                .setMessage(getString(R.string.sh_msg))
+                .setTitle(title)
+                .setMessage(msg)
                 .setView(alphaDialog)
                 .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
                     @Override
@@ -219,6 +212,5 @@ public class Tools extends PreferenceFragment implements
                 .create()
                 .show();
     }
-
 
 }
