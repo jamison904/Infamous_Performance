@@ -37,6 +37,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.brewcrewfoo.performance.R;
+import com.brewcrewfoo.performance.activities.FlasherActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
@@ -49,9 +50,9 @@ public class Tools extends PreferenceFragment implements
 
     private SharedPreferences mPreferences;
     private EditText settingText;
-    private Preference mWipe_Cache;
-    private String pcache;
-    private Handler handler;
+   // private Preference mWipe_Cache;
+   // private String pcache;
+   // private Handler handler;
 
 
     @Override
@@ -61,8 +62,10 @@ public class Tools extends PreferenceFragment implements
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.layout.tools);
 
-        mWipe_Cache=(Preference) findPreference(PREF_WIPE_CACHE);
-        pcache=Helpers.getCachePartition();
+        if(Helpers.binExist("dd").equals(NOT_FOUND)){
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_flash_img");
+            getPreferenceScreen().removePreference(hideCat);
+        }
 
 
         setHasOptionsMenu(true);
@@ -123,10 +126,17 @@ public class Tools extends PreferenceFragment implements
             Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
             theButton.setOnClickListener(new CustomListener(alertDialog));
 
-            //-----------------
-
         }
-
+        else if(key.equals(FLASH_KERNEL)) {
+            Intent flash = new Intent(getActivity(), FlasherActivity.class);
+            flash.putExtra("mod","kernel");
+            startActivity(flash);
+        }
+        else if(key.equals(FLASH_RECOVERY)) {
+            Intent flash = new Intent(getActivity(), FlasherActivity.class);
+            flash.putExtra("mod","recovery");
+            startActivity(flash);
+        }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
@@ -138,8 +148,10 @@ public class Tools extends PreferenceFragment implements
         @Override
         public void onClick(View v) {
             ((AlertDialog)dialog).setMessage(getString(R.string.wait));
-            handler = new Handler();
-            Runnable runnable = new Runnable() {
+            ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+            ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE).setEnabled(false);
+            final Handler handler = new Handler();
+            final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
                     final StringBuilder sb = new StringBuilder();
@@ -147,11 +159,11 @@ public class Tools extends PreferenceFragment implements
                     sb.append("busybox rm -rf /cache/*\n");
                     sb.append("reboot\n");
                     Helpers.shExec(sb);
-                    try {
+                    /*try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 }
             };
             new Thread(runnable).start();

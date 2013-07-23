@@ -131,7 +131,7 @@ public class OOMSettings extends PreferenceFragment implements
             mSysON.setChecked(Helpers.readOneLine(SYS_PROC_PATH).equals("1"));
             mPreferences.edit().putString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH)).apply();
         }
-        ispm=(Helpers.binExist("pm")!= NOT_FOUND);
+        ispm=(!Helpers.binExist("pm").equals(NOT_FOUND));
     }
 
     @Override
@@ -251,23 +251,23 @@ public class OOMSettings extends PreferenceFragment implements
             return true;
         }
         else if (preference.equals(mUserNames)){
-            mPreferences.edit().putBoolean("MOD",false).apply();
-            if(!ispm){
-                ProcEditDialog(key,getString(R.string.pt_user_names_proc),"",USER_PROC_NAMES_PATH,false);
+            if(ispm){
+                Intent getpacks = new Intent(getActivity(), PackActivity.class);
+                getpacks.putExtra("mod",false);
+                startActivity(getpacks);
             }
             else{
-                Intent getpacks = new Intent(getActivity(), PackActivity.class);
-                startActivity(getpacks);
+                ProcEditDialog(key,getString(R.string.pt_user_names_proc),"",USER_PROC_NAMES_PATH,false);
             }
         }
         else if (preference.equals(mSysNames)){
-            mPreferences.edit().putBoolean("MOD",true).apply();
-            if(!ispm){
-                ProcEditDialog(key,getString(R.string.pt_sys_names_proc),"",USER_SYS_NAMES_PATH,true);
+            if(ispm){
+                Intent getpacks = new Intent(getActivity(), PackActivity.class);
+                getpacks.putExtra("mod",true);
+                startActivity(getpacks);
             }
             else{
-                Intent getpacks = new Intent(getActivity(), PackActivity.class);
-                startActivity(getpacks);
+                ProcEditDialog(key,getString(R.string.pt_sys_names_proc),"",USER_SYS_NAMES_PATH,true);
             }
         }
 
