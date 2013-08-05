@@ -16,6 +16,12 @@ File contain partitions layout for flashing kernel & recovery
         <cache>/dev/block/mmcblk0p16</cache>
     </device>
     <device>
+        <model>SGH-T679</model> <!-- Galaxy Exhibit -->
+        <kernel>/dev/block/mmcblk0p8</kernel>
+        <recovery>/dev/block/mmcblk0p13</recovery>
+        <cache>/dev/block/mmcblk0p16</cache>
+    </device>
+    <device>
         <model>GT-I9505</model> <!-- GALAXY S IV -->
         <kernel>/dev/block/platform/msm_sdcc.1/by-name/boot</kernel>
         <recovery>/dev/block/platform/msm_sdcc.1/by-name/recovery</recovery>
