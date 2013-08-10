@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.brewcrewfoo.performance"
           android:versionCode="4"
-          android:versionName="2.0.5">
+          android:versionName="2.0.6">
 
     <uses-sdk
             android:minSdkVersion="14"
-            android:targetSdkVersion="17"/>
+            android:targetSdkVersion="18"/>
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
@@ -21,12 +21,14 @@
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="com.brewcrewfoo.performance.activities.PCSettings"/>
         <activity android:name="com.brewcrewfoo.performance.activities.PackActivity"/>
         <activity android:name="com.brewcrewfoo.performance.activities.FlasherActivity"/>
         <activity android:name="com.brewcrewfoo.performance.activities.FileChooser"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.ResidualsActivity"/>
 
         <receiver android:name=".service.BootReceiver">
             <intent-filter>
