@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+devices.xml
 File contain partitions layout for flashing kernel & recovery
+
 -->
 <devices>
     <device>
@@ -20,6 +22,18 @@ File contain partitions layout for flashing kernel & recovery
         <kernel>/dev/block/mmcblk0p8</kernel>
         <recovery>/dev/block/mmcblk0p13</recovery>
         <cache>/dev/block/mmcblk0p16</cache>
+    </device>
+    <device>
+        <model>GT-I9100</model> <!-- GALAXY S II -->
+        <kernel>/dev/block/mmcblk0p5</kernel>
+        <recovery>/dev/block/mmcblk0p6</recovery>
+        <cache>/dev/block/mmcblk0p7</cache>
+    </device>
+    <device>
+        <model>GT-I9300</model> <!-- GALAXY S III -->
+        <kernel>/dev/block/mmcblk0p5</kernel>
+        <recovery>/dev/block/mmcblk0p6</recovery>
+        <cache>/dev/block/mmcblk0p8</cache>
     </device>
     <device>
         <model>GT-I9505</model> <!-- GALAXY S IV -->
