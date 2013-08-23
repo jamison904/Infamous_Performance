@@ -167,17 +167,15 @@ public interface Constants {
     public static final String FLASH_RECOVERY = "pref_recovery_img";
     public static final String RESIDUAL_FILES="pref_residual_files";
     public static final String residualfiles[]={"/data/log","/data/tombstones","/data/system/dropbox","/data/system/usagestats","data/anr"};
-    public static final String TMPFILE="/data/pc.tmp";
     public static final String PREF_FIX_PERMS = "pref_fix_perms";
-    public static final String FP_LOG = "fp_log";
-    public static final String FP_CLEAN = "fp_clean";
+    public static final String PREF_LOG = "pref_log";
     public static final String PREF_OPTIM_DB = "pref_optim_db";
 
     // PC Settings
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";
     public static final String PREF_WIDGET_BG_COLOR = "widget_bg_color";
     public static final String PREF_WIDGET_TEXT_COLOR = "widget_text_color";
-    public static final String VERSION_NUM = "2.0.8";
+    public static final String VERSION_NUM = "2.0.8 LS";
 }
 
 

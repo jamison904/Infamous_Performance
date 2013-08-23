@@ -75,13 +75,13 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
                     sb.append("busybox rm -f "+o.getName()+"/*;\n");
                 }
                 adapter.clear();
-
                 linlaHeaderProgress.setVisibility(View.VISIBLE);
                 tools.setVisibility(View.GONE);
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         Helpers.shExec(sb);
+                        mPreferences.edit().putLong(RESIDUAL_FILES,System.currentTimeMillis()).commit();
                         finish();
                     }
                 };
@@ -162,6 +162,7 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
                     tools.setVisibility(View.GONE);
                 }
             }
+            mPreferences.edit().putLong(RESIDUAL_FILES,System.currentTimeMillis()).commit();
             dialog.cancel();
         }
     }
@@ -213,7 +214,7 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
                 t.append(residualfiles[i]);
                 t.append(" ");
             }
-            Helpers.get_assetsFile("count_files",context,"DIRS=\""+t.toString()+"\"");
+            Helpers.get_assetsFile("count_files",context,"DIRS=\""+t.toString()+"\";");
             new CMDProcessor().su.runWaitFor("busybox cat "+ISTORAGE+"count_files > " + SH_PATH );
         }
 
