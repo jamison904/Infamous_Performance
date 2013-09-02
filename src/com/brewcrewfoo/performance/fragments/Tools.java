@@ -30,7 +30,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 
 import android.os.AsyncTask;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.*;
@@ -53,8 +52,7 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
 
-public class Tools extends PreferenceFragment implements
-        OnSharedPreferenceChangeListener, OnPreferenceChangeListener, Constants {
+public class Tools extends PreferenceFragment implements OnSharedPreferenceChangeListener, Constants {
 
     private static final int NEW_MENU_ID=Menu.FIRST+1;
     private byte tip;
@@ -73,8 +71,8 @@ public class Tools extends PreferenceFragment implements
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.layout.tools);
 
-        mResidualFiles=(Preference) findPreference(RESIDUAL_FILES);
-        mOptimDB=(Preference) findPreference(PREF_OPTIM_DB);
+        mResidualFiles= findPreference(RESIDUAL_FILES);
+        mOptimDB= findPreference(PREF_OPTIM_DB);
 
         long mStartTime=mPreferences.getLong(RESIDUAL_FILES, 0);
         mResidualFiles.setSummary("");
@@ -154,11 +152,6 @@ public class Tools extends PreferenceFragment implements
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object o) {
-        return false;
-    }
-
-    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(RESIDUAL_FILES)) {
             mResidualFiles.setSummary("");
@@ -180,7 +173,7 @@ public class Tools extends PreferenceFragment implements
         String key = preference.getKey();
 
         if (key.equals(PREF_SH)) {
-            shEditDialog(key,getString(R.string.sh_title),getString(R.string.sh_msg));
+            shEditDialog(key,getString(R.string.sh_title),R.string.sh_msg);
         }
         else if(key.equals(PREF_WIPE_CACHE)) {
 
@@ -199,7 +192,7 @@ public class Tools extends PreferenceFragment implements
 
                                 }
                             });
-            ;
+
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
             //alertDialog.setCancelable(false);
@@ -238,7 +231,6 @@ public class Tools extends PreferenceFragment implements
 
                                     }
                                 });
-                ;
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -266,7 +258,6 @@ public class Tools extends PreferenceFragment implements
 
                                 }
                             });
-            ;
 
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -405,7 +396,7 @@ public class Tools extends PreferenceFragment implements
     }
 
 
-    public void shEditDialog(final String key,String title,String msg) {
+    public void shEditDialog(final String key,String title,int msg) {
         Resources res = getActivity().getResources();
         String cancel = res.getString(R.string.cancel);
         String ok = res.getString(R.string.ps_volt_save);
@@ -415,6 +406,7 @@ public class Tools extends PreferenceFragment implements
 
 
         settingText = (EditText) alphaDialog.findViewById(R.id.shText);
+        settingText.setHint(msg);
         settingText.setText(mPreferences.getString(key,""));
         settingText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -438,7 +430,6 @@ public class Tools extends PreferenceFragment implements
         });
         new AlertDialog.Builder(getActivity())
                 .setTitle(title)
-                .setMessage(msg)
                 .setView(alphaDialog)
                 .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
                     @Override
