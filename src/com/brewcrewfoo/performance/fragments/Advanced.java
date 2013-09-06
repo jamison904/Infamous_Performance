@@ -77,7 +77,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 	private Preference mDynamicWriteBackSuspend;
 
 	private ListPreference mReadAhead;
-	private SharedPreferences mPreferences;
+	SharedPreferences mPreferences;
 	
 	private int mSeekbarProgress;
 	private EditText settingText;
@@ -196,26 +196,17 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.advanced_menu, menu);
-        final SubMenu smenu = menu.addSubMenu(0, NEW_MENU_ID, 0,getString(R.string.menu_tab));
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        final int cur=mViewPager.getCurrentItem();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(i!=cur)
-            smenu.add(0, NEW_MENU_ID +i+1, 0, mViewPager.getAdapter().getPageTitle(i));
-        }
+        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.app_settings) {
-            Intent intent = new Intent(getActivity(), PCSettings.class);
-            startActivity(intent);
-        }
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(item.getItemId() == NEW_MENU_ID+i+1) {
-                mViewPager.setCurrentItem(i);
-            }
+        Helpers.removeCurItem(item,NEW_MENU_ID,(ViewPager) getView().getParent());
+        switch(item.getItemId()){
+            case R.id.app_settings:
+                Intent intent = new Intent(getActivity(), PCSettings.class);
+                startActivity(intent);
+            break;
         }
         return true;
     }
@@ -384,7 +375,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 		if (key.equals(PREF_READ_AHEAD)) {
 			String evalues = Helpers.readOneLine(READ_AHEAD_PATH[0]);
-			String values = sharedPreferences.getString(key,evalues);//mPreferences.getString(key,evalues);
+			String values = sharedPreferences.getString(key,evalues);
 			if (!values.equals(evalues)){
 				final StringBuilder sb = new StringBuilder();
 				for(int i=0; i<READ_AHEAD_PATH.length; i++){
@@ -407,7 +398,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 		else if (key.equals(PREF_MENUBACK_LAST_ERR_WAIT)){
 			mMenuBackLastErrWait.setSummary(Helpers.readOneLine(PFK_MENUBACK_LAST_ERR_WAIT)+" ms");
 		}
-    		else if (key.equals(BLX_SOB)) {
+    	else if (key.equals(BLX_SOB)) {
     			if(sharedPreferences.getBoolean(key,false)){
 				editor.putInt(PREF_BLX, Integer.parseInt(Helpers.readOneLine(BLX_PATH))).apply();
     			}
@@ -415,7 +406,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
     				editor.remove(PREF_BLX).apply();
     			}
 		}
-    		else if (key.equals(BLTIMEOUT_SOB)) {
+    	else if (key.equals(BLTIMEOUT_SOB)) {
     			if(sharedPreferences.getBoolean(key,false)){
 				editor.putInt(PREF_BLTIMEOUT, Integer.parseInt(Helpers.readOneLine(BL_TIMEOUT_PATH))).apply();
     			}
@@ -423,7 +414,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
     				editor.remove(PREF_BLTIMEOUT).apply();
     			}
 		}
-    		else if (key.equals(PFK_SOB)) {
+    	else if (key.equals(PFK_SOB)) {
     			if(sharedPreferences.getBoolean(key,false)){
 				if(Helpers.readOneLine(PFK_HOME_ENABLED).equals("1")){
 					editor.putBoolean(PFK_HOME_ON, true);
@@ -455,7 +446,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 				.apply();
     			}
 		}
-    		else if (key.equals(DYNAMIC_DIRTY_WRITEBACK_SOB)) {
+    	else if (key.equals(DYNAMIC_DIRTY_WRITEBACK_SOB)) {
     			if(sharedPreferences.getBoolean(key,false)){
 				if(Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH).equals("1")){
 					editor.putBoolean(PREF_DYNAMIC_DIRTY_WRITEBACK,true);
@@ -474,7 +465,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 				.apply();
     			}
 		}
-    		else if (key.equals(VM_SOB)) {
+    	else if (key.equals(VM_SOB)) {
     			if(sharedPreferences.getBoolean(key,false)){
 				editor.putInt(PREF_DIRTY_RATIO, Integer.parseInt(Helpers.readOneLine(DIRTY_RATIO_PATH)))
 				.putInt(PREF_DIRTY_BACKGROUND, Integer.parseInt(Helpers.readOneLine(DIRTY_BACKGROUND_PATH)))
@@ -517,7 +508,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				int val = Integer.valueOf(settingText.getText().toString());
+				int val = Integer.parseInt(settingText.getText().toString());
 				seekbar.setProgress(val);
 				return true;
 			}
@@ -537,12 +528,12 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-			int val = Integer.parseInt(s.toString());
-			if (val > max) {
-				s.replace(0, s.length(), Integer.toString(max));
-				val=max;
-			}
-			seekbar.setProgress(val);
+                    int val = Integer.parseInt(s.toString());
+                    if (val > max) {
+                        s.replace(0, s.length(), Integer.toString(max));
+                        val=max;
+                    }
+                    seekbar.setProgress(val);
                 } catch (NumberFormatException ex) {
                 }
             }
@@ -579,7 +570,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 			.setPositiveButton(ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					int val = Integer.valueOf(settingText.getText().toString());
+					int val = Integer.parseInt(settingText.getText().toString());
 					if(val<min){val=min;}
 					seekbar.setProgress(val);
 					int newProgress = seekbar.getProgress();

@@ -76,9 +76,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
 
         public TitleAdapter(FragmentManager fm) {
             super(fm);
-            // Display the Voltage Control fragment only
-            // if a table is found.
-            // Display the Battery fragment only if fastcharge and battery life extender exists
             if (mVoltageExists) {
             	if(Helpers.showBattery()){
 	                frags[0] = new CPUSettings();

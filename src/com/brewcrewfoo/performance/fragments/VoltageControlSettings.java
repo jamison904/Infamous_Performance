@@ -53,7 +53,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
     public static final int DIALOG_EDIT_VOLT = 0;
     private List<Voltage> mVoltages;
     private ListAdapter mAdapter;
-    private static SharedPreferences mPreferences;
+    SharedPreferences mPreferences;
     private Voltage mVoltage;
 
     @Override
@@ -61,9 +61,9 @@ public class VoltageControlSettings extends Fragment implements Constants {
         super.onCreate(savedInstanceState);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        mAdapter = new ListAdapter(getActivity());
         mVoltages = getVolts(mPreferences);
+        mAdapter = new ListAdapter(getActivity());
+
         setHasOptionsMenu(true);
     }
 
@@ -73,6 +73,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
 
         final ListView listView = (ListView) view.findViewById(R.id.ListView);
         final Switch setOnBoot = (Switch) view.findViewById(R.id.applyAtBoot);
+
 
         if (mVoltages.isEmpty()) {
             ((TextView) view.findViewById(R.id.emptyList)).setVisibility(View.VISIBLE);
@@ -137,7 +138,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
 				}
 			}
 			Helpers.shExec(sb);
-			
+
 			final List<Voltage> volts = getVolts(mPreferences);
 			mVoltages.clear();
 			mVoltages.addAll(volts);
@@ -164,35 +165,26 @@ public class VoltageControlSettings extends Fragment implements Constants {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.voltage_control_menu, menu);
-        final SubMenu smenu = menu.addSubMenu(0, NEW_MENU_ID, 0,getString(R.string.menu_tab));
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        final int cur=mViewPager.getCurrentItem();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(i!=cur)
-            smenu.add(0, NEW_MENU_ID +i+1, 0, mViewPager.getAdapter().getPageTitle(i));
-        }
+        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.app_settings) {
+        Helpers.removeCurItem(item,Menu.FIRST+1,(ViewPager) getView().getParent());
+        switch (item.getItemId()){
+        case R.id.app_settings:
             Intent intent = new Intent(getActivity(), PCSettings.class);
             startActivity(intent);
-        }
-        else if(item.getItemId() == R.id.volt_increase){
-		IncreasebyStep(25);
-        }
-        else if(item.getItemId() == R.id.volt_decrease){
+            break;
+        case R.id.volt_increase:
+            IncreasebyStep(25);
+            break;
+        case R.id.volt_decrease:
             IncreasebyStep(-25);
-        }
-        else if(item.getItemId() == R.id.reset){
+            break;
+        case R.id.reset:
             ResetVolt();
-        }
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(item.getItemId() == NEW_MENU_ID+i+1) {
-                mViewPager.setCurrentItem(i);
-            }
+            break;
         }
         return true;
     }
@@ -330,11 +322,9 @@ public class VoltageControlSettings extends Fragment implements Constants {
                 voltageSeek
                         .setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
                             @Override
-                            public void onProgressChanged(SeekBar sb, int progress,
-                                                          boolean fromUser) {
+                            public void onProgressChanged(SeekBar sb, int progress,boolean fromUser) {
                                 if (fromUser) {
-                                    final String volt = Integer
-                                            .toString(STEPS[progress]);
+                                    final String volt = Integer.toString(STEPS[progress]);
                                     voltageMeter.setText(volt + " mV");
                                     voltageEdit.setText(volt);
                                 }
@@ -448,14 +438,12 @@ public class VoltageControlSettings extends Fragment implements Constants {
 
             public void setCurrentMV(final String currentMv) {
                 mCurrentMV.setText(getResources().getString(
-                        R.string.ps_volt_current_voltage)
-                        + currentMv + " mV");
+                        R.string.ps_volt_current_voltage) + currentMv + " mV");
             }
 
             public void setSavedMV(final String savedMv) {
                 mSavedMV.setText(getResources().getString(
-                        R.string.ps_volt_setting_to_apply)
-                        + savedMv + " mV");
+                        R.string.ps_volt_setting_to_apply) + savedMv + " mV");
             }
         }
     }

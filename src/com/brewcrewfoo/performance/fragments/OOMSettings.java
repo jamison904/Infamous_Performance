@@ -49,7 +49,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 
     private static final int NEW_MENU_ID=Menu.FIRST+1;
 
-    private SharedPreferences mPreferences;
+    SharedPreferences mPreferences;
 	
 	private int mSeekbarProgress;
 	private EditText settingText;
@@ -144,26 +144,17 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.oom_menu, menu);
-        final SubMenu smenu = menu.addSubMenu(0, NEW_MENU_ID, 0,getString(R.string.menu_tab));
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        final int cur=mViewPager.getCurrentItem();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(i!=cur)
-            smenu.add(0, NEW_MENU_ID +i+1, 0, mViewPager.getAdapter().getPageTitle(i));
-        }
+        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.app_settings) {
-            Intent intent = new Intent(getActivity(), PCSettings.class);
-            startActivity(intent);
-        }
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(item.getItemId() == NEW_MENU_ID+i+1) {
-                mViewPager.setCurrentItem(i);
-            }
+        Helpers.removeCurItem(item,Menu.FIRST+1,(ViewPager) getView().getParent());
+        switch(item.getItemId()){
+            case R.id.app_settings:
+                Intent intent = new Intent(getActivity(), PCSettings.class);
+                startActivity(intent);
+                break;
         }
         return true;
     }
@@ -399,7 +390,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				int val = Integer.valueOf(settingText.getText().toString());
+				int val = Integer.parseInt(settingText.getText().toString());
 				seekbar.setProgress(val);
 				return true;
 			}
@@ -459,7 +450,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 			.setPositiveButton(ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					int val = Integer.valueOf(settingText.getText().toString());
+					int val = Integer.parseInt(settingText.getText().toString());
 					if(val<min){val=min;}
 					seekbar.setProgress(val);
 					int newProgress = seekbar.getProgress();

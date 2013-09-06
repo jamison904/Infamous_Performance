@@ -61,7 +61,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private String mCurMinSpeed;
 
     private CurCPUThread mCurCPUThread;
-    private SharedPreferences mPreferences;
+    SharedPreferences mPreferences;
 
     private boolean mIsTegra3 = false;
     private int mFrequenciesNum;
@@ -91,8 +91,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             Arrays.sort(mAvailableFrequencies, new Comparator<String>() {
                 @Override
                 public int compare(String object1, String object2) {
-                    return Integer.valueOf(object1).compareTo(
-                            Integer.valueOf(object2));
+                    return Integer.valueOf(object1).compareTo(Integer.valueOf(object2));
                 }
             });
         }
@@ -191,26 +190,17 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.cpu_settings_menu, menu);
-        final SubMenu smenu = menu.addSubMenu(0, NEW_MENU_ID, 0,getString(R.string.menu_tab));
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        final int cur=mViewPager.getCurrentItem();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(i!=cur)
-            smenu.add(0, NEW_MENU_ID +i+1, 0, mViewPager.getAdapter().getPageTitle(i));
-        }
+        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.app_settings) {
-            Intent intent = new Intent(getActivity(), PCSettings.class);
-            startActivity(intent);
-        }
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(item.getItemId() == NEW_MENU_ID+i+1) {
-                mViewPager.setCurrentItem(i);
-            }
+        Helpers.removeCurItem(item,NEW_MENU_ID,(ViewPager) getView().getParent());
+        switch(item.getItemId()){
+            case R.id.app_settings:
+                Intent intent = new Intent(getActivity(), PCSettings.class);
+                startActivity(intent);
+                break;
         }
         return true;
     }
@@ -283,22 +273,24 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
 
     @Override
     public void onResume() {
-        super.onResume();
+
         if (mCurCPUThread == null) {
             mCurCPUThread = new CurCPUThread();
             mCurCPUThread.start();
         }
+        super.onResume();
     }
 
     @Override
     public void onPause() {
-        super.onPause();
+
         Helpers.updateAppWidget(getActivity());
+        super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+
         if (mCurCPUThread != null) {
             if (mCurCPUThread.isAlive()) {
                 mCurCPUThread.interrupt();
@@ -308,6 +300,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 }
             }
         }
+        super.onDestroy();
     }
 
     public void setMaxSpeed(SeekBar seekBar, int progress) {

@@ -2,9 +2,7 @@
 <!--
 Translation by Rhonin86
 -->
-
 <resources>
-
     <string name="app_name">Performance Control</string>
     <!-- Main tabs -->
     <string name="tab_cpu_settings">CPU Einstellungen</string>
@@ -216,14 +214,14 @@ Translation by Rhonin86
     <string name="ps_wipe_cache">Cache Partition: %s</string>
     <string name="wipe_cache_msg">Am Ende wird das System neu gestartet. Weiter machen?</string>
 
-    <string name="prefcat_flash_img">Flash *.img Datei</string>
+    <string name="prefcat_flash_img">Flash *.img Datei (Direkt oder aus CWM-Zip)</string>
     <string name="kernel_img_title">Flash Kernel</string>
-    <string name="ps_kernel_img">Flash boot.img als Kernel und benutze \'dd\' binary</string>
+    <string name="ps_kernel_img">Flash boot.img als Kernel und benutze \'dd\' binary (CWM-Zip auch nutzbar)</string>
     <string name="recovery_img_title">Flash Recovery</string>
-    <string name="ps_recovery_img">Flash recovery.img als Recovery und benutze \'dd\' binary</string>
+    <string name="ps_recovery_img">Flash recovery.img als Recovery und benutze \'dd\' binary (CWM-Zip auch nutzbar)</string>
     <string name="btn_choose">Wähle %s</string>
-    <string name="unsupported_info">Dein Gerät wird nciht unterstützt</string>
-    <string name="flash_info">wird geflasht auf die Partition \n%s\n as</string>
+    <string name="unsupported_info">Dein Gerät wird nicht unterstützt</string>
+    <string name="flash_info">wird geflasht auf die Partition \n%s\n als</string>
     <string name="dir_parent">&lt;Parent DIR&gt;</string>
     <string name="dir">&lt;DIR&gt;</string>
     <string name="bkexit">Drücke nochmal zum Beenden</string>
@@ -260,6 +258,14 @@ Translation by Rhonin86
     <string name="closebtn">schließen</string>
     <string name="delallbtn">löschen Sie alle</string>
     <string name="del_file_msg">%s wird gelöscht. Weiter machen?</string>
+    <string-array name="batt_status">
+        <item>Unbekannte</item>
+        <item>Unbekannte</item>
+        <item>Aufladen</item>
+        <item>Entladen</item>
+        <item>Voll</item>
+        <item>Lädt nicht</item>
+    </string-array>
 
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Benutze das helle Theme</string>

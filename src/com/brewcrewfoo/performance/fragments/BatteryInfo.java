@@ -20,12 +20,15 @@ package com.brewcrewfoo.performance.fragments;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.view.*;
@@ -36,54 +39,41 @@ import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
+
 import java.io.File;
 
 public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeListener, Constants {
     private static final int NEW_MENU_ID=Menu.FIRST+1;
-    private CurBattThread mCurBattThread;
-    private TextView mbattery_percent;
-    private TextView mbattery_volt;
-    private TextView mbattery_aux;
-    private TextView mbattery_status;
-    private SeekBar mBlxSlider;
-    private TextView mBlxVal;
-    private Switch mSetOnBoot;
-    private Switch mFastchargeOnBoot;
-    private SharedPreferences mPreferences;
-    private LinearLayout mhide;
-    private LinearLayout mpart;
-
+    TextView mbattery_percent;
+    TextView mbattery_volt;
+    TextView mbattery_status;
+    TextView mBlxVal;
+    ImageView mBattIcon;
+    Switch mFastchargeOnBoot;
+    SharedPreferences mPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
   	    mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
+        setRetainInstance(true);
         setHasOptionsMenu(true);
+
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.battery_menu, menu);
-        final SubMenu smenu = menu.addSubMenu(0, NEW_MENU_ID, 0,getString(R.string.menu_tab));
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        final int cur=mViewPager.getCurrentItem();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(i!=cur)
-            smenu.add(0, NEW_MENU_ID +i+1, 0, mViewPager.getAdapter().getPageTitle(i));
-        }
+        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.app_settings) {
-            Intent intent = new Intent(getActivity(), PCSettings.class);
-            startActivity(intent);
-        }
-        final ViewPager mViewPager = (ViewPager) getView().getParent();
-        for(int i=0;i< mViewPager.getAdapter().getCount();i++){
-            if(item.getItemId() == NEW_MENU_ID+i+1) {
-                mViewPager.setCurrentItem(i);
-            }
+        Helpers.removeCurItem(item,NEW_MENU_ID,(ViewPager) getView().getParent());
+        switch(item.getItemId()){
+                case R.id.app_settings:
+                Intent intent = new Intent(getActivity(), PCSettings.class);
+                startActivity(intent);
+            break;
         }
         return true;
     }
@@ -94,54 +84,80 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
 
         mbattery_percent = (TextView) view.findViewById(R.id.batt_percent);
         mbattery_volt = (TextView) view.findViewById(R.id.batt_volt);
-        mbattery_volt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try{
-                    Intent powerUsageIntent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
-                    startActivity(powerUsageIntent);
-                }
-                catch(Exception e){
-                }
-            }
-        });
-
-        mbattery_aux = (TextView) view.findViewById(R.id.batt_aux);
         mbattery_status = (TextView) view.findViewById(R.id.batt_status);
-        mhide= (LinearLayout) view.findViewById(R.id.wlayout);
+        mBattIcon=(ImageView) view.findViewById(R.id.batt_icon);
 
-        mBlxSlider = (SeekBar) view.findViewById(R.id.blx_slider);
+        if (new File(BAT_VOLT_PATH).exists()){
+            int volt=Integer.parseInt(Helpers.readOneLine(BAT_VOLT_PATH));
+            if(volt>5000) volt = (int) Math.round(volt / 1000.0);
+            mbattery_volt.setText(volt+" mV");
+            mBattIcon.setVisibility(ImageView.GONE);
+            mbattery_volt.setVisibility(TextView.VISIBLE);
+            mbattery_volt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        Intent powerUsageIntent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
+                        startActivity(powerUsageIntent);
+                    }
+                    catch(Exception e){
+                    }
+                }
+            });
+            mbattery_volt.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view) {
+                    mBattIcon.setVisibility(ImageView.VISIBLE);
+                    mbattery_volt.setVisibility(TextView.GONE);
+                    return true;
+                }
+            });
+        }
+        else{
+            mBattIcon.setVisibility(ImageView.VISIBLE);
+            mbattery_volt.setVisibility(TextView.GONE);
+            mBattIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        Intent powerUsageIntent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
+                        startActivity(powerUsageIntent);
+                    }
+                    catch(Exception e){
+                    }
+                }
+            });
+        }
+
+        SeekBar mBlxSlider = (SeekBar) view.findViewById(R.id.blx_slider);
         if (new File(BLX_PATH).exists()) {
-            mhide.setVisibility(LinearLayout.VISIBLE);
-
             mBlxSlider.setMax(100);
 
             mBlxVal = (TextView) view.findViewById(R.id.blx_val);
-            mBlxVal.setText(" "+Helpers.readOneLine(BLX_PATH)+"%");
+            mBlxVal.setText(getString(R.string.blx_title)+" " + Helpers.readOneLine(BLX_PATH)+"%");
 
             mBlxSlider.setProgress(Integer.parseInt(Helpers.readOneLine(BLX_PATH)));
             mBlxSlider.setOnSeekBarChangeListener(this);
-            mSetOnBoot = (Switch) view.findViewById(R.id.blx_sob);
+            Switch mSetOnBoot = (Switch) view.findViewById(R.id.blx_sob);
             mSetOnBoot.setChecked(mPreferences.getBoolean(BLX_SOB, false));
             mSetOnBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton v,boolean checked) {
-                       final SharedPreferences.Editor editor = mPreferences.edit();
-                       editor.putBoolean(BLX_SOB, checked);
-                       if(checked){
-                           editor.putInt(PREF_BLX, Integer.parseInt(Helpers.readOneLine(BLX_PATH)));
-                       }
-                       editor.commit();
+                @Override
+                public void onCheckedChanged(CompoundButton v, boolean checked) {
+                    final SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putBoolean(BLX_SOB, checked);
+                    if (checked) {
+                        editor.putInt(PREF_BLX, Integer.parseInt(Helpers.readOneLine(BLX_PATH)));
+                    }
+                    editor.commit();
                 }
-                });
+            });
         }
         else{
-            mpart= (LinearLayout) view.findViewById(R.id.blx_layout);
+            LinearLayout mpart = (LinearLayout) view.findViewById(R.id.blx_layout);
             mpart.setVisibility(LinearLayout.GONE);
         }
 
         if (new File(FASTCHARGE_PATH).exists()) {
-            mhide.setVisibility(LinearLayout.VISIBLE);
 
             mFastchargeOnBoot = (Switch) view.findViewById(R.id.fastcharge_sob);
             mFastchargeOnBoot.setChecked(mPreferences.getBoolean(PREF_FASTCHARGE, false));
@@ -181,16 +197,18 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
             });
         }
          else{
-            mpart= (LinearLayout) view.findViewById(R.id.fastcharge_layout);
+            LinearLayout mpart = (LinearLayout) view.findViewById(R.id.fastcharge_layout);
             mpart.setVisibility(LinearLayout.GONE);
          }
+
+
         return view;
     }
 
    @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            mBlxVal.setText(" " + progress + "%");
+            mBlxVal.setText(getString(R.string.blx_title)+" " + progress + "%");
         }
     }
 
@@ -205,74 +223,73 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putInt(PREF_BLX, seekBar.getProgress()).commit();
     }
-
-//-----------------
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(this.batteryInfoReceiver);
+    }
     @Override
     public void onResume() {
         super.onResume();
-        if (mCurBattThread == null) {
-            mCurBattThread = new CurBattThread();
-            mCurBattThread.start();
-        }
+        getActivity().registerReceiver(this.batteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED) );
     }
-    @Override
-    public void onPause() {
-        super.onPause();
-        //Helpers.updateAppWidget(getActivity());
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mCurBattThread != null) {
-            if (mCurBattThread.isAlive()) {
-                mCurBattThread.interrupt();
-                try {
-                    mCurBattThread.join();
-                } catch (InterruptedException e) {
-                }
-            }
-        }
-    }
-
-
-    protected class CurBattThread extends Thread {
-        private boolean mInterrupt = false;
-
-        public void interrupt() {
-            mInterrupt = true;
-        }
-
+    private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
+        private int voltage;
         @Override
-        public void run() {
-            try {
-                while (!mInterrupt) {
-                    sleep(500);
+        public void onReceive(Context context, Intent intent) {
+            //int  health= intent.getIntExtra(BatteryManager.EXTRA_HEALTH,0);
+            //String  technology= intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY);
+            //int  plugged= intent.getIntExtra(BatteryManager.EXTRA_PLUGGED,0);
+            //boolean  present= intent.getExtras().getBoolean(BatteryManager.EXTRA_PRESENT);
+            int  scale= intent.getIntExtra(BatteryManager.EXTRA_SCALE,0);
+            int  level= intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
+            int  status= intent.getIntExtra(BatteryManager.EXTRA_STATUS,0);
+            int  temperature= intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0);
+            int  rawvoltage= intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0);
 
-                    final StringBuilder sb = new StringBuilder();
-                    sb.append(Helpers.readOneLine(BAT_PERCENT_PATH)+";");
-                    sb.append(Helpers.readOneLine(BAT_VOLT_PATH)+";");
-                    sb.append(Helpers.readOneLine(BAT_STAT_PATH)+";");
-                    sb.append(Helpers.readOneLine(BAT_TECH_PATH)+";");
-                    sb.append(Helpers.readOneLine(BAT_TEMP_PATH)+";");
-                    mCurBattHandler.sendMessage(mCurBattHandler.obtainMessage(0,sb.toString()));
-                }
-            } catch (InterruptedException e) {
-                return;
+            level=level*scale/100;
+            mbattery_percent.setText(level+"%");
+
+            switch ((int) Math.ceil(level / 20.0)){
+                case 0:
+                    mBattIcon.setImageResource(R.drawable.battery_0);
+                    break;
+                case 1:
+                    mBattIcon.setImageResource(R.drawable.battery_1);
+                    break;
+                case 2:
+                    mBattIcon.setImageResource(R.drawable.battery_2);
+                    break;
+                case 3:
+                    mBattIcon.setImageResource(R.drawable.battery_3);
+                    break;
+                case 4:
+                    mBattIcon.setImageResource(R.drawable.battery_4);
+                    break;
+                case 5:
+                    mBattIcon.setImageResource(R.drawable.battery_5);
+                    break;
             }
+            /*
+            int voltage;
+
+            if(String.valueOf(rawvoltage).length()<=2){
+                voltage=rawvoltage*1000;
+            }
+            else if(String.valueOf(rawvoltage).length()<=4){
+                voltage=rawvoltage;
+            }
+            else{
+                voltage=Math.round(rawvoltage/1000);
+            }
+            if (new File(BAT_VOLT_PATH).exists()){
+                voltage=Integer.parseInt(Helpers.readOneLine(BAT_VOLT_PATH));
+            }
+            mbattery_volt.setText(voltage+" mV");
+*/
+            mbattery_status.setText((temperature/10)+"°C  "+getResources().getStringArray(R.array.batt_status)[status]);
+
         }
-        protected Handler mCurBattHandler = new Handler() {
-            public void handleMessage(Message msg) {
-	        final String r=(String) msg.obj;
-	        final String[] rr = r.split(";");
-            mbattery_percent.setText(rr[0]+"%");
-            mbattery_volt.setText(rr[1]+" mV");
-            mbattery_status.setText((Integer.parseInt(rr[4])/10)+"°C  "+rr[2]);
-            }
-        };
-
-    }
-
+    };
 
 }
