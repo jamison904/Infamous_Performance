@@ -50,6 +50,7 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         res = getResources();
         setTheme();
@@ -198,8 +199,8 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
                 t.append(residualfile);
                 t.append(" ");
             }
-            Helpers.get_assetsFile("count_files",context,"DIRS=\""+t.toString()+"\";");
-            new CMDProcessor().su.runWaitFor("busybox cat "+ISTORAGE+"count_files > " + SH_PATH );
+            Helpers.get_assetsScript("count_files",context,"DIRS=\""+t.toString()+"\";","count_files \"$DIRS\";\n");
+            Helpers.shWrite(getFilesDir()+"/count_files");
         }
 
         @Override
