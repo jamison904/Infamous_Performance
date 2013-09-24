@@ -297,6 +297,25 @@ Copyright (C) 2012  James Roberts
     <string name="ksm_pagtoscan">Pages to Scan:</string>
     <string name="ksm_sleep">Sleep (ms):</string>
 
+    <!-- freezer -->
+    <string name="prefcat_freezer">FREEZE or DEFROST PACKAGES</string>
+    <string name="pt_freeze">Freeze Package</string>
+    <string name="pt_unfreeze">Defrost Package</string>
+    <string name="ps_freeze">List of packages installed in the system</string>
+    <string name="ps_unfreeze">List of frozen packages</string>
+    <string name="mt_system_packs">System Packages</string>
+    <string name="mt_user_packs">User Packages</string>
+    <string name="freeze_msg">%s will be frozen. Continue?</string>
+    <string name="unfreeze_msg">%s will be defrosted. Continue?</string>
+
+    <!-- zRam -->
+    <string name="prefcat_zram">zRAM</string>
+    <string name="pt_run_zram">Enable zRam</string>
+    <string name="zram_set_title">Settings</string>
+    <!-- 2.1.3 -->
+    <string name="ps_zram">Compress memory for increased virtual capacity</string>
+    <string name="mt_gov_ctrl">Governor Settings</string>
+
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Use light theme</string>
     <string name="ps_use_light_theme">If checked, Performance Control will use a Holo light theme</string>

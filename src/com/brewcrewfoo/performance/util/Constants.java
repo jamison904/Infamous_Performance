@@ -21,7 +21,11 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.2.1";
+    public static final String VERSION_NUM = "2.1.3";
+    //hide flashing kernel/recovery options
+    // NO_FLASH=true > hide flash options
+    // NO_FLASH=false > show flash options
+    public static final Boolean NO_FLASH = false;
 
     // CPU settings
     public static final String CUR_CPU_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
@@ -32,6 +36,8 @@ public interface Constants {
     public static final String GOVERNORS_LIST_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors";
     public static final String GOVERNOR_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor";
     public static final String[] IO_SCHEDULER_PATH = {"/sys/block/mmcblk0/queue/scheduler","/sys/block/mmcblk1/queue/scheduler"};
+    //Dynamic frequency scaling
+    public static final String DYN_FREQ_PATH = "/sys/power/cpufreq_max_limit";
     
     public static final String NUM_OF_CPUS_PATH = "/sys/devices/system/cpu/present";
 
@@ -40,6 +46,10 @@ public interface Constants {
     public static final String PREF_GOV = "pref_gov";
     public static final String PREF_IO = "pref_io";
     public static final String CPU_SOB = "cpu_sob";
+    public static final String GOV_SOB = "gov_settings_sob";
+    public static final String GOV_SETTINGS = "gov_settings";
+    public static final String GOV_NAME = "gov_name";
+    public static final String GOV_SETTINGS_PATH = "/sys/devices/system/cpu/cpufreq/";
 
     // CPU info
     public static String KERNEL_INFO_PATH = "/proc/version";
@@ -55,7 +65,7 @@ public interface Constants {
     // Other settings
     public static final String MINFREE_PATH = "/sys/module/lowmemorykiller/parameters/minfree";
     public static final String MINFREE_ADJ_PATH = "/sys/module/lowmemorykiller/parameters/adj";
-    public static final String[] READ_AHEAD_PATH ={ "/sys/devices/virtual/bdi/179:0/read_ahead_kb","/sys/devices/virtual/bdi/179:32/read_ahead_kb"};
+    public static final String READ_AHEAD_PATH ="/sys/block/mmcblk0/bdi/read_ahead_kb";
     //"/sys/devices/virtual/bdi/default/read_ahead_kb"
     
     public static final String INTENT_ACTION_FASTCHARGE = "com.aokp.romcontrol.FCHARGE_CHANGED";
@@ -98,7 +108,6 @@ public interface Constants {
     public static final String PREF_BLX = "pref_blx";
     public static final String BLX_PATH = "/sys/class/misc/batterylifeextender/charging_limit";
     public static final String BLX_SOB = "blx_sob";
-    public static final String SH_PATH = "/data/PerformanceControl";
     //-------DFsync---------
     public static final String DSYNC_PATH = "/sys/kernel/dyn_fsync/Dyn_fsync_active";
     public static final String PREF_DSYNC= "pref_dsync";
@@ -177,7 +186,13 @@ public interface Constants {
     public static final String PREF_LOG = "pref_log";
     public static final String PREF_OPTIM_DB = "pref_optim_db";
 
+    //Freezer
+    public static final String PREF_FRREZE = "freeze_packs";
+    public static final String PREF_UNFRREZE = "unfreeze_packs";
+
     //zRam
+    public static final String ISZRAM = "busybox echo `busybox zcat /proc/config.gz | busybox grep ZRAM | busybox grep -v ^#'`";
+    public static final String ZRAM_DEV = "/dev/block/zram0";
     public static final String ZRAM_SIZE_PATH = "/sys/block/zram0/disksize";
     public static final String ZRAM_RESET_PATH = "/sys/block/zram0/reset";
     public static final String ZRAM_COMPR_PATH = "/sys/block/zram0/compr_data_size";

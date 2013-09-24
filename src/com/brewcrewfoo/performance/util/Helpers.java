@@ -401,29 +401,34 @@ public class Helpers implements Constants {
         else{return NOT_FOUND;}
     }
 
+    public static long getTotMem() {
+        long v=0;
+        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E --only-matching '[[:digit:]]+'`");
+        if(cr.success()){
+            try{
+               v = (long) Integer.parseInt(cr.stdout)*1024;
+            }
+            catch (NumberFormatException e) {
+                Log.d(TAG, "MemTot conversion err: "+e);
+            }
+        }
+        return v;
+    }
+
     public static boolean showBattery() {
 	    return ((new File(BLX_PATH).exists()) || (fastcharge_path()!=null));
     }
 
-    public static void shWrite(String f){
-        new CMDProcessor().su.runWaitFor("busybox cat "+f+" > " + SH_PATH );
-        new CMDProcessor().su.runWaitFor("busybox chmod 755 "+SH_PATH );
-    }
-
-	public static String shExec(StringBuilder s){
-		if (new File(SH_PATH).exists()) {
-			s.insert(0,"#!"+binExist("sh")+"\n\n");
-			new CMDProcessor().su.runWaitFor("busybox echo \""+s.toString()+"\" > " + SH_PATH );
-            new CMDProcessor().su.runWaitFor("busybox chmod 755 "+SH_PATH );
-            CMDProcessor.CommandResult cr = null;
-			cr=new CMDProcessor().su.runWaitFor(SH_PATH);
-            if(cr.success()){return cr.stdout;}
-            else{Log.d(TAG, "execute: "+cr.stderr);return "";}
-		}
-		else{
-			Log.d(TAG, "missing file: "+SH_PATH);
-            return "";
-		}
+	public static String shExec(StringBuilder s,Context c,Boolean su){
+        get_assetsScript("run", c, s.toString(),"");
+        new CMDProcessor().su.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
+        CMDProcessor.CommandResult cr = null;
+        if(su)
+		    cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
+        else
+            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
+        if(cr.success()){return cr.stdout;}
+        else{Log.d(TAG, "execute: "+cr.stderr);return null;}
 	}
 
     public static void get_assetsScript(String fn,Context c,String prefix,String postfix){
@@ -435,8 +440,8 @@ public class Helpers implements Constants {
             f.read(buffer);
             f.close();
             final String s = new String(buffer);
-            final StringBuffer sb = new StringBuffer(s);
-            if(!postfix.equals("")){ sb.append("\n\n"+postfix); }
+            final StringBuilder sb = new StringBuilder(s);
+            if(!postfix.equals("")){ sb.append("\n\n").append(postfix); }
             if(!prefix.equals("")){ sb.insert(0,prefix+"\n"); }
             sb.insert(0,"#!"+Helpers.binExist("sh")+"\n\n");
             try {
@@ -456,12 +461,36 @@ public class Helpers implements Constants {
             e.printStackTrace();
         }
     }
+    public static void get_assetsBinary(String fn,Context c){
+        byte[] buffer;
+        final AssetManager assetManager = c.getAssets();
+        try {
+            InputStream f =assetManager.open(fn);
+            buffer = new byte[f.available()];
+            f.read(buffer);
+            f.close();
+            try {
+                FileOutputStream fos;
+                fos = c.openFileOutput(fn, Context.MODE_PRIVATE);
+                fos.write(buffer);
+                fos.close();
+
+            } catch (IOException e) {
+                Log.d(TAG, "error write "+fn+" file");
+                e.printStackTrace();
+            }
+
+        }
+        catch (IOException e) {
+            Log.d(TAG, "error read "+fn+" file");
+            e.printStackTrace();
+        }
+    }
     public static String ReadableByteCount(long bytes) {
-        int unit = 1024;
-        if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
+        if (bytes < 1024) return bytes + " B";
+        int exp = (int) (Math.log(bytes) / Math.log(1024));
         String pre = String.valueOf("KMGTPE".charAt(exp-1));
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+        return String.format("%.1f %sB", bytes / Math.pow(1024, exp), pre);
     }
     public static void removeCurItem(MenuItem item,int idx,ViewPager vp){
         for(int i=0;i< vp.getAdapter().getCount();i++){

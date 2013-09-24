@@ -111,6 +111,7 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
         List<Item>dir = new ArrayList<Item>();
         List<Item>fls = new ArrayList<Item>();
         try{
+            assert dirs != null;
             for(File ff: dirs){
                 Date lastModDate = new Date(ff.lastModified());
                 DateFormat formater = DateFormat.getDateTimeInstance();
@@ -226,11 +227,11 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                         return null;
                     }
                     nFile=dn+"/boot.img";
-                    sb.append("dd if="+nFile+" of="+part+"\n");
-                    sb.append("busybox rm -rf "+dn+"/*\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
+                    sb.append("busybox rm -rf ").append(dn).append("/*\n");
                 }
                 else{
-                    sb.append("dd if="+nFile+" of="+part+"\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
                 }
                 sb.append("busybox rm -rf /data/dalvik-cache/*\n");
                 sb.append("busybox rm -rf /cache/*\n");
@@ -248,17 +249,17 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                         return null;
                     }
                     nFile=dn+"/recovery.img";
-                    sb.append("dd if="+nFile+" of="+part+"\n");
-                    sb.append("busybox rm -rf "+dn+"/*\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
+                    sb.append("busybox rm -rf ").append(dn).append("/*\n");
                 }
                 else{
-                    sb.append("dd if="+nFile+" of="+part+"\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
                 }
 
                 sb.append("reboot recovery\n");
                 //Log.d(TAG,sb.toString());
             }
-            Helpers.shExec(sb);
+            Helpers.shExec(sb,context,true);
             return null;
         }
 
@@ -308,7 +309,6 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                                 dialog.cancel();
                             }
                         });
-        ;
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
         //alertDialog.setCancelable(false);

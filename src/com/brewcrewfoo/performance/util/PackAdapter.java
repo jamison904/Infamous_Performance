@@ -3,8 +3,6 @@ package com.brewcrewfoo.performance.util;
 /**
  * Created by h0rn3t on 17.07.2013.
  */
-import java.util.List;
-
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,18 +15,21 @@ import android.widget.TextView;
 
 import com.brewcrewfoo.performance.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class PackAdapter extends BaseAdapter {
 
     Activity context;
     PackageManager packageManager;
-    String pList[];
+    ArrayList<String> pList;
 
 
     public PackAdapter(Activity context,String pmList[], PackageManager packageManager) {
         super();
         this.context = context;
         this.packageManager = packageManager;
-        this.pList=pmList;
+        this.pList= new ArrayList<String>(Arrays.asList(pmList));
     }
 
     private class ViewHolder {
@@ -38,11 +39,14 @@ public class PackAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return pList.length;
+        return pList.size();
+    }
+    public void delItem(int position) {
+        pList.remove(position);
     }
 
     public String getItem(int position) {
-        return pList[position];
+        return pList.get(position).toString();
     }
 
     public long getItemId(int position) {

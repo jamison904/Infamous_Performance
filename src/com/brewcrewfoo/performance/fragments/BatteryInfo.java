@@ -51,12 +51,14 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
     ImageView mBattIcon;
     Switch mFastchargeOnBoot;
     SharedPreferences mPreferences;
-    private final String FASTCHARGE_PATH=Helpers.fastcharge_path();
+    private String mFastChargePath;
+    private Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-  	    mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        context=getActivity();
+  	    mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
@@ -72,7 +74,7 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
         Helpers.removeCurItem(item,NEW_MENU_ID,(ViewPager) getView().getParent());
         switch(item.getItemId()){
                 case R.id.app_settings:
-                Intent intent = new Intent(getActivity(), PCSettings.class);
+                Intent intent = new Intent(context, PCSettings.class);
                 startActivity(intent);
             break;
         }
@@ -89,30 +91,31 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
         mBattIcon=(ImageView) view.findViewById(R.id.batt_icon);
 
         if (new File(BAT_VOLT_PATH).exists()){
-            int volt=Integer.parseInt(Helpers.readOneLine(BAT_VOLT_PATH));
-            if(volt>5000) volt = (int) Math.round(volt / 1000.0);
-            mbattery_volt.setText(volt+" mV");
-            mBattIcon.setVisibility(ImageView.GONE);
-            mbattery_volt.setVisibility(TextView.VISIBLE);
-            mbattery_volt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try{
-                        Intent powerUsageIntent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
-                        startActivity(powerUsageIntent);
+                int volt=Integer.parseInt(Helpers.readOneLine(BAT_VOLT_PATH));
+                if(volt>5000) volt = (int) Math.round(volt / 1000.0);// in microvolts
+                mbattery_volt.setText(volt+" mV");
+                mBattIcon.setVisibility(ImageView.GONE);
+                mbattery_volt.setVisibility(TextView.VISIBLE);
+                mbattery_volt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try{
+                            Intent powerUsageIntent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
+                            startActivity(powerUsageIntent);
+                        }
+                        catch(Exception e){
+
+                        }
                     }
-                    catch(Exception e){
+                });
+                mbattery_volt.setOnLongClickListener(new View.OnLongClickListener(){
+                    @Override
+                    public boolean onLongClick(View view) {
+                        mBattIcon.setVisibility(ImageView.VISIBLE);
+                        mbattery_volt.setVisibility(TextView.GONE);
+                        return true;
                     }
-                }
-            });
-            mbattery_volt.setOnLongClickListener(new View.OnLongClickListener(){
-                @Override
-                public boolean onLongClick(View view) {
-                    mBattIcon.setVisibility(ImageView.VISIBLE);
-                    mbattery_volt.setVisibility(TextView.GONE);
-                    return true;
-                }
-            });
+                });
         }
         else{
             mBattIcon.setVisibility(ImageView.VISIBLE);
@@ -157,8 +160,8 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
             LinearLayout mpart = (LinearLayout) view.findViewById(R.id.blx_layout);
             mpart.setVisibility(LinearLayout.GONE);
         }
-
-        if (FASTCHARGE_PATH!=null) {
+        mFastChargePath=Helpers.fastcharge_path();
+        if (mFastChargePath!=null) {
 
             mFastchargeOnBoot = (Switch) view.findViewById(R.id.fastcharge_sob);
             mFastchargeOnBoot.setChecked(mPreferences.getBoolean(PREF_FASTCHARGE, false));
@@ -173,7 +176,7 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
                     String cancel = getString(R.string.cancel);
                     String ok = getString(R.string.ok);
                     //-----------------
-                    new AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(context)
                             .setMessage(warningMessage)
                             .setNegativeButton(cancel,
                                     new DialogInterface.OnClickListener() {
@@ -187,12 +190,12 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog,int which) {
-                                            new CMDProcessor().su.runWaitFor("busybox echo 1 > " + FASTCHARGE_PATH);
+                                            new CMDProcessor().su.runWaitFor("busybox echo 1 > " + mFastChargePath);
                                         }
                                     }).create().show();
                     }
                     else{
-                        new CMDProcessor().su.runWaitFor("busybox echo 0 > " + FASTCHARGE_PATH);
+                        new CMDProcessor().su.runWaitFor("busybox echo 0 > " + mFastChargePath);
                     }
                  }
             });
@@ -227,15 +230,16 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().unregisterReceiver(this.batteryInfoReceiver);
+        context=getActivity();
+        context.unregisterReceiver(this.batteryInfoReceiver);
     }
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().registerReceiver(this.batteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED) );
+        context=getActivity();
+        context.registerReceiver(this.batteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED) );
     }
     private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
-        private int voltage;
         @Override
         public void onReceive(Context context, Intent intent) {
             //int  health= intent.getIntExtra(BatteryManager.EXTRA_HEALTH,0);
@@ -271,23 +275,6 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
                     mBattIcon.setImageResource(R.drawable.battery_5);
                     break;
             }
-            /*
-            int voltage;
-
-            if(String.valueOf(rawvoltage).length()<=2){
-                voltage=rawvoltage*1000;
-            }
-            else if(String.valueOf(rawvoltage).length()<=4){
-                voltage=rawvoltage;
-            }
-            else{
-                voltage=Math.round(rawvoltage/1000);
-            }
-            if (new File(BAT_VOLT_PATH).exists()){
-                voltage=Integer.parseInt(Helpers.readOneLine(BAT_VOLT_PATH));
-            }
-            mbattery_volt.setText(voltage+" mV");
-*/
             mbattery_status.setText((temperature/10)+"°C  "+getResources().getStringArray(R.array.batt_status)[status]);
 
         }
