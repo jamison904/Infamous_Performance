@@ -271,7 +271,7 @@ public class BootService extends Service implements Constants {
             }
             if (preferences.getBoolean(GOV_SOB, false)) {
                     final String gn = preferences.getString(GOV_NAME, "");
-                    if (gn.equals(Helpers.readOneLine(GOVERNOR_PATH))) {
+                    if (gn.equals(gov)) {
                         final String gs = preferences.getString(GOV_SETTINGS, null);
                         if(gs != null){
                             String p[]=gs.split(";");
@@ -282,7 +282,7 @@ public class BootService extends Service implements Constants {
                         }
                     }
              }
-            sb.append(preferences.getString(PREF_SH,"# no custom shell command")+";\n");
+            sb.append(preferences.getString(PREF_SH, "# no custom shell command")).append(";\n");
             Helpers.shExec(sb,context,true);
             return null;
         }
