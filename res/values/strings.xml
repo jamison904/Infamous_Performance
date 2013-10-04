@@ -327,6 +327,7 @@ Copyright (C) 2012  James Roberts
     <string name="prop_no_backup">Initial backup not found!</string>
     <string name="prop_restore_msg">Initial build.prop file will be restored. You must reboot your device to take effect. Continue?</string>
     <string name="filter">Filter</string>
+    <string name="fmt_backup">Backup</string>
 
 
     <!-- PC Settings -->
