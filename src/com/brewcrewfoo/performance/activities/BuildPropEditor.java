@@ -288,8 +288,10 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                         if (!f.exists()) {f.mkdir();}
                         f=new File(dn+"/buildprop");
                         if (!f.exists()) {f.mkdir();}
-                        new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/buildprop/build.prop.bak" );
-                        Toast.makeText(context, getString(R.string.prop_backup, dn), Toast.LENGTH_LONG).show();
+                        if(!new File(dn+"/buildprop/build.prop.bak").exists()){
+                            new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/buildprop/build.prop.bak" );
+                            Toast.makeText(context, getString(R.string.prop_backup, dn), Toast.LENGTH_LONG).show();
+                        }
                         if (pp!=null) {
                             if (tv.getText().toString() != null && tv.getText().toString().trim().length() > 0){
                                 pp.setVal(tv.getText().toString().trim());

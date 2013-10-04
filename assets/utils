@@ -7,13 +7,7 @@ busybox mount -o remount,rw /system
 sysro() {
 busybox mount -o remount,ro /system
 }
-restore_bk(){
-prop_file=${2:-/system/build.prop}
-prop_backup=$1
-sysrw;
-busybox cp $prop_backup $prop_file;
-sysro;
-}
+
 set_prop() {
 	prop_key=$1
 	prop_value=$2
@@ -37,7 +31,6 @@ set_prop() {
 		else
 		    sysrw
 		    busybox echo "$prop_key $seperator $prop_value" >> $prop_file;
-		    busybox echo "" >> $prop_file;
 		    exit_status=$?
 		    sysro
 		fi
@@ -87,6 +80,5 @@ elif [ "$arg" == "-govprop" ]; then
     echo "$r";
 elif [ "$arg" == "-setprop" ]; then
     set_prop $2 $3;
-elif [ "$arg" == "-restore" ]; then
-    restore_bk $2 $3;
+
 fi;
