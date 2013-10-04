@@ -1,6 +1,50 @@
 #
 ####### made by h0rn3t #######
 #
+sysrw() {
+busybox mount -o remount,rw /system
+}
+sysro() {
+busybox mount -o remount,ro /system
+}
+restore_bk(){
+prop_file=${2:-/system/build.prop}
+prop_backup=$1
+sysrw;
+busybox cp $prop_backup $prop_file;
+sysro;
+}
+set_prop() {
+	prop_key=$1
+	prop_value=$2
+	prop_file=${3:-/system/build.prop}
+	seperator="="
+	exit_status=1
+	setprop $prop_key $prop_value
+	if busybox [ -e $prop_file ]
+	then
+		prop_line=` busybox grep -m 1 $prop_key $prop_file `
+		if busybox [ -n "${prop_line}" ]
+		then
+			if busybox [ -n "$( echo $prop_line | busybox grep ' = ' )" ]
+			then
+				seperator=" = "
+			fi
+			sysrw
+			busybox sed -i "s|${prop_key}${seperator}.*|${prop_key}${seperator}${prop_value}|g" $prop_file
+			exit_status=$?
+			sysro
+		else
+		    sysrw
+		    busybox echo "$prop_key $seperator $prop_value" >> $prop_file;
+		    busybox echo "" >> $prop_file;
+		    exit_status=$?
+		    sysro
+		fi
+	fi
+	return $exit_status
+}
+
 count_files(){
 if [ "X$2" == "X" ]; then
     ext="*";
@@ -41,4 +85,8 @@ elif [ "$arg" == "-govprop" ]; then
         fi;
     done;
     echo "$r";
+elif [ "$arg" == "-setprop" ]; then
+    set_prop $2 $3;
+elif [ "$arg" == "-restore" ]; then
+    restore_bk $2 $3;
 fi;

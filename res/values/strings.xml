@@ -315,6 +315,19 @@ Copyright (C) 2012  James Roberts
     <!-- 2.1.3 -->
     <string name="ps_zram">Compress memory for increased virtual capacity</string>
     <string name="mt_gov_ctrl">Governor Settings</string>
+    <!-- 2.1.5 -->
+    <string name="prefcat_build_prop">BUILD PROP</string>
+    <string name="build_prop_title">Edit Build Prop</string>
+    <string name="add_prop_title">Add Property</string>
+    <string name="edit_prop_title">Edit Property</string>
+    <string name="prop_name">Name</string>
+    <string name="prop_val">Value</string>
+    <string name="prop_preset">Presets</string>
+    <string name="prop_backup">Backup of build.prop was created in %s</string>
+    <string name="prop_no_backup">Initial backup not found!</string>
+    <string name="prop_restore_msg">Initial build.prop file will be restored. You must reboot your device to take effect. Continue?</string>
+    <string name="filter">Filter</string>
+
 
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Use light theme</string>

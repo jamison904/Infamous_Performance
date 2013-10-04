@@ -420,7 +420,7 @@ public class Helpers implements Constants {
     }
 
 	public static String shExec(StringBuilder s,Context c,Boolean su){
-        get_assetsScript("run", c, s.toString(),"");
+        get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().su.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
         CMDProcessor.CommandResult cr = null;
         if(su)
