@@ -178,7 +178,8 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,long row) {
         final Prop p = adapter.getItem(position);
-        editPropDialog(p);
+        if(!p.getName().contains("fingerprint"))
+            editPropDialog(p);
     }
     @Override
     public boolean isThemeChanged() {
@@ -369,7 +370,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         props.clear();
         String p[]=s.split("\n");
         for (String aP : p) {
-            if(!aP.contains("#") && aP.length()>0 && aP!=null){
+            if(!aP.contains("#") && aP.trim().length()>0 && aP!=null){
                 aP=aP.replace("[","").replace("]","");
                 String pp[]=aP.split("=");
                 if(pp.length>=2){
