@@ -138,6 +138,10 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
 
         @Override
         protected String doInBackground(String... params) {
+            File f= new File(dn);
+            if (!f.exists()) {f.mkdir();}
+            f=new File(dn+"/buildprop");
+            if (!f.exists()) {f.mkdir();}
             CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"*.ogg\"");
             oggs=cr.stdout.split("\n");
             final String s = Helpers.readFileViaShell("/system/build.prop", false);
@@ -284,10 +288,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                     public void onClick(DialogInterface dialog, int which) {
                         Helpers.get_assetsScript("utils",context,"","");
                         new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
-                        File f= new File(dn);
-                        if (!f.exists()) {f.mkdir();}
-                        f=new File(dn+"/buildprop");
-                        if (!f.exists()) {f.mkdir();}
+
                         if(!new File(dn+"/buildprop/build.prop.bak").exists()){
                             new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/buildprop/build.prop.bak" );
                             Toast.makeText(context, getString(R.string.prop_backup, dn), Toast.LENGTH_LONG).show();
