@@ -7,19 +7,19 @@ for i in `busybox find /data -iname "*.db"`; do
 	$sql3 $i 'VACUUM;';
 	db=`busybox expr $db + 1`;
 done;
-if [ -d "/dbdata" ]; then
+if busybox [ -d "/dbdata" ]; then
 	for i in `busybox find /dbdata -iname "*.db"`; do
 		$sql3 $i 'VACUUM;';
 		db=`busybox expr $db + 1`;
 	done;
 fi;
-if [ -d "/system" ]; then
+if busybox [ -d "/system" ]; then
 	for i in `busybox find /system -iname "*.db"`; do
 		$sql3 $i 'VACUUM;';
 		db=`busybox expr $db + 1`;
 	done;
 fi;
-if [ -d "/datadata" ]; then
+if busybox [ -d "/datadata" ]; then
 	for i in `busybox find /datadata -iname "*.db"`; do
 		$sql3 $i 'VACUUM;';
 		db=`busybox expr $db + 1`;
