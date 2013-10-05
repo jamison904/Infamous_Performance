@@ -289,6 +289,23 @@
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Включить zRam</string>
     <string name="zram_set_title">настройки</string>
+
+    <string name="ps_zram">Сжатие памяти для увеличения виртуальной емкости</string>
+    <string name="mt_gov_ctrl">Настройки Говернора</string>
+
+    <string name="prefcat_build_prop">BUILD PROP</string>
+    <string name="build_prop_title">Редактировать Build Prop</string>
+    <string name="add_prop_title">Добавить Значение</string>
+    <string name="edit_prop_title">Редактировать Значение</string>
+    <string name="prop_name">Название</string>
+    <string name="prop_val">Значение</string>
+    <string name="prop_preset">Пресет</string>
+    <string name="prop_backup">Бэкап build.prop был сохранен в  %s</string>
+    <string name="prop_no_backup">Бэкап не найден!</string>
+    <string name="prop_restore_msg">Исходный build.prop файл будет восстановлен. Вам нужно будет перезагрузить устройство, чтобы применить изменения. Продолжить?</string>
+    <string name="filter">Фильтр</string>
+    <string name="fmt_backup">Бэкап</string>
+
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Использовать светлую тему</string>
     <string name="ps_use_light_theme">Если выбрать, приложение будет использовать светлую тему Holo</string>
