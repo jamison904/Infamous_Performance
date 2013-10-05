@@ -30,7 +30,7 @@ set_prop() {
 			sysro
 		else
 		    sysrw
-		    busybox echo "$prop_key $seperator $prop_value" >> $prop_file;
+		    busybox echo "$prop_key$seperator$prop_value" >> $prop_file;
 		    exit_status=$?
 		    sysro
 		fi

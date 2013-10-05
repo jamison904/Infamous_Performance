@@ -295,13 +295,13 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                             Toast.makeText(context, getString(R.string.prop_backup, dn), Toast.LENGTH_LONG).show();
                         }
                         if (pp!=null) {
-                            if (tv.getText().toString() != null && tv.getText().toString().trim().length() > 0){
+                            if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
                                 new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop "+pp.getName()+" "+pp.getVal());
                             }
                         }
                         else {
-                            if (tv.getText().toString() != null && tv.getText().toString().trim().length() > 0 && tn.getText().toString() != null && tn.getText().toString().trim().length() > 0){
+                            if (tv.getText().toString() != null && tn.getText().toString() != null && tn.getText().toString().trim().length() > 0){
                                 props.add(new Prop(tn.getText().toString().trim(),tv.getText().toString().trim()));
                                 new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop "+tn.getText().toString().trim()+" "+tv.getText().toString().trim());
                             }
