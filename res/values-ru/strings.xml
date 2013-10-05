@@ -292,7 +292,7 @@
 
     <string name="ps_zram">Сжатие памяти для увеличения виртуальной емкости</string>
     <string name="mt_gov_ctrl">Настройки Говернора</string>
-
+    <!-- 2.1.5 -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Редактировать Build Prop</string>
     <string name="add_prop_title">Добавить Значение</string>
