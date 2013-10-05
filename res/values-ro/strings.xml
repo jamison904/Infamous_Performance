@@ -266,7 +266,7 @@ Translation by Laurentiu1996
     <string name="ksm_pagvolatile">Pagini volatile:</string>
     <string name="ksm_pagtoscan">Pagini de scanat:</string>
     <string name="ksm_sleep">Pauză (ms):</string>
-    <!-- 2.1.3 -->
+
     <!-- freezer -->
     <string name="prefcat_freezer">ÎNGHEȚARE sau DEZGHEȚARE PACHETE</string>
     <string name="pt_freeze">Îngheaţare pachet</string>
@@ -281,6 +281,22 @@ Translation by Laurentiu1996
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Activaţi zRam</string>
     <string name="zram_set_title">Setări</string>
+    <!-- 2.1.3 -->
+    <string name="ps_zram">Crește capacitatea virtuală prin compresia memoriei</string>
+    <string name="mt_gov_ctrl">Setare Governor</string>
+    <!-- 2.1.5 -->
+    <string name="prefcat_build_prop">BUILD PROP</string>
+    <string name="build_prop_title">Editare fișier Build Prop</string>
+    <string name="add_prop_title">Adăugare Proprietate</string>
+    <string name="edit_prop_title">Editare Proprietate</string>
+    <string name="prop_name">Denumire</string>
+    <string name="prop_val">Valoare</string>
+    <string name="prop_preset">Predefinite</string>
+    <string name="prop_backup">O copie de siguranţă a fișierului build.prop a fost creată în %s</string>
+    <string name="prop_no_backup">Copia de siguranţă iniţială nu a fost găsită!</string>
+    <string name="prop_restore_msg">Fișierul build.prop va fi restaurat. Pentru a avea efect este necesară repornirea dispozitivului. Continuaţi?</string>
+    <string name="filter">Filtru</string>
+    <string name="fmt_backup">Backup</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Utilizaţi o temă deschisă</string>
     <string name="ps_use_light_theme">Dacă este bifată, aplicaţia va folosi o temă deschisă Holo</string>
