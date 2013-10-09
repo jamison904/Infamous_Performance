@@ -41,6 +41,8 @@
         <activity android:name="com.brewcrewfoo.performance.activities.GovSetActivity"/>
         <activity android:name="com.brewcrewfoo.performance.activities.BuildPropEditor"
                   android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.ZramActivity"
+            android:windowSoftInputMode="stateHidden"/>
 
         <receiver android:name=".service.BootReceiver">
             <intent-filter>

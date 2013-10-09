@@ -313,6 +313,14 @@ Copyright (C) 2012  James Roberts
     <string name="pt_run_zram">Enable zRam</string>
     <string name="zram_set_title">Settings</string>
 
+    <string name="zram_compressed_size">Compressed Data Size</string>
+    <string name="zram_compressed_ratio">Compression Ratio</string>
+    <string name="zram_original_size">Original Data Size</string>
+    <string name="zram_used_ratio">Used Ratio</string>
+    <string name="zram_mem_used">Total Used Memory</string>
+    <string name="mt_start">Start</string>
+    <string name="mt_stop">Start</string>
+
     <!-- 2.1.3 -->
     <string name="ps_zram">Compress memory for increased virtual capacity</string>
     <string name="mt_gov_ctrl">Governor Settings</string>
