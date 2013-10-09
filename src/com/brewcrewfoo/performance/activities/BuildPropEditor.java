@@ -284,7 +284,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         })
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.ps_volt_save), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Helpers.get_assetsScript("utils",context,"","");
