@@ -209,10 +209,10 @@ public class Helpers implements Constants {
      */
     public static String[] getAvailableIOSchedulers() {
         String[] schedulers = null;
-        String[] aux = readStringArray(IO_SCHEDULER_PATH[0]);
+        String[] aux = readStringArray(IO_SCHEDULER_PATH);
         if (aux != null) {
             schedulers = new String[aux.length];
-            for (int i = 0; i < aux.length; i++) {
+            for (byte i = 0; i < aux.length; i++) {
                 if (aux[i].charAt(0) == '[') {
                     schedulers[i] = aux[i].substring(1, aux[i].length() - 1);
                 } else {
@@ -244,7 +244,7 @@ public class Helpers implements Constants {
      */
     public static String getIOScheduler() {
         String scheduler = null;
-        String[] schedulers = readStringArray(IO_SCHEDULER_PATH[0]);
+        String[] schedulers = readStringArray(IO_SCHEDULER_PATH);
         if (schedulers != null) {
             for (String s : schedulers) {
                 if (s.charAt(0) == '[') {
@@ -493,7 +493,7 @@ public class Helpers implements Constants {
         return String.format("%.1f %sB", bytes / Math.pow(1024, exp), pre);
     }
     public static void removeCurItem(MenuItem item,int idx,ViewPager vp){
-        for(int i=0;i< vp.getAdapter().getCount();i++){
+        for(byte i=0;i< vp.getAdapter().getCount();i++){
             if(item.getItemId() == idx+i+1) {
                 vp.setCurrentItem(i);
             }
@@ -501,7 +501,7 @@ public class Helpers implements Constants {
     }
     public static void addItems2Menu(Menu menu,int idx,String nume,ViewPager vp){
         final SubMenu smenu = menu.addSubMenu(0, idx, 0,nume);
-        for(int i=0;i< vp.getAdapter().getCount();i++){
+        for(byte i=0;i< vp.getAdapter().getCount();i++){
             if(i!=vp.getCurrentItem())
                 smenu.add(0,idx +i+1, 0, vp.getAdapter().getPageTitle(i));
         }

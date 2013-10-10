@@ -93,9 +93,9 @@ public class BootService extends Service implements Constants {
                 if(new File(DYN_MIN_FREQ_PATH).exists()){
                     sb.append("busybox echo ").append(min).append(" > ").append(DYN_MIN_FREQ_PATH).append(";\n");
                 }
-                for(int i=0;i<IO_SCHEDULER_PATH.length; i++){
-                    if (new File(IO_SCHEDULER_PATH[i]).exists())
-                        sb.append("busybox echo ").append(io).append(" > ").append(IO_SCHEDULER_PATH[i]).append(";\n");
+                for(byte i=0;i<2; i++){
+                    if (new File(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).exists())
+                        sb.append("busybox echo ").append(io).append(" > ").append(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).append(";\n");
                 }
             }
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
@@ -104,7 +104,7 @@ public class BootService extends Service implements Constants {
                     if (Helpers.getVoltagePath().equals(VDD_PATH)) {
                         for (final Voltage volt : volts) {
                             if(!volt.getSavedMV().equals(volt.getCurrentMv())){
-                                for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
+                                for (byte i = 0; i < Helpers.getNumOfCpus(); i++) {
                                     sb.append("busybox echo ").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
                                 }
                             }
@@ -116,7 +116,7 @@ public class BootService extends Service implements Constants {
                         for (final Voltage volt : volts) {
                             b.append(volt.getSavedMV()).append(" ");
                         }
-                        for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
+                        for (byte i = 0; i < Helpers.getNumOfCpus(); i++) {
                             sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
                         }
                     }
@@ -271,7 +271,7 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH))).append(" > ").append(KSM_SLEEP_PATH).append(";\n");
                 }
             }
-            for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
+            for (byte i = 0; i < Helpers.getNumOfCpus(); i++) {
                 sb.append("busybox echo ").append(gov).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
             }
             if (preferences.getBoolean(GOV_SOB, false)) {

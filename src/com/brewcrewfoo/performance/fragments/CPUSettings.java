@@ -271,9 +271,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
             String selected = parent.getItemAtPosition(pos).toString();
 			final StringBuilder sb = new StringBuilder();
-			for(int i=0; i<IO_SCHEDULER_PATH.length; i++){
-                if (new File(IO_SCHEDULER_PATH[i]).exists())
-				sb.append("busybox echo ").append(selected).append(" > ").append(IO_SCHEDULER_PATH[i]).append(";\n");
+			for(byte i=0; i<2; i++){
+                if (new File(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).exists())
+				    sb.append("busybox echo ").append(selected).append(" > ").append(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).append(";\n");
 			}
 			Helpers.shExec(sb,context,true);
             updateSharedPrefs(PREF_IO, selected);
