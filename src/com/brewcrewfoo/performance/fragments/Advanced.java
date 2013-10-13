@@ -305,7 +305,10 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 		if (key.equals(PREF_READ_AHEAD)) {
 			final String values = mReadAhead.getValue();
 			if (!values.equals(Helpers.readOneLine(READ_AHEAD_PATH))){
-                new CMDProcessor().su.runWaitFor("busybox echo "+values+" > " + READ_AHEAD_PATH);
+                for(byte i=0;i<2;i++){
+                    if(new File(READ_AHEAD_PATH.replace("mmcblk0","mmcblk"+i)).exists())
+                        new CMDProcessor().su.runWaitFor("busybox echo "+values+" > " + READ_AHEAD_PATH.replace("mmcblk0","mmcblk"+i));
+                }
 			}
 			mReadAhead.setSummary(sreadahead+values + " kb");
 		}	

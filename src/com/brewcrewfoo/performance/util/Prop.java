@@ -3,7 +3,7 @@ package com.brewcrewfoo.performance.util;
 /**
  * Created by h0rn3t on 22.09.2013.
  */
-public class Prop {
+public class Prop implements Comparable<Prop> {
 
     private String name;
     private String data;
@@ -25,5 +25,10 @@ public class Prop {
     public void setVal(String d){
         this.data=d;
     }
-
+    public int compareTo(Prop o) {
+        if(this.name != null)
+            return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
+        else
+            throw new IllegalArgumentException();
+    }
 }

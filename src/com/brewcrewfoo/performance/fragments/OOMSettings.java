@@ -42,6 +42,7 @@ import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.KSMActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.activities.PackActivity;
+import com.brewcrewfoo.performance.activities.ZramActivity;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -84,6 +85,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     private Preference mSysNames;
     private CheckBoxPreference mKSM;
     private Preference mKSMsettings;
+    private Preference mZRAMsettings;
 
     private Boolean ispm;
 	
@@ -125,6 +127,8 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 
         mKSM=(CheckBoxPreference) findPreference(PREF_RUN_KSM);
         mKSMsettings= findPreference("ksm_settings");
+
+        mZRAMsettings= findPreference("zram_settings");
 
         if (!new File(USER_PROC_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("notkill_user_proc");
@@ -306,7 +310,9 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         else if (preference.equals(mKSMsettings)){
             startActivityForResult(new Intent(getActivity(), KSMActivity.class), 1);
         }
-
+        else if (preference.equals(mZRAMsettings)){
+            startActivityForResult(new Intent(getActivity(), ZramActivity.class), 1);
+        }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 

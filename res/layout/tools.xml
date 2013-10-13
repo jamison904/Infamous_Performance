@@ -87,4 +87,11 @@ Copyright (C) 2012  James Roberts
             android:summary="@string/ps_unfreeze"
             android:title="@string/pt_unfreeze"/>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:key="category_build_prop"
+        android:title="@string/prefcat_build_prop">
+        <Preference
+            android:key="pref_build_prop"
+            android:title="@string/build_prop_title"/>
+    </PreferenceCategory>
 </PreferenceScreen>

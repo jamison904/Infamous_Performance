@@ -20,7 +20,7 @@ busybox printf "%02d:%02d:%02d\n" "$hours" "$mins" "$secs"
 
 fp_print(){
    MSG="$*";
-   if [ $LOGGING -eq 1 ]; then
+   if busybox [ $LOGGING -eq 1 ]; then
     busybox echo "$MSG" >> $LOG_FILE;
    fi
 }
@@ -141,7 +141,7 @@ fp_all() {
 }
 FPSTART=$( busybox date +"%m-%d-%Y %H:%M:%S" );
 SD=`busybox mount | busybox egrep -v "asec|android_secure|external_sd|sdcard1" | busybox egrep -i "(sdcard|sdcard0)" | busybox awk '{print $3}'`;
-if [ "$SD" == "" ]; then
+if busybox [ "$SD" == "" ]; then
       LOG_FILE="/data/fix_permissions.log"
 else
       LOG_FILE="$SD/fix_permissions.log"
@@ -149,12 +149,12 @@ fi
 busybox rm -f "$LOG_FILE";
 
 arg=$1;
-if [ "$arg" == "-l" ]; then
+if busybox [ "$arg" == "-l" ]; then
     LOGGING=1;
 else
     LOGGING=0;
 fi;
-if [ $LOGGING -eq 1 ]; then
+if busybox [ $LOGGING -eq 1 ]; then
    busybox touch "$LOG_FILE";
 fi
 fp_all;

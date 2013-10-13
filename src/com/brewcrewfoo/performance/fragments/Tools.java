@@ -45,6 +45,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.brewcrewfoo.performance.R;
+import com.brewcrewfoo.performance.activities.BuildPropEditor;
 import com.brewcrewfoo.performance.activities.FlasherActivity;
 import com.brewcrewfoo.performance.activities.FreezerActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
@@ -93,6 +94,11 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         }
         if(Helpers.binExist("pm").equals(NOT_FOUND)){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_freezer");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"build.prop\"");
+        if(!cr.success() || cr.stdout.equals("")){
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_build_prop");
             getPreferenceScreen().removePreference(hideCat);
         }
         setRetainInstance(true);
@@ -259,17 +265,20 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
             theButton.setOnClickListener(new sqlListener(alertDialog));
         }
         else if (key.equals(PREF_FRREZE)){
-            Intent getpacks = new Intent(context, FreezerActivity.class);
-            getpacks.putExtra("freeze",true);
-            getpacks.putExtra("packs","usr");
-            startActivity(getpacks);
+            Intent intent = new Intent(context, FreezerActivity.class);
+            intent.putExtra("freeze",true);
+            intent.putExtra("packs","usr");
+            startActivity(intent);
         }
         else if (key.equals(PREF_UNFRREZE)){
-            Intent getpacks = new Intent(context, FreezerActivity.class);
-            getpacks.putExtra("freeze",false);
-            startActivity(getpacks);
+            Intent intent = new Intent(context, FreezerActivity.class);
+            intent.putExtra("freeze",false);
+            startActivity(intent);
         }
-
+        else if (key.equals("pref_build_prop")){
+            Intent intent = new Intent(context, BuildPropEditor.class);
+            startActivity(intent);
+        }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 

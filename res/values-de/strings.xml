@@ -294,6 +294,23 @@ Translation by Rhonin86 & Evisceration
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Aktiviere zRam</string>
     <string name="zram_set_title">Einstellungen</string>
+
+    <string name="ps_zram">Komprimiere den Speicher um die Speicherkapazietät zu erhöhen</string>
+    <string name="mt_gov_ctrl">Governor Einstellungen</string>
+    <!-- 2.1.5 -->
+    <string name="prefcat_build_prop">BUILD PROP</string>
+    <string name="build_prop_title">Editiere Build Prop</string>
+    <string name="add_prop_title">Füge Eigenschaft hinzu</string>
+    <string name="edit_prop_title">Editiere die Eigenschaft</string>
+    <string name="prop_name">Name</string>
+    <string name="prop_val">Wert</string>
+    <string name="prop_preset">Voreinstellungen</string>
+    <string name="prop_backup">Backup der build.prop wurde erzeugt in %s</string>
+    <string name="prop_no_backup">Backup der ursprünglichen build.prop wurde nicht gefunden!</string>
+    <string name="prop_restore_msg">Ursprüngliche build.prop wird wieder hergestellt. Das Handy muß neu gestartet werden um die alte buid.prop zu reaktivieren. Weiter machen?</string>
+    <string name="filter">Filter</string>
+    <string name="fmt_backup">Backup</string>
+
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Benutze das helle Theme</string>
     <string name="ps_use_light_theme">Verwende das helle HOLO-Theme</string>

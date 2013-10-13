@@ -67,7 +67,7 @@ public class Zram implements Constants {
         return (float) getOriginalDataSize() / (float) getDiskSize();
    }
 
-    public void setDiskSize(int v) throws Exception {
+    public void setDiskSize(long v) throws Exception {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
             sb.append("busybox echo " + String.valueOf(v*1024*1024) + " > " + ZRAM_SIZE_PATH.replace("zram0", "zram" + i));
