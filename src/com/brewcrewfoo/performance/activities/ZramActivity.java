@@ -115,9 +115,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            if (seekBar.getId() == R.id.val1) {
-                tval1.setText(getString(R.string.zram_disk_size,Helpers.ReadableByteCount(progress*1024*1024)));
-            }
+            tval1.setText(getString(R.string.zram_disk_size,Helpers.ReadableByteCount(progress*1024*1024)));
         }
     }
 
