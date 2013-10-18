@@ -403,10 +403,10 @@ public class Helpers implements Constants {
 
     public static long getTotMem() {
         long v=0;
-        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E --only-matching '[[:digit:]]+'`");
+        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E -o '[[:digit:]]+'`");
         if(cr.success()){
             try{
-               v = (long) Integer.parseInt(cr.stdout)*1024;
+               v = (long) Integer.parseInt(cr.stdout);//kb
             }
             catch (NumberFormatException e) {
                 Log.d(TAG, "MemTot conversion err: "+e);

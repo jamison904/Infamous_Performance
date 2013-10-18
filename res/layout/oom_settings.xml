@@ -131,6 +131,10 @@ Copyright (C) 2012  James Roberts
             android:key="zram_settings"
             android:summary="@string/ps_zram"
             android:title="@string/zram_set_title"/>
-
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="zram_boot"
+            android:summary="@string/ps_restore_boot"
+            android:title="@string/sob"/>
     </PreferenceCategory>
 </PreferenceScreen>

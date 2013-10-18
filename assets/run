@@ -1,0 +1,16 @@
+
+zramstart(){
+cpus=$1;
+val=$2;
+busybox modprobe zram zram_num_devices=$cpus 2>/dev/null;
+num_cpus=`busybox expr $cpus - 1`;
+for i in `busybox seq 0 $num_cpus`; do
+    busybox echo "$val" > /sys/block/zram$i/disksize
+done;
+for i in `busybox seq 0 $num_cpus`; do
+    busybox mkswap /dev/block/zram$i
+done;
+for i in `busybox seq 0 $num_cpus`; do
+    busybox swapon /dev/block/zram$i
+done;
+}

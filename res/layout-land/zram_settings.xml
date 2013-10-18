@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/zram_compressed_size"
-                android:id="@+id/t5"
+                android:id="@+id/tt1"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="0dp"
                 android:layout_alignParentTop="true"
@@ -37,12 +37,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/t6"
-                android:layout_toRightOf="@+id/t5"
+                android:id="@+id/t1"
+                android:layout_toRightOf="@+id/tt1"
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:text="0" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -57,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/zram_compressed_ratio"
-                android:id="@+id/t1"
+                android:id="@+id/tt2"
                 android:layout_gravity="center"
                 android:textSize="14dip"
                 android:layout_alignParentLeft="true"
@@ -71,9 +72,10 @@
                 android:id="@+id/t2"
                 android:textSize="18dip"
                 android:textStyle="bold"
-                android:layout_toRightOf="@+id/t1"
+                android:layout_toRightOf="@+id/tt2"
                 android:layout_alignParentEnd="true"
-                android:gravity="right" />
+                android:gravity="right"
+                android:text="0" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -89,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/zram_original_size"
-                android:id="@+id/t3"
+                android:id="@+id/tt3"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="0dp"
                 android:layout_alignParentTop="true"
@@ -98,12 +100,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/t4"
-                android:layout_toRightOf="@+id/t3"
+                android:id="@+id/t3"
+                android:layout_toRightOf="@+id/tt3"
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:text="0" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -119,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/zram_used_ratio"
-                android:id="@+id/t7"
+                android:id="@+id/tt4"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="0dp"
                 android:layout_alignParentTop="true"
@@ -128,12 +131,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/t8"
-                android:layout_toRightOf="@+id/t7"
+                android:id="@+id/t4"
+                android:layout_toRightOf="@+id/tt4"
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:text="0" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -149,7 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/zram_mem_used"
-                android:id="@+id/t9"
+                android:id="@+id/tt5"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="0dp"
                 android:layout_alignParentTop="true"
@@ -158,28 +162,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/t10"
-                android:layout_toRightOf="@+id/t9"
+                android:id="@+id/t5"
+                android:layout_toRightOf="@+id/tt5"
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:text="0" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:id="@+id/linearLayout4">
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/mt_reset"
-                android:id="@+id/rst"
-                android:textSize="14dp" />
-        </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
@@ -204,36 +195,18 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ksm_pagtoscan"
+                android:text="@string/zram_disk_size"
                 android:id="@+id/tval1"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal" />
 
-            <RelativeLayout
+            <SeekBar
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent" >
+                android:layout_height="wrap_content"
+                android:id="@+id/val1"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="false" />
 
-                <SeekBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/val1"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentBottom="false"
-                    android:layout_alignParentEnd="false"
-                    android:layout_toLeftOf="@+id/edit1" />
-
-                <EditText
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/edit1"
-                    android:layout_alignParentEnd="true"
-                    android:inputType="number"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="false"
-                    android:gravity="right"
-                    android:singleLine="true" />
-
-            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
