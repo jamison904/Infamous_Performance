@@ -69,7 +69,25 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         setTheme();
         setContentView(R.layout.prop_view);
 
+        File f= new File(dn);
+        if (!f.exists()) {f.mkdir();}
+        f=new File(dn+"/buildprop");
+        if (!f.exists()) {f.mkdir();}
+        if(!new File(dn+"/buildprop/build.prop.bak").exists()){
+            new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/buildprop/build.prop.bak" );
+            Toast.makeText(context, getString(R.string.prop_backup, dn), Toast.LENGTH_LONG).show();
+        }
+
         packList = (ListView) findViewById(R.id.applist);
+        packList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position,long id) {
+                final Prop p = adapter.getItem(position);
+                if(p.getName().contains("fingerprint")) return true;
+                makedialog(getString(R.string.del_prop_title),getString(R.string.del_prop_msg,p.getName()),(byte)1,p);
+                return false;
+            }
+        });
         packList.setOnItemClickListener(this);
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         nofiles = (LinearLayout) findViewById(R.id.nofiles);
@@ -96,6 +114,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         new GetPropOperation().execute();
 
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -117,11 +136,12 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                 search.setVisibility(RelativeLayout.VISIBLE);
                 break;
             case R.id.restore_prop:
-                makedialog(getString(R.string.prefcat_build_prop),getString(R.string.prop_restore_msg),(byte)0);
+                makedialog(getString(R.string.prefcat_build_prop),getString(R.string.prop_restore_msg),(byte)0,null);
                 break;
         }
         return true;
     }
+
 
     @Override
     public void onBackPressed(){
@@ -138,14 +158,9 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
 
         @Override
         protected String doInBackground(String... params) {
-            File f= new File(dn);
-            if (!f.exists()) {f.mkdir();}
-            f=new File(dn+"/buildprop");
-            if (!f.exists()) {f.mkdir();}
             CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"*.ogg\"");
             oggs=cr.stdout.split("\n");
-            final String s = Helpers.readFileViaShell("/system/build.prop", false);
-            return s;
+            return Helpers.readFileViaShell("/system/build.prop", false);
         }
         @Override
         protected void onPostExecute(String result) {
@@ -181,6 +196,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         if(!p.getName().contains("fingerprint"))
             editPropDialog(p);
     }
+
     @Override
     public boolean isThemeChanged() {
         final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
@@ -241,9 +257,9 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
             else if(v.contains(".ogg")){
                 if(oggs.length>0){
                     vAdapter.add(v);
-                    for(int i=0;i<oggs.length;i++){
-                        File f = new File(oggs[i]);
-                        if(!f.getName().equalsIgnoreCase(v))
+                    for (String ogg : oggs) {
+                        File f = new File(ogg);
+                        if (!f.getName().equalsIgnoreCase(v))
                             vAdapter.add(f.getName());
                     }
                     lpresets.setVisibility(LinearLayout.VISIBLE);
@@ -289,11 +305,6 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                     public void onClick(DialogInterface dialog, int which) {
                         Helpers.get_assetsScript("utils",context,"","");
                         new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
-
-                        if(!new File(dn+"/buildprop/build.prop.bak").exists()){
-                            new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/buildprop/build.prop.bak" );
-                            Toast.makeText(context, getString(R.string.prop_backup, dn), Toast.LENGTH_LONG).show();
-                        }
                         if (pp!=null) {
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
@@ -313,7 +324,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     }
 
 
-    private void makedialog(String t,String m,byte op){
+    private void makedialog(String t,String m,byte op,Prop p){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(t)
                 .setMessage(m)
@@ -335,15 +346,17 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         //alertDialog.setCancelable(false);
         Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         if (theButton != null) {
-            theButton.setOnClickListener(new CustomListener(alertDialog,op));
+            theButton.setOnClickListener(new CustomListener(alertDialog,op,p));
         }
     }
     class CustomListener implements View.OnClickListener {
         private final Dialog dialog;
         private final byte op;
-        public CustomListener(Dialog dialog,byte op) {
+        private final Prop p;
+        public CustomListener(Dialog dialog,byte op,Prop p) {
             this.dialog = dialog;
             this.op=op;
+            this.p=p;
         }
         @Override
         public void onClick(View v) {
@@ -362,6 +375,15 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                     else{
                         Toast.makeText(context, getString(R.string.prop_no_backup), Toast.LENGTH_LONG).show();
                     }
+                    break;
+                case 1:
+                    final StringBuilder sb = new StringBuilder();
+                    sb.append("busybox mount -o remount,rw /system").append(";\n");
+                    sb.append("busybox sed -i '/").append(p.getName()).append("/d' ").append("/system/build.prop;\n");
+                    sb.append("busybox mount -o remount,ro /system").append(";\n");
+                    Helpers.shExec(sb,context,true);
+                    adapter.remove(p);
+                    adapter.notifyDataSetChanged();
                     break;
             }
         }
