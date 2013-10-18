@@ -321,6 +321,8 @@ Copyright (C) 2012  James Roberts
     <string name="zram_disk_size">Disk Size: %s</string>
     <string name="mt_start">Start</string>
     <string name="mt_stop">Stop</string>
+    <string name="zram_num_reads">Number of Reads</string>
+    <string name="zram_num_writes">Number of Writes</string>
 
     <!-- 2.1.3 -->
     <string name="ps_zram">Compress memory for increased virtual capacity</string>

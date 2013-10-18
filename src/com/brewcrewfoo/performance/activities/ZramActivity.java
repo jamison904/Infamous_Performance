@@ -33,13 +33,16 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private boolean mIsLightTheme;
     final Context context = this;
     private CurThread mCurThread;
-    private TextView t1,t2,t3,t4,t5,tval1;
+    private TextView t1,t2,t3,t4,t5,t6,t7,tval1;
     private SeekBar mdisksize;
     private int ncpus=0;
+    private int curcpu=0;
     private int curdisk=0;
     private Boolean ist1=false;
     private Boolean ist3=false;
     private Boolean ist5=false;
+    private Boolean ist6=false;
+    private Boolean ist7=false;
     private Button start_btn;
     private NumberFormat nf;
     private ProgressDialog progressDialog;
@@ -72,18 +75,28 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         t3=(TextView)findViewById(R.id.t3);
         t4=(TextView)findViewById(R.id.t4);
         t5=(TextView)findViewById(R.id.t5);
+        t6=(TextView)findViewById(R.id.t6);
+        t7=(TextView)findViewById(R.id.t7);
 
-        if(new File(ZRAM_COMPR_PATH).exists()){
-            t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH))));
+        if(new File(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)).exists()){
+            t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)))));
             ist1=true;
         }
-        if(new File(ZRAM_ORIG_PATH).exists()){
-            t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH))));
+        if(new File(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)).exists()){
+            t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)))));
             ist3=true;
         }
-        if(new File(ZRAM_MEMTOT_PATH).exists()){
-            t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH))));
+        if(new File(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)).exists()){
+            t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
             ist5=true;
+        }
+        if(new File(ZRAM_READS_PATH.replace("zram0","zram"+curcpu)).exists()){
+            t6.setText(Helpers.readOneLine(ZRAM_READS_PATH.replace("zram0","zram"+curcpu)));
+            ist6=true;
+        }
+        if(new File(ZRAM_WRITES_PATH.replace("zram0","zram"+curcpu)).exists()){
+            t7.setText(Helpers.readOneLine(ZRAM_WRITES_PATH.replace("zram0","zram"+curcpu)));
+            ist7=true;
         }
         if(ist1&&ist3&&ist5){
             t2.setText(nf.format(getCompressionRatio()));
@@ -190,9 +203,11 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     }
     protected Handler mCurHandler = new Handler() {
         public void handleMessage(Message msg) {
-            if (ist1) t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH))));
-            if (ist3) t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH))));
-            if (ist5) t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH))));
+            if (ist1) t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)))));
+            if (ist3) t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)))));
+            if (ist5) t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
+            if (ist6) t6.setText(Helpers.readOneLine(ZRAM_READS_PATH.replace("zram0","zram"+curcpu)));
+            if (ist7) t7.setText(Helpers.readOneLine(ZRAM_WRITES_PATH.replace("zram0","zram"+curcpu)));
             if(ist1&&ist3&&ist5){
                 t2.setText(nf.format(getCompressionRatio()));
                 t4.setText(nf.format(getUsedRatio()));
@@ -206,15 +221,15 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     }
 
     private int getDiskSize() {
-        return parseInt(Helpers.readOneLine(ZRAM_SIZE_PATH));
+        return parseInt(Helpers.readOneLine(ZRAM_SIZE_PATH.replace("zram0","zram"+curcpu)));
     }
 
     private int getCompressedDataSize(){
-        return parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH));
+        return parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)));
     }
 
     private int getOriginalDataSize(){
-        return parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH));
+        return parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)));
     }
 
     public float getCompressionRatio() {

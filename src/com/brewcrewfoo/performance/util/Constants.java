@@ -199,6 +199,8 @@ public interface Constants {
     public static final String ZRAM_COMPR_PATH = "/sys/block/zram0/compr_data_size";
     public static final String ZRAM_ORIG_PATH = "/sys/block/zram0/orig_data_size";
     public static final String ZRAM_MEMTOT_PATH = "/sys/block/zram0/mem_used_total";
+    public static final String ZRAM_READS_PATH = "/sys/block/zram0/num_reads";
+    public static final String ZRAM_WRITES_PATH = "/sys/block/zram0/num_writes";
     public static final String PREF_ZRAM = "zram_size";
     public static final String ZRAM_SOB = "zram_boot";
 
