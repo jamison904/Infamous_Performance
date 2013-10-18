@@ -46,7 +46,8 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:layout_alignParentTop="false"
+                android:text="0" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -79,7 +80,8 @@
                 android:layout_alignParentTop="false"
                 android:layout_toRightOf="@+id/t1"
                 android:layout_alignParentEnd="true"
-                android:gravity="right" />
+                android:gravity="right"
+                android:text="0" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -111,7 +113,8 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:layout_alignParentTop="false"
+                android:text="0" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -143,7 +146,8 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:layout_alignParentTop="false"
+                android:text="0" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -175,7 +179,8 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:layout_alignParentTop="false"
+                android:text="0" />
         </RelativeLayout>
 
     </LinearLayout>

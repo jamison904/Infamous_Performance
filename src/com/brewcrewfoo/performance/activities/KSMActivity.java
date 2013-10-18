@@ -32,11 +32,7 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
     SharedPreferences mPreferences;
     private boolean mIsLightTheme;
     final Context context = this;
-    private TextView t1;
-    private TextView t2;
-    private TextView t3;
-    private TextView t4;
-    private TextView t5;
+    private TextView t1,t2,t3,t4,t5;
     private CurThread mCurThread;
     private Boolean ist1=false;
     private Boolean ist2=false;
