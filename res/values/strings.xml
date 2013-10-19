@@ -58,6 +58,7 @@ Copyright (C) 2012  James Roberts
     <string name="sob">Set on boot</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="mt_gov_ctrl">Governor Settings</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">FREE MEMORY</string>
     <string name="prefcat_tweaks">FAST CHARGE</string>
@@ -270,7 +271,6 @@ Copyright (C) 2012  James Roberts
     <string name="free">free %s</string>
     <string name="used">used %s</string>
 
-    <!-- 2.1.0 -->
     <string name="verify">Verifying…</string>
     <string name="bad_zip">%s not found in zip file !</string>
     <string name="closebtn">Close</string>
@@ -284,7 +284,6 @@ Copyright (C) 2012  James Roberts
         <item>Full</item>
         <item>Not charging</item>
     </string-array>
-    <!-- 2.1.2 -->
     <!-- ksm -->
     <string name="prefcat_ksm">KERNEL SAMEPAGE MERGING</string>
     <string name="pt_run_ksm">Enable KSM</string>
@@ -296,7 +295,6 @@ Copyright (C) 2012  James Roberts
     <string name="ksm_pagvolatile">Pages Volatile:</string>
     <string name="ksm_pagtoscan">Pages to Scan:</string>
     <string name="ksm_sleep">Sleep (ms):</string>
-
     <!-- freezer -->
     <string name="prefcat_freezer">FREEZE or DEFROST PACKAGES</string>
     <string name="pt_freeze">Freeze Package</string>
@@ -307,15 +305,11 @@ Copyright (C) 2012  James Roberts
     <string name="mt_user_packs">User Packages</string>
     <string name="freeze_msg">%s will be frozen. Continue?</string>
     <string name="unfreeze_msg">%s will be defrosted. Continue?</string>
-
     <!-- zRam -->
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Enable zRam</string>
     <string name="zram_set_title">Settings</string>
-
     <string name="ps_zram">Compress memory for increased virtual capacity</string>
-    <string name="mt_gov_ctrl">Governor Settings</string>
-
     <string name="zram_compressed_size">Compressed Data Size</string>
     <string name="zram_compressed_ratio">Compression Ratio</string>
     <string name="zram_original_size">Original Data Size</string>

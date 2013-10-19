@@ -42,6 +42,7 @@ Translation by Rhonin86 & Evisceration
     <string name="sob">Beim Booten einstellen</string>
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
+    <string name="mt_gov_ctrl">Governor Einstellungen</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">Freier Speicher</string>
     <string name="prefcat_tweaks">Schnelles Laden</string>
@@ -252,7 +253,7 @@ Translation by Rhonin86 & Evisceration
 
     <string name="free">frei %s</string>
     <string name="used">genutzt %s</string>
-    <!-- 2.1.0 -->
+
     <string name="verify">Überprüfung…</string>
     <string name="bad_zip">%s nicht in Zip-Datei gefunden !</string>
     <string name="closebtn">Schließen</string>
@@ -266,9 +267,8 @@ Translation by Rhonin86 & Evisceration
         <item>Voll</item>
         <item>Lädt nicht</item>
     </string-array>
-    <!-- 2.1.2 -->
     <!-- ksm -->
-    <string name="prefcat_ksm">KERNEL SAMEPAGE MERGING</string>
+    <string name="prefcat_ksm">Kernel Samepage Merging</string>
     <string name="pt_run_ksm">Aktiviere KSM</string>
     <string name="ksm_adv_title">Einstellungen</string>
     <string name="ksm_fullscans">Komplette Scans:</string>
@@ -278,7 +278,6 @@ Translation by Rhonin86 & Evisceration
     <string name="ksm_pagvolatile">Bewegliche Seiten:</string>
     <string name="ksm_pagtoscan">Zu scannende Seiten:</string>
     <string name="ksm_sleep">Schlaf (ms):</string>
-    <!-- 2.1.3 -->
     <!-- freezer -->
     <string name="prefcat_freezer">Aktiviere oder Deaktiviere Anwendungen</string>
     <string name="pt_freeze">Deaktiviere Anwendungen</string>
@@ -289,15 +288,11 @@ Translation by Rhonin86 & Evisceration
     <string name="mt_user_packs">Benutzer Anwendungen</string>
     <string name="freeze_msg">%s werden deaktiviert. Fortfahren?</string>
     <string name="unfreeze_msg">%s werden reaktiviert. Fortfahren?</string>
-
     <!-- zRam -->
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Aktiviere zRam</string>
     <string name="zram_set_title">Einstellungen</string>
-
     <string name="ps_zram">Komprimiere den Speicher, um die Speicherkapazität zu erhöhen</string>
-    <string name="mt_gov_ctrl">Governor Einstellungen</string>
-
     <string name="zram_compressed_size">Komprimierte Größe</string>
     <string name="zram_compressed_ratio">Komprimierungsgrad</string>
     <string name="zram_original_size">Original Größe</string>
@@ -308,7 +303,6 @@ Translation by Rhonin86 & Evisceration
     <string name="mt_stop">Stop</string>
     <string name="zram_num_reads">Anzahl der Lesezugriffe</string>
     <string name="zram_num_writes">Anzahl der Schreibzugriffe</string>
-
     <!-- builprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Bearbeite Build Prop</string>
