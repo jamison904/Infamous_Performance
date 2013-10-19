@@ -281,10 +281,21 @@ Translation by Laurentiu1996
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Activaţi zRam</string>
     <string name="zram_set_title">Setări</string>
-    <!-- 2.1.3 -->
+
     <string name="ps_zram">Crește capacitatea virtuală prin compresia memoriei</string>
     <string name="mt_gov_ctrl">Setare Governor</string>
     <!-- 2.1.5 -->
+    <string name="zram_compressed_size">Mărime Compresie Date</string>
+    <string name="zram_compressed_ratio">Raport Compresie</string>
+    <string name="zram_original_size">Mărime Date Originale</string>
+    <string name="zram_used_ratio">Raport Utilizat</string>
+    <string name="zram_mem_used">Memorie totală utilizată</string>
+    <string name="zram_disk_size">Mărime disc: %s</string>
+    <string name="mt_start">Start</string>
+    <string name="mt_stop">Stop</string>
+    <string name="zram_num_reads">Număr Citiri</string>
+    <string name="zram_num_writes">Număr Scrieri</string>
+
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Editare fișier Build Prop</string>
     <string name="add_prop_title">Adăugare Proprietate</string>
@@ -297,6 +308,8 @@ Translation by Laurentiu1996
     <string name="prop_restore_msg">Fișierul build.prop va fi restaurat. Pentru a avea efect este necesară repornirea dispozitivului. Continuaţi?</string>
     <string name="filter">Filtru</string>
     <string name="fmt_backup">Backup</string>
+    <string name="del_prop_title">Șterge proprietate</string>
+    <string name="del_prop_msg">%s va fi șters. Continuaţi?</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Utilizaţi o temă deschisă</string>
     <string name="ps_use_light_theme">Dacă este bifată, aplicaţia va folosi o temă deschisă Holo</string>
