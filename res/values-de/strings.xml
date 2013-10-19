@@ -112,7 +112,7 @@ Translation by Rhonin86 & Evisceration
     <!-- bl_timeout -->
     <string name="prefcat_bltimeout">LED Timeout</string>
     <string name="ps_bltimeout">%s ms</string>
-    <string name="bltimeout_title"></string>
+    <string name="bltimeout_title">@string/prefcat_bltimeout</string>
     <!-- bl_touch -->
     <string name="prefcat_bltouch">Hintergrundbeleuchtung des Touchscreens</string>
     <string name="pt_bltouch">Hintergrundbeleuchtung des Touchscreens</string>
@@ -149,7 +149,7 @@ Translation by Rhonin86 & Evisceration
     <string name="size_2048_kb">2048kb</string>
     <string name="size_4096_kb">4096kb</string>
     <!-- Voltage control -->
-    <string name="volt_info">Achtung!\nBevor du nach Neustart wiederherstellen aktivierts, stelle bitte sicher, dass die eingegebenen Werte keine Grenzen verletzten.</string>
+    <string name="volt_info">Achtung!\nBevor du nach Neustart wiederherstellen aktivierst, stelle bitte sicher, dass die eingegebenen Werte keine Grenzen verletzten.</string>
     <string name="ps_volt_mhz_voltage">" Hz"</string>
     <string name="ps_volt_save">"Speichern"</string>
     <string name="ps_volt_current_voltage">"Aktuelle Spannung: "</string>
@@ -295,7 +295,7 @@ Translation by Rhonin86 & Evisceration
     <string name="pt_run_zram">Aktiviere zRam</string>
     <string name="zram_set_title">Einstellungen</string>
 
-    <string name="ps_zram">Komprimiere den Speicher, um die Speicherkapazietät zu erhöhen</string>
+    <string name="ps_zram">Komprimiere den Speicher, um die Speicherkapazität zu erhöhen</string>
     <string name="mt_gov_ctrl">Governor Einstellungen</string>
 
     <string name="zram_compressed_size">Komprimierte Größe</string>
