@@ -298,8 +298,8 @@ Translation by Laurentiu1996
     <!-- builprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Editare fișier Build Prop</string>
-    <string name="add_prop_title">Adăugare Proprietate</string>
-    <string name="edit_prop_title">Editare Proprietate</string>
+    <string name="add_prop_title">Adăugare Parametru</string>
+    <string name="edit_prop_title">Editare Parametru</string>
     <string name="prop_name">Denumire</string>
     <string name="prop_val">Valoare</string>
     <string name="prop_preset">Predefinite</string>
@@ -308,7 +308,7 @@ Translation by Laurentiu1996
     <string name="prop_restore_msg">Fișierul build.prop va fi restaurat. Pentru a avea efect este necesară repornirea dispozitivului. Continuaţi?</string>
     <string name="filter">Filtru</string>
     <string name="fmt_backup">Backup</string>
-    <string name="del_prop_title">Șterge proprietate</string>
+    <string name="del_prop_title">Șterge Parametru</string>
     <string name="del_prop_msg">%s va fi șters. Continuaţi?</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Utilizaţi o temă deschisă</string>
