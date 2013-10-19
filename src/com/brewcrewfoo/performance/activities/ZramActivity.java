@@ -12,10 +12,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -46,6 +49,11 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private Button start_btn;
     private NumberFormat nf;
     private ProgressDialog progressDialog;
+
+    int clickCount = 0;
+    long startTime;
+    long duration;
+    static final int MAX_DURATION = 250;
 
 
     @Override
@@ -112,6 +120,16 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 else {
                     new StartZramOperation().execute();
                 }
+            }
+        });
+        LinearLayout prev=(LinearLayout) findViewById(R.id.preview);
+
+        prev.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                curcpu=mod(curcpu+1,ncpus);
+                Toast.makeText(context, "CPU "+(curcpu+1), Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 
@@ -321,5 +339,9 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         @Override
         protected void onProgressUpdate(Void... values) {
         }
+    }
+    private int mod(int x, int y){
+        int result = x % y;
+        return result < 0? result + y : result;
     }
 }

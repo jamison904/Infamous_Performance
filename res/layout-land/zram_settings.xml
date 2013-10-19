@@ -12,8 +12,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/left"
+        android:layout_height="wrap_content"
+        android:id="@+id/preview"
         android:paddingTop="10dp">
 
         <RelativeLayout
@@ -43,8 +43,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="right" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -75,8 +74,7 @@
                 android:textStyle="bold"
                 android:layout_toRightOf="@+id/tt2"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="right" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -106,8 +104,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="right" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -137,8 +134,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="right" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -168,8 +164,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="right" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -198,8 +193,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="right" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -228,8 +222,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="right" />
         </RelativeLayout>
     </LinearLayout>
     </ScrollView>

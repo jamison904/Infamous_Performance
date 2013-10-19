@@ -46,8 +46,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
-                android:text="0" />
+                android:layout_alignParentTop="false" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -80,8 +79,7 @@
                 android:layout_alignParentTop="false"
                 android:layout_toRightOf="@+id/tt2"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="right" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -113,8 +111,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
-                android:text="0" />
+                android:layout_alignParentTop="false" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -146,8 +143,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
-                android:text="0" />
+                android:layout_alignParentTop="false" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -179,8 +175,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
-                android:text="0" />
+                android:layout_alignParentTop="false" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -211,8 +206,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
-                android:text="0" />
+                android:layout_alignParentTop="false" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -243,8 +237,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="right"
                 android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
-                android:text="0" />
+                android:layout_alignParentTop="false" />
         </RelativeLayout>
     </LinearLayout>
 
