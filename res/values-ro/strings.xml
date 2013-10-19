@@ -284,7 +284,7 @@ Translation by Laurentiu1996
 
     <string name="ps_zram">Crește capacitatea virtuală prin compresia memoriei</string>
     <string name="mt_gov_ctrl">Setare Governor</string>
-    <!-- 2.1.5 -->
+
     <string name="zram_compressed_size">Mărime Compresie Date</string>
     <string name="zram_compressed_ratio">Raport Compresie</string>
     <string name="zram_original_size">Mărime Date Originale</string>
@@ -295,7 +295,7 @@ Translation by Laurentiu1996
     <string name="mt_stop">Stop</string>
     <string name="zram_num_reads">Număr Citiri</string>
     <string name="zram_num_writes">Număr Scrieri</string>
-
+    <!-- builprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Editare fișier Build Prop</string>
     <string name="add_prop_title">Adăugare Proprietate</string>

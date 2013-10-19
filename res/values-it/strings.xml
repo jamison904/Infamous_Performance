@@ -298,10 +298,21 @@ translation by Stefano187
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Abilita zRam</string>
     <string name="zram_set_title">Impostazioni</string>
-    <!-- 2.1.3 -->
+
     <string name="ps_zram">Comprime la memoria per una maggiore capacità virtuale</string>
     <string name="mt_gov_ctrl">Impostazioni Governor</string>
-    <!-- 2.1.5 -->
+
+    <string name="zram_compressed_size">Misura Compressa dei Dati</string>
+    <string name="zram_compressed_ratio">Rapporto di Compressione</string>
+    <string name="zram_original_size">Dimensione Originale dei Dati</string>
+    <string name="zram_used_ratio">Rapporto Utilizzato</string>
+    <string name="zram_mem_used">Memoria Totale Utilizzata</string>
+    <string name="zram_disk_size">Dimensione Disco: %s</string>
+    <string name="mt_start">Inizio</string>
+    <string name="mt_stop">Fine</string>
+    <string name="zram_num_reads">Numero di Letture</string>
+    <string name="zram_num_writes">Numero di Scritture</string>
+    <!-- builprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Modifica Build Prop</string>
     <string name="add_prop_title">Aggiungi Proprietà</string>
@@ -314,7 +325,8 @@ translation by Stefano187
     <string name="prop_restore_msg">Il file build.prop iniziale sarà ripristinato. Il dispositivo deve essere riavviato affinché i cambiamenti siano effettuati. Continuare?</string>
     <string name="filter">Filtro</string>
     <string name="fmt_backup">Backup</string>
-
+    <string name="del_prop_title">Elimina Proprietà</string>
+    <string name="del_prop_msg">%s sarà eliminato.. Continuare?</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Usa tema chiaro</string>
     <string name="ps_use_light_theme">Se selezionato, Performance Control userà un tema Holo chiaro</string>
