@@ -177,68 +177,7 @@
                 android:layout_alignParentLeft="false"
                 android:layout_alignParentTop="false" />
         </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/relativeLayout6"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/zram_num_reads"
-                android:id="@+id/tt6"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="0dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/t6"
-                android:layout_toRightOf="@+id/tt6"
-                android:textSize="18dip"
-                android:textStyle="bold"
-                android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/relativeLayout7"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/zram_num_writes"
-                android:id="@+id/tt7"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="0dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/t7"
-                android:layout_toRightOf="@+id/tt7"
-                android:textSize="18dip"
-                android:textStyle="bold"
-                android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
-        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -254,7 +193,7 @@
         android:id="@+id/set1"
         android:layout_below="@+id/preview"
         android:paddingBottom="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="fill_parent"

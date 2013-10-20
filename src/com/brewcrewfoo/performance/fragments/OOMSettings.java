@@ -156,9 +156,14 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         ispm=(!Helpers.binExist("pm").equals(NOT_FOUND));
 
-        if(!new File("/sys/block/zram0").exists()){
+        if(!new File(ZRAM_SYS).exists()){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("zram");
             getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            int maxdisk = (int) Helpers.getTotMem() / 1024;
+            int curdisk=mPreferences.getInt(PREF_ZRAM,(int) maxdisk /2);
+            mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
         }
     }
 
@@ -332,9 +337,19 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         getActivity();
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-                final String r=data.getStringExtra("result");
+                final int r=data.getIntExtra("result",0);
                 Log.d(TAG, "input = "+r);
-                mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+r.split(":")[0]+" | "+getString(R.string.ksm_sleep)+" "+r.split(":")[1]);
+                //mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+r.split(":")[0]+" | "+getString(R.string.ksm_sleep)+" "+r.split(":")[1]);
+                switch(r){
+                    case 1:
+                        mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH)+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH));
+                        break;
+                    case 2:
+                        int maxdisk = (int) Helpers.getTotMem() / 1024;
+                        int curdisk=mPreferences.getInt(PREF_ZRAM,(int) maxdisk /2);
+                        mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
+                        break;
+                }
             }
             //if (resultCode == Activity.RESULT_CANCELED) {}
         }

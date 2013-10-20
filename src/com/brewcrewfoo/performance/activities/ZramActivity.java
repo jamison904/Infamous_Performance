@@ -6,6 +6,7 @@ package com.brewcrewfoo.performance.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private boolean mIsLightTheme;
     final Context context = this;
     private CurThread mCurThread;
-    private TextView t1,t2,t3,t4,t5,t6,t7,tval1;
+    private TextView t1,t2,t3,t4,t5,tval1;
     private SeekBar mdisksize;
     private int ncpus=0;
     private int curcpu=0;
@@ -44,16 +45,9 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private Boolean ist1=false;
     private Boolean ist3=false;
     private Boolean ist5=false;
-    private Boolean ist6=false;
-    private Boolean ist7=false;
     private Button start_btn;
     private NumberFormat nf;
     private ProgressDialog progressDialog;
-
-    int clickCount = 0;
-    long startTime;
-    long duration;
-    static final int MAX_DURATION = 250;
 
 
     @Override
@@ -83,8 +77,6 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         t3=(TextView)findViewById(R.id.t3);
         t4=(TextView)findViewById(R.id.t4);
         t5=(TextView)findViewById(R.id.t5);
-        t6=(TextView)findViewById(R.id.t6);
-        t7=(TextView)findViewById(R.id.t7);
 
         if(new File(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)).exists()){
             t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)))));
@@ -98,14 +90,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
             t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
             ist5=true;
         }
-        if(new File(ZRAM_READS_PATH.replace("zram0","zram"+curcpu)).exists()){
-            t6.setText(Helpers.readOneLine(ZRAM_READS_PATH.replace("zram0","zram"+curcpu)));
-            ist6=true;
-        }
-        if(new File(ZRAM_WRITES_PATH.replace("zram0","zram"+curcpu)).exists()){
-            t7.setText(Helpers.readOneLine(ZRAM_WRITES_PATH.replace("zram0","zram"+curcpu)));
-            ist7=true;
-        }
+
         if(ist1&&ist3&&ist5){
             t2.setText(nf.format(getCompressionRatio()));
             t4.setText(nf.format(getUsedRatio()));
@@ -162,6 +147,9 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         }
         mPreferences.edit().putInt(PREF_ZRAM,seekBar.getProgress()).apply();
         curdisk=seekBar.getProgress();
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("result",2);
+        setResult(RESULT_OK,returnIntent);
     }
 
     @Override
@@ -224,8 +212,6 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
             if (ist1) t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)))));
             if (ist3) t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)))));
             if (ist5) t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
-            if (ist6) t6.setText(Helpers.readOneLine(ZRAM_READS_PATH.replace("zram0","zram"+curcpu)));
-            if (ist7) t7.setText(Helpers.readOneLine(ZRAM_WRITES_PATH.replace("zram0","zram"+curcpu)));
             if(ist1&&ist3&&ist5){
                 t2.setText(nf.format(getCompressionRatio()));
                 t4.setText(nf.format(getUsedRatio()));
@@ -275,6 +261,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         @Override
         protected String doInBackground(String... params) {
             final StringBuilder sb = new StringBuilder();
+
             for (int i = 0; i < ncpus; i++) {
                 sb.append("busybox swapoff ").append(ZRAM_DEV.replace("zram0", "zram" + i)).append(";\n");
             }
@@ -299,10 +286,25 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 start_btn.setText(getString(R.string.mt_start));
                 mdisksize.setEnabled(true);
             }
+            if (mCurThread == null) {
+                mCurThread = new CurThread();
+                mCurThread.start();
+            }
         }
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(ZramActivity.this, null, getString(R.string.wait));
+            if (mCurThread != null) {
+                if (mCurThread.isAlive()) {
+                    mCurThread.interrupt();
+                    try {
+                        mCurThread.join();
+                        mCurThread=null;
+                    }
+                    catch (InterruptedException e) {
+                    }
+                }
+            }
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -312,6 +314,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private class StartZramOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
+
             long v=(long)(curdisk/ncpus)*1024*1024;
             final StringBuilder sb = new StringBuilder();
             sb.append("zramstart ").append(ncpus).append(" ").append(v).append(";\n");

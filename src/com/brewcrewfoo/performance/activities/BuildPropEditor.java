@@ -68,11 +68,8 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
-
-        File f= new File(dn);
-        if (!f.exists()) {f.mkdir();}
-        f=new File(dn+"/buildprop");
-        if (!f.exists()) {f.mkdir();}
+        //new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss_build.prop").format(new Date());
+        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn+"/buildprop" );
         if(!new File(dn+"/buildprop/build.prop.bak").exists()){
             new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/buildprop/build.prop.bak" );
             Toast.makeText(context, getString(R.string.prop_backup, dn), Toast.LENGTH_LONG).show();
@@ -142,7 +139,6 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         return true;
     }
 
-
     @Override
     public void onBackPressed(){
         if(search.isShown()){
@@ -155,7 +151,6 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     }
 
     private class GetPropOperation extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... params) {
             CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"*.ogg\"");

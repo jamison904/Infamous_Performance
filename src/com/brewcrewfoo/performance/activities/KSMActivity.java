@@ -188,7 +188,7 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
                         .putString("pref_ksm_sleep", String.valueOf(i2))
                         .commit();
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("result",i1+":"+i2);
+                returnIntent.putExtra("result",1);
                 setResult(RESULT_OK,returnIntent);
                 finish();
             }
