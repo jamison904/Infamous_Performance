@@ -44,6 +44,7 @@ translation by Stefano187
     <string name="sob">"Imposta all'avvio"</string>
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
+    <string name="mt_gov_ctrl">Impostazioni Governor</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">MEMORIA LIBERA</string>
     <string name="prefcat_tweaks">CARICA RAPIDA</string>
@@ -256,7 +257,6 @@ translation by Stefano187
     <string name="free">libero %s</string>
     <string name="used">utilizzato %s</string>
 
-    <!-- 2.1.0 -->
     <string name="verify">Verifica…</string>
     <string name="bad_zip">%s non trovato nel file zip !</string>
     <string name="closebtn">Chiudi</string>
@@ -270,7 +270,6 @@ translation by Stefano187
         <item>Piena</item>
         <item>Non in carica</item>
     </string-array>
-    <!-- 2.1.2 -->
     <!-- ksm -->
     <string name="prefcat_ksm">KERNEL SAMEPAGE MERGING</string>
     <string name="pt_run_ksm">Abilita KSM</string>
@@ -282,7 +281,6 @@ translation by Stefano187
     <string name="ksm_pagvolatile">Pagine Volatili:</string>
     <string name="ksm_pagtoscan">Pagine da scansionare:</string>
     <string name="ksm_sleep">Sleep (ms):</string>
-
     <!-- freezer -->
     <string name="prefcat_freezer">CONGELA or SCONGELA PACCHETTI</string>
     <string name="pt_freeze">Congela Pacchetto</string>
@@ -293,15 +291,22 @@ translation by Stefano187
     <string name="mt_user_packs">Pacchetti Utente</string>
     <string name="freeze_msg">%s sarà congelato. Continuare?</string>
     <string name="unfreeze_msg">%s sarà scongelato. Continuare?</string>
-
     <!-- zRam -->
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Abilita zRam</string>
     <string name="zram_set_title">Impostazioni</string>
-    <!-- 2.1.3 -->
     <string name="ps_zram">Comprime la memoria per una maggiore capacità virtuale</string>
-    <string name="mt_gov_ctrl">Impostazioni Governor</string>
-    <!-- 2.1.5 -->
+    <string name="zram_compressed_size">Misura Compressa dei Dati</string>
+    <string name="zram_compressed_ratio">Rapporto di Compressione</string>
+    <string name="zram_original_size">Dimensione Originale dei Dati</string>
+    <string name="zram_used_ratio">Rapporto Utilizzato</string>
+    <string name="zram_mem_used">Memoria Totale Utilizzata</string>
+    <string name="zram_disk_size">Dimensione Disco: %s</string>
+    <string name="mt_start">Inizio</string>
+    <string name="mt_stop">Fine</string>
+    <string name="zram_num_reads">Numero di Letture</string>
+    <string name="zram_num_writes">Numero di Scritture</string>
+    <!-- builprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Modifica Build Prop</string>
     <string name="add_prop_title">Aggiungi Proprietà</string>
@@ -314,7 +319,8 @@ translation by Stefano187
     <string name="prop_restore_msg">Il file build.prop iniziale sarà ripristinato. Il dispositivo deve essere riavviato affinché i cambiamenti siano effettuati. Continuare?</string>
     <string name="filter">Filtro</string>
     <string name="fmt_backup">Backup</string>
-
+    <string name="del_prop_title">Elimina Proprietà</string>
+    <string name="del_prop_msg">%s sarà eliminato.. Continuare?</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Usa tema chiaro</string>
     <string name="ps_use_light_theme">Se selezionato, Performance Control userà un tema Holo chiaro</string>

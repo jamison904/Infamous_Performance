@@ -39,6 +39,7 @@
     <string name="sob">Автозагрузка</string>
     <string name="ok">OK</string>
     <string name="cancel">Отменить</string>
+    <string name="mt_gov_ctrl">Настройки Говернора</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">СВОБОДНАЯ ПАМЯТЬ</string>
     <string name="prefcat_tweaks">БЫСТРАЯ ЗАРЯДКА</string>
@@ -245,9 +246,10 @@
     <string name="fix_perms_title">Исправить разрешения</string>
     <string name="fix_perms_msg">Операция может занять несколько минут. Продолжить?</string>
     <string name="preflogg_fix_perms">Включить логи</string>
+
     <string name="free">свободно %s</string>
     <string name="used">занято %s</string>
-    <!-- 2.1.0 -->
+
     <string name="verify">Проверка…</string>
     <string name="bad_zip">%s не найден в архиве!</string>
     <string name="closebtn">Закрыть</string>
@@ -261,7 +263,6 @@
         <item>полный</item>
         <item>не заряжается</item>
     </string-array>
-    <!-- 2.1.2 -->
     <!-- ksm -->
     <string name="prefcat_ksm">ОБЪЕДИНЁННАЯ ПАМЯТЬ (KSM)</string>
     <string name="pt_run_ksm">Включить KSM</string>
@@ -273,7 +274,6 @@
     <string name="ksm_pagvolatile">Изменчивые:</string>
     <string name="ksm_pagtoscan">Будут отсканированы:</string>
     <string name="ksm_sleep">Сон (ms):</string>
-    <!-- 2.1.3 -->
     <!-- freezer -->
     <string name="prefcat_freezer">ЗАМОРОЗИТЬ или РАЗМОРОЗИТЬ ДАННЫЕ</string>
     <string name="pt_freeze">Заморозить Пакеты Данных</string>
@@ -284,15 +284,22 @@
     <string name="mt_user_packs">Пакеты Данных Пользователя</string>
     <string name="freeze_msg">%s будет заморожено. Продолжить?</string>
     <string name="unfreeze_msg">%s будет разморожено. Продолжить?</string>
-
     <!-- zRam -->
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Включить zRam</string>
     <string name="zram_set_title">настройки</string>
-
     <string name="ps_zram">Сжатие памяти для увеличения виртуальной емкости</string>
-    <string name="mt_gov_ctrl">Настройки Говернора</string>
-    <!-- 2.1.5 -->
+    <string name="zram_compressed_size">Размер Сжатых Данных</string>
+    <string name="zram_compressed_ratio">Коэффициент Сжатия</string>
+    <string name="zram_original_size">Исходный Размер Данных</string>
+    <string name="zram_used_ratio">Применённый Коэффициент</string>
+    <string name="zram_mem_used">Общая Применённая Память</string>
+    <string name="zram_disk_size">Размер Диска: %s</string>
+    <string name="mt_start">Старт</string>
+    <string name="mt_stop">Стоп</string>
+    <string name="zram_num_reads">Количество Чтений</string>
+    <string name="zram_num_writes">Количество Записей</string>
+    <!-- buildprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Редактировать Build Prop</string>
     <string name="add_prop_title">Добавить Значение</string>
@@ -300,12 +307,13 @@
     <string name="prop_name">Название</string>
     <string name="prop_val">Значение</string>
     <string name="prop_preset">Пресет</string>
-    <string name="prop_backup">Бэкап build.prop был сохранен в  %s</string>
+    <string name="prop_backup">Бэкап build.prop был сохранен в %s</string>
     <string name="prop_no_backup">Бэкап не найден!</string>
     <string name="prop_restore_msg">Исходный build.prop файл будет восстановлен. Вам нужно будет перезагрузить устройство, чтобы применить изменения. Продолжить?</string>
     <string name="filter">Фильтр</string>
     <string name="fmt_backup">Бэкап</string>
-
+    <string name="del_prop_title">Удаление Значения</string>
+    <string name="del_prop_msg">%s будет удалено. Продолжить?</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Использовать светлую тему</string>
     <string name="ps_use_light_theme">Если выбрать, приложение будет использовать светлую тему Holo</string>

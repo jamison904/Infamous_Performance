@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
+import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.FileArrayAdapter;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -235,8 +236,6 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                 }
                 sb.append("busybox rm -rf /data/dalvik-cache/*\n");
                 sb.append("busybox rm -rf /cache/*\n");
-                sb.append("reboot\n");
-                //Log.d(TAG,sb.toString());
             }
             else{
                 if(iszip){
@@ -255,18 +254,21 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                 else{
                     sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
                 }
-
-                sb.append("reboot recovery\n");
-                //Log.d(TAG,sb.toString());
             }
             Helpers.shExec(sb,context,true);
-            return null;
+            return tip;
         }
 
         @Override
         protected void onPostExecute(String result) {
             if (progressDialog != null) {
                 progressDialog.dismiss();
+            }
+            if(tip.equalsIgnoreCase("kernel")){
+                new CMDProcessor().su.runWaitFor("reboot");
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("reboot recovery");
             }
         }
 
