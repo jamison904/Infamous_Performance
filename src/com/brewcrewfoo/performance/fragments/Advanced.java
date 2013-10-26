@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.*;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -38,6 +39,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.PCSettings;
+import com.brewcrewfoo.performance.activities.VMActivity;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -47,34 +49,18 @@ import java.io.File;
 public class Advanced extends PreferenceFragment implements OnSharedPreferenceChangeListener, Constants {
 
     private static final int NEW_MENU_ID=Menu.FIRST+1;
-	private CheckBoxPreference mDsync;
-	
-	private Preference mBltimeout;
+    SharedPreferences mPreferences;
+	private Preference mBltimeout,mViber,mHomeAllowedIrqs,mHomeReportWait,
+            mMenuBackIrqChecks,mMenuBackFirstErrWait,mMenuBackLastErrWait,
+            mDynamicWriteBackActive,mDynamicWriteBackSuspend,mVM;
 	private CheckBoxPreference mBltouch;
 
-    private CheckBoxPreference mBln;
-    //--------
-	private CheckBoxPreference mHomeOn;
-	private CheckBoxPreference mMenuBackOn;
-	
-	private Preference mHomeAllowedIrqs;
-	private Preference mHomeReportWait;
-
-	private Preference mMenuBackIrqChecks;
-	private Preference mMenuBackFirstErrWait;
-	private Preference mMenuBackLastErrWait;	
-//--------
-	private CheckBoxPreference mDynamicWriteBackOn;
-	private Preference mDynamicWriteBackActive;
-	private Preference mDynamicWriteBackSuspend;
-
+    private CheckBoxPreference mBln,mHomeOn,mMenuBackOn,mDynamicWriteBackOn,mDsync;
 	private ListPreference mReadAhead;
-	SharedPreferences mPreferences;
-	
 	private int mSeekbarProgress;
 	private EditText settingText;
 	private String sreadahead;
-    private String BLN_PATH;
+    private String BLN_PATH,VIBE_PATH;
     private Context context;
 
     @Override
@@ -91,6 +77,9 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         mBltimeout= findPreference(PREF_BLTIMEOUT);
         mBltouch=(CheckBoxPreference) findPreference(PREF_BLTOUCH);
         mBln=(CheckBoxPreference) findPreference(PREF_BLN);
+        mViber= findPreference("pref_viber");
+        mVM= findPreference("vm_settings");
+
         mDsync=(CheckBoxPreference) findPreference(PREF_DSYNC);
         mHomeOn=(CheckBoxPreference) findPreference(PFK_HOME_ON);
         mHomeAllowedIrqs = findPreference(PREF_HOME_ALLOWED_IRQ);
@@ -150,6 +139,16 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         else{
             mBln.setChecked(Helpers.readOneLine(BLN_PATH).equals("1"));
         }
+
+        VIBE_PATH=Helpers.vibe_path();
+        if (VIBE_PATH==null) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("viber");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            mViber.setSummary(Helpers.readOneLine(VIBE_PATH));
+        }
+
         if (!new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("cat_dynamic_write_back");
             getPreferenceScreen().removePreference(hideCat);
@@ -193,109 +192,119 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
 
-	if (preference == mDsync){
-		if (Integer.parseInt(Helpers.readOneLine(DSYNC_PATH))==0){
-			new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DSYNC_PATH);
-		}
-		else{
-			new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DSYNC_PATH);
-		}
-            return true;
-	}
-	else if (preference == mBltimeout){
-            String title = getString(R.string.bltimeout_title)+" (ms)";
-            int currentProgress = Integer.parseInt(Helpers.readOneLine(BL_TIMEOUT_PATH));
-            openDialog(currentProgress, title, 0,5000, preference,BL_TIMEOUT_PATH, PREF_BLTIMEOUT);
-            return true;
-	}
-	else if (preference == mBltouch){
-		if (Integer.parseInt(Helpers.readOneLine(BL_TOUCH_ON_PATH))==0){
-			new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BL_TOUCH_ON_PATH);
-		}
-		else{
-			new CMDProcessor().su.runWaitFor("busybox echo 0 > " + BL_TOUCH_ON_PATH);
-		}
-            return true;
-	}
-    else if (preference == mBln){
-        if (Integer.parseInt(Helpers.readOneLine(BLN_PATH))==0){
-            new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BLN_PATH);
+        if (preference == mDsync){
+            if (Integer.parseInt(Helpers.readOneLine(DSYNC_PATH))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DSYNC_PATH);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DSYNC_PATH);
+            }
+                return true;
         }
-        else{
-            new CMDProcessor().su.runWaitFor("busybox echo 0 > " + BLN_PATH);
+        else if (preference == mBltimeout){
+                String title = getString(R.string.bltimeout_title)+" (ms)";
+                int currentProgress = Integer.parseInt(Helpers.readOneLine(BL_TIMEOUT_PATH));
+                openDialog(currentProgress, title, 0,5000, preference,BL_TIMEOUT_PATH, PREF_BLTIMEOUT);
+                return true;
         }
-        return true;
-    }
-    else if (preference == mHomeOn){
-		if (Integer.parseInt(Helpers.readOneLine(PFK_HOME_ENABLED))==0){
-			new CMDProcessor().su.runWaitFor("busybox echo 1 > " + PFK_HOME_ENABLED);
-		}
-		else{
-			new CMDProcessor().su.runWaitFor("busybox echo 0 > " + PFK_HOME_ENABLED);
-		}
-            return true;
-	}
-	else if (preference == mMenuBackOn){
-		if (Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_ENABLED))==0){
-			new CMDProcessor().su.runWaitFor("busybox echo 1 > " + PFK_MENUBACK_ENABLED);
-		}
-		else{
-			new CMDProcessor().su.runWaitFor("busybox echo 0 > " + PFK_MENUBACK_ENABLED);
-		}
-            return true;
-	}
-	else if (preference == mHomeAllowedIrqs) {
-            String title = getString(R.string.home_allowed_irq_title);
-            int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_HOME_ALLOWED_IRQ));
-            openDialog(currentProgress, title, 1,32, preference, PFK_HOME_ALLOWED_IRQ, PREF_HOME_ALLOWED_IRQ);
-            return true;		
-	}
-	else if (preference == mHomeReportWait) {
-            String title = getString(R.string.home_report_wait_title)+" (ms)";
-            int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_HOME_REPORT_WAIT));
-            openDialog(currentProgress, title, 5,25, preference, PFK_HOME_REPORT_WAIT, PREF_HOME_REPORT_WAIT);
-            return true;
-	}
-	else if (preference == mMenuBackIrqChecks) {
-            String title = getString(R.string.menuback_interrupt_checks_title);
-            int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_INTERRUPT_CHECKS));
-            openDialog(currentProgress, title, 1,10, preference, PFK_MENUBACK_INTERRUPT_CHECKS, PREF_MENUBACK_INTERRUPT_CHECKS);
-            return true;
-	}
-	else if (preference == mMenuBackFirstErrWait) {
-            String title = getString(R.string.menuback_first_err_wait_title)+" (ms)";
-            int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_FIRST_ERR_WAIT));
-            openDialog(currentProgress, title, 50,1000, preference, PFK_MENUBACK_FIRST_ERR_WAIT, PREF_MENUBACK_FIRST_ERR_WAIT);
-            return true;
-	}
-	else if (preference == mMenuBackLastErrWait) {
-            String title = getString(R.string.menuback_last_err_wait_title)+" (ms)";
-            int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_LAST_ERR_WAIT));
-            openDialog(currentProgress, title, 50,100, preference,PFK_MENUBACK_LAST_ERR_WAIT, PREF_MENUBACK_LAST_ERR_WAIT);
-            return true;
-	}
-	else if (preference == mDynamicWriteBackOn){
-		if (Integer.parseInt(Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH))==0){
-			new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
-		}
-		else{
-			new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
-		}
-            return true;
-	}        
-	else if (preference == mDynamicWriteBackActive) {
-            String title = getString(R.string.dynamic_writeback_active_title);
-            int currentProgress = Integer.parseInt(Helpers.readOneLine(DIRTY_WRITEBACK_ACTIVE_PATH));
-            openDialog(currentProgress, title, 0,5000, preference,DIRTY_WRITEBACK_ACTIVE_PATH, PREF_DIRTY_WRITEBACK_ACTIVE);
+        else if (preference == mBltouch){
+            if (Integer.parseInt(Helpers.readOneLine(BL_TOUCH_ON_PATH))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BL_TOUCH_ON_PATH);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + BL_TOUCH_ON_PATH);
+            }
             return true;
         }
-	else if (preference == mDynamicWriteBackSuspend) {
-            String title = getString(R.string.dynamic_writeback_suspend_title);
-            int currentProgress = Integer.parseInt(Helpers.readOneLine(DIRTY_WRITEBACK_SUSPEND_PATH));
-            openDialog(currentProgress, title, 0,5000, preference,DIRTY_WRITEBACK_SUSPEND_PATH, PREF_DIRTY_WRITEBACK_SUSPEND);
+        else if (preference == mBln){
+            if (Integer.parseInt(Helpers.readOneLine(BLN_PATH))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BLN_PATH);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + BLN_PATH);
+            }
             return true;
-        }        
-        
+        }
+        else if (preference == mViber){
+            String title = getString(R.string.viber_title);
+            int currentProgress = Integer.parseInt(Helpers.readOneLine(VIBE_PATH));
+            openDialog(currentProgress, title, 0,500, preference,VIBE_PATH, "pref_viber");
+            return true;
+        }
+        else if (preference == mHomeOn){
+            if (Integer.parseInt(Helpers.readOneLine(PFK_HOME_ENABLED))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + PFK_HOME_ENABLED);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + PFK_HOME_ENABLED);
+            }
+                return true;
+        }
+        else if (preference == mMenuBackOn){
+            if (Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_ENABLED))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + PFK_MENUBACK_ENABLED);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + PFK_MENUBACK_ENABLED);
+            }
+                return true;
+        }
+        else if (preference == mHomeAllowedIrqs) {
+                String title = getString(R.string.home_allowed_irq_title);
+                int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_HOME_ALLOWED_IRQ));
+                openDialog(currentProgress, title, 1,32, preference, PFK_HOME_ALLOWED_IRQ, PREF_HOME_ALLOWED_IRQ);
+                return true;
+        }
+        else if (preference == mHomeReportWait) {
+                String title = getString(R.string.home_report_wait_title)+" (ms)";
+                int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_HOME_REPORT_WAIT));
+                openDialog(currentProgress, title, 5,25, preference, PFK_HOME_REPORT_WAIT, PREF_HOME_REPORT_WAIT);
+                return true;
+        }
+        else if (preference == mMenuBackIrqChecks) {
+                String title = getString(R.string.menuback_interrupt_checks_title);
+                int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_INTERRUPT_CHECKS));
+                openDialog(currentProgress, title, 1,10, preference, PFK_MENUBACK_INTERRUPT_CHECKS, PREF_MENUBACK_INTERRUPT_CHECKS);
+                return true;
+        }
+        else if (preference == mMenuBackFirstErrWait) {
+                String title = getString(R.string.menuback_first_err_wait_title)+" (ms)";
+                int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_FIRST_ERR_WAIT));
+                openDialog(currentProgress, title, 50,1000, preference, PFK_MENUBACK_FIRST_ERR_WAIT, PREF_MENUBACK_FIRST_ERR_WAIT);
+                return true;
+        }
+        else if (preference == mMenuBackLastErrWait) {
+                String title = getString(R.string.menuback_last_err_wait_title)+" (ms)";
+                int currentProgress = Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_LAST_ERR_WAIT));
+                openDialog(currentProgress, title, 50,100, preference,PFK_MENUBACK_LAST_ERR_WAIT, PREF_MENUBACK_LAST_ERR_WAIT);
+                return true;
+        }
+        else if (preference == mDynamicWriteBackOn){
+            if (Integer.parseInt(Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
+            }
+                return true;
+        }
+        else if (preference == mDynamicWriteBackActive) {
+                String title = getString(R.string.dynamic_writeback_active_title);
+                int currentProgress = Integer.parseInt(Helpers.readOneLine(DIRTY_WRITEBACK_ACTIVE_PATH));
+                openDialog(currentProgress, title, 0,5000, preference,DIRTY_WRITEBACK_ACTIVE_PATH, PREF_DIRTY_WRITEBACK_ACTIVE);
+                return true;
+        }
+        else if (preference == mDynamicWriteBackSuspend) {
+                String title = getString(R.string.dynamic_writeback_suspend_title);
+                int currentProgress = Integer.parseInt(Helpers.readOneLine(DIRTY_WRITEBACK_SUSPEND_PATH));
+                openDialog(currentProgress, title, 0,5000, preference,DIRTY_WRITEBACK_SUSPEND_PATH, PREF_DIRTY_WRITEBACK_SUSPEND);
+                return true;
+        }
+        else if (preference == mVM) {
+            Intent intent = new Intent(context, VMActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
@@ -464,26 +473,34 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 			.setTitle(title)
 			.setView(alphaDialog)
 			.setNegativeButton(cancel,
-			new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog,int which) {
-				// nothing
-				}
-			})
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nothing
+                        }
+                    })
 			.setPositiveButton(ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					int val = Integer.parseInt(settingText.getText().toString());
-					if(val<min){val=min;}
-					seekbar.setProgress(val);
-					int newProgress = seekbar.getProgress();
-					pref.setSummary(Integer.toString(newProgress));
-					new CMDProcessor().su.runWaitFor("busybox echo " + newProgress + " > " + path);
-					final SharedPreferences.Editor editor = mPreferences.edit();
-					editor.putInt(key, newProgress);
-					editor.commit();
-				}
-			}).create().show();
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    int val = Integer.parseInt(settingText.getText().toString());
+                    if (val < min) {
+                        val = min;
+                    }
+                    seekbar.setProgress(val);
+                    int newProgress = seekbar.getProgress();
+
+                    new CMDProcessor().su.runWaitFor("busybox echo " + newProgress + " > " + path);
+                    final String v=Helpers.readOneLine(path);
+                    final SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putInt(key, Integer.parseInt(v));
+                    editor.commit();
+                    pref.setSummary(v);
+                    if (key == "pref_viber") {
+                        Vibrator vb = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                        vb.vibrate(1000);
+                    }
+                }
+            }).create().show();
     }
 }
 

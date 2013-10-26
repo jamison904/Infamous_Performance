@@ -80,5 +80,15 @@ elif busybox [ "$arg" == "-govprop" ]; then
     echo "$r";
 elif busybox [ "$arg" == "-setprop" ]; then
     set_prop $2 $3;
-
+elif busybox [ "$arg" == "-vmprop" ]; then
+    r="";
+    for f in $(busybox find /proc/sys/vm/* -type f -prune -perm -644); do
+        v=$(busybox cat $f);
+        if busybox [ "X$r" == "X" ]; then
+            r="$f:$v";
+        else
+            r="$r;$f:$v";
+        fi;
+    done;
+    echo "$r";
 fi;

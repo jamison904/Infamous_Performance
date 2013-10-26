@@ -39,6 +39,7 @@ Copyright (C) 2012  James Roberts
         <item>@string/size_512_kb</item>
         <item>@string/size_1024_kb</item>
         <item>@string/size_2048_kb</item>
+        <item>@string/size_3072_kb</item>
         <item>@string/size_4096_kb</item>
     </string-array>
     <string-array name="read_ahead_values" translatable="false">
@@ -47,6 +48,7 @@ Copyright (C) 2012  James Roberts
         <item>512</item>
         <item>1024</item>
         <item>2048</item>
+        <item>3072</item>
         <item>4096</item>
     </string-array>
 

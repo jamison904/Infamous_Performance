@@ -54,6 +54,8 @@ import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
+import java.io.File;
+
 
 public class Tools extends PreferenceFragment implements OnSharedPreferenceChangeListener, Constants {
 
@@ -96,8 +98,9 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_freezer");
             getPreferenceScreen().removePreference(hideCat);
         }
-        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"build.prop\"");
-        if(!cr.success() || cr.stdout.equals("")){
+       // CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"build.prop\"");
+       // if(!cr.success() || cr.stdout.equals("")){
+        if(!new File("/system/build.prop").exists()){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_build_prop");
             getPreferenceScreen().removePreference(hideCat);
         }

@@ -1,5 +1,8 @@
 package com.brewcrewfoo.performance.fragments;
 
+/**
+ * Created by h0rn3t on 20.08.2013.
+ */
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -25,9 +28,6 @@ import com.brewcrewfoo.performance.util.Helpers;
 
 import java.io.File;
 
-/**
- * Created by h0rn3t on 20.08.2013.
- */
 public class DiskInfo extends Fragment implements Constants {
 
     private static final int NEW_MENU_ID=Menu.FIRST+1;
@@ -95,7 +95,6 @@ public class DiskInfo extends Fragment implements Constants {
                 }
             }
         });
-
         ldata=(RelativeLayout) view.findViewById(R.id.data);
         ldata.setOnClickListener(new View.OnClickListener(){
             private byte ck=0;

@@ -83,6 +83,19 @@ Copyright (C) 2012  James Roberts
                 android:summary="@string/ps_dsync"
                 android:title="@string/pt_bln"/>
     </PreferenceCategory>
+    <!-- Vibration Intensity -->
+    <PreferenceCategory
+        android:key="viber"
+        android:title="@string/prefcat_viber">
+        <Preference
+            android:key="pref_viber"
+            android:title="@string/viber_title"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="viber_sob"
+            android:summary="@string/ps_blx_boot"
+            android:title="@string/sob"/>
+    </PreferenceCategory>
     <!-- PFK -->
     <PreferenceCategory
             android:key="pfk"
@@ -142,6 +155,13 @@ Copyright (C) 2012  James Roberts
                 android:summary="@string/ps_blx_boot"
                 android:title="@string/sob"/>	
     </PreferenceCategory>
-
+    <!-- VM Settings -->
+    <PreferenceCategory
+        android:key="cat_vm"
+        android:title="@string/prefcat_vm_settings">
+        <Preference
+            android:key="vm_settings"
+            android:title="@string/pt_vm"/>
+    </PreferenceCategory>
 </PreferenceScreen>
 
