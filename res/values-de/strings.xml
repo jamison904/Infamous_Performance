@@ -5,25 +5,17 @@ Translation by Rhonin86 & Evisceration
 <resources>
     <string name="app_name">Performance Control</string>
     <!-- Main tabs -->
-    <string name="tab_cpu_settings">CPU Einstellungen</string>
-    <string name="tab_cpu_profiles">CPU Profile</string>
-    <string name="tab_battery_info">Akku Informationen</string>
-    <string name="tab_oom_settings">Speicher Einstellungen</string>
-    <string name="tab_time_in_state">Frequenzverteilung</string>
-    <string name="tab_voltage_settings">Spannungs Einstellungen</string>
-    <string name="tab_cpu_info">Allgemeine Informationen</string>
-    <string name="tab_disk_info">Disk-Informationen</string>
-    <string name="tab_tools">Tools</string>
-    <!-- Titles -->
-    <string name="t_cpu_settings">CPU Einstellungen</string>
-    <string name="t_battery_info">Akku Informationen</string>
-    <string name="t_oom_settings">Speicher Einstellungen</string>
-    <string name="t_volt_settings">Spannungs Einstellungen</string>
-    <string name="t_adv_settings">"Erweiterte Einstellungen"</string>
-    <string name="t_time_in_state">"Frequenzverteilung"</string>
-    <string name="t_cpu_info">Allgemeine Informationen</string>
-    <string name="t_disk_info">Disk-Informationen</string>
-    <string name="t_tools">Tools</string>
+    <string-array name="tabs">
+        <item>CPU Einstellungen</item>
+        <item>Akku Informationen</item>
+        <item>Speicher Einstellungen</item>
+        <item>Spannungs Einstellungen</item>
+        <item>Erweiterte Einstellungen</item>
+        <item>Frequenzverteilung</item>
+        <item>Allgemeine Informationen</item>
+        <item>Disk Informationen</item>
+        <item>Tools</item>
+    </string-array>
 
     <string name="menu_tab">Tab</string>
     <!-- Menu -->
@@ -49,6 +41,7 @@ Translation by Rhonin86 & Evisceration
     <string name="prefcat_misc_short">Verschiedenes</string>
     <string name="prefcat_read_ahead">Vorablesen von SD</string>
     <string name="prefcat_vm_settings">VM Einstellungen</string>
+    <string name="pt_vm">VM Einstellungen</string>
     <string name="dt_free_memory">Mindestverfügbarer Speicher</string>
     <string name="dt_read_ahead">Vorablesen von SD</string>
     <string name="pt_free_memory">Freier Speicher</string>
@@ -148,6 +141,7 @@ Translation by Rhonin86 & Evisceration
     <string name="size_512_kb">512kb</string>
     <string name="size_1024_kb">1024kb</string>
     <string name="size_2048_kb">2048kb</string>
+    <string name="size_3072_kb">3072kb</string>
     <string name="size_4096_kb">4096kb</string>
     <!-- Voltage control -->
     <string name="volt_info">Achtung!\nBevor du nach Neustart wiederherstellen aktivierst, stelle bitte sicher, dass die eingegebenen Werte keine Grenzen verletzten.</string>
@@ -278,6 +272,7 @@ Translation by Rhonin86 & Evisceration
     <string name="ksm_pagvolatile">Bewegliche Seiten:</string>
     <string name="ksm_pagtoscan">Zu scannende Seiten:</string>
     <string name="ksm_sleep">Schlaf (ms):</string>
+    <string name="uksm">Ultra-KSM detektiert</string>
     <!-- freezer -->
     <string name="prefcat_freezer">Aktiviere oder Deaktiviere Anwendungen</string>
     <string name="pt_freeze">Deaktiviere Anwendungen</string>
@@ -318,13 +313,16 @@ Translation by Rhonin86 & Evisceration
     <string name="fmt_backup">Backup</string>
     <string name="del_prop_title">Lösche die Eigenschaft</string>
     <string name="del_prop_msg">%s wird gelöscht. Weiter?</string>
-
+    <!-- Vibration Intensity -->
+    <string name="prefcat_viber">VIBRATION</string>
+    <string name="viber_title">Setze die Vibrationsstärke fest</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Benutze das helle Design</string>
     <string name="ps_use_light_theme">Verwende das helle Holo-Design</string>
     <string name="pt_widget_bg_color">Widget Hintergrundfarbe</string>
     <string name="pt_widget_text_color">Widget Textfarbe</string>
     <string name="pt_ver">"Version - "</string>
+    <string name="pt_show_tabs">Set Tabs Sichtweite</string>
     <!-- Color picker -->
     <string name="dialog_color_picker">Farbauswahl</string>
     <string name="press_color_to_apply">Wähle die zu benutzende Farbe:</string>
