@@ -21,7 +21,7 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.5";
+    public static final String VERSION_NUM = "2.1.6";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
@@ -84,13 +84,14 @@ public interface Constants {
     public static final String OOM_EMPTY_APP = "oom_empty_app";
     //------ KSM
     public static final String KSM_RUN_PATH = "/sys/kernel/mm/ksm/run";
-    public static final String KSM_FULLSCANS_PATH = "/sys/kernel/mm/ksm/full_scans";
-    public static final String KSM_PAGESSHARED_PATH = "/sys/kernel/mm/ksm/pages_shared";
-    public static final String KSM_PAGESSHARING_PATH = "/sys/kernel/mm/ksm/pages_sharing";
-    public static final String KSM_PAGESTOSCAN_PATH = "/sys/kernel/mm/ksm/pages_to_scan";
-    public static final String KSM_PAGESUNSHERED_PATH = "/sys/kernel/mm/ksm/pages_unshared";
-    public static final String KSM_PAGESVOLATILE_PATH = "/sys/kernel/mm/ksm/pages_volatile";
-    public static final String KSM_SLEEP_PATH = "/sys/kernel/mm/ksm/sleep_millisecs";
+    public static final String UKSM_RUN_PATH = "/sys/kernel/mm/uksm/run";
+    public static final String[] KSM_FULLSCANS_PATH = {"/sys/kernel/mm/ksm/full_scans","/sys/kernel/mm/uksm/full_scans"};
+    public static final String[] KSM_PAGESSHARED_PATH = {"/sys/kernel/mm/ksm/pages_shared","/sys/kernel/mm/uksm/pages_shared"};
+    public static final String[] KSM_PAGESSHARING_PATH = {"/sys/kernel/mm/ksm/pages_sharing","/sys/kernel/mm/uksm/pages_sharing"};
+    public static final String[] KSM_PAGESTOSCAN_PATH = {"/sys/kernel/mm/ksm/pages_to_scan","/sys/kernel/mm/uksm/pages_to_scan"};
+    public static final String[] KSM_PAGESUNSHERED_PATH = {"/sys/kernel/mm/ksm/pages_unshared","/sys/kernel/mm/uksm/pages_unshared"};
+    public static final String[] KSM_PAGESVOLATILE_PATH = {"/sys/kernel/mm/ksm/pages_volatile","/sys/kernel/mm/uksm/pages_volatile"};
+    public static final String[] KSM_SLEEP_PATH = {"/sys/kernel/mm/ksm/sleep_millisecs","/sys/kernel/mm/uksm/sleep_millisecs"};
     public static final String PREF_RUN_KSM = "pref_run_ksm";
     public static final String KSM_SOB = "ksm_boot";
 
@@ -150,22 +151,6 @@ public interface Constants {
     public static final String DYNAMIC_DIRTY_WRITEBACK_SOB = "dynamic_write_back_sob";
 
     // VM settings
-    public static final String PREF_DIRTY_RATIO = "pref_dirty_ratio";
-    public static final String PREF_DIRTY_BACKGROUND = "pref_dirty_background";
-    public static final String PREF_DIRTY_EXPIRE = "pref_dirty_expire";
-    public static final String PREF_DIRTY_WRITEBACK = "pref_dirty_writeback";
-    public static final String PREF_MIN_FREE_KB = "pref_min_free_kb";
-    public static final String PREF_OVERCOMMIT = "pref_overcommit";
-    public static final String PREF_SWAPPINESS = "pref_swappiness";
-    public static final String PREF_VFS = "pref_vfs";
-    public static final String DIRTY_RATIO_PATH = "/proc/sys/vm/dirty_ratio";
-    public static final String DIRTY_BACKGROUND_PATH = "/proc/sys/vm/dirty_background_ratio";
-    public static final String DIRTY_EXPIRE_PATH = "/proc/sys/vm/dirty_expire_centisecs";
-    public static final String DIRTY_WRITEBACK_PATH = "/proc/sys/vm/dirty_writeback_centisecs";
-    public static final String MIN_FREE_PATH = "/proc/sys/vm/min_free_kbytes";
-    public static final String OVERCOMMIT_PATH = "/proc/sys/vm/overcommit_ratio";
-    public static final String SWAPPINESS_PATH = "/proc/sys/vm/swappiness";
-    public static final String VFS_CACHE_PRESSURE_PATH = "/proc/sys/vm/vfs_cache_pressure";
     public static final String VM_SOB = "vm_sob";
 
     // Voltage control

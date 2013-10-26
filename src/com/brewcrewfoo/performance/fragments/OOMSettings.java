@@ -88,6 +88,8 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     private Preference mZRAMsettings;
 
     private Boolean ispm;
+    private int ksm=0;
+    private String ksmpath=KSM_RUN_PATH;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,13 +148,24 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             mSysON.setChecked(Helpers.readOneLine(SYS_PROC_PATH).equals("1"));
             mPreferences.edit().putString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH)).apply();
         }
-        if (!new File(KSM_RUN_PATH).exists()) {
+        if (!new File(UKSM_RUN_PATH).exists() && !new File(KSM_RUN_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("ksm");
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
-            mKSM.setChecked(Helpers.readOneLine(KSM_RUN_PATH).equals("1"));
-            mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH)+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH));
+            if(new File(UKSM_RUN_PATH).exists()){
+                ksm=1;
+                ksmpath=UKSM_RUN_PATH;
+                mKSM.setSummary(R.string.uksm);
+            }
+            else{
+                ksm=0;
+                ksmpath=KSM_RUN_PATH;
+                mKSM.setSummary(null);
+            }
+            mKSM.setChecked(Helpers.readOneLine(ksmpath).equals("1"));
+            mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
+
         }
         ispm=(!Helpers.binExist("pm").equals(NOT_FOUND));
 
@@ -303,11 +316,11 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             }
         }
         else if (preference.equals(mKSM)){
-            if (Integer.parseInt(Helpers.readOneLine(KSM_RUN_PATH))==0){
-                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + KSM_RUN_PATH);
+            if (Integer.parseInt(Helpers.readOneLine(ksmpath))==0){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + ksmpath);
             }
             else{
-                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + KSM_RUN_PATH);
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + ksmpath);
             }
             return true;
         }
@@ -342,7 +355,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                 //mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+r.split(":")[0]+" | "+getString(R.string.ksm_sleep)+" "+r.split(":")[1]);
                 switch(r){
                     case 1:
-                        mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH)+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH));
+                        mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
                         break;
                     case 2:
                         int maxdisk = (int) Helpers.getTotMem() / 1024;
