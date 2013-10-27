@@ -322,7 +322,7 @@ Translation by Rhonin86 & Evisceration
     <string name="pt_widget_bg_color">Widget Hintergrundfarbe</string>
     <string name="pt_widget_text_color">Widget Textfarbe</string>
     <string name="pt_ver">"Version - "</string>
-    <string name="pt_show_tabs">Set Tabs Sichtweite</string>
+    <string name="pt_show_tabs">Setzte Sichtbarkeit der Tabs</string>
     <!-- Color picker -->
     <string name="dialog_color_picker">Farbauswahl</string>
     <string name="press_color_to_apply">Wähle die zu benutzende Farbe:</string>
