@@ -7,25 +7,17 @@ Translation by Laurentiu1996
 
     <string name="app_name">Performance Control</string>
     <!-- Main tabs -->
-    <string name="tab_cpu_settings">Setări CPU</string>
-    <string name="tab_cpu_profiles">Profile CPU</string>
-    <string name="tab_battery_info">Baterie</string>
-    <string name="tab_oom_settings">Setări memorie</string>
-    <string name="tab_time_in_state">Timp de lucru</string>
-    <string name="tab_voltage_settings">Setări Tensiune</string>
-    <string name="tab_cpu_info">Informaţii Generale</string>
-    <string name="tab_disk_info">Informatii Disk</string>
-    <string name="tab_tools">Unelte</string>
-    <!-- Titles -->
-    <string name="t_cpu_settings">SETĂRI CPU</string>
-    <string name="t_battery_info">BATERIE</string>
-    <string name="t_oom_settings">SETĂRI MEMORIE</string>
-    <string name="t_volt_settings">SETĂRI TENSIUNE</string>
-    <string name="t_adv_settings">"SETĂRI AVANSATE"</string>
-    <string name="t_time_in_state">"TIMP DE LUCRU"</string>
-    <string name="t_cpu_info">INFORMAŢII GENERALE</string>
-    <string name="t_disk_info">INFORMAŢII DISK</string>
-    <string name="t_tools">UNELTE</string>
+    <string-array name="tabs">
+        <item>Setări CPU</item>
+        <item>Baterie</item>
+        <item>Setări memorie</item>
+        <item>Setări Tensiune</item>
+        <item>Setări Avansate</item>
+        <item>Timp de lucru</item>
+        <item>Informaţii Generale</item>
+        <item>Informatii Disk</item>
+        <item>Utile</item>
+    </string-array>
 
     <string name="menu_tab">Tab-uri</string>
     <!-- Menu -->
@@ -51,6 +43,7 @@ Translation by Laurentiu1996
     <string name="prefcat_misc_short">DIVERSE</string>
     <string name="prefcat_read_ahead">SD READ AHEAD</string>
     <string name="prefcat_vm_settings">SETĂRI VM</string>
+    <string name="pt_vm">Setări VM</string>
     <string name="dt_free_memory">Minfree Taskkiller</string>
     <string name="dt_read_ahead">SD Read Ahead</string>
     <string name="pt_free_memory">Memorie libera</string>
@@ -144,6 +137,7 @@ Translation by Laurentiu1996
     <string name="size_512_kb">512kb</string>
     <string name="size_1024_kb">1024kb</string>
     <string name="size_2048_kb">2048kb</string>
+    <string name="size_3072_kb">3072kb</string>
     <string name="size_4096_kb">4096kb</string>
     <!-- Voltage control -->
     <string name="volt_info">ATENŢIE!\nÎnaintea activării "Aplică la bootare", asigură-te că valorile introduse nu depăşesc limitele admise, altfel telefonul se va bloca.</string>
@@ -266,6 +260,7 @@ Translation by Laurentiu1996
     <string name="ksm_pagvolatile">Pagini volatile:</string>
     <string name="ksm_pagtoscan">Pagini de scanat:</string>
     <string name="ksm_sleep">Pauză (ms):</string>
+    <string name="uksm">Ultra KSM a fost detectat</string>
     <!-- freezer -->
     <string name="prefcat_freezer">ÎNGHEȚARE sau DEZGHEȚARE PACHETE</string>
     <string name="pt_freeze">Îngheaţare pachet</string>
@@ -306,12 +301,16 @@ Translation by Laurentiu1996
     <string name="fmt_backup">Backup</string>
     <string name="del_prop_title">Șterge Parametru</string>
     <string name="del_prop_msg">%s va fi șters. Continuaţi?</string>
+    <!-- Vibration Intensity -->
+    <string name="prefcat_viber">Vibrare</string>
+    <string name="viber_title">Controlul intensităţii vibraţiilor</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Utilizaţi o temă deschisă</string>
     <string name="ps_use_light_theme">Dacă este bifată, aplicaţia va folosi o temă deschisă Holo</string>
     <string name="pt_widget_bg_color">Culoarea Widgetului  bg</string>
     <string name="pt_widget_text_color">Culoarea textului Widgetului</string>
     <string name="pt_ver">"Versiune - "</string>
+    <string name="pt_show_tabs">Setare Vizibilitate Tab-uri</string>
     <!-- Color picker -->
     <string name="dialog_color_picker">Alegerea Culorii</string>
     <string name="press_color_to_apply">Apăsaţi pe Culoare pentru aplicare</string>

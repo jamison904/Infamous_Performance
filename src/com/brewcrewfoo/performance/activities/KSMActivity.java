@@ -1,5 +1,7 @@
 package com.brewcrewfoo.performance.activities;
-
+/**
+ * Created by h0rn3t on 11.09.2013.
+ */
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,9 +27,6 @@ import com.brewcrewfoo.performance.util.Helpers;
 
 import java.io.File;
 
-/**
- * Created by h0rn3t on 11.09.2013.
- */
 public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBarChangeListener, ActivityThemeChangeInterface {
     SharedPreferences mPreferences;
     private boolean mIsLightTheme;
@@ -45,6 +44,8 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
     private SeekBar mSleep;
     final private int maxPages2Scan=2048;
     final private int maxSleep=5000;
+    private int ksm=0;
+    private String ksmpath=KSM_RUN_PATH;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,41 +58,45 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
         t3=(TextView)findViewById(R.id.t6);
         t4=(TextView)findViewById(R.id.t8);
         t5=(TextView)findViewById(R.id.t10);
-
-        if (new File(KSM_PAGESSHARED_PATH).exists()) {
-            t1.setText(Helpers.readOneLine(KSM_PAGESSHARED_PATH));
+        if(new File(UKSM_RUN_PATH).exists()){
+            ksm=1;
+            ksmpath=UKSM_RUN_PATH;
+        }
+        if (new File(KSM_PAGESSHARED_PATH[ksm]).exists()) {
+            t1.setText(Helpers.readOneLine(KSM_PAGESSHARED_PATH[ksm]));
             ist1=true;
         }
         else{
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout1);
             relativeLayout.setVisibility(RelativeLayout.GONE);
         }
-        if (new File(KSM_PAGESSHARED_PATH).exists()) {
-            t2.setText(Helpers.readOneLine(KSM_PAGESUNSHERED_PATH));
+
+        if (new File(KSM_PAGESSHARED_PATH[ksm]).exists()) {
+            t2.setText(Helpers.readOneLine(KSM_PAGESUNSHERED_PATH[ksm]));
             ist2=true;
         }
         else{
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout2);
             relativeLayout.setVisibility(RelativeLayout.GONE);
         }
-        if (new File(KSM_PAGESSHARING_PATH).exists()) {
-            t3.setText(Helpers.readOneLine(KSM_PAGESSHARING_PATH));
+        if (new File(KSM_PAGESSHARING_PATH[ksm]).exists()) {
+            t3.setText(Helpers.readOneLine(KSM_PAGESSHARING_PATH[ksm]));
             ist3=true;
         }
         else{
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout3);
             relativeLayout.setVisibility(RelativeLayout.GONE);
         }
-        if (new File(KSM_PAGESVOLATILE_PATH).exists()) {
-            t4.setText(Helpers.readOneLine(KSM_PAGESVOLATILE_PATH));
+        if (new File(KSM_PAGESVOLATILE_PATH[ksm]).exists()) {
+            t4.setText(Helpers.readOneLine(KSM_PAGESVOLATILE_PATH[ksm]));
             ist4=true;
         }
         else{
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout4);
             relativeLayout.setVisibility(RelativeLayout.GONE);
         }
-        if (new File(KSM_FULLSCANS_PATH).exists()) {
-            t5.setText(Helpers.readOneLine(KSM_FULLSCANS_PATH));
+        if (new File(KSM_FULLSCANS_PATH[ksm]).exists()) {
+            t5.setText(Helpers.readOneLine(KSM_FULLSCANS_PATH[ksm]));
             ist5=true;
         }
         else{
@@ -99,8 +104,8 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
             relativeLayout.setVisibility(RelativeLayout.GONE);
         }
 
-        final int v1=Integer.parseInt(Helpers.readOneLine(KSM_PAGESTOSCAN_PATH));
-        final int v2=Integer.parseInt(Helpers.readOneLine(KSM_SLEEP_PATH));
+        final int v1=Integer.parseInt(Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]));
+        final int v2=Integer.parseInt(Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
 
         TextView tval1 = (TextView) findViewById(R.id.tval1);
         tval1.setText(getString(R.string.ksm_pagtoscan));
@@ -181,8 +186,8 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
                     return;
                 }
 
-                new CMDProcessor().su.runWaitFor("busybox echo " + i1 + " > " + KSM_PAGESTOSCAN_PATH);
-                new CMDProcessor().su.runWaitFor("busybox echo " + i2 + " > " + KSM_SLEEP_PATH);
+                new CMDProcessor().su.runWaitFor("busybox echo " + i1 + " > " + KSM_PAGESTOSCAN_PATH[ksm]);
+                new CMDProcessor().su.runWaitFor("busybox echo " + i2 + " > " + KSM_SLEEP_PATH[ksm]);
                 mPreferences.edit()
                         .putString("pref_ksm_pagetoscan", String.valueOf(i1))
                         .putString("pref_ksm_sleep", String.valueOf(i2))
@@ -198,11 +203,11 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
             public void onClick(View arg0) {
                 Runnable runnable = new Runnable() {
                     public void run() {
-                        final String vlast=Helpers.readOneLine(KSM_RUN_PATH);
+                        final String vlast=Helpers.readOneLine(ksmpath);
                         final StringBuilder sb = new StringBuilder();
-                        sb.append("busybox echo 0 > ").append(KSM_RUN_PATH).append(";\n").append("sleep 0.5;\n");
-                        sb.append("busybox echo 2 > ").append(KSM_RUN_PATH).append(";\n").append("sleep 0.5;\n");
-                        sb.append("busybox echo ").append(vlast).append(" > ").append(KSM_RUN_PATH).append(";\n");
+                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
+                        sb.append("busybox echo 2 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
+                        sb.append("busybox echo ").append(vlast).append(" > ").append(ksmpath).append(";\n");
                         Helpers.shExec(sb,context,true);
 
                     }
@@ -287,11 +292,11 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
     }
     protected Handler mCurHandler = new Handler() {
         public void handleMessage(Message msg) {
-            if (ist1) t1.setText(Helpers.readOneLine(KSM_PAGESSHARED_PATH));
-            if (ist2) t2.setText(Helpers.readOneLine(KSM_PAGESUNSHERED_PATH));
-            if (ist3) t3.setText(Helpers.readOneLine(KSM_PAGESSHARING_PATH));
-            if (ist4) t4.setText(Helpers.readOneLine(KSM_PAGESVOLATILE_PATH));
-            if (ist5) t5.setText(Helpers.readOneLine(KSM_FULLSCANS_PATH));
+            if (ist1) t1.setText(Helpers.readOneLine(KSM_PAGESSHARED_PATH[ksm]));
+            if (ist2) t2.setText(Helpers.readOneLine(KSM_PAGESUNSHERED_PATH[ksm]));
+            if (ist3) t3.setText(Helpers.readOneLine(KSM_PAGESSHARING_PATH[ksm]));
+            if (ist4) t4.setText(Helpers.readOneLine(KSM_PAGESVOLATILE_PATH[ksm]));
+            if (ist5) t5.setText(Helpers.readOneLine(KSM_FULLSCANS_PATH[ksm]));
         }
     };
 

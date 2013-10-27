@@ -48,7 +48,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         final AppWidgetManager awm = AppWidgetManager.getInstance(context);
         final ComponentName nm = new ComponentName(context, PCWidget.class);
         final String action = intent.getAction();
-        if (action.equals("com.brewcrewfoo.performance.ACTION_FREQS_CHANGED")) {
+        if (action!=null && action.equals("com.brewcrewfoo.performance.ACTION_FREQS_CHANGED")) {
             onUpdate(context, awm, awm.getAppWidgetIds(nm));
         }
     }

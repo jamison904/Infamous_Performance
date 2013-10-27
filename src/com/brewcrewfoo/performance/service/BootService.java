@@ -70,10 +70,16 @@ public class BootService extends Service implements Constants {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
             final StringBuilder sb = new StringBuilder();
             final String FASTCHARGE_PATH=Helpers.fastcharge_path();
+            final String VIBE_PATH=Helpers.vibe_path();
             final String BLN_PATH=Helpers.bln_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
             final int ncpus=Helpers.getNumOfCpus();
-
+            int ksm=0;
+            String ksmpath=KSM_RUN_PATH;
+            if (new File(UKSM_RUN_PATH).exists()) {
+                ksm=1;
+                ksmpath=UKSM_RUN_PATH;
+            }
             if (preferences.getBoolean(CPU_SOB, false)) {
                 final String max = preferences.getString(PREF_MAX_CPU, Helpers.readOneLine(MAX_FREQ_PATH));
                 final String min = preferences.getString(PREF_MIN_CPU, Helpers.readOneLine(MIN_FREQ_PATH));
@@ -186,6 +192,11 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo 0 > ").append(BLN_PATH).append(";\n");
                 }
             }
+            if (VIBE_PATH!=null) {
+                if (preferences.getBoolean("viber_sob", false)) {
+                    sb.append("busybox echo ").append(preferences.getInt("pref_viber", Integer.parseInt(Helpers.readOneLine(VIBE_PATH)))).append(" > ").append(VIBE_PATH).append(";\n");
+                }
+            }
             if (new File(PFK_HOME_ENABLED).exists() && new File(PFK_MENUBACK_ENABLED).exists()) {
                 if (preferences.getBoolean(PFK_SOB, false)) {
                     sb.append("busybox echo ").append(preferences.getInt(PREF_HOME_ALLOWED_IRQ, Integer.parseInt(Helpers.readOneLine(PFK_HOME_ALLOWED_IRQ)))).append(" > ").append(PFK_HOME_ALLOWED_IRQ).append(";\n");
@@ -207,12 +218,20 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-            boolean isdynamic=false;
+            if (preferences.getBoolean(VM_SOB, false)) {
+                final String gs = preferences.getString("vm_settings", null);
+                if(gs != null){
+                    String p[]=gs.split(";");
+                    for (String aP : p) {
+                        final String pn[]=aP.split(":");
+                        sb.append("busybox echo ").append(pn[1]).append(" > ").append("/proc/sys/vm/").append(pn[0]).append(";\n");
+                    }
+                }
+            }
             if (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists()) {
                 if (preferences.getBoolean(DYNAMIC_DIRTY_WRITEBACK_SOB, false)) {
                     if (preferences.getBoolean(PREF_DYNAMIC_DIRTY_WRITEBACK, false)) {
                         sb.append("busybox echo 1 > " + DYNAMIC_DIRTY_WRITEBACK_PATH + ";\n");
-                        isdynamic=true;
                     }
                     else{
                         sb.append("busybox echo 0 > " + DYNAMIC_DIRTY_WRITEBACK_PATH + ";\n");
@@ -222,18 +241,6 @@ public class BootService extends Service implements Constants {
                 }
             }
 
-            if (preferences.getBoolean(VM_SOB, false)) {
-                sb.append("busybox echo ").append(preferences.getInt(PREF_DIRTY_RATIO, Integer.parseInt(Helpers.readOneLine(DIRTY_RATIO_PATH)))).append(" > ").append(DIRTY_RATIO_PATH).append(";\n");
-                sb.append("busybox echo ").append(preferences.getInt(PREF_DIRTY_BACKGROUND, Integer.parseInt(Helpers.readOneLine(DIRTY_BACKGROUND_PATH)))).append(" > ").append(DIRTY_BACKGROUND_PATH).append(";\n");
-                sb.append("busybox echo ").append(preferences.getInt(PREF_DIRTY_EXPIRE, Integer.parseInt(Helpers.readOneLine(DIRTY_EXPIRE_PATH)))).append(" > ").append(DIRTY_EXPIRE_PATH).append(";\n");
-                if(!isdynamic){
-                sb.append("busybox echo ").append(preferences.getInt(PREF_DIRTY_WRITEBACK, Integer.parseInt(Helpers.readOneLine(DIRTY_WRITEBACK_PATH)))).append(" > ").append(DIRTY_WRITEBACK_PATH).append(";\n");
-                }
-                sb.append("busybox echo ").append(preferences.getInt(PREF_MIN_FREE_KB, Integer.parseInt(Helpers.readOneLine(MIN_FREE_PATH)))).append(" > ").append(MIN_FREE_PATH).append(";\n");
-                sb.append("busybox echo ").append(preferences.getInt(PREF_OVERCOMMIT, Integer.parseInt(Helpers.readOneLine(OVERCOMMIT_PATH)))).append(" > ").append(OVERCOMMIT_PATH).append(";\n");
-                sb.append("busybox echo ").append(preferences.getInt(PREF_SWAPPINESS, Integer.parseInt(Helpers.readOneLine(SWAPPINESS_PATH)))).append(" > ").append(SWAPPINESS_PATH).append(";\n");
-                sb.append("busybox echo ").append(preferences.getInt(PREF_VFS, Integer.parseInt(Helpers.readOneLine(VFS_CACHE_PRESSURE_PATH)))).append(" > ").append(VFS_CACHE_PRESSURE_PATH).append(";\n");
-            }
             if (preferences.getBoolean(PREF_MINFREE_BOOT, false)) {
                     sb.append("busybox echo ").append(preferences.getString(PREF_MINFREE, Helpers.readOneLine(MINFREE_PATH))).append(" > ").append(MINFREE_PATH).append(";\n");
             }
@@ -259,16 +266,17 @@ public class BootService extends Service implements Constants {
                         sb.append("busybox echo ").append(preferences.getString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH))).append(" > ").append(USER_SYS_NAMES_PATH).append(";\n");
                     }
             }
-            if (new File(KSM_RUN_PATH).exists()) {
+
+            if (new File(ksmpath).exists()) {
                 if (preferences.getBoolean(KSM_SOB, false)) {
                     if (preferences.getBoolean(PREF_RUN_KSM, false)) {
-                        sb.append("busybox echo 1 > " + KSM_RUN_PATH + ";\n");
+                        sb.append("busybox echo 1 > ").append(ksmpath).append(";\n");
                     }
                     else{
-                        sb.append("busybox echo 0 > " + KSM_RUN_PATH + ";\n");
+                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n");
                     }
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH))).append(" > ").append(KSM_PAGESTOSCAN_PATH).append(";\n");
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH))).append(" > ").append(KSM_SLEEP_PATH).append(";\n");
+                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
+                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                 }
             }
             if(new File("/sys/block/zram0").exists()){

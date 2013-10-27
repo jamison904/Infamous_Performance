@@ -1,4 +1,7 @@
 package com.brewcrewfoo.performance.util;
+/**
+ * Created by h0rn3t on 22.09.2013.
+ */
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,9 +16,6 @@ import com.brewcrewfoo.performance.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by h0rn3t on 22.09.2013.
- */
 public class PropAdapter extends ArrayAdapter<Prop> {
     private Context c;
     private int id;
@@ -64,9 +64,7 @@ public class PropAdapter extends ArrayAdapter<Prop> {
     }
 
     private class AppFilter extends Filter {
-
         private List<com.brewcrewfoo.performance.util.Prop> sourceObjects;
-
         public AppFilter(List<com.brewcrewfoo.performance.util.Prop> props) {
             sourceObjects = new ArrayList<com.brewcrewfoo.performance.util.Prop>();
             synchronized (this) {
@@ -80,14 +78,14 @@ public class PropAdapter extends ArrayAdapter<Prop> {
             FilterResults result = new FilterResults();
             if (filterSeq != null && filterSeq.length() > 0) {
                 List<com.brewcrewfoo.performance.util.Prop> filter = new ArrayList<com.brewcrewfoo.performance.util.Prop>();
-                for (int i=0;i<props.size();i++) {
-                    com.brewcrewfoo.performance.util.Prop o=props.get(i);
+                for (Prop o : props) {
                     if (o.getName().toLowerCase().contains(filterSeq))
                         filter.add(o);
                 }
                 result.count = filter.size();
                 result.values = filter;
-            } else {
+            }
+            else {
                 synchronized (this) {
                     result.values = sourceObjects;
                     result.count = sourceObjects.size();
@@ -98,11 +96,10 @@ public class PropAdapter extends ArrayAdapter<Prop> {
 
         @Override
         protected void publishResults(CharSequence constraint,FilterResults results) {
-            List<com.brewcrewfoo.performance.util.Prop> filtered = (List<com.brewcrewfoo.performance.util.Prop>) results.values;
+            List<Prop> filtered = (List<Prop>) results.values;
             notifyDataSetChanged();
             clear();
-            for (int i = 0, l = filtered.size(); i < l; i++)
-                add((com.brewcrewfoo.performance.util.Prop) filtered.get(i));
+            for (Prop aFiltered : filtered) add(aFiltered);
             notifyDataSetInvalidated();
         }
     }

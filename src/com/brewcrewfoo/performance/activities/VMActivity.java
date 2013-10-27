@@ -1,5 +1,8 @@
 package com.brewcrewfoo.performance.activities;
 
+/**
+ * Created by h0rn3t on 24.10.2013.
+ */
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -33,10 +36,7 @@ import com.brewcrewfoo.performance.util.PropAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by h0rn3t on 21.09.2013.
- */
-public class GovSetActivity extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
+public class VMActivity extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
@@ -46,7 +46,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     private LinearLayout nofiles;
     private RelativeLayout tools;
     private PropAdapter adapter;
-    private String curgov;
+    private String vmpath="/proc/sys/vm";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,8 +64,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         tools = (RelativeLayout) findViewById(R.id.tools);
         Button applyBtn = (Button) findViewById(R.id.applyBtn);
         final Switch setOnBoot = (Switch) findViewById(R.id.applyAtBoot);
-        setOnBoot.setChecked(mPreferences.getBoolean(GOV_SOB, false));
-        curgov=Helpers.readOneLine(GOVERNOR_PATH);
+        setOnBoot.setChecked(mPreferences.getBoolean(VM_SOB, false));
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -79,9 +78,9 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                     else{
                         sb.append(";").append(p.getName().replace(" ","_")).append(":").append(p.getVal());
                     }
-                    sbs.append("busybox echo ").append(p.getVal()).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(p.getName().replace(" ","_")).append(";\n");
+                    sbs.append("busybox echo ").append(p.getVal()).append(" > ").append(vmpath).append("/").append(p.getName().replace(" ","_")).append(";\n");
                 }
-                mPreferences.edit().putString(GOV_NAME,curgov).putString(GOV_SETTINGS, sb.toString()).commit();
+                mPreferences.edit().putString("vm_settings", sb.toString()).commit();
                 Helpers.shExec(sbs,context,true);
             }
         });
@@ -101,12 +100,12 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
 
                         }
                     }
-                    mPreferences.edit().putString(GOV_NAME,curgov).putString(GOV_SETTINGS, sb.toString()).apply();
+                    mPreferences.edit().putString("vm_settings", sb.toString()).apply();
                 }
                 else{
-                    mPreferences.edit().remove(GOV_SETTINGS).remove(GOV_NAME).apply();
+                    mPreferences.edit().remove("vm_settings").apply();
                 }
-                mPreferences.edit().putBoolean(GOV_SOB, isChecked).apply();
+                mPreferences.edit().putBoolean(VM_SOB, isChecked).apply();
             }
         });
 
@@ -120,9 +119,10 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         @Override
         protected String doInBackground(String... params) {
             new CMDProcessor().su.runWaitFor("busybox chmod 750 "+ context.getFilesDir()+"/utils" );
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -govprop "+curgov);
+            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -vmprop");
             if(cr.success()){return cr.stdout;}
-            else{Log.d(TAG,"read governor err: "+cr.stderr); return null; }
+            else{
+                Log.d(TAG, "read vm err: " + cr.stderr); return null; }
         }
         @Override
         protected void onPostExecute(String result) {
@@ -132,20 +132,20 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             else{
                 String p[]=result.split(";");
                 for (String aP : p) {
-                        final String pn[]=aP.split(":");
-                        if(pn[1]!=null && !pn[1].trim().equals(""))
+                    final String pn[]=aP.split(":");
+                    if(pn[1]!=null && !pn[1].trim().equals(""))
                         props.add(new Prop(pn[0].substring(pn[0].lastIndexOf("/") + 1, pn[0].length()).replace("_"," "),pn[1]));
                 }
                 linlaHeaderProgress.setVisibility(View.GONE);
                 if(props.isEmpty()){
-                        nofiles.setVisibility(View.VISIBLE);
-                        tools.setVisibility(View.GONE);
+                    nofiles.setVisibility(View.VISIBLE);
+                    tools.setVisibility(View.GONE);
                 }
                 else{
-                        nofiles.setVisibility(View.GONE);
-                        tools.setVisibility(View.VISIBLE);
-                        adapter = new PropAdapter(GovSetActivity.this, R.layout.prop_item, props);
-                        packList.setAdapter(adapter);
+                    nofiles.setVisibility(View.GONE);
+                    tools.setVisibility(View.VISIBLE);
+                    adapter = new PropAdapter(VMActivity.this, R.layout.prop_item, props);
+                    packList.setAdapter(adapter);
                 }
             }
         }
@@ -167,15 +167,15 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     }
     @Override
     public boolean isThemeChanged() {
-    final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
-            return is_light_theme != mIsLightTheme;
+        final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
+        return is_light_theme != mIsLightTheme;
     }
 
     @Override
     public void setTheme() {
-    final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
-            mIsLightTheme = is_light_theme;
-            setTheme(is_light_theme ? R.style.Theme_Light : R.style.Theme_Dark);
+        final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
+        mIsLightTheme = is_light_theme;
+        setTheme(is_light_theme ? R.style.Theme_Light : R.style.Theme_Dark);
     }
     @Override
     public void onResume() {
@@ -191,7 +191,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         tv.setText(pp.getVal());
         tn.setText(pp.getName());
         new AlertDialog.Builder(this)
-                .setTitle(curgov)
+                .setTitle(getString(R.string.pt_vm))
                 .setView(editDialog)
                 .setNegativeButton(getString(R.string.cancel),
                         new DialogInterface.OnClickListener() {

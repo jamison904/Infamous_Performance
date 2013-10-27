@@ -18,10 +18,15 @@
 
 package com.brewcrewfoo.performance.activities;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.*;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.util.Log;
+
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.Constants;
@@ -35,6 +40,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
     private ColorPickerPreference mWidgetBgColorPref;
     private ColorPickerPreference mWidgetTextColorPref;
     private Preference mVersion;
+    private final Context context=this;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,9 +66,12 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
             Helpers.restartPC(this);
             return true;
         }
+        else if("visible_tabs".equals(key)){
+            startActivity(new Intent(context, HideTabs.class));
+            return true;
+        }
         return false;
     }
-
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mWidgetBgColorPref) {

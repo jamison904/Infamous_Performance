@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -39,6 +38,9 @@ import com.brewcrewfoo.performance.fragments.*;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity implements Constants,ActivityThemeChangeInterface {
 
@@ -76,53 +78,69 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
 
         public TitleAdapter(FragmentManager fm) {
             super(fm);
-            if (mVoltageExists) {
-            	if(Helpers.showBattery()){
-	                frags[0] = new CPUSettings();
-		            frags[1] = new BatteryInfo();
-		            frags[2] = new OOMSettings();
-                    frags[3] = new VM();
-	                frags[4] = new VoltageControlSettings();
-	                frags[5] = new Advanced();
-	                frags[6] = new TimeInState();
-	                frags[7] = new CPUInfo();
-                    frags[8] = new DiskInfo();
-                    frags[9] = new Tools();
-            	}
-            	else{
-			        frags[0] = new CPUSettings();
-	        	    frags[1] = new OOMSettings();
-                    frags[2] = new VM();
-                	frags[3] = new VoltageControlSettings();
-                	frags[4] = new Advanced();
-                	frags[5] = new TimeInState();
-                	frags[6] = new CPUInfo();
-                    frags[7] = new DiskInfo();
-                    frags[8] = new Tools();
-            	}
-            } 
-            else {
-                if(Helpers.showBattery()){
-                    frags[0] = new CPUSettings();
-                    frags[1] = new BatteryInfo();
-                    frags[2] = new OOMSettings();
-                    frags[3] = new VM();
-                    frags[4] = new Advanced();
-                    frags[5] = new TimeInState();
-                    frags[6] = new CPUInfo();
-                    frags[7] = new DiskInfo();
-                    frags[8] = new Tools();
+
+            int i=0;
+            int j=0;
+            while (i<getResources().getStringArray(R.array.tabs).length) {
+                boolean isvisible=mPreferences.getBoolean(getResources().getStringArray(R.array.tabs)[i],true);
+                switch(i){
+                    case 0:
+                        if(isvisible){
+                            frags[j] = new CPUSettings();
+                            j++;
+                        }
+                        break;
+                    case 1:
+                        if(Helpers.showBattery()&&isvisible){
+                            frags[j] = new BatteryInfo();
+                            j++;
+                        }
+                        break;
+                    case 2:
+                        if(isvisible){
+                            frags[j] = new OOMSettings();
+                            j++;
+                        }
+                        break;
+                    case 3:
+                        if (mVoltageExists&&isvisible) {
+                            frags[j] = new VoltageControlSettings();
+                            j++;
+                        }
+                        break;
+                    case 4:
+                        if(isvisible){
+                            frags[j] = new Advanced();
+                            j++;
+                        }
+                        break;
+                    case 5:
+                        if(isvisible){
+                            frags[j] = new TimeInState();
+                            j++;
+                        }
+                        break;
+                    case 6:
+                        if(isvisible){
+                            frags[j] = new CPUInfo();
+                            j++;
+                        }
+                        break;
+                    case 7:
+                        if(isvisible){
+                            frags[j] = new DiskInfo();
+                            j++;
+                        }
+                        break;
+                    case 8:
+                        if(isvisible){
+                            frags[j] = new Tools();
+                            j++;
+                        }
+                        break;
                 }
-                else{
-                    frags[0] = new CPUSettings();
-                    frags[1] = new OOMSettings();
-                    frags[2] = new VM();
-                    frags[3] = new Advanced();
-                    frags[4] = new TimeInState();
-                    frags[5] = new CPUInfo();
-                    frags[6] = new DiskInfo();
-                    frags[7] = new Tools();
-                }
+
+                i++;
             }
         }
 
@@ -255,66 +273,38 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
 
     /**
      * Get a list of titles for the tabstrip to display depending on if the
-     * voltage control fragment and battery fragment will be displayed. (Depends on the result of
-     * Helpers.voltageTableExists() & Helpers.showBattery()
-     *
      * @return String[] containing titles
      */
     private String[] getTitles() {
-        String titleString[];
-        if (mVoltageExists) {
-        	if(Helpers.showBattery()){
-                titleString = new String[]{
-                        getString(R.string.t_cpu_settings),
-                        getString(R.string.t_battery_info),
-                        getString(R.string.t_oom_settings),
-                        getString(R.string.prefcat_vm_settings),
-                        getString(R.string.t_volt_settings),
-                        getString(R.string.t_adv_settings),
-                        getString(R.string.t_time_in_state),
-                        getString(R.string.t_cpu_info),
-                        getString(R.string.t_disk_info),
-                        getString(R.string.t_tools)};
-                }
-                else{
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_volt_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info),
-                            getString(R.string.t_tools)};
-                }
-        } 
-        else {
-        	if(Helpers.showBattery()){
-                titleString = new String[]{
-                        getString(R.string.t_cpu_settings),
-                        getString(R.string.t_battery_info),
-                        getString(R.string.t_oom_settings),
-                        getString(R.string.prefcat_vm_settings),
-                        getString(R.string.t_adv_settings),
-                        getString(R.string.t_time_in_state),
-                        getString(R.string.t_cpu_info),
-                        getString(R.string.t_disk_info),
-                        getString(R.string.t_tools)};
+        List<String> titleslist = new ArrayList<String>();
+        int i=0;
+        int j=0;
+        while (i<getResources().getStringArray(R.array.tabs).length) {
+            boolean isvisible=mPreferences.getBoolean(getResources().getStringArray(R.array.tabs)[i],true);
+            switch(i){
+                case 1:
+                    if(Helpers.showBattery()&&isvisible){
+                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
+                        j++;
+                    }
+                    break;
+                case 3:
+                    if (mVoltageExists&&isvisible) {
+                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
+                        j++;
+                    }
+                    break;
+                default:
+                    if(isvisible){
+                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
+                        j++;
+                    }
+                    break;
             }
-        	else{
-                titleString = new String[]{
-                        getString(R.string.t_cpu_settings),
-                        getString(R.string.t_oom_settings),
-                        getString(R.string.prefcat_vm_settings),
-                        getString(R.string.t_adv_settings),
-                        getString(R.string.t_time_in_state),
-                        getString(R.string.t_cpu_info),
-                        getString(R.string.t_disk_info),
-                        getString(R.string.t_tools)};
-            }
+
+            i++;
         }
-        return titleString;
+        return titleslist.toArray(new String[titleslist.size()]);
     }
 
     @Override

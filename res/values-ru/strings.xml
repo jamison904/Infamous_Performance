@@ -3,25 +3,18 @@
 
     <string name="app_name">Производительность</string>
     <!-- Main tabs -->
-    <string name="tab_cpu_settings">Настройки Процессора</string>
-    <string name="tab_cpu_profiles">Профили Процессора</string>
-    <string name="tab_battery_info">Аккумулятор</string>
-    <string name="tab_oom_settings">Настройки Памяти</string>
-    <string name="tab_time_in_state">Время в Действии</string>
-    <string name="tab_voltage_settings">Настройки Напряжения</string>
-    <string name="tab_cpu_info">Общая информация</string>
-    <string name="tab_disk_info">О Диске</string>
-    <string name="tab_tools">Инструменты</string>
-    <!-- Titles -->
-    <string name="t_cpu_settings">НАСТРОЙКИ ПРОЦЕССОРА</string>
-    <string name="t_battery_info">АККУМУЛЯТОР</string>
-    <string name="t_oom_settings">НАСТРОЙКИ ПАМЯТИ</string>
-    <string name="t_volt_settings">НАСТРОЙКИ НАПРЯЖЕНИЯ</string>
-    <string name="t_adv_settings">"РАСШИРЕННЫЕ НАСТРОЙКИ"</string>
-    <string name="t_time_in_state">"ВРЕМЯ В ДЕЙСТВИИ"</string>
-    <string name="t_cpu_info">Общая информация</string>
-    <string name="t_disk_info">О ДИСКЕ</string>
-    <string name="t_tools">ИНСТРУМЕНТЫ</string>
+    <string-array name="tabs">
+        <item>Настройки Процессора</item>
+        <item>Аккумулятор</item>
+        <item>Настройки Памяти</item>
+        <item>Настройки Напряжения</item>
+        <item>Расширенные настройки</item>
+        <item>Время в Действии</item>
+        <item>Общая информация</item>
+        <item>О Диске</item>
+        <item>Инструменты</item>
+    </string-array>
+
     <string name="menu_tab">Вкладки</string>
     <!-- Menu -->
     <string name="mt_refresh">Обновить</string>
@@ -46,6 +39,7 @@
     <string name="prefcat_misc_short">MISC</string>
     <string name="prefcat_read_ahead">Упреждающее Чтение</string>
     <string name="prefcat_vm_settings">НАСТРОЙКИ VM</string>
+    <string name="pt_vm">Настройки VM</string>
     <string name="dt_free_memory">Менеджер задач Minfree</string>
     <string name="dt_read_ahead">Упреждающее Чтение</string>
     <string name="pt_free_memory">Свободная Память</string>
@@ -139,6 +133,7 @@
     <string name="size_512_kb">512кб</string>
     <string name="size_1024_kb">1024кб</string>
     <string name="size_2048_kb">2048кб</string>
+    <string name="size_3072_kb">3072кб</string>
     <string name="size_4096_kb">4096кб</string>
     <!-- Voltage control -->
     <string name="volt_info">ВНИМАНИЕ! Перед тем как применять параметры
@@ -274,6 +269,7 @@
     <string name="ksm_pagvolatile">Изменчивые:</string>
     <string name="ksm_pagtoscan">Будут отсканированы:</string>
     <string name="ksm_sleep">Сон (ms):</string>
+    <string name="uksm">Ультра KSM обнаружены</string>
     <!-- freezer -->
     <string name="prefcat_freezer">ЗАМОРОЗИТЬ или РАЗМОРОЗИТЬ ДАННЫЕ</string>
     <string name="pt_freeze">Заморозить Пакеты Данных</string>
@@ -314,12 +310,16 @@
     <string name="fmt_backup">Бэкап</string>
     <string name="del_prop_title">Удаление Значения</string>
     <string name="del_prop_msg">%s будет удалено. Продолжить?</string>
+    <!-- Vibration Intensity -->
+    <string name="prefcat_viber">ВИБРАЦИЯ</string>
+    <string name="viber_title">Настройка Интенсивности  вибраци</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Использовать светлую тему</string>
     <string name="ps_use_light_theme">Если выбрать, приложение будет использовать светлую тему Holo</string>
     <string name="pt_widget_bg_color">Цвет фона виджета</string>
     <string name="pt_widget_text_color">Цвет текста виджета</string>
     <string name="pt_ver">"Версия - "</string>
+    <string name="pt_show_tabs">Видимость указан Tabs</string>
     <!-- Color picker -->
     <string name="dialog_color_picker">Выбор цвета</string>
     <string name="press_color_to_apply">Нажмите на цвет чтобы выбрать</string>

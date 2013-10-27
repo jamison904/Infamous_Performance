@@ -7,25 +7,17 @@ translation by Stefano187
 
     <string name="app_name">Performance Control</string>
     <!-- Main tabs -->
-    <string name="tab_cpu_settings">Impostazioni CPU</string>
-    <string name="tab_cpu_profiles">Profili CPU</string>
-    <string name="tab_battery_info">Batteria</string>
-    <string name="tab_oom_settings">Impostazioni Memoria</string>
-    <string name="tab_time_in_state">Frequenza e Tempo</string>
-    <string name="tab_voltage_settings">Impostazioni Voltaggio</string>
-    <string name="tab_cpu_info">Informazioni Generali</string>
-    <string name="tab_disk_info">Informazioni Disco</string>
-    <string name="tab_tools">Strumenti</string>
-    <!-- Titles -->
-    <string name="t_cpu_settings">IMPOSTAZIONI CPU</string>
-    <string name="t_battery_info">BATTERIA</string>
-    <string name="t_oom_settings">IMPOSTAZIONI MEMORIA</string>
-    <string name="t_volt_settings">IMPOSTAZIONI VOLTAGGIO</string>
-    <string name="t_adv_settings">"IMPOSTAZIONI AVANZATE"</string>
-    <string name="t_time_in_state">"FREQUENZA E TEMPO"</string>
-    <string name="t_cpu_info">INFORMAZIONI GENERALI</string>
-    <string name="t_disk_info">INFORMAZIONI DISCO</string>
-    <string name="t_tools">STRUMENTI</string>
+    <string-array name="tabs">
+        <item>Impostazioni CPU</item>
+        <item>Batteria</item>
+        <item>Impostazioni Memoria</item>
+        <item>Impostazioni Voltaggio</item>
+        <item>Informazioni Avanzate</item>
+        <item>Frequenza e Tempo</item>
+        <item>Informazioni Generali</item>
+        <item>Informazioni Disco</item>
+        <item>Strumenti</item>
+    </string-array>
 
     <string name="menu_tab">Tabs</string>
     <!-- Menu -->
@@ -51,6 +43,7 @@ translation by Stefano187
     <string name="prefcat_misc_short">MISC</string>
     <string name="prefcat_read_ahead">SD READ AHEAD</string>
     <string name="prefcat_vm_settings">IMPOSTAZIONI VM</string>
+    <string name="pt_vm">Informazioni VM</string>
     <string name="dt_free_memory">Minfree Taskkiller</string>
     <string name="dt_read_ahead">SD Read Ahead</string>
     <string name="pt_free_memory">Memoria Libera</string>
@@ -150,6 +143,7 @@ translation by Stefano187
     <string name="size_512_kb">512kb</string>
     <string name="size_1024_kb">1024kb</string>
     <string name="size_2048_kb">2048kb</string>
+    <string name="size_3072_kb">3072kb</string>
     <string name="size_4096_kb">4096kb</string>
     <!-- Voltage control -->
     <string name="volt_info">ATTENZIONE!\nPrima di attivare "Imposta all\'avvio",assicurati che i valori inseriti ​​non eccedano i limiti o che causino il blocco del telefono.</string>
@@ -281,6 +275,7 @@ translation by Stefano187
     <string name="ksm_pagvolatile">Pagine Volatili:</string>
     <string name="ksm_pagtoscan">Pagine da scansionare:</string>
     <string name="ksm_sleep">Sleep (ms):</string>
+    <string name="uksm">Ultra KSM rilevato</string>
     <!-- freezer -->
     <string name="prefcat_freezer">CONGELA or SCONGELA PACCHETTI</string>
     <string name="pt_freeze">Congela Pacchetto</string>
@@ -321,12 +316,16 @@ translation by Stefano187
     <string name="fmt_backup">Backup</string>
     <string name="del_prop_title">Elimina Proprietà</string>
     <string name="del_prop_msg">%s sarà eliminato.. Continuare?</string>
+    <!-- Vibration Intensity -->
+    <string name="prefcat_viber">VIBRAZIONE</string>
+    <string name="viber_title">Controllo intensità vibrazione</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Usa tema chiaro</string>
     <string name="ps_use_light_theme">Se selezionato, Performance Control userà un tema Holo chiaro</string>
     <string name="pt_widget_bg_color">Colore bg Widget</string>
     <string name="pt_widget_text_color">Colore testo Widget</string>
     <string name="pt_ver">"Versione - "</string>
+    <string name="pt_show_tabs">Impostare Tabs Visibilità</string>
     <!-- Color picker -->
     <string name="dialog_color_picker">Selettore Colore</string>
     <string name="press_color_to_apply">Premi sul colore per applicare</string>
