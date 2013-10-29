@@ -120,20 +120,26 @@ public class VMActivity extends Activity implements Constants, AdapterView.OnIte
         protected String doInBackground(String... params) {
             new CMDProcessor().su.runWaitFor("busybox chmod 750 "+ context.getFilesDir()+"/utils" );
             CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -vmprop");
-            if(cr.success()){return cr.stdout;}
+            if(cr.success()){
+                return cr.stdout;
+            }
             else{
-                Log.d(TAG, "read vm err: " + cr.stderr); return null; }
+                Log.d(TAG, "read vm err: " + cr.stderr);
+                return null;
+            }
         }
         @Override
         protected void onPostExecute(String result) {
             if((result==null)||(result.length()<=0)) {
-                finish();
+                //finish();
+                nofiles.setVisibility(View.VISIBLE);
+                tools.setVisibility(View.GONE);
             }
             else{
                 String p[]=result.split(";");
                 for (String aP : p) {
                     final String pn[]=aP.split(":");
-                    if(pn[1]!=null && !pn[1].trim().equals(""))
+                    if(pn[1]!=null && !pn[1].trim().equals("") && !pn[0].equals(DYNAMIC_DIRTY_WRITEBACK_PATH) && !pn[0].equals(DIRTY_WRITEBACK_ACTIVE_PATH) && !pn[0].equals(DIRTY_WRITEBACK_SUSPEND_PATH))
                         props.add(new Prop(pn[0].substring(pn[0].lastIndexOf("/") + 1, pn[0].length()).replace("_"," "),pn[1]));
                 }
                 linlaHeaderProgress.setVisibility(View.GONE);
