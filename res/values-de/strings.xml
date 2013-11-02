@@ -313,6 +313,10 @@ Translation by Rhonin86 & Evisceration
     <string name="fmt_backup">Backup</string>
     <string name="del_prop_title">Lösche die Eigenschaft</string>
     <string name="del_prop_msg">%s wird gelöscht. Weiter?</string>
+    <string name="ps_build_prop">Reboot ist notwendig, um die Werte gelten</string>
+    <!-- sysctl -->
+    <string name="prefcat_sysctl">SYSCTL</string>
+    <string name="sysctl_title">Bearbeite Sysctl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">VIBRATION</string>
     <string name="viber_title">Setze die Vibrationsstärke fest</string>

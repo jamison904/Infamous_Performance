@@ -331,6 +331,10 @@ Copyright (C) 2012  James Roberts
     <string name="fmt_backup">备份</string>
     <string name="del_prop_title">删除属性</string>
     <string name="del_prop_msg">%s 将被删除，继续？</string>
+    <string name="ps_build_prop">重新启动是必需的应用价值</string>
+    <!-- sysctl -->
+    <string name="prefcat_sysctl">SYSCTL</string>
+    <string name="sysctl_title">编辑 Sysctl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">震动</string>
     <string name="viber_title">震动强度设置</string>

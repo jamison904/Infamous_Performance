@@ -331,10 +331,13 @@ Copyright (C) 2012  James Roberts
     <string name="fmt_backup">Backup</string>
     <string name="del_prop_title">Delete Property</string>
     <string name="del_prop_msg">%s will be deleted. Continue?</string>
+    <string name="ps_build_prop">Reboot is necessary to apply the values</string>
+    <!-- sysctl -->
+    <string name="prefcat_sysctl">SYSCTL</string>
+    <string name="sysctl_title">Edit Sysctl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">VIBRATION</string>
     <string name="viber_title">Vibration Intensity Control</string>
-
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Use light theme</string>
     <string name="ps_use_light_theme">If checked, Performance Control will use a Holo light theme</string>

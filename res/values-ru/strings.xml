@@ -310,6 +310,10 @@
     <string name="fmt_backup">Бэкап</string>
     <string name="del_prop_title">Удаление Значения</string>
     <string name="del_prop_msg">%s будет удалено. Продолжить?</string>
+    <string name="ps_build_prop">Перезагрузка необходимо применить значения</string>
+    <!-- sysctl -->
+    <string name="prefcat_sysctl">SYSCTL</string>
+    <string name="sysctl_title">Редактировать Sysctl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">ВИБРАЦИЯ</string>
     <string name="viber_title">Настройка Интенсивности  вибраци</string>
