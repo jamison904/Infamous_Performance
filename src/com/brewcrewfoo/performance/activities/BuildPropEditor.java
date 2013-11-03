@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -58,7 +59,8 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
     private String[] oggs={};
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl";
+    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/buildprop";
+    private String buildname="build";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,10 +71,12 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         setTheme();
         setContentView(R.layout.prop_view);
         //new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss_build.prop").format(new Date());
-        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn+"/buildprop" );
-        if(!new File(dn+"/buildprop/build.prop.bak").exists()){
-            new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/buildprop/build.prop.bak" );
-            Toast.makeText(context, getString(R.string.prop_backup, dn), Toast.LENGTH_LONG).show();
+        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
+        buildname = (Build.DISPLAY.equals("")||Build.DISPLAY==null) ? buildname + ".prop" : buildname + "-" + Build.DISPLAY.replace(" ", "_") + ".prop";
+
+        if(!new File(dn+"/"+buildname).exists()){
+            new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/"+buildname );
+            Toast.makeText(context, getString(R.string.prop_backup, dn+"/"+buildname), Toast.LENGTH_LONG).show();
         }
 
         packList = (ListView) findViewById(R.id.applist);
@@ -153,6 +157,8 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
+            Helpers.get_assetsScript("utils",context,"","");
+            new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
             CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"*.ogg\"");
             oggs=cr.stdout.split("\n");
             return Helpers.readFileViaShell("/system/build.prop", false);
@@ -298,18 +304,16 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                 .setPositiveButton(getString(R.string.ps_volt_save), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Helpers.get_assetsScript("utils",context,"","");
-                        new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
                         if (pp!=null) {
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
-                                new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop "+pp.getName()+" "+pp.getVal());
+                                new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\"");
                             }
                         }
                         else {
                             if (tv.getText().toString() != null && tn.getText().toString() != null && tn.getText().toString().trim().length() > 0){
                                 props.add(new Prop(tn.getText().toString().trim(),tv.getText().toString().trim()));
-                                new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop "+tn.getText().toString().trim()+" "+tv.getText().toString().trim());
+                                new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop \""+tn.getText().toString().trim()+"="+tv.getText().toString().trim()+"\"");
                             }
                         }
                         Collections.sort(props);
@@ -358,10 +362,10 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
             dialog.cancel();
             switch (op){
                 case 0:
-                    if(new File(dn+"/buildprop/build.prop.bak").exists()){
+                    if(new File(dn+"/"+buildname).exists()){
                         final StringBuilder sb = new StringBuilder();
                         sb.append("busybox mount -o remount,rw /system").append(";\n");
-                        sb.append("busybox cp ").append(dn).append("/buildprop/build.prop.bak /system/build.prop;\n");
+                        sb.append("busybox cp ").append(dn).append("/").append(buildname).append(" /system/build.prop;\n");
                         sb.append("busybox chmod 644 ").append("/system/build.prop;\n");
                         sb.append("busybox mount -o remount,ro /system").append(";\n");
                         Helpers.shExec(sb,context,true);
@@ -395,10 +399,10 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                     for(int i=2;i<pp.length;i++){
                         r=r+"="+pp[i];
                     }
-                    props.add(new Prop(pp[0],pp[1].trim()+r));
+                    props.add(new Prop(pp[0].trim(),pp[1].trim()+r));
                 }
                 else{
-                    props.add(new Prop(pp[0],""));
+                    props.add(new Prop(pp[0].trim(),""));
                 }
             }
         }
