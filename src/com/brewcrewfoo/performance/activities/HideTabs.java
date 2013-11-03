@@ -68,6 +68,7 @@ public class HideTabs extends Activity implements Constants, ActivityThemeChange
     public void onResume() {
         super.onResume();
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -113,6 +114,7 @@ public class HideTabs extends Activity implements Constants, ActivityThemeChange
                         Tab t = (Tab) cb.getTag();
                         mPreferences.edit().putBoolean(cb.getText().toString(),cb.isChecked()).apply();
                         t.setSelected(cb.isChecked());
+                        MainActivity.thide=true;
                     }
                 });
             }

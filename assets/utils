@@ -2,19 +2,18 @@
 ####### made by h0rn3t #######
 #
 sysrw() {
-busybox mount -o remount,rw /system
+    busybox mount -o remount,rw /system 2>/dev/null;
 }
 sysro() {
-busybox mount -o remount,ro /system
+    busybox mount -o remount,ro /system 2>/dev/null;
 }
 
 set_prop() {
-	prop_key=$1
-	prop_value=$2
-	prop_file=${3:-/system/build.prop}
+	prop_key=$(busybox echo "$1" | cut -d'=' -f1);
+	prop_value=$(busybox echo "$1" | cut -d'=' -f2);
+	prop_file=${2:-/system/build.prop}
 	seperator="="
-	exit_status=1
-	setprop $prop_key $prop_value
+	exit_status=1;
 	if busybox [ -e $prop_file ]
 	then
 		prop_line=` busybox grep -m 1 $prop_key $prop_file `
@@ -59,36 +58,11 @@ for d in $1; do
 done;
 echo "$r";
 }
+#### main ####
 arg=$1;
 if busybox [ "$arg" == "-count" ]; then
     count_files "$DIRS";
-elif busybox [ "$arg" == "-govprop" ]; then
-    r="";
-    gov=$2;
-    if busybox [ "X$gov" == "X" ]; then
-        echo "";
-        exit;
-    fi;
-    for f in $(busybox find /sys/devices/system/cpu/cpufreq/$gov/* -type f -prune -perm -644); do
-        v=$(busybox cat $f);
-        if busybox [ "X$r" == "X" ]; then
-            r="$f:$v";
-        else
-            r="$r;$f:$v";
-        fi;
-    done;
-    echo "$r";
 elif busybox [ "$arg" == "-setprop" ]; then
-    set_prop $2 $3;
-elif busybox [ "$arg" == "-vmprop" ]; then
-    r="";
-    for f in $(busybox find /proc/sys/vm/* -type f -prune -perm -644); do
-        v=$(busybox cat $f);
-        if busybox [ "X$r" == "X" ]; then
-            r="$f:$v";
-        else
-            r="$r;$f:$v";
-        fi;
-    done;
-    echo "$r";
+    set_prop "$2" $3;
 fi;
+exit;

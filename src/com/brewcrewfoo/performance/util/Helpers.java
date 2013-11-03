@@ -32,7 +32,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 
-import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.widget.PCWidget;
 
 import java.io.*;
@@ -392,13 +391,6 @@ public class Helpers implements Constants {
         cr = new CMDProcessor().sh.runWaitFor("busybox which " + b);
         if (cr.success()){ return  cr.stdout; }
         else{ return NOT_FOUND;}
-    }
-
-    public static String getCachePartition() {
-        CMDProcessor.CommandResult cr = null;
-        cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox mount | busybox grep cache | busybox cut -d' ' -f1`");
-        if(cr.success()&& !cr.stdout.equals("") ){return cr.stdout;}
-        else{return NOT_FOUND;}
     }
 
     public static long getTotMem() {

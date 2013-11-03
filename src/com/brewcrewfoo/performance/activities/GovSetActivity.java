@@ -119,8 +119,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
 
         @Override
         protected String doInBackground(String... params) {
-            new CMDProcessor().su.runWaitFor("busybox chmod 750 "+ context.getFilesDir()+"/utils" );
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -govprop "+curgov);
+            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox find /sys/devices/system/cpu/cpufreq/"+curgov+"/* -type f -prune -perm -644`");
             if(cr.success()){return cr.stdout;}
             else{Log.d(TAG,"read governor err: "+cr.stderr); return null; }
         }
@@ -130,11 +129,13 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                 finish();
             }
             else{
-                String p[]=result.split(";");
+                String p[]=result.split(" ");
                 for (String aP : p) {
-                        final String pn[]=aP.split(":");
-                        if(pn[1]!=null && !pn[1].trim().equals(""))
-                        props.add(new Prop(pn[0].substring(pn[0].lastIndexOf("/") + 1, pn[0].length()).replace("_"," "),pn[1]));
+                    if(aP.trim().length()>0 && aP!=null){
+                        final String pv=Helpers.readOneLine(aP).trim();
+                        final String pn=aP.substring(aP.lastIndexOf("/") + 1, aP.length()).replace("_"," ");
+                        props.add(new Prop(pn,pv));
+                    }
                 }
                 linlaHeaderProgress.setVisibility(View.GONE);
                 if(props.isEmpty()){
@@ -154,7 +155,6 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             linlaHeaderProgress.setVisibility(View.VISIBLE);
             nofiles.setVisibility(View.GONE);
             tools.setVisibility(View.GONE);
-            Helpers.get_assetsScript("utils",context,"","");
         }
         @Override
         protected void onProgressUpdate(Void... values) {

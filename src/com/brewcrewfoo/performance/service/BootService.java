@@ -218,14 +218,14 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-            if (preferences.getBoolean(VM_SOB, false)) {
-                final String gs = preferences.getString("vm_settings", null);
-                if(gs != null){
-                    String p[]=gs.split(";");
-                    for (String aP : p) {
-                        final String pn[]=aP.split(":");
-                        sb.append("busybox echo ").append(pn[1]).append(" > ").append("/proc/sys/vm/").append(pn[0]).append(";\n");
-                    }
+            if (new File("/system/etc/sysctl.conf").exists()) {
+                if (preferences.getBoolean(SYSCTL_SOB, false)) {
+                    sb.append("busybox sysctl -p;\n");
+                }
+            }
+            if (new File("/system/etc/vm.conf").exists()) {
+                if (preferences.getBoolean(VM_SOB, false)) {
+                    sb.append("busybox sysctl -p /system/etc/vm.conf;\n");
                 }
             }
             if (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists()) {

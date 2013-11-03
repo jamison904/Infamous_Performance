@@ -50,6 +50,7 @@ import com.brewcrewfoo.performance.activities.FlasherActivity;
 import com.brewcrewfoo.performance.activities.FreezerActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.activities.ResidualsActivity;
+import com.brewcrewfoo.performance.activities.SysctlEditor;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -98,10 +99,12 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_freezer");
             getPreferenceScreen().removePreference(hideCat);
         }
-       // CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"build.prop\"");
-       // if(!cr.success() || cr.stdout.equals("")){
         if(!new File("/system/build.prop").exists()){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_build_prop");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        if(Helpers.binExist("sysctl").equals(NOT_FOUND)){
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_sysctl");
             getPreferenceScreen().removePreference(hideCat);
         }
         setRetainInstance(true);
@@ -280,6 +283,11 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         }
         else if (key.equals("pref_build_prop")){
             Intent intent = new Intent(context, BuildPropEditor.class);
+            startActivity(intent);
+        }
+        else if (key.equals("pref_sysctl")){
+            Intent intent = new Intent(context, SysctlEditor.class);
+            intent.putExtra("mod","sysctl");
             startActivity(intent);
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
