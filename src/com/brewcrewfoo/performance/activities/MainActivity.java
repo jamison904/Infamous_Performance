@@ -50,11 +50,13 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
 
     private static boolean mVoltageExists;
     private boolean mIsLightTheme;
+    public static Boolean thide=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         setTheme();
         setContentView(R.layout.activity_main);
         mVoltageExists = Helpers.voltageFileExists();
@@ -163,7 +165,8 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     @Override
     public void onResume() {
         super.onResume();
-        if (isThemeChanged()) {
+        if (isThemeChanged() || thide) {
+            thide=false;
             Helpers.restartPC(this);
         }
     }

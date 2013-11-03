@@ -18,15 +18,11 @@
 
 package com.brewcrewfoo.performance.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.*;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.util.Log;
-
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.Constants;
@@ -39,13 +35,13 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
     private CheckBoxPreference mLightThemePref;
     private ColorPickerPreference mWidgetBgColorPref;
     private ColorPickerPreference mWidgetTextColorPref;
-    private Preference mVersion;
-    private final Context context=this;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         addPreferencesFromResource(R.xml.pc_settings);
 
         mLightThemePref = (CheckBoxPreference) findPreference("use_light_theme");
@@ -53,7 +49,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
         mWidgetBgColorPref.setOnPreferenceChangeListener(this);
         mWidgetTextColorPref = (ColorPickerPreference) findPreference("widget_text_color");
         mWidgetTextColorPref.setOnPreferenceChangeListener(this);
-        mVersion = findPreference("version_info");
+        Preference mVersion = findPreference("version_info");
         mVersion.setTitle(getString(R.string.pt_ver) + VERSION_NUM);
 
         setTheme();
@@ -67,11 +63,12 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
             return true;
         }
         else if("visible_tabs".equals(key)){
-            startActivity(new Intent(context, HideTabs.class));
+            startActivity(new Intent(this, HideTabs.class));
             return true;
         }
         return false;
     }
+
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mWidgetBgColorPref) {
@@ -83,7 +80,8 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
             editor.commit();
             Helpers.updateAppWidget(this);
             return true;
-        } else if (preference == mWidgetTextColorPref) {
+        }
+        else if (preference == mWidgetTextColorPref) {
             String hex = ColorPickerPreference.convertToARGB(Integer.parseInt(String.valueOf(newValue)));
             preference.setSummary(hex);
             int intHex = ColorPickerPreference.convertToColorInt(hex);
@@ -98,8 +96,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
 
     @Override
     public boolean isThemeChanged() {
-        final boolean is_light_theme = mPreferences.getBoolean(
-                PREF_USE_LIGHT_THEME, false);
+        final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
         return is_light_theme != mLightThemePref.isChecked();
     }
 
@@ -112,8 +109,6 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
     public void setTheme() {
         final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
         setTheme(is_light_theme ? R.style.Theme_Light : R.style.Theme_Dark);
-        getListView().setBackgroundDrawable(
-                getResources().getDrawable(
-                        is_light_theme ? R.drawable.background_holo_light : R.drawable.background_holo_dark));
+        getListView().setBackgroundDrawable(getResources().getDrawable(is_light_theme ? R.drawable.background_holo_light : R.drawable.background_holo_dark));
     }
 }
