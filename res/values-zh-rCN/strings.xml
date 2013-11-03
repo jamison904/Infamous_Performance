@@ -319,8 +319,8 @@ Copyright (C) 2012  James Roberts
     <!-- builprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">编辑 Build Prop</string>
-    <string name="add_prop_title">增加属性</string>
-    <string name="edit_prop_title">编辑属性</string>
+    <string name="add_prop_title">添加参数</string>
+    <string name="edit_prop_title">编辑参数</string>
     <string name="prop_name">名称</string>
     <string name="prop_val">值</string>
     <string name="prop_preset">预设</string>
@@ -329,12 +329,12 @@ Copyright (C) 2012  James Roberts
     <string name="prop_restore_msg">初始的 build.prop 将被恢复，你必须重启设备以生效。继续？</string>
     <string name="filter">过滤</string>
     <string name="fmt_backup">备份</string>
-    <string name="del_prop_title">删除属性</string>
+    <string name="del_prop_title">删除参数</string>
     <string name="del_prop_msg">%s 将被删除，继续？</string>
     <string name="ps_build_prop">重新启动是必需的应用价值</string>
     <!-- sysctl -->
     <string name="prefcat_sysctl">SYSCTL</string>
-    <string name="sysctl_title">编辑 Sysctl</string>
+    <string name="sysctl_title">编辑 SysCtl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">震动</string>
     <string name="viber_title">震动强度设置</string>

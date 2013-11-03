@@ -298,8 +298,8 @@
     <!-- buildprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Редактировать Build Prop</string>
-    <string name="add_prop_title">Добавить Значение</string>
-    <string name="edit_prop_title">Редактировать Значение</string>
+    <string name="add_prop_title">Добавить параметр</string>
+    <string name="edit_prop_title">Редактировать параметр</string>
     <string name="prop_name">Название</string>
     <string name="prop_val">Значение</string>
     <string name="prop_preset">Пресет</string>
@@ -308,15 +308,15 @@
     <string name="prop_restore_msg">Исходный build.prop файл будет восстановлен. Вам нужно будет перезагрузить устройство, чтобы применить изменения. Продолжить?</string>
     <string name="filter">Фильтр</string>
     <string name="fmt_backup">Бэкап</string>
-    <string name="del_prop_title">Удаление Значения</string>
+    <string name="del_prop_title">Удаление параметр</string>
     <string name="del_prop_msg">%s будет удалено. Продолжить?</string>
     <string name="ps_build_prop">Перезагрузка необходимо применить значения</string>
     <!-- sysctl -->
     <string name="prefcat_sysctl">SYSCTL</string>
-    <string name="sysctl_title">Редактировать Sysctl</string>
+    <string name="sysctl_title">Редактировать SysCtl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">ВИБРАЦИЯ</string>
-    <string name="viber_title">Настройка Интенсивности  вибраци</string>
+    <string name="viber_title">Настройка Интенсивности вибраци</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Использовать светлую тему</string>
     <string name="ps_use_light_theme">Если выбрать, приложение будет использовать светлую тему Holo</string>

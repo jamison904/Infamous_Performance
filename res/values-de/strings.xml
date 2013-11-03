@@ -301,8 +301,8 @@ Translation by Rhonin86 & Evisceration
     <!-- builprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Bearbeite Build Prop</string>
-    <string name="add_prop_title">Füge Eigenschaft hinzu</string>
-    <string name="edit_prop_title">Bearbeiten der Eigenschaft</string>
+    <string name="add_prop_title">Füge Parameter hinzu</string>
+    <string name="edit_prop_title">Bearbeiten der Parameter</string>
     <string name="prop_name">Name</string>
     <string name="prop_val">Wert</string>
     <string name="prop_preset">Voreinstellungen</string>
@@ -311,12 +311,12 @@ Translation by Rhonin86 & Evisceration
     <string name="prop_restore_msg">Ursprüngliche build.prop wird wiederhergestellt. Das Handy muss neu gestartet werden um die alte build.prop zu reaktivieren.\nFortfahren?</string>
     <string name="filter">Filter</string>
     <string name="fmt_backup">Backup</string>
-    <string name="del_prop_title">Lösche die Eigenschaft</string>
+    <string name="del_prop_title">Lösche die Parameter</string>
     <string name="del_prop_msg">%s wird gelöscht. Weiter?</string>
     <string name="ps_build_prop">Reboot ist notwendig, um die Werte gelten</string>
     <!-- sysctl -->
     <string name="prefcat_sysctl">SYSCTL</string>
-    <string name="sysctl_title">Bearbeite Sysctl</string>
+    <string name="sysctl_title">Bearbeite SysCtl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">VIBRATION</string>
     <string name="viber_title">Setze die Vibrationsstärke fest</string>

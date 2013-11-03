@@ -299,12 +299,12 @@ Translation by Laurentiu1996
     <string name="prop_restore_msg">Fișierul build.prop va fi restaurat. Pentru a avea efect este necesară repornirea dispozitivului. Continuaţi?</string>
     <string name="filter">Filtru</string>
     <string name="fmt_backup">Backup</string>
-    <string name="del_prop_title">Șterge Parametru</string>
+    <string name="del_prop_title">Ștergere Parametru</string>
     <string name="del_prop_msg">%s va fi șters. Continuaţi?</string>
     <string name="ps_build_prop">Repornirea dispozitivului este necesară pentru aplicarea valorilor</string>
     <!-- sysctl -->
     <string name="prefcat_sysctl">SYSCTL</string>
-    <string name="sysctl_title">Editare Sysctl</string>
+    <string name="sysctl_title">Editare SysCtl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">Vibrare</string>
     <string name="viber_title">Controlul intensităţii vibraţiilor</string>

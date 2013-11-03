@@ -304,8 +304,8 @@ translation by Stefano187
     <!-- builprop -->
     <string name="prefcat_build_prop">BUILD PROP</string>
     <string name="build_prop_title">Modifica Build Prop</string>
-    <string name="add_prop_title">Aggiungi Proprietà</string>
-    <string name="edit_prop_title">Modifica Proprietà</string>
+    <string name="add_prop_title">Aggiungi Parametro</string>
+    <string name="edit_prop_title">Modifica Parametro</string>
     <string name="prop_name">Nome</string>
     <string name="prop_val">Valore</string>
     <string name="prop_preset">Presets</string>
@@ -314,12 +314,12 @@ translation by Stefano187
     <string name="prop_restore_msg">Il file build.prop iniziale sarà ripristinato. Il dispositivo deve essere riavviato affinché i cambiamenti siano effettuati. Continuare?</string>
     <string name="filter">Filtro</string>
     <string name="fmt_backup">Backup</string>
-    <string name="del_prop_title">Elimina Proprietà</string>
+    <string name="del_prop_title">Elimina Parametro</string>
     <string name="del_prop_msg">%s sarà eliminato.. Continuare?</string>
     <string name="ps_build_prop">Reboot è necessario applicare i valori</string>
     <!-- sysctl -->
     <string name="prefcat_sysctl">SYSCTL</string>
-    <string name="sysctl_title">Modifica Sysctl</string>
+    <string name="sysctl_title">Modifica SysCtl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">VIBRAZIONE</string>
     <string name="viber_title">Controllo intensità vibrazione</string>
