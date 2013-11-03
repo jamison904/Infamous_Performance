@@ -92,6 +92,14 @@ Copyright (C) 2012  James Roberts
         android:title="@string/prefcat_build_prop">
         <Preference
             android:key="pref_build_prop"
+            android:summary="@string/ps_build_prop"
             android:title="@string/build_prop_title"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="category_sysctl"
+        android:title="@string/prefcat_sysctl">
+        <Preference
+            android:key="pref_sysctl"
+            android:title="@string/sysctl_title"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -62,7 +62,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
 
     private String mod="sysctl";
     private String syspath="/system/etc/";
-    private String cmd="/utils -sysprop \"*\"";
+    private String cmd="busybox echo `busybox find /proc/sys/* -type f -perm -644 | grep -v \"vm.\"`";
     private String sob=SYSCTL_SOB;
     private Boolean isdyn=false;
 
@@ -79,7 +79,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         Intent i=getIntent();
         mod=i.getStringExtra("mod");
         if(mod.equals("vm")){
-            cmd="/utils -vmprop";
+            cmd="busybox echo `busybox find /proc/sys/vm/* -type f -prune -perm -644`";
             sob=VM_SOB;
         }
 
@@ -176,9 +176,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            Helpers.get_assetsScript("utils",context,"","");
-            new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor(getFilesDir()+cmd);
+            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor(cmd);
             if(cr.success()){
                 return cr.stdout;
             }
@@ -290,19 +288,13 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
 
     public void load_prop(String s){
         props.clear();
-        String p[]=s.split(";");
+        String p[]=s.split(" ");
         for (String aP : p) {
-            //Log.d(TAG, aP);
             if(aP.trim().length()>0 && aP!=null){
-                final String pp[]=aP.split(":");
-                final String pn=pp[0].trim().replace("/",".").substring(10, pp[0].length());
+                final String pv=Helpers.readOneLine(aP).trim();
+                final String pn=aP.trim().replace("/",".").substring(10, aP.length());
                 if(testprop(pn)){
-                    if(pp.length>=2){
-                        props.add(new Prop(pn,pp[1].trim()));
-                    }
-                    else{
-                        props.add(new Prop(pn,""));
-                    }
+                        props.add(new Prop(pn,pv));
                 }
             }
         }
