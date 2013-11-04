@@ -59,7 +59,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private boolean mIsDynFreq = false;
     private static final int NEW_MENU_ID=Menu.FIRST+1;
     private Context context;
-    private String supported[]={"ondemand","lulzactive","lulzactiveW","interactive","hyper","conservative"};
+    private String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
