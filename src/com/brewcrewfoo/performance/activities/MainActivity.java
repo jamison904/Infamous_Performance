@@ -183,13 +183,13 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         // Don't bother AOKP users ;)
         PackageManager pm = getPackageManager();
         boolean rcInstalled = false;
-        try {
+        /*try {
             pm.getPackageInfo("com.aokp.romcontrol",PackageManager.GET_ACTIVITIES);
             rcInstalled = true;
         }
         catch (PackageManager.NameNotFoundException e) {
             rcInstalled = false;
-        }
+        }*/
 
         // Now that we've decided what to do. Launch the appropriate dialog
         if (firstrun || rootWasCanceled) {
