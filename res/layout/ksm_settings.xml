@@ -44,9 +44,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:gravity="right"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -75,8 +73,6 @@
                 android:id="@+id/t2"
                 android:textSize="18dip"
                 android:textStyle="bold"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
                 android:layout_toRightOf="@+id/t1"
                 android:layout_alignParentEnd="true"
                 android:gravity="right" />
@@ -109,9 +105,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:gravity="right"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -141,9 +135,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:gravity="right"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -173,9 +165,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:gravity="right"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -188,8 +178,6 @@
         android:gravity="center_horizontal"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
         android:id="@+id/set1"
         android:layout_below="@+id/preview"
         android:paddingBottom="10dip">
@@ -209,21 +197,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/val1"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="false"
                 android:layout_toLeftOf="@+id/edit1" />
 
             <EditText
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit1"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
                 android:layout_alignParentEnd="true"
                 android:inputType="number"
-                android:layout_alignParentStart="false"
                 android:gravity="right"
                 android:singleLine="true"
                 android:numeric="integer" />
@@ -239,8 +221,6 @@
         android:gravity="center_horizontal"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
         android:id="@+id/set2"
         android:layout_below="@+id/set1">
 
@@ -259,21 +239,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/val2"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="false"
                 android:layout_toLeftOf="@+id/edit2" />
 
             <EditText
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit2"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
                 android:layout_alignParentEnd="true"
                 android:inputType="number"
-                android:layout_alignParentStart="false"
                 android:gravity="right"
                 android:singleLine="true"
                 android:numeric="integer" />
@@ -286,7 +260,6 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:baselineAligned="false"
             android:gravity="bottom"
             android:layout_below="@+id/set2"
             android:paddingTop="10dip">

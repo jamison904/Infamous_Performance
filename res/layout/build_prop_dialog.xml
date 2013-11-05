@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"
         android:layout_alignParentTop="true"
         android:id="@+id/lname">
 
@@ -37,8 +36,6 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
         android:id="@+id/lval"
         android:layout_below="@+id/lname"
         android:layout_marginTop="10dip">
@@ -64,8 +61,6 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
         android:id="@+id/lpresets"
         android:layout_below="@+id/lval"
         android:layout_marginTop="10dip">

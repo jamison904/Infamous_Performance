@@ -44,10 +44,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:layout_gravity="top"
-            android:layout_alignParentTop="false"
             android:layout_marginBottom="4dp"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentEnd="false"
             android:layout_toLeftOf="@+id/tools">
 
     <ListView
@@ -63,7 +60,6 @@
                   android:orientation="vertical"
                   android:layout_height="match_parent"
                   android:layout_gravity="bottom"
-                  android:layout_alignParentBottom="false"
                   android:layout_alignParentRight="true"
                   android:gravity="center_vertical"
                   android:visibility="gone">
