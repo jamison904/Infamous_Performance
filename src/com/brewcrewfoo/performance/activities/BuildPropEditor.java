@@ -70,7 +70,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
-        //new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss_build.prop").format(new Date());
+
         new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
         buildname = (Build.DISPLAY.equals("")||Build.DISPLAY==null) ? buildname + ".prop" : buildname + "-" + Build.DISPLAY.replace(" ", "_") + ".prop";
 
