@@ -89,8 +89,10 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/"+mod+".conf"+" "+dn+"/"+mod+".conf" );
         }
         else{
-            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\" > "+dn+"/"+mod+".conf" );
+            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/"+mod+".conf" );
         }
+        Helpers.get_assetsScript("utils",context,"","");
+        new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
@@ -268,6 +270,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                 .setPositiveButton(getString(R.string.ps_volt_save), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         if (pp!=null) {
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
