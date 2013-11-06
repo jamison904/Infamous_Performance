@@ -42,8 +42,10 @@ import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class SysctlEditor extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
@@ -89,8 +91,10 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/"+mod+".conf"+" "+dn+"/"+mod+".conf" );
         }
         else{
-            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\" > "+dn+"/"+mod+".conf" );
+            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/"+mod+".conf" );
         }
+        Helpers.get_assetsScript("utils",context,"","");
+        new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
@@ -157,6 +161,20 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         switch(item.getItemId()){
             case R.id.search_prop:
                 search.setVisibility(RelativeLayout.VISIBLE);
+                break;
+            case R.id.reset:
+                if(new File(syspath+mod+".conf").exists()){
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                    Date now = new Date();
+                    String nf = formatter.format(now)+"_" + mod+".conf";
+                    new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/"+mod+".conf"+" "+dn+"/"+nf );
+                    final StringBuilder sb = new StringBuilder();
+                    sb.append("busybox mount -o remount,rw /system").append(";\n");
+                    sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/" + mod + ".conf" + ";\n");
+                    sb.append("busybox mount -o remount,ro /system").append(";\n");
+                    Helpers.shExec(sb,context,true);
+                }
+                new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/"+mod+".conf" );
                 break;
         }
         return true;
@@ -268,6 +286,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                 .setPositiveButton(getString(R.string.ps_volt_save), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         if (pp!=null) {
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());

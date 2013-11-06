@@ -33,7 +33,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.GovSetActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
-import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
@@ -59,7 +58,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private boolean mIsDynFreq = false;
     private static final int NEW_MENU_ID=Menu.FIRST+1;
     private Context context;
-    private String supported[]={"ondemand","lulzactive","lulzactiveW","interactive","hyper","conservative"};
+    private String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

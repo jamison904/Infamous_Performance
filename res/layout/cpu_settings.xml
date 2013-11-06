@@ -135,7 +135,6 @@ Copyright (C) 2012  James Roberts
             android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical|center_horizontal"
-        android:baselineAligned="false"
         android:id="@+id/governor"
         android:layout_below="@+id/speed_set"
         android:layout_marginTop="10dip">

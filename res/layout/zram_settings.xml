@@ -44,9 +44,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:gravity="right"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -75,8 +73,6 @@
                 android:id="@+id/t2"
                 android:textSize="18dip"
                 android:textStyle="bold"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
                 android:layout_toRightOf="@+id/tt2"
                 android:layout_alignParentEnd="true"
                 android:gravity="right" />
@@ -109,9 +105,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:gravity="right"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -141,9 +135,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:gravity="right"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -173,9 +165,7 @@
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                android:gravity="right"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false" />
+                android:gravity="right"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -188,8 +178,6 @@
         android:gravity="center_horizontal"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
         android:id="@+id/set1"
         android:layout_below="@+id/preview"
         android:paddingBottom="10dp"
@@ -207,8 +195,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/val1"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="false" />
+            android:layout_alignParentStart="true"/>
 
     </LinearLayout>
 
@@ -216,7 +203,6 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:baselineAligned="false"
             android:gravity="bottom"
             android:paddingTop="10dip"
             android:layout_below="@+id/set1">

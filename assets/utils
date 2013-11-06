@@ -1,6 +1,5 @@
-#
-####### made by h0rn3t #######
-#
+###### made by h0rn3t ######
+
 sysrw() {
     busybox mount -o remount,rw /system 2>/dev/null;
 }
@@ -14,25 +13,21 @@ set_prop() {
 	prop_file=${2:-/system/build.prop}
 	seperator="="
 	exit_status=1;
-	if busybox [ -e $prop_file ]
-	then
+	if busybox [ -e $prop_file ];then
+	    sysrw
 		prop_line=` busybox grep -m 1 $prop_key $prop_file `
 		if busybox [ -n "${prop_line}" ]
 		then
-			if busybox [ -n "$( echo $prop_line | busybox grep ' = ' )" ]
-			then
+			if busybox [ -n "$( echo $prop_line | busybox grep ' = ' )" ];then
 				seperator=" = "
 			fi
-			sysrw
 			busybox sed -i "s|${prop_key}${seperator}.*|${prop_key}${seperator}${prop_value}|g" $prop_file
 			exit_status=$?
-			sysro
 		else
-		    sysrw
 		    busybox echo "$prop_key$seperator$prop_value" >> $prop_file;
 		    exit_status=$?
-		    sysro
-		fi
+		fi;
+		sysro;
 	fi
 	return $exit_status
 }

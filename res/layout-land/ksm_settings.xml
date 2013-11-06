@@ -222,8 +222,6 @@
                     android:id="@+id/val1"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentBottom="false"
-                    android:layout_alignParentEnd="false"
                     android:layout_toLeftOf="@+id/edit1" />
 
                 <EditText
@@ -233,7 +231,6 @@
                     android:layout_alignParentEnd="true"
                     android:inputType="number"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentStart="false"
                     android:gravity="right"
                     android:singleLine="true" />
 
@@ -268,7 +265,6 @@
                     android:id="@+id/val2"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="false"
                     android:layout_toLeftOf="@+id/edit2" />
 
                 <EditText
@@ -278,7 +274,6 @@
                     android:layout_alignParentEnd="true"
                     android:inputType="number"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentStart="false"
                     android:gravity="right"
                     android:singleLine="true" />
 
