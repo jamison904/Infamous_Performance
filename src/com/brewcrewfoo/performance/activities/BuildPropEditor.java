@@ -391,7 +391,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         props.clear();
         String p[]=s.split("\n");
         for (String aP : p) {
-            if(!aP.contains("#") && aP.trim().length()>0 && aP!=null){
+            if(!aP.contains("#") && aP.trim().length()>0 && aP!=null && aP.contains("=")){
                 aP=aP.replace("[","").replace("]","");
                 String pp[]=aP.split("=");
                 if(pp.length>=2){
