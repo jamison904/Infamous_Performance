@@ -99,13 +99,8 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
                 mbattery_volt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        try{
-                            Intent powerUsageIntent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
-                            startActivity(powerUsageIntent);
-                        }
-                        catch(Exception e){
-
-                        }
+                        Intent powerUsageIntent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
+                        if(powerUsageIntent.resolveActivity(context.getPackageManager())!=null) startActivity(powerUsageIntent);
                     }
                 });
                 mbattery_volt.setOnLongClickListener(new View.OnLongClickListener(){
