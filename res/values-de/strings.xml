@@ -183,8 +183,7 @@ Translation by Rhonin86 & Evisceration
     <string name="su_success_title">Erfolgreich!</string>
     <string name="su_failed_title">Upps!</string>
     <string name="first_run_message">Die Anwendung überprüft den Rootzugriff und
-        BusyBox.\n\nDrücke OK um weiter zu machen. \nAbbrechen, wenn der Anwendung kein Root Zugang
-        gewährt werden soll.
+        BusyBox.\n\nDrücke OK um weiter zu machen.
     </string>
     <string name="su_success_message">"Performance Control hat Root Zugang und hat BusyBox
         gefunden. Los geht's!"

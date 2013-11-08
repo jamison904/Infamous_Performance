@@ -202,7 +202,6 @@ Copyright (C) 2012  James Roberts
     <string name="su_failed_title">啊呀！</string>
     <string name="first_run_message">本应用需要检查是否有 ROOT 权限和安装 busybox。
 	    按“确认”继续。
-	    如果你不愿赋予 ROOT 权限，请按“取消”。
     </string>
     <string name="su_success_message">性能控制能够得到 ROOT 权限并已找到了 busybox。
         万事俱备！

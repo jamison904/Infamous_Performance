@@ -218,17 +218,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setView(firstRunDialog)
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,int which) {
-                                String message = getString(R.string.su_cancel_message);
-                                SharedPreferences.Editor e = mPreferences.edit();
-                                e.putBoolean("rootcanceled", true);
-                                e.commit();
-                                suResultDialog(failedTitle, message);
-                            }
-                        })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

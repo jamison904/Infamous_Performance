@@ -187,7 +187,7 @@ Translation by DaniPhii
     <string name="su_success_title">¡Correcto!</string>
     <string name="su_failed_title">¡Algo fue mal!</string>
     <string name="first_run_message">La aplicación necesita comprobar los permisos de superusuario y
-        la versión de BusyBox. Pulsa Aceptar para continuar. Pulsa Cancelar si no quieres dar pemisos.
+        la versión de BusyBox. Pulsa Aceptar para continuar.
     </string>
     <string name="su_success_message">Performance Control tiene permisos de superusuario y ha encontrado
         BusyBox en el sistema. ¡Todo correcto!

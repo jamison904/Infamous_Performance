@@ -186,8 +186,7 @@ translation by Stefano187
     <string name="su_success_title">Riuscita!</string>
     <string name="su_failed_title">Oops!</string>
     <string name="first_run_message">L\'applicazione deve verificare l\'accesso come root e la presenza di
-        busybox. Premi OK per continuare. Annulla se non vuoi garantire l\'accesso
-        come amministratore.
+        busybox. Premi OK per continuare.
     </string>
     <string name="su_success_message">Performance Control ha ottenuto l\'accesso come root ed
         ha trovato busybox. Pronto per il rock!

@@ -201,8 +201,7 @@ Copyright (C) 2012  James Roberts
     <string name="su_success_title">Success!</string>
     <string name="su_failed_title">Oops!</string>
     <string name="first_run_message">The application needs to check for root access and
-        busybox. Press OK to continue. Cancel if you would not like to grant
-        root access.
+        busybox. Press OK to continue.
     </string>
     <string name="su_success_message">Performance Control was able to get root access and
         find busybox. Ready to rock!
