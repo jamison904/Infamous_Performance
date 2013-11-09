@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -67,8 +68,8 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
             ist1=true;
         }
         else{
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout1);
-            relativeLayout.setVisibility(RelativeLayout.GONE);
+            LinearLayout relativeLayout = (LinearLayout) findViewById(R.id.relativeLayout1);
+            relativeLayout.setVisibility(LinearLayout.GONE);
         }
 
         if (new File(KSM_PAGESSHARED_PATH[ksm]).exists()) {
@@ -76,32 +77,32 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
             ist2=true;
         }
         else{
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout2);
-            relativeLayout.setVisibility(RelativeLayout.GONE);
+            LinearLayout relativeLayout = (LinearLayout) findViewById(R.id.relativeLayout2);
+            relativeLayout.setVisibility(LinearLayout.GONE);
         }
         if (new File(KSM_PAGESSHARING_PATH[ksm]).exists()) {
             t3.setText(Helpers.readOneLine(KSM_PAGESSHARING_PATH[ksm]));
             ist3=true;
         }
         else{
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout3);
-            relativeLayout.setVisibility(RelativeLayout.GONE);
+            LinearLayout relativeLayout = (LinearLayout) findViewById(R.id.relativeLayout3);
+            relativeLayout.setVisibility(LinearLayout.GONE);
         }
         if (new File(KSM_PAGESVOLATILE_PATH[ksm]).exists()) {
             t4.setText(Helpers.readOneLine(KSM_PAGESVOLATILE_PATH[ksm]));
             ist4=true;
         }
         else{
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout4);
-            relativeLayout.setVisibility(RelativeLayout.GONE);
+            LinearLayout relativeLayout = (LinearLayout) findViewById(R.id.relativeLayout4);
+            relativeLayout.setVisibility(LinearLayout.GONE);
         }
         if (new File(KSM_FULLSCANS_PATH[ksm]).exists()) {
             t5.setText(Helpers.readOneLine(KSM_FULLSCANS_PATH[ksm]));
             ist5=true;
         }
         else{
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout5);
-            relativeLayout.setVisibility(RelativeLayout.GONE);
+            LinearLayout relativeLayout = (LinearLayout) findViewById(R.id.relativeLayout5);
+            relativeLayout.setVisibility(LinearLayout.GONE);
         }
 
         final int v1=Integer.parseInt(Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]));
