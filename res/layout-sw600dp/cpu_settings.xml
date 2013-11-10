@@ -22,23 +22,37 @@ Copyright (C) 2012  James Roberts
               android:layout_height="match_parent"
               android:gravity="center_horizontal"
               android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical"
-        android:layout_gravity="top"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="40dp">
+            android:id="@+id/speed"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:gravity="center_horizontal">
 
         <TextView
-                android:id="@+id/current_speed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="85sp"/>
+            android:id="@+id/current_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="85sp"
+            android:gravity="center_horizontal"
+            android:layout_weight="0.9" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/curcpu"
+            android:numeric="integer"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/pc_blue"
+            android:textSize="16dp"
+            android:layout_alignParentEnd="true"
+            android:textStyle="bold"
+            android:layout_marginRight="20dp" />
 
     </LinearLayout>
 

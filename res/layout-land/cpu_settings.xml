@@ -39,13 +39,35 @@ Copyright (C) 2012  James Roberts
                 android:orientation="vertical"
             android:layout_gravity="top">
 
-            <TextView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/speed"
+                android:gravity="center_horizontal">
+
+                <TextView
                     android:id="@+id/current_speed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="56sp"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="0.9" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                android:textSize="56sp"/>
+                    android:id="@+id/curcpu"
+                    android:numeric="integer"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/pc_blue"
+                    android:textSize="13dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:textStyle="bold" />
 
-        <LinearLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/speed_set"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"

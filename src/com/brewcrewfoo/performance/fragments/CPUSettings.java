@@ -59,12 +59,19 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private static final int NEW_MENU_ID=Menu.FIRST+1;
     private Context context;
     private String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
+    private int curcpu=0;
+    private int nCpus=Helpers.getNumOfCpus();
+    private TextView mCurCpu;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=getActivity();
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if(savedInstanceState!=null) {
+            curcpu=savedInstanceState.getInt("curcpu");
+        }
         setHasOptionsMenu(true);
     }
 
@@ -72,7 +79,19 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     public View onCreateView(LayoutInflater inflater, ViewGroup root, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.cpu_settings, root, false);
 
+        mCurCpu = (TextView) view.findViewById(R.id.curcpu);
+        mCurCpu.setText(Integer.toString(curcpu+1));
         mCurFreq = (TextView) view.findViewById(R.id.current_speed);
+        mCurFreq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(curcpu>=(nCpus-1)) curcpu=0;
+                else curcpu++;
+                mCurCpu.setText(Integer.toString(curcpu+1));
+            }
+        });
+
+
         mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
         mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
         mAvailableFrequencies = new String[0];
@@ -235,7 +254,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     public void onStopTrackingTouch(SeekBar seekBar) {
         // we have a break now, write the values..
         final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
+        for (int i = 0; i < nCpus; i++){
             sb.append("busybox echo ").append(mMaxFreqSetting).append(" > ").append(MAX_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
             sb.append("busybox echo ").append(mMinFreqSetting).append(" > ").append(MIN_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
         }
@@ -253,7 +272,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             final StringBuilder sb = new StringBuilder();
             String selected = parent.getItemAtPosition(pos).toString();
-            for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
+            for (int i = 0; i < nCpus; i++) {
                 sb.append("busybox echo ").append(selected).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
             }
             updateSharedPrefs(PREF_GOV, selected);
@@ -281,7 +300,11 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             // Do nothing.
         }
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle saveState) {
+        super.onSaveInstanceState(saveState);
+        saveState.putInt("curcpu",curcpu);
+    }
     @Override
     public void onResume() {
         if (mCurCPUThread == null) {
@@ -351,7 +374,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             try {
                 while (!mInterrupt) {
                     sleep(500);
-                    final String curFreq = Helpers.readOneLine(CUR_CPU_PATH);
+                    final String curFreq = Helpers.readOneLine(CUR_CPU_PATH.replace("cpu0","cpu"+curcpu));
                     mCurCPUHandler.sendMessage(mCurCPUHandler.obtainMessage(0,curFreq));
                 }
             }
@@ -372,5 +395,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(var, value).commit();
     }
+
 }
 
