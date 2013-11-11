@@ -63,7 +63,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/sysctl";
 
     private String mod="sysctl";
-    private String syspath="/system/etc/";
+    private final String syspath="/system/etc/";
     private String cmd="busybox echo `busybox find /proc/sys/* -type f -perm -644 | grep -v \"vm.\"`";
     private String sob=SYSCTL_SOB;
     private Boolean isdyn=false;
@@ -122,7 +122,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
                 sb.append("busybox mount -o remount,rw /system").append(";\n");
-                sb.append("busybox cp ").append(dn).append("/").append(mod).append(".conf").append(" /system/etc/" + mod + ".conf" + ";\n");
+                sb.append("busybox cp ").append(dn).append("/").append(mod).append(".conf").append(" /system/etc/").append(mod).append(".conf").append(";\n");
                 sb.append("busybox chmod 644 ").append("/system/etc/").append(mod).append(".conf").append(";\n");
                 sb.append("busybox mount -o remount,ro /system").append(";\n");
                 sb.append("busybox sysctl -p ").append("/system/etc/").append(mod).append(".conf").append(";\n");
@@ -170,7 +170,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                     new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/"+mod+".conf"+" "+dn+"/"+nf );
                     final StringBuilder sb = new StringBuilder();
                     sb.append("busybox mount -o remount,rw /system").append(";\n");
-                    sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/" + mod + ".conf" + ";\n");
+                    sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append(mod).append(".conf").append(";\n");
                     sb.append("busybox mount -o remount,ro /system").append(";\n");
                     Helpers.shExec(sb,context,true);
                 }

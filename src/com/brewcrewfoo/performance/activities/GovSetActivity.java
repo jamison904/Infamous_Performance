@@ -129,14 +129,22 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                 finish();
             }
             else{
-                String p[]=result.split(" ");
+
+                final String p[]=result.split(" ");
                 for (String aP : p) {
                     if(aP.trim().length()>0 && aP!=null){
+                        try{
                         final String pv=Helpers.readOneLine(aP).trim();
                         final String pn=aP.substring(aP.lastIndexOf("/") + 1, aP.length()).replace("_"," ");
                         props.add(new Prop(pn,pv));
+                        }
+                        catch (Exception e){
+
+                        }
                     }
                 }
+
+
                 linlaHeaderProgress.setVisibility(View.GONE);
                 if(props.isEmpty()){
                         nofiles.setVisibility(View.VISIBLE);
