@@ -37,6 +37,7 @@ translation by Stefano187
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
     <string name="mt_gov_ctrl">Impostazioni Governor</string>
+    <string name="mpdecision">MPDECISION</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">MEMORIA LIBERA</string>
     <string name="prefcat_tweaks">CARICA RAPIDA</string>

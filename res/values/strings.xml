@@ -52,6 +52,7 @@ Copyright (C) 2012  James Roberts
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="mt_gov_ctrl">Governor Settings</string>
+    <string name="mpdecision">MPDECISION</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">FREE MEMORY</string>
     <string name="prefcat_tweaks">FAST CHARGE</string>

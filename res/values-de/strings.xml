@@ -35,6 +35,7 @@ Translation by Rhonin86 & Evisceration
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="mt_gov_ctrl">Governor Einstellungen</string>
+    <string name="mpdecision">MPDECISION</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">Freier Speicher</string>
     <string name="prefcat_tweaks">Schnelles Laden</string>

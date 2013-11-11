@@ -37,6 +37,7 @@ Translation by Laurentiu1996
     <string name="ok">OK</string>
     <string name="cancel">Renunţă</string>
     <string name="mt_gov_ctrl">Setare Governor</string>
+    <string name="mpdecision">MPDECISION</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">MEMORIE LIBERĂ</string>
     <string name="prefcat_tweaks">ÎNCĂRCARE RAPIDĂ</string>

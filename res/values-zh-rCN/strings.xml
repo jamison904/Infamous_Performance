@@ -52,6 +52,7 @@ Copyright (C) 2012  James Roberts
     <string name="ok">确认</string>
     <string name="cancel">取消</string>
     <string name="mt_gov_ctrl">调速器设置</string>
+    <string name="mpdecision">MPDECISION</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">空闲内存</string>
     <string name="prefcat_tweaks">快速充电</string>

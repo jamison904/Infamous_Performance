@@ -33,6 +33,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Отменить</string>
     <string name="mt_gov_ctrl">Настройки Говернора</string>
+    <string name="mpdecision">MPDECISION</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">СВОБОДНАЯ ПАМЯТЬ</string>
     <string name="prefcat_tweaks">БЫСТРАЯ ЗАРЯДКА</string>
