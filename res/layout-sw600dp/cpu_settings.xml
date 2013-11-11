@@ -94,13 +94,12 @@ Copyright (C) 2012  James Roberts
             <SeekBar
                     android:id="@+id/max_slider"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
+                    android:layout_width="500dp"
                     android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/min_speed_layout"
-                android:layout_width="match_parent"
+            android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
@@ -129,70 +128,110 @@ Copyright (C) 2012  James Roberts
             <SeekBar
                     android:id="@+id/min_slider"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
+                    android:layout_width="500dp"
                     android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="20dp">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="20dip">
 
-        <TextView
-                android:id="@+id/governor_label"
+        <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dip"
-                android:text="@string/governor"
-                android:textSize="16sp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
 
-        <Spinner
-                android:id="@+id/pref_governor"
-                android:layout_width="200dip"
-                android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/governor_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dip"
+                    android:text="@string/governor"
+                    android:textSize="16sp"/>
+
+            <Spinner
+                    android:id="@+id/pref_governor"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                    android:id="@+id/io_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dip"
+                    android:text="@string/io"
+                    android:textSize="16sp"/>
+
+            <Spinner
+                    android:id="@+id/pref_io"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
-        <TextView
-                android:id="@+id/io_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dip"
-                android:text="@string/io"
-                android:textSize="16sp"/>
-
-        <Spinner
-                android:id="@+id/pref_io"
-                android:layout_width="200dip"
-                android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:baselineAligned="false">
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.5"
+            android:id="@+id/sob"
+            android:gravity="center_horizontal">
+
+            <TextView
                 android:id="@+id/set_on_boot_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dip"
                 android:text="@string/sob"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
-        <Switch
+            <Switch
                 android:id="@+id/cpu_sob"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.5"
+            android:id="@+id/mpd"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/mpd_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mpdecision"
+                android:textSize="14sp" />
+
+            <Switch
+                android:id="@+id/mpd_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

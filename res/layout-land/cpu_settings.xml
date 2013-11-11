@@ -196,24 +196,57 @@ Copyright (C) 2012  James Roberts
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dip"
-                    android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:baselineAligned="false"
+                android:layout_marginTop="30dp">
 
-                <TextView
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/sob"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
                         android:id="@+id/set_on_boot_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/sob"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
-                <Switch
+                    <Switch
                         android:id="@+id/cpu_sob"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/mpd"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/mpd_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mpdecision"
+                        android:textSize="14sp" />
+
+                    <Switch
+                        android:id="@+id/mpd_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
