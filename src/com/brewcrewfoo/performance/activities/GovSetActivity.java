@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -47,6 +48,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     private RelativeLayout tools;
     private PropAdapter adapter;
     private String curgov;
+    private int curcpu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,9 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
+
+        Intent i=getIntent();
+        curcpu=Integer.parseInt(i.getStringExtra("cpu"));
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
