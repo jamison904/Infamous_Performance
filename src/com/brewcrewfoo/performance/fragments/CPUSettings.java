@@ -63,9 +63,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private final String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
     private int curcpu=0;
     private boolean curon=true;
-    private final int nCpus=Helpers.getNumOfCpus();
+    private int nCpus;
     private TextView mCurCpu;
-    private final String[] mAvailableGovernors = Helpers.readOneLine(GOVERNORS_LIST_PATH).split(" ");
+    private String[] mAvailableGovernors;
     private Resources res;
     private Boolean mpdon=false;
 
@@ -75,6 +75,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         context=getActivity();
         res=getResources();
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        nCpus=Helpers.getNumOfCpus();
         if(savedInstanceState!=null) {
             curcpu=savedInstanceState.getInt("curcpu");
         }
@@ -147,6 +148,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
         mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
         mAvailableFrequencies = new String[0];
+        mAvailableGovernors = Helpers.readOneLine(GOVERNORS_LIST_PATH).split(" ");
 
         String availableFrequenciesLine = Helpers.readOneLine(STEPS_PATH);
         if (availableFrequenciesLine != null) {
@@ -244,7 +246,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 for(byte i=0;i<supported.length;i++){
                     if(supported[i].equals(Helpers.readOneLine(GOVERNOR_PATH))){
                         intent = new Intent(context, GovSetActivity.class);
-                        intent.putExtra("cpu",curcpu);
+                        intent.putExtra("cpu",Integer.toString(curcpu));
                         startActivity(intent);
                         break;
                     }
