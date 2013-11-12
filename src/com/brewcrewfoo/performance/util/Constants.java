@@ -28,6 +28,7 @@ public interface Constants {
     public static final Boolean NO_FLASH = false;
 
     // CPU settings
+    public static final String CPU_ON_PATH = "/sys/devices/system/cpu/cpu0/online";
     public static final String CUR_CPU_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
     public static final String MAX_FREQ_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
     public static final String TEGRA_MAX_FREQ_PATH = "/sys/module/cpu_tegra/parameters/cpu_user_cap";

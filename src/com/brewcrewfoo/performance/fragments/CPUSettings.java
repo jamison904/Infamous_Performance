@@ -22,6 +22,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,6 +34,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.GovSetActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
+import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
@@ -58,16 +60,20 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private boolean mIsDynFreq = false;
     private static final int NEW_MENU_ID=Menu.FIRST+1;
     private Context context;
-    private String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
+    private final String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
     private int curcpu=0;
-    private int nCpus=Helpers.getNumOfCpus();
+    private boolean curon=true;
+    private final int nCpus=Helpers.getNumOfCpus();
     private TextView mCurCpu;
-
+    private final String[] mAvailableGovernors = Helpers.readOneLine(GOVERNORS_LIST_PATH).split(" ");
+    private Resources res;
+    private Boolean mpdon=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=getActivity();
+        res=getResources();
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if(savedInstanceState!=null) {
             curcpu=savedInstanceState.getInt("curcpu");
@@ -79,17 +85,63 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     public View onCreateView(LayoutInflater inflater, ViewGroup root, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.cpu_settings, root, false);
 
+        LinearLayout mpdlayout=(LinearLayout) view.findViewById(R.id.mpd);
+
+        Switch mpdsw = (Switch) view.findViewById(R.id.mpd_switch);
+        if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
+            mpdlayout.setVisibility(LinearLayout.VISIBLE);
+            mpdon=Helpers.moduleActive("mpdecision");
+
+            mpdsw.setChecked(mpdon);
+            mpdsw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton v, boolean checked) {
+                    if (checked) {
+                        new CMDProcessor().su.runWaitFor("stop mpdecision");
+                    }
+                    else{
+                        new CMDProcessor().su.runWaitFor("start mpdecision");
+                    }
+                    mPreferences.edit().putBoolean("mpdecision",checked).apply();
+                }
+            });
+        }
+
         mCurCpu = (TextView) view.findViewById(R.id.curcpu);
-        mCurCpu.setText(Integer.toString(curcpu+1));
         mCurFreq = (TextView) view.findViewById(R.id.current_speed);
         mCurFreq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(curcpu>=(nCpus-1)) curcpu=0;
                 else curcpu++;
-                mCurCpu.setText(Integer.toString(curcpu+1));
+                setCPUval(curcpu);
             }
         });
+        mCurFreq.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View view) {
+                if((new File(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).exists())){
+                    if(curon){
+                        new CMDProcessor().su.runWaitFor("busybox echo \"0\" > " + CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
+                        if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).equals("0")){
+                            mCurCpu.setTextColor(res.getColor(R.color.pc_red));
+                            curon=false;
+                        }
+
+                    }
+                    else{
+                        new CMDProcessor().su.runWaitFor("busybox echo \"1\" > " + CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
+                        if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).equals("1")){
+                            mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
+                            curon=true;
+                        }
+                    }
+                    mPreferences.edit().putBoolean("cpuon"+curcpu,curon).apply();
+                }
+                return true;
+            }
+        });
+
 
 
         mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
@@ -107,57 +159,21 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             });
         }
 
+
         int mFrequenciesNum = mAvailableFrequencies.length - 1;
-        String[] mAvailableGovernors = Helpers.readOneLine(GOVERNORS_LIST_PATH).split(" ");
+
         String[] mAvailableIo = Helpers.getAvailableIOSchedulers();
-
-        String mCurrentGovernor = Helpers.readOneLine(GOVERNOR_PATH);
         String mCurrentIo = Helpers.getIOScheduler();
-        String mCurMaxSpeed;
-        String mCurMinSpeed;
-        if(new File(DYN_MAX_FREQ_PATH).exists()){
-            mCurMaxSpeed = Helpers.readOneLine(DYN_MAX_FREQ_PATH);
-        }
-        else{
-            mCurMaxSpeed = Helpers.readOneLine(MAX_FREQ_PATH);
-        }
-        if(new File(DYN_MIN_FREQ_PATH).exists()){
-            mCurMinSpeed = Helpers.readOneLine(DYN_MIN_FREQ_PATH);
-        }
-        else{
-            mCurMinSpeed = Helpers.readOneLine(MIN_FREQ_PATH);
-        }
-
-        if (mIsTegra3) {
-            String curTegraMaxSpeed = Helpers.readOneLine(TEGRA_MAX_FREQ_PATH);
-            int curTegraMax = 0;
-            try {
-                curTegraMax = Integer.parseInt(curTegraMaxSpeed);
-                if (curTegraMax > 0) {
-                    mCurMaxSpeed = Integer.toString(curTegraMax);
-                }
-            }
-            catch (NumberFormatException ex) {
-                curTegraMax = 0;
-            }
-        }
 
         mMaxSlider = (SeekBar) view.findViewById(R.id.max_slider);
         mMaxSlider.setMax(mFrequenciesNum);
-        mMaxSpeedText = (TextView) view.findViewById(R.id.max_speed_text);
-        mMaxSpeedText.setText(Helpers.toMHz(mCurMaxSpeed));
-        mMaxSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMaxSpeed));
-        mMaxFreqSetting=mCurMaxSpeed;
         mMaxSlider.setOnSeekBarChangeListener(this);
+        mMaxSpeedText = (TextView) view.findViewById(R.id.max_speed_text);
 
         mMinSlider = (SeekBar) view.findViewById(R.id.min_slider);
         mMinSlider.setMax(mFrequenciesNum);
-        mMinSpeedText = (TextView) view.findViewById(R.id.min_speed_text);
-        mMinSpeedText.setText(Helpers.toMHz(mCurMinSpeed));
-        mMinSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMinSpeed));
-        mMinFreqSetting=mCurMinSpeed;
         mMinSlider.setOnSeekBarChangeListener(this);
-
+        mMinSpeedText = (TextView) view.findViewById(R.id.min_speed_text);
 
         mGovernor = (Spinner) view.findViewById(R.id.pref_governor);
         ArrayAdapter<CharSequence> governorAdapter = new ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item);
@@ -166,7 +182,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             governorAdapter.add(mAvailableGovernor);
         }
         mGovernor.setAdapter(governorAdapter);
-        mGovernor.setSelection(Arrays.asList(mAvailableGovernors).indexOf(mCurrentGovernor));
         mGovernor.post(new Runnable() {
             public void run() {
                 mGovernor.setOnItemSelectedListener(new GovListener());
@@ -203,6 +218,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 editor.commit();
             }
         });
+
+        setCPUval(curcpu);
 
         return view;
     }
@@ -275,7 +292,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             for (int i = 0; i < nCpus; i++) {
                 sb.append("busybox echo ").append(selected).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
             }
-            updateSharedPrefs(PREF_GOV, selected);
+            updateSharedPrefs(PREF_GOV+curcpu, selected);
             // reset gov settings
             mPreferences.edit().remove(GOV_SETTINGS).remove(GOV_NAME).apply();
             Helpers.shExec(sb,context,true);
@@ -345,7 +362,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         }
         mMaxSpeedText.setText(Helpers.toMHz(current));
         mMaxFreqSetting = current;
-        updateSharedPrefs(PREF_MAX_CPU, current);
+        updateSharedPrefs(PREF_MAX_CPU+curcpu, current);
     }
 
     public void setMinSpeed(SeekBar seekBar, int progress) {
@@ -359,7 +376,76 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         }
         mMinSpeedText.setText(Helpers.toMHz(current));
         mMinFreqSetting = current;
-        updateSharedPrefs(PREF_MIN_CPU, current);
+        updateSharedPrefs(PREF_MIN_CPU+curcpu, current);
+    }
+
+    public String getMaxSpeed(int i){
+        String mCurMaxSpeed="0";
+        if (mIsTegra3) {
+            String curTegraMaxSpeed = Helpers.readOneLine(TEGRA_MAX_FREQ_PATH);
+            int curTegraMax = 0;
+            try {
+                curTegraMax = Integer.parseInt(curTegraMaxSpeed);
+                if (curTegraMax > 0) {
+                    mCurMaxSpeed = Integer.toString(curTegraMax);
+                }
+            }
+            catch (NumberFormatException ex) {
+                curTegraMax = 0;
+                mCurMaxSpeed = Integer.toString(curTegraMax);
+            }
+        }
+        else{
+            if(new File(DYN_MAX_FREQ_PATH).exists()){
+                mCurMaxSpeed = Helpers.readOneLine(DYN_MAX_FREQ_PATH);
+            }
+            else{
+                mCurMaxSpeed = Helpers.readOneLine(MAX_FREQ_PATH.replace("cpu0","cpu"+i));
+            }
+        }
+        return mCurMaxSpeed;
+    }
+    public String getMinSpeed(int i){
+        String mCurMinSpeed;
+        if(new File(DYN_MIN_FREQ_PATH).exists()){
+            mCurMinSpeed = Helpers.readOneLine(DYN_MIN_FREQ_PATH);
+        }
+        else{
+            mCurMinSpeed = Helpers.readOneLine(MIN_FREQ_PATH.replace("cpu0","cpu"+i));
+        }
+        return mCurMinSpeed;
+    }
+
+    public void setCPUval(int i){
+        final String mCurMaxSpeed=getMaxSpeed(curcpu);
+        mMaxSpeedText.setText(Helpers.toMHz(mCurMaxSpeed));
+        mMaxSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMaxSpeed));
+        mMaxFreqSetting=mCurMaxSpeed;
+
+        final String mCurMinSpeed=getMinSpeed(curcpu);
+        mMinSpeedText.setText(Helpers.toMHz(mCurMinSpeed));
+        mMinSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMinSpeed));
+        mMinFreqSetting=mCurMinSpeed;
+
+        String mCurrentGovernor = Helpers.readOneLine(GOVERNOR_PATH.replace("cpu0","cpu"+curcpu));
+        mGovernor.setSelection(Arrays.asList(mAvailableGovernors).indexOf(mCurrentGovernor));
+
+        if((new File(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).exists())){
+            if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).equals("0")){
+                mCurCpu.setTextColor(res.getColor(R.color.pc_red));
+                curon=false;
+            }
+            else{
+                mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
+                curon=true;
+            }
+        }
+        else{
+            mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
+            curon=true;
+        }
+
+        mCurCpu.setText(Integer.toString(i+1));
     }
 
     protected class CurCPUThread extends Thread {

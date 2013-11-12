@@ -393,6 +393,14 @@ public class Helpers implements Constants {
         else{ return NOT_FOUND;}
     }
 
+    public static Boolean moduleActive(String b) {
+        CMDProcessor.CommandResult cr = null;
+        cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox ps | busybox grep "+b+" | busybox grep -v \"busybox grep "+b+"\" | busybox awk '{print $1}'`");
+        Log.d(TAG, "Module: "+cr.stdout);
+        if (cr.success() && !cr.stdout.equals("")){ return  true; }
+        else{ return false;}
+    }
+
     public static long getTotMem() {
         long v=0;
         CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E -o '[[:digit:]]+'`");
