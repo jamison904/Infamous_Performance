@@ -89,7 +89,7 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(max).append(" > ").append(MAX_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                     sb.append("busybox echo ").append(min).append(" > ").append(MIN_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                     //sb.append("busybox echo ").append(gov).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-                    sb.append("busybox echo performance > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
+                    sb.append("busybox echo \"performance\" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                 }
                 if (new File(TEGRA_MAX_FREQ_PATH).exists()) {
                     sb.append("busybox echo ").append(max).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
