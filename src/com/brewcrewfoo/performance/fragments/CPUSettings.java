@@ -391,30 +391,28 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     }
 
     public String getMaxSpeed(int i){
-        String mCurMaxSpeed="0";
         if (mIsTegra3) {
             String curTegraMaxSpeed = Helpers.readOneLine(TEGRA_MAX_FREQ_PATH);
             int curTegraMax = 0;
             try {
                 curTegraMax = Integer.parseInt(curTegraMaxSpeed);
                 if (curTegraMax > 0) {
-                    mCurMaxSpeed = Integer.toString(curTegraMax);
+                    return Integer.toString(curTegraMax);
                 }
             }
             catch (NumberFormatException ex) {
-                curTegraMax = 0;
-                mCurMaxSpeed = Integer.toString(curTegraMax);
+                return "0";
             }
         }
         else{
             if(new File(DYN_MAX_FREQ_PATH).exists()){
-                mCurMaxSpeed = Helpers.readOneLine(DYN_MAX_FREQ_PATH);
+                return Helpers.readOneLine(DYN_MAX_FREQ_PATH);
             }
             else{
-                mCurMaxSpeed = Helpers.readOneLine(MAX_FREQ_PATH.replace("cpu0","cpu"+i));
+                return Helpers.readOneLine(MAX_FREQ_PATH.replace("cpu0","cpu"+i));
             }
         }
-        return mCurMaxSpeed;
+        return "0";
     }
     public String getMinSpeed(int i){
         String mCurMinSpeed;
