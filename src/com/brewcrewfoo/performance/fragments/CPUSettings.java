@@ -278,11 +278,11 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         final StringBuilder sb = new StringBuilder();
         if (seekBar.getId() == R.id.max_slider){
             sb.append("busybox echo ").append(mMaxFreqSetting).append(" > ").append(MAX_FREQ_PATH.replace("cpu0", "cpu" + curcpu)).append(";\n");
-            if (mIsTegra3) {
-                sb.append("busybox echo ").append(mMaxFreqSetting).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
-            }
             if (mIsDynFreq) {
                 sb.append("busybox echo ").append(mMaxFreqSetting).append(" > ").append(DYN_MAX_FREQ_PATH).append(";\n");
+            }
+            if (mIsTegra3) {
+                sb.append("busybox echo ").append(mMaxFreqSetting).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
             }
         }
         else if(seekBar.getId() == R.id.min_slider){
@@ -463,7 +463,10 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             try {
                 while (!mInterrupt) {
                     sleep(500);
-                    final String curFreq = Helpers.readOneLine(CUR_CPU_PATH.replace("cpu0","cpu"+curcpu));
+                    String curFreq="0";
+                    if(new File(CUR_CPU_PATH.replace("cpu0","cpu"+curcpu)).exists()){
+                        curFreq = Helpers.readOneLine(CUR_CPU_PATH.replace("cpu0","cpu"+curcpu));
+                    }
                     mCurCPUHandler.sendMessage(mCurCPUHandler.obtainMessage(0,curFreq));
                 }
             }

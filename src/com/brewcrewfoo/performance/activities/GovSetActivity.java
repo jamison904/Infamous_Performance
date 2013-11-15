@@ -36,6 +36,7 @@ import java.util.List;
 
 /**
  * Created by h0rn3t on 21.09.2013.
+ * http://forum.xda-developers.com/member.php?u=4674443
  */
 public class GovSetActivity extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
     private boolean mIsLightTheme;
@@ -79,12 +80,12 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                 for(int i=0;i<adapter.getCount();i++){
                     Prop p=adapter.getItem(i);
                     if(i==0){
-                        sb.append(p.getName().replace(" ","_")).append(":").append(p.getVal());
+                        sb.append(p.getName()).append(":").append(p.getVal());
                     }
                     else{
-                        sb.append(";").append(p.getName().replace(" ","_")).append(":").append(p.getVal());
+                        sb.append(";").append(p.getName()).append(":").append(p.getVal());
                     }
-                    sbs.append("busybox echo ").append(p.getVal()).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(p.getName().replace(" ","_")).append(";\n");
+                    sbs.append("busybox echo ").append(p.getVal()).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(p.getName()).append(";\n");
                 }
                 mPreferences.edit().putString(GOV_NAME,curgov).putString(GOV_SETTINGS, sb.toString()).commit();
                 Helpers.shExec(sbs,context,true);
@@ -99,10 +100,10 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                     for(int i=0;i<adapter.getCount();i++){
                         Prop p=adapter.getItem(i);
                         if (i == 0) {
-                            sb.append(p.getName().replace(" ","_")).append(":").append(p.getVal());
+                            sb.append(p.getName()).append(":").append(p.getVal());
 
                         } else {
-                            sb.append(";").append(p.getName().replace(" ","_")).append(":").append(p.getVal());
+                            sb.append(";").append(p.getName()).append(":").append(p.getVal());
 
                         }
                     }
@@ -140,7 +141,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                     if(aP.trim().length()>0 && aP!=null){
                         try{
                         final String pv=Helpers.readOneLine(aP).trim();
-                        final String pn=aP.substring(aP.lastIndexOf("/") + 1, aP.length()).replace("_"," ");
+                        final String pn=aP.substring(aP.lastIndexOf("/") + 1, aP.length());
                         props.add(new Prop(pn,pv));
                         }
                         catch (Exception e){
