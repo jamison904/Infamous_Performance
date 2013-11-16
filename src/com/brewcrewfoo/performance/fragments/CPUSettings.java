@@ -117,27 +117,24 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 getCPUval(curcpu);
             }
         });
+
         mCurFreq.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View view) {
                 if(new File(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).exists() && curcpu>0){
+                    final StringBuilder sb = new StringBuilder();
+                    sb.append("busybox chmod 644 "+CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
                     if(curon){
-                        new CMDProcessor().su.runWaitFor("busybox echo \"0\" > " + CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
-                        if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).equals("0")){
-                            mCurCpu.setTextColor(res.getColor(R.color.pc_red));
-                            curon=false;
-                        }
-
+                        sb.append("busybox echo \"0\" > " + CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
                     }
                     else{
-                        new CMDProcessor().su.runWaitFor("busybox echo \"1\" > " + CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
-                        if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).equals("1")){
-                            mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
-                            curon=true;
-                        }
+                        sb.append("busybox echo \"1\" > " + CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
                     }
+                    sb.append("busybox chmod 444 "+CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
+                    Helpers.shExec(sb,context,true);
                     mPreferences.edit().putBoolean("cpuon"+curcpu,curon).apply();
                 }
+                getCPUval(curcpu);
                 return true;
             }
         });
@@ -175,6 +172,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mMinSlider.setMax(mFrequenciesNum);
         mMinSlider.setOnSeekBarChangeListener(this);
         mMinSpeedText = (TextView) view.findViewById(R.id.min_speed_text);
+
+
 
         mGovernor = (Spinner) view.findViewById(R.id.pref_governor);
         ArrayAdapter<CharSequence> governorAdapter = new ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item);
@@ -430,10 +429,12 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mMaxSpeedText.setText(Helpers.toMHz(mCurMaxSpeed));
         mMaxSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMaxSpeed));
         mMaxFreqSetting=mCurMaxSpeed;
+        mMaxSlider.setEnabled(true);
 
         final String mCurMinSpeed=getMinSpeed(i);
         mMinSpeedText.setText(Helpers.toMHz(mCurMinSpeed));
         mMinSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMinSpeed));
+        mMinSlider.setEnabled(true);
         mMinFreqSetting=mCurMinSpeed;
 
         String mCurrentGovernor = Helpers.readOneLine(GOVERNOR_PATH);
@@ -442,10 +443,13 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mCurCpu.setText(Integer.toString(i+1));
         mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
         curon=true;
+
         if((new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists())){
             if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+i)).equals("0")){
                 mCurCpu.setTextColor(res.getColor(R.color.pc_red));
                 curon=false;
+                mMaxSlider.setEnabled(false);
+                mMinSlider.setEnabled(false);
             }
         }
 
