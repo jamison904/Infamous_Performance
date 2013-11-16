@@ -91,18 +91,21 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
             mpdlayout.setVisibility(LinearLayout.VISIBLE);
             Boolean mpdon = Helpers.moduleActive("mpdecision");
-
             mpdsw.setChecked(mpdon);
+            mPreferences.edit().putBoolean("mpdecision",mpdon).apply();
+
             mpdsw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v, boolean checked) {
                     if (checked) {
                         new CMDProcessor().su.runWaitFor("stop mpdecision");
+                        mPreferences.edit().putBoolean("mpdecision",false).apply();
                     }
                     else{
                         new CMDProcessor().su.runWaitFor("start mpdecision");
+                        mPreferences.edit().putBoolean("mpdecision",true).apply();
                     }
-                    mPreferences.edit().putBoolean("mpdecision",checked).apply();
+
                 }
             });
         }
@@ -123,23 +126,21 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             public boolean onLongClick(View view) {
                 if(new File(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).exists() && curcpu>0){
                     final StringBuilder sb = new StringBuilder();
-                    sb.append("busybox chmod 644 "+CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
+                    sb.append("busybox chmod 644 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
                     if(curon){
-                        sb.append("busybox echo \"0\" > " + CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
+                        sb.append("busybox echo \"0\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
                     }
                     else{
-                        sb.append("busybox echo \"1\" > " + CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
+                        sb.append("busybox echo \"1\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
                     }
-                    sb.append("busybox chmod 444 "+CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
+                    sb.append("busybox chmod 444 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
                     Helpers.shExec(sb,context,true);
-                    mPreferences.edit().putBoolean("cpuon"+curcpu,curon).apply();
+
                 }
                 getCPUval(curcpu);
                 return true;
             }
         });
-
-
 
         mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
         mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
@@ -452,7 +453,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 mMinSlider.setEnabled(false);
             }
         }
-
+        mPreferences.edit().putBoolean("cpuon"+curcpu,curon).apply();
     }
 
     protected class CurCPUThread extends Thread {
