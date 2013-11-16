@@ -19,7 +19,6 @@ Translation by DaniPhii
         <item>Herramientas</item>
     </string-array>
 
-
     <string name="menu_tab">Pestañas</string>
     <!-- Menú -->
     <string name="mt_refresh">Actualizar</string>
@@ -72,7 +71,7 @@ Translation by DaniPhii
     <string name="title_secondary_server">Servidor secundario</string>
     <string name="title_hidden_app">Aplicaciones ocultas</string>
     <string name="title_content_providers">Proveedores de contenido</string>
-    <string name="title_empty_app">Aplicaciones vacías</string>
+    <string name="title_empty_app">Vaciar aplicaciones</string>
     <string name="prefcat_oom_predefines">AJUSTES PREESTABLECIDOS</string>
     <string name="pt_oom">Ajustes preestablecidos del matador de procesos</string>
 
@@ -148,7 +147,7 @@ Translation by DaniPhii
     <string name="size_3072_kb">3072 KB</string>
     <string name="size_4096_kb">4096 KB</string>
     <!-- Voltage control -->
-    <string name="volt_info">¡Atención!\nAntes de activar la aplicación al arranque, asegúrate de que los valores\nno superan los valores máximos, hay riesgo de que paralice el teléfono.</string>
+    <string name="volt_info">¡Atención!\nAntes de activar la aplicación al arranque, asegúrate de que los valores\nno superan los valores máximos, hay riesgo de que se paralice el teléfono.</string>
     <string name="ps_volt_mhz_voltage">" Hz"</string>
     <string name="ps_volt_save">"Aplicar"</string>
     <string name="ps_volt_current_voltage">"Voltaje actual: "</string>
@@ -168,7 +167,7 @@ Translation by DaniPhii
     <string name="dirty_writeback_title">Respuesta de suciedad (en centisegundos)</string>
     <string name="min_free_title">RAM mínima libre (KB)</string>
     <string name="overcommit_title">Índice de sobrecarga</string>
-    <string name="swappiness_title">Swappiness</string>
+    <string name="swappiness_title">"Swappiness"</string>
     <string name="vfs_title">Presión caché VFS</string>
     <!-- Time in state -->
     <string name="time_in_state">ESTADÍSTICAS</string>
@@ -188,7 +187,7 @@ Translation by DaniPhii
     <string name="su_success_title">¡Correcto!</string>
     <string name="su_failed_title">¡Algo fue mal!</string>
     <string name="first_run_message">La aplicación necesita comprobar los permisos de superusuario y
-        la versión de BusyBox. Pulsa Aceptar para continuar.
+        la versión de BusyBox. Pulsa Aceptar para continuar. Pulsa Cancelar si no quieres dar pemisos.
     </string>
     <string name="su_success_message">Performance Control tiene permisos de superusuario y ha encontrado
         BusyBox en el sistema. ¡Todo correcto!
@@ -230,7 +229,7 @@ Translation by DaniPhii
     <string name="btncleanall">Limpiar todo</string>
     <string name="clean_files_msg">Los archivos residuarles de %s serán eliminados. ¿Continuar?</string>
     <string name="filesstr">archivo(s)</string>
-    <string name="no_residuals">No hay residuos</string>
+    <string name="no_residuals">No hay basura que limpiar</string>
 
     <string name="prefcat_optim_db">OPTIMIZAR BASES DE DATOS</string>
     <string name="optim_db_title">Optimizar las bases de datos</string>
@@ -289,7 +288,7 @@ Translation by DaniPhii
     <string name="unfreeze_msg">%s se descongelará. ¿Continuar?</string>
     <!-- zRam -->
     <string name="prefcat_zram">zRAM</string>
-    <string name="pt_run_zram">Activar zRam</string>
+    <string name="pt_run_zram">Activar zRAM</string>
     <string name="zram_set_title">Ajustes</string>
     <string name="ps_zram">Comprimir memoria para aumentar la RAM virtual</string>
     <string name="zram_compressed_size">Tamaño comprimido</string>
@@ -325,8 +324,8 @@ Translation by DaniPhii
     <string name="prefcat_viber">VIBRACIÓN</string>
     <string name="viber_title">Control de intensidad</string>
     <!-- PC Settings -->
-    <string name="pt_use_light_theme">Usar tema de luz</string>
-    <string name="ps_use_light_theme">Si se activa, Performance Control usará un tema de luz Holo</string>
+    <string name="pt_use_light_theme">Usar tema claro</string>
+    <string name="ps_use_light_theme">Si se activa, Performance Control usará un tema de color blanco y letras negras</string>
     <string name="pt_widget_bg_color">Color de fondo del widget</string>
     <string name="pt_widget_text_color">Color de texto del widget</string>
     <string name="pt_ver">"Versión: "</string>
@@ -338,7 +337,6 @@ Translation by DaniPhii
     <string name="arrow_down">↓</string>
     <string name="hex">Hex:</string>
     <string name="hex_hint">#FF000000</string>
-    <string name="set">Aplicar</string>
+    <string name="set">OK</string>
     <string name="ics_color">Holo</string>
-
 </resources>
