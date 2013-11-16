@@ -163,9 +163,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
 
         int mFrequenciesNum = mAvailableFrequencies.length - 1;
 
-        String[] mAvailableIo = Helpers.getAvailableIOSchedulers();
-        String mCurrentIo = Helpers.getIOScheduler();
-
         mMaxSlider = (SeekBar) view.findViewById(R.id.max_slider);
         mMaxSlider.setMax(mFrequenciesNum);
         mMaxSlider.setOnSeekBarChangeListener(this);
@@ -177,7 +174,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mMinSpeedText = (TextView) view.findViewById(R.id.min_speed_text);
 
 
-
         mGovernor = (Spinner) view.findViewById(R.id.pref_governor);
         ArrayAdapter<CharSequence> governorAdapter = new ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item);
         governorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -185,12 +181,15 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             governorAdapter.add(mAvailableGovernor);
         }
         mGovernor.setAdapter(governorAdapter);
+        mGovernor.setSelection(Arrays.asList(mAvailableGovernors).indexOf(Helpers.readOneLine(GOVERNOR_PATH)));
         mGovernor.post(new Runnable() {
             public void run() {
                 mGovernor.setOnItemSelectedListener(new GovListener());
             }
         });
 
+
+        String[] mAvailableIo = Helpers.getAvailableIOSchedulers();
         mIo = (Spinner) view.findViewById(R.id.pref_io);
         ArrayAdapter<CharSequence> ioAdapter = new ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item);
         ioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -198,7 +197,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             ioAdapter.add(aMAvailableIo);
         }
         mIo.setAdapter(ioAdapter);
-        mIo.setSelection(Arrays.asList(mAvailableIo).indexOf(mCurrentIo));
+        mIo.setSelection(Arrays.asList(mAvailableIo).indexOf(Helpers.getIOScheduler()));
         mIo.post(new Runnable() {
             public void run() {
                 mIo.setOnItemSelectedListener(new IOListener());
@@ -439,8 +438,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mMinSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMinSpeed));
         mMinFreqSetting=mCurMinSpeed;
 
-        String mCurrentGovernor = Helpers.readOneLine(GOVERNOR_PATH);
-        mGovernor.setSelection(Arrays.asList(mAvailableGovernors).indexOf(mCurrentGovernor));
+
 
         mCurCpu.setText(Integer.toString(i+1));
         mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
