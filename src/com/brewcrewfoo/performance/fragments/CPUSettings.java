@@ -120,7 +120,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mCurFreq.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View view) {
-                if((new File(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).exists())){
+                if(new File(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).exists() && curcpu>0){
                     if(curon){
                         new CMDProcessor().su.runWaitFor("busybox echo \"0\" > " + CPU_ON_PATH.replace("cpu0","cpu"+curcpu));
                         if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).equals("0")){
