@@ -132,13 +132,16 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 
         mZRAMsettings= findPreference("zram_settings");
 
+        String names="";
         if (!new File(USER_PROC_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("notkill_user_proc");
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
             mUserON.setChecked(Helpers.readOneLine(USER_PROC_PATH).equals("1"));
-            mPreferences.edit().putString(PREF_USER_NAMES, Helpers.readOneLine(USER_PROC_NAMES_PATH)).apply();
+            names=Helpers.readOneLine(USER_PROC_NAMES_PATH);
+            if(names==null) names="";
+            mPreferences.edit().putString(PREF_USER_NAMES, names).apply();
         }
         if (!new File(SYS_PROC_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("notkill_sys_proc");
@@ -146,7 +149,9 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         else{
             mSysON.setChecked(Helpers.readOneLine(SYS_PROC_PATH).equals("1"));
-            mPreferences.edit().putString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH)).apply();
+            names=Helpers.readOneLine(USER_SYS_NAMES_PATH);
+            if(names==null) names="";
+            mPreferences.edit().putString(PREF_SYS_NAMES, names).apply();
         }
         if (!new File(UKSM_RUN_PATH).exists() && !new File(KSM_RUN_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("ksm");
