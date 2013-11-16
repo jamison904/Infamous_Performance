@@ -63,7 +63,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private final String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
     private int curcpu=0;
     private boolean curon=true;
-    private int nCpus;
+    private int nCpus=0;
     private TextView mCurCpu;
     private String[] mAvailableGovernors;
     private Resources res;
@@ -126,14 +126,14 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             public boolean onLongClick(View view) {
                 if(new File(CPU_ON_PATH.replace("cpu0","cpu"+curcpu)).exists() && curcpu>0){
                     final StringBuilder sb = new StringBuilder();
-                    sb.append("busybox chmod 644 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
+                    sb.append("busybox chmod 644 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu)).append(";\n");
                     if(curon){
-                        sb.append("busybox echo \"0\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
+                        sb.append("busybox echo \"0\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu)).append(";\n");
                     }
                     else{
-                        sb.append("busybox echo \"1\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
+                        sb.append("busybox echo \"1\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu)).append(";\n");
                     }
-                    sb.append("busybox chmod 444 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu));
+                    sb.append("busybox chmod 444 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + curcpu)).append(";\n");
                     Helpers.shExec(sb,context,true);
 
                 }
