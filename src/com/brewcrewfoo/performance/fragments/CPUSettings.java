@@ -85,6 +85,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     public View onCreateView(LayoutInflater inflater, ViewGroup root, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.cpu_settings, root, false);
 
+        mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
+        mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
+
         LinearLayout mpdlayout=(LinearLayout) view.findViewById(R.id.mpd);
 
         Switch mpdsw = (Switch) view.findViewById(R.id.mpd_switch);
@@ -142,8 +145,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             }
         });
 
-        mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
-        mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
+
         mAvailableFrequencies = new String[0];
         mAvailableGovernors = Helpers.readOneLine(GOVERNORS_LIST_PATH).split(" ");
 
@@ -430,12 +432,11 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mMaxSpeedText.setText(Helpers.toMHz(mCurMaxSpeed));
         mMaxSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMaxSpeed));
         mMaxFreqSetting=mCurMaxSpeed;
-        mMaxSlider.setEnabled(true);
+
 
         final String mCurMinSpeed=getMinSpeed(i);
         mMinSpeedText.setText(Helpers.toMHz(mCurMinSpeed));
         mMinSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(mCurMinSpeed));
-        mMinSlider.setEnabled(true);
         mMinFreqSetting=mCurMinSpeed;
 
         String mCurrentGovernor = Helpers.readOneLine(GOVERNOR_PATH);
@@ -444,6 +445,15 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mCurCpu.setText(Integer.toString(i+1));
         mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
         curon=true;
+
+        if(mIsDynFreq && curcpu>0){
+            mMaxSlider.setEnabled(false);
+            mMinSlider.setEnabled(false);
+        }
+        else{
+            mMaxSlider.setEnabled(true);
+            mMinSlider.setEnabled(true);
+        }
 
         if((new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists())){
             if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+i)).equals("0")){
