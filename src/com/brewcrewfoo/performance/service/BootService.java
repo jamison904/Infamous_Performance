@@ -98,10 +98,10 @@ public class BootService extends Service implements Constants {
                     min = preferences.getString(PREF_MIN_CPU+i, Helpers.readOneLine(MIN_FREQ_PATH).replace("cpu0","cpu"+i));
                     if(new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists() && i>0){
                         if(preferences.getBoolean("cpuon"+i, false)){
-                            sb.append("busybox echo \"0\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
+                            sb.append("busybox echo \"1\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                         }
                         else{
-                            sb.append("busybox echo \"1\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
+                            sb.append("busybox echo \"0\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                         }
                         sb.append("busybox chmod 444 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                     }
@@ -268,23 +268,25 @@ public class BootService extends Service implements Constants {
             if (new File(USER_PROC_PATH).exists()) {
                     if (preferences.getBoolean(USER_PROC_SOB, false)) {
                         if (preferences.getBoolean(PREF_USER_PROC, false)) {
+                            sb.append("busybox echo ").append(preferences.getString(PREF_USER_NAMES, Helpers.readOneLine(USER_PROC_NAMES_PATH))).append(" > ").append(USER_PROC_NAMES_PATH).append(";\n");
                             sb.append("busybox echo 1 > " + USER_PROC_PATH + ";\n");
                         }
                         else{
                             sb.append("busybox echo 0 > " + USER_PROC_PATH + ";\n");
                         }
-                        sb.append("busybox echo ").append(preferences.getString(PREF_USER_NAMES, Helpers.readOneLine(USER_PROC_NAMES_PATH))).append(" > ").append(USER_PROC_NAMES_PATH).append(";\n");
+
                     }
             }
             if (new File(SYS_PROC_PATH).exists()) {
                     if (preferences.getBoolean(SYS_PROC_SOB, false)) {
                         if (preferences.getBoolean(PREF_SYS_PROC, false)) {
+                            sb.append("busybox echo ").append(preferences.getString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH))).append(" > ").append(USER_SYS_NAMES_PATH).append(";\n");
                             sb.append("busybox echo 1 > " + SYS_PROC_PATH + ";\n");
                         }
                         else{
                             sb.append("busybox echo 0 > " + SYS_PROC_PATH + ";\n");
                         }
-                        sb.append("busybox echo ").append(preferences.getString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH))).append(" > ").append(USER_SYS_NAMES_PATH).append(";\n");
+
                     }
             }
 
