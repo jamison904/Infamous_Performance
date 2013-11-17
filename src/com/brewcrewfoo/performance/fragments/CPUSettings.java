@@ -453,7 +453,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             mMinSlider.setEnabled(true);
         }
 
-        if((new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists())){
+        if(new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists()){
             if(Helpers.readOneLine(CPU_ON_PATH.replace("cpu0","cpu"+i)).equals("0")){
                 mCurCpu.setTextColor(res.getColor(R.color.pc_red));
                 curon=false;

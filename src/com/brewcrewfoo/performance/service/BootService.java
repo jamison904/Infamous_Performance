@@ -74,31 +74,52 @@ public class BootService extends Service implements Constants {
             final String BLN_PATH=Helpers.bln_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
             final int ncpus=Helpers.getNumOfCpus();
+            String max,min;
             int ksm=0;
             String ksmpath=KSM_RUN_PATH;
             if (new File(UKSM_RUN_PATH).exists()) {
                 ksm=1;
                 ksmpath=UKSM_RUN_PATH;
             }
+
             if (preferences.getBoolean(CPU_SOB, false)) {
-                final String max = preferences.getString(PREF_MAX_CPU, Helpers.readOneLine(MAX_FREQ_PATH));
-                final String min = preferences.getString(PREF_MIN_CPU, Helpers.readOneLine(MIN_FREQ_PATH));
+                final String max0=preferences.getString(PREF_MAX_CPU+0, Helpers.readOneLine(MAX_FREQ_PATH).replace("cpu0","cpu"+0));
+                final String min0=preferences.getString(PREF_MIN_CPU+0, Helpers.readOneLine(MIN_FREQ_PATH).replace("cpu0","cpu"+0));
                 final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
 
+                if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
+                    if(!preferences.getBoolean("mpdecision",true) && Helpers.moduleActive("mpdecision")){
+                        sb.append("stop mpdecision;\n");
+                    }
+                }
+
                 for (int i = 0; i < ncpus; i++) {
+                    max = preferences.getString(PREF_MAX_CPU+i, Helpers.readOneLine(MAX_FREQ_PATH).replace("cpu0","cpu"+i));
+                    min = preferences.getString(PREF_MIN_CPU+i, Helpers.readOneLine(MIN_FREQ_PATH).replace("cpu0","cpu"+i));
+                    if(new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists() && i>0){
+                        if(preferences.getBoolean("cpuon"+i, false)){
+                            sb.append("busybox echo \"0\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
+                        }
+                        else{
+                            sb.append("busybox echo \"1\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
+                        }
+                        sb.append("busybox chmod 444 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
+                    }
+
                     sb.append("busybox echo ").append(max).append(" > ").append(MAX_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                     sb.append("busybox echo ").append(min).append(" > ").append(MIN_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-                    //sb.append("busybox echo ").append(gov).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-                    sb.append("busybox echo \"performance\" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
+                    sb.append("busybox echo ").append(gov).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                 }
+
+
                 if (new File(TEGRA_MAX_FREQ_PATH).exists()) {
-                    sb.append("busybox echo ").append(max).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
+                    sb.append("busybox echo ").append(max0).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
                 }
                 if(new File(DYN_MAX_FREQ_PATH).exists()){
-                    sb.append("busybox echo ").append(max).append(" > ").append(DYN_MAX_FREQ_PATH).append(";\n");
+                    sb.append("busybox echo ").append(max0).append(" > ").append(DYN_MAX_FREQ_PATH).append(";\n");
                 }
                 if(new File(DYN_MIN_FREQ_PATH).exists()){
-                    sb.append("busybox echo ").append(min).append(" > ").append(DYN_MIN_FREQ_PATH).append(";\n");
+                    sb.append("busybox echo ").append(min0).append(" > ").append(DYN_MIN_FREQ_PATH).append(";\n");
                 }
                 for(byte i=0;i<2; i++){
                     if (new File(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).exists())
@@ -287,9 +308,6 @@ public class BootService extends Service implements Constants {
                 }
             }
 
-            for (byte i = 0; i < ncpus; i++) {
-                sb.append("busybox echo ").append(gov).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-            }
             if (preferences.getBoolean(GOV_SOB, false)) {
                     final String gn = preferences.getString(GOV_NAME, "");
                     if (gn.equals(gov)) {
