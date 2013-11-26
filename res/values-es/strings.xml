@@ -29,15 +29,15 @@ Translation by DaniPhii
     <string name="mt_minus25">Aumentar 25 mV</string>
     <!-- Ajustes de CPUs -->
     <string name="current_speed">Velocidad CPU actual</string>
-    <string name="current_max">Frecuencia máxima:</string>
-    <string name="current_min">Frecuencia mínima:</string>
+    <string name="current_max">Frecuencia máxima: </string>
+    <string name="current_min">Frecuencia mínima: </string>
     <string name="governor">Gobernador</string>
     <string name="io">Planificador E/S</string>
     <string name="sob">Aplicar al arranque</string>
     <string name="ok">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="mt_gov_ctrl">Ajustes del gobernador</string>
-    <string name="mpdecision">MPDECISION</string>
+    <string name="mpdecision">FICHERO MPDECISION</string>
     <!-- Otros ajustes -->
     <string name="prefcat_free_memory">MEMORIA LIBRE</string>
     <string name="prefcat_tweaks">CARGA RÁPIDA</string>
@@ -64,7 +64,7 @@ Translation by DaniPhii
     <string name="fast_charge_notification_title">¡Carga rápida activada!</string>
     <string name="fast_charge_notification_message">¡El teléfono solo se cargará!</string>
 
-    <!-- minfree -->
+    <!-- Umbrales de memoria -->
     <string name="prefcat_oom">MATADOR DE PROCESOS</string>
     <string name="title_foreground_app">Aplicaciones en segundo plano</string>
     <string name="title_visible_app">Aplicaciones visibles</string>
@@ -81,7 +81,7 @@ Translation by DaniPhii
     <string name="pt_aggressive">Agresivo</string>
     <string name="pt_veryaggressive">Muy agresivo</string>
 
-    <!-- do not kill proc -->
+    <!-- Procesos inmortales -->
     <string name="prefcat_user_proc">PROCESOS DE USUARIO INMORTALES</string>
     <string name="prefcat_sys_proc">PROCESOS DE SISTEMA INMORTALES</string>
     <string name="pt_user_proc">Activar</string>
@@ -92,28 +92,28 @@ Translation by DaniPhii
     <string name="ps_user_proc">Aplicaciones de usuario que el matador de procesos no cerrará (separados por comas)</string>
     <string name="ps_sys_proc">Aplicaciones de sistema que el matador de procesos no cerrará (separados por comas)</string>
     <string name="no_proc">Sin paquetes</string>
-    <!-- bln -->
-    <string name="prefcat_bln">NOTIFICACIÓN LUMINOSA</string>
-    <string name="pt_bln">Luz de notificación</string>
-    <!-- blx -->
+    <!-- Notificación  -->
+    <string name="prefcat_bln">NOTIFICACIONES</string>
+    <string name="pt_bln">Iluminar para notificar</string>
+    <!-- Battery Life eXtender -->
     <string name="blx_info">Sobre la funcionalidad Battery Life eXtender\nAutor: Ezekeel</string>
     <string name="prefcat_blx">BATTERY LIFE EXTENDER</string>
     <string name="pt_blx_boot">Aplicar al arranque</string>
     <string name="ps_blx_boot">Aplica el valor actual al arranque</string>
     <string name="blx_title">Límite de carga:</string>
-    <!-- dsync -->
+    <!-- Dynamic FSync -->
     <string name="dsync_info">Sobre la funcionalidad Dynamic FSync\nAutor: Paul Reioux (@faux123)</string>
     <string name="prefcat_dsync">DYNAMIC FSYNC</string>
     <string name="ps_dsync">Los valores actuales se aplicarán al arranque</string>
     <string name="pt_dsync">Dynamic FSync</string>
-    <!-- bl_timeout -->
+    <!-- Tiempo de suspensión -->
     <string name="prefcat_bltimeout">MODO DE SUSPENSIÓN</string>
     <string name="ps_bltimeout">%s ms</string>
     <string name="bltimeout_title">Modo de suspensión</string>
-    <!-- bl_touch -->
+    <!-- Iluminar pantalla -->
     <string name="prefcat_bltouch">ILUMINAR PANTALLA</string>
-    <string name="pt_bltouch">Iluminar pantalla</string>
-    <!-- pfk -->
+    <string name="pt_bltouch">Iluminar al tocar pantalla</string>
+    <!-- Phantom Key Presses Filter -->
     <string name="pfk_info">Sobre el módulo Phantom Key Presses Filter versión %s\nAutor: Cristoforo Cataldo (@Christopher83)</string>
     <string name="prefcat_pfk">PHANTOM KEY PRESSES FILTER</string>
     <string name="pt_home_enabled">Botón HOME</string>
@@ -127,13 +127,13 @@ Translation by DaniPhii
     <string name="menuback_first_err_wait_title">Tiempo de espera del primer error</string>
     <string name="menuback_last_err_wait_title">Tiempo de espera del último error</string>
     <string name="ps_pfk_set_on_boot">Si se activa, se aplicarán los valores actuales del PKF al arranque</string>
-    <!-- dynamic write back -->
+    <!-- Dynamic Dirty Page Writebacks -->
     <string name="dynamic_writeback_info">Sobre la funcionalidad Dynamic Dirty Page Writebacks\nAutor: Cristoforo Cataldo (@Christopher83)</string>
     <string name="dynamic_write_back_title">DYNAMIC DIRTY PAGE WRITEBACKS</string>
     <string name="pt_dynamic_write_back">Respuesta de suciedad dinámica</string>
     <string name="dynamic_writeback_active_title">Activación respuesta de suciedad (centisegundos)</string>
     <string name="dynamic_writeback_suspend_title">Suspensión respuesta de suciedad (centisegundos)</string>
-    <!-- -->
+    <!-- Tamaños a mostrar en MB-->
     <string name="size_25_mb">25 MB</string>
     <string name="size_50_mb">50 MB</string>
     <string name="size_75_mb">75 MB</string>
@@ -146,7 +146,7 @@ Translation by DaniPhii
     <string name="size_2048_kb">2048 KB</string>
     <string name="size_3072_kb">3072 KB</string>
     <string name="size_4096_kb">4096 KB</string>
-    <!-- Voltage control -->
+    <!-- Control del voltaje -->
     <string name="volt_info">¡Atención!\nAntes de activar la aplicación al arranque, asegúrate de que los valores\nno superan los valores máximos, hay riesgo de que se paralice el teléfono.</string>
     <string name="ps_volt_mhz_voltage">" Hz"</string>
     <string name="ps_volt_save">"Aplicar"</string>
@@ -159,7 +159,7 @@ Translation by DaniPhii
     <string name="current">mV actuales</string>
     <string name="saved">mV aplicados</string>
     <string name="not_supported">El kernel actual no es compatible con esta función</string>
-    <!-- VM settings -->
+    <!-- Ajustes de la máquina virtual -->
     <string name="ps_vm_set_on_boot">Se aplicarán los valores actuales en cada arranque</string>
     <string name="dirty_ratio_title">Índice de suciedad</string>
     <string name="dirty_background_title">Índice de suciedad en segundo plano</string>
@@ -169,7 +169,7 @@ Translation by DaniPhii
     <string name="overcommit_title">Índice de sobrecarga</string>
     <string name="swappiness_title">"Swappiness"</string>
     <string name="vfs_title">Presión caché VFS</string>
-    <!-- Time in state -->
+    <!-- Estadísticas -->
     <string name="time_in_state">ESTADÍSTICAS</string>
     <string name="unused_cpu_states">FRECUENCIAS NO USADAS</string>
     <string name="total_state_time">ESTADÍSTICAS TOTALES</string>
@@ -179,11 +179,11 @@ Translation by DaniPhii
         estadísticas.
     </string>
     <string name="deep_sleep">"Sueño profundo"</string>
-    <!-- CPU info -->
+    <!-- Información de CPU -->
     <string name="kernel_info">INFORMACIÓN DEL KERNEL LINUX</string>
     <string name="cpu_info">INFORMACIÓN DE CPU</string>
     <string name="mem_info">INFORMACIÓN DE LA MEMORIA</string>
-    <string name="first_run_title">Comprobando permisos de superusuario</string>
+    <string name="first_run_title">Comprobando permisos de superusuario…</string>
     <string name="su_success_title">¡Correcto!</string>
     <string name="su_failed_title">¡Algo fue mal!</string>
     <string name="first_run_message">La aplicación necesita comprobar los permisos de superusuario y
@@ -227,9 +227,9 @@ Translation by DaniPhii
     <string name="prefcat_residual_files">LIMPIAR ARCHIVOS RESIDUALES</string>
     <string name="residual_files_title">Hacer limpieza</string>
     <string name="btncleanall">Limpiar todo</string>
-    <string name="clean_files_msg">Los archivos residuarles de %s serán eliminados. ¿Continuar?</string>
+    <string name="clean_files_msg">Los archivos residuales de %s serán eliminados. ¿Continuar?</string>
     <string name="filesstr">archivo(s)</string>
-    <string name="no_residuals">No hay basura que limpiar</string>
+    <string name="no_residuals">No se necesita hacer limpieza</string>
 
     <string name="prefcat_optim_db">OPTIMIZAR BASES DE DATOS</string>
     <string name="optim_db_title">Optimizar las bases de datos</string>
@@ -245,7 +245,7 @@ Translation by DaniPhii
     </string-array>
     <string name="prefcat_fix_perms">REPARAR PERMISOS</string>
     <string name="fix_perms_title">Reparar permisos</string>
-    <string name="fix_perms_msg">La operación tardará unos minutos. ¿Continuar?</string>
+    <string name="fix_perms_msg">La operación puede tardar unos minutos. ¿Continuar?</string>
     <string name="preflogg_fix_perms">Crear un log de registro</string>
 
     <string name="free">libre %s</string>
@@ -264,7 +264,7 @@ Translation by DaniPhii
         <item>Llena</item>
         <item>No cargando</item>
     </string-array>
-    <!-- ksm -->
+    <!-- Kernel Samepage Merging -->
     <string name="prefcat_ksm">KERNEL SAMEPAGE MERGING</string>
     <string name="pt_run_ksm">Activar KSM</string>
     <string name="ksm_adv_title">Ajustes</string>
@@ -276,7 +276,7 @@ Translation by DaniPhii
     <string name="ksm_pagtoscan">Páginas a escanear:</string>
     <string name="ksm_sleep">Suspensión (ms):</string>
     <string name="uksm">Ultra KSM detectado</string>
-    <!-- freezer -->
+    <!-- Congelador de aplicaciones -->
     <string name="prefcat_freezer">CONGELAR/DESCONGELAR APLICACIONES</string>
     <string name="pt_freeze">Congelar aplicación</string>
     <string name="pt_unfreeze">Descongelar aplicación</string>
@@ -286,7 +286,7 @@ Translation by DaniPhii
     <string name="mt_user_packs">Aplicaciones de usuario</string>
     <string name="freeze_msg">%s se congelará. ¿Continuar?</string>
     <string name="unfreeze_msg">%s se descongelará. ¿Continuar?</string>
-    <!-- zRam -->
+    <!-- zRAM -->
     <string name="prefcat_zram">zRAM</string>
     <string name="pt_run_zram">Activar zRAM</string>
     <string name="zram_set_title">Ajustes</string>
@@ -301,7 +301,7 @@ Translation by DaniPhii
     <string name="mt_stop">Detener</string>
     <string name="zram_num_reads">Número de lecturas</string>
     <string name="zram_num_writes">Número de escrituras</string>
-    <!-- builprop -->
+    <!-- Ajustes build.prop -->
     <string name="prefcat_build_prop">BUILD.PROP</string>
     <string name="build_prop_title">Editar build.prop</string>
     <string name="add_prop_title">Añadir parámetro</string>
@@ -309,23 +309,23 @@ Translation by DaniPhii
     <string name="prop_name">Nombre</string>
     <string name="prop_val">Valor</string>
     <string name="prop_preset">Preajuste</string>
-    <string name="prop_backup">La copia del build.prop actual se creó en %s</string>
+    <string name="prop_backup">La copia del fichero build.prop actual se creó en %s</string>
     <string name="prop_no_backup">¡No se encuentra la copia de seguridad!</string>
-    <string name="prop_restore_msg">El build.prop se restaurará. Deberás reiniciar el sistema para aplicar los cambios. ¿Continuar?</string>
+    <string name="prop_restore_msg">El fichero build.prop se restaurará. Deberás reiniciar el sistema para aplicar los cambios. ¿Continuar?</string>
     <string name="filter">Filtro</string>
     <string name="fmt_backup">Copia de seguridad</string>
     <string name="del_prop_title">Borrar parámetro</string>
     <string name="del_prop_msg">%s se borrará. ¿Continuar?</string>
     <string name="ps_build_prop">Es necesario un reinicio para aplicar los cambios</string>
-    <!-- sysctl -->
+    <!-- SysCtl -->
     <string name="prefcat_sysctl">SYSCTL</string>
     <string name="sysctl_title">Editar SysCtl</string>
-    <!-- Vibration Intensity -->
+    <!-- Intensidad de la vibración -->
     <string name="prefcat_viber">VIBRACIÓN</string>
-    <string name="viber_title">Control de intensidad</string>
-    <!-- PC Settings -->
+    <string name="viber_title">Controlar intensidad</string>
+    <!-- Otros ajustes -->
     <string name="pt_use_light_theme">Usar tema claro</string>
-    <string name="ps_use_light_theme">Si se activa, Performance Control usará un tema de color blanco y letras negras</string>
+    <string name="ps_use_light_theme">Si se activa, Performance Control usará un tema de color claro con texto oscuro.</string>
     <string name="pt_widget_bg_color">Color de fondo del widget</string>
     <string name="pt_widget_text_color">Color de texto del widget</string>
     <string name="pt_ver">"Versión: "</string>
