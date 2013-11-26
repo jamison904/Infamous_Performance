@@ -150,7 +150,7 @@ public class Helpers implements Constants {
 	                br.close();
 	            }
 	        } catch (Exception e) {
-	            Log.e(TAG, "IO Exception when reading sys file", e);
+	            //Log.e(TAG, "IO Exception when reading sys file", e);
 	            // attempt to do magic!
 	            return readFileViaShell(fname, true);
 	        }
