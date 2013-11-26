@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StatFs;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -234,12 +235,19 @@ public class DiskInfo extends Fragment implements Constants {
         }
     }
     public void set_ex_info(String part,TextView t2,TextView t3,TextView t4){
-        CMDProcessor.CommandResult cr=null;
-        cr=new CMDProcessor().sh.runWaitFor("busybox echo `mount | busybox grep "+part+" | busybox awk '{print $1,$3,$4}'`" );
-        if(cr.success()){
-            t2.setText(cr.stdout.split(" ")[2].split(",")[0].toUpperCase());
-            t3.setText(cr.stdout.split(" ")[0]);
-            t4.setText(cr.stdout.split(" ")[1].toUpperCase());
+        if(part.equals(internalsd)||part.equals(externalsd)){
+            //t2.setText("");
+            t3.setText(part);
+            //t4.setText("");
+        }
+        else{
+            CMDProcessor.CommandResult cr=null;
+            cr=new CMDProcessor().sh.runWaitFor("busybox echo `mount | busybox grep "+part+" | busybox awk '{print $1,$3,$4}'`" );
+            if(cr.success()){
+                t2.setText(cr.stdout.split(" ")[2].split(",")[0].toUpperCase());
+                t3.setText(cr.stdout.split(" ")[0]);
+                t4.setText(cr.stdout.split(" ")[1].toUpperCase());
+            }
         }
     }
     public void loadData(){
@@ -248,23 +256,23 @@ public class DiskInfo extends Fragment implements Constants {
         set_part_info("/data","Data",dataname,datatotal,dataused,datafree,databar,ldata);
         set_part_info("/cache","Cache",cachename,cachetotal,cacheused,cachefree,cachebar,lcache);
 
-        cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox mount | busybox egrep -v \"asec|android_secure|sdcard1|external_sd|sd-ext\" | busybox egrep -i \"(sdcard|sdcard0)\" | busybox awk '{print $3}'`" );
-        Log.d(TAG, "SDcard1 detected: "+cr.stdout);
-        Log.d(TAG, "error detected: "+cr.stderr);
-
-        if(cr.success() && set_part_info(cr.stdout,"SD card 1",sd1name,sd1total,sd1used,sd1free,sd1bar,lsd1)){
-            internalsd=cr.stdout;
+        final String state = Environment.getExternalStorageState();
+        if ( Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state) ) {
+            internalsd = Environment.getExternalStorageDirectory().getAbsolutePath();
+            set_part_info(internalsd,"SD card 1",sd1name,sd1total,sd1used,sd1free,sd1bar,lsd1);
+            Log.d(TAG, "SDCard 1: " + internalsd);
         }
-
-        String sep="";
-        if(!internalsd.equals("")) sep="|";
-
-        cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox mount | busybox egrep -v \"asec|android_secure"+sep+internalsd+"\" | busybox egrep -i \"(external_sd|sdcard1|sd-ext)\" | busybox awk '{print $3}'`" );
-        Log.d(TAG, "SDcard2 detected: "+cr.stdout);
-        Log.d(TAG, "error detected: "+cr.stderr);
-
-        if(cr.success()&&set_part_info(cr.stdout,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2)){
-            externalsd=cr.stdout;
+        final String externalstorage[]=System.getenv("SECONDARY_STORAGE").split(":");
+        for ( final String dirs : externalstorage ) {
+            final File dir= new File(dirs);
+            if ( dir.isDirectory() && dir.canRead() && (dir.listFiles().length > 0) ) {
+                externalsd=dirs;
+                break;
+            }
+        }
+        if(externalsd!=""){
+            set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
+            Log.d(TAG, "SDCard 2: " + externalsd );
         }
 
     }
