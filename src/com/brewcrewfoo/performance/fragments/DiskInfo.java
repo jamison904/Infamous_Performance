@@ -236,9 +236,7 @@ public class DiskInfo extends Fragment implements Constants {
     }
     public void set_ex_info(String part,TextView t2,TextView t3,TextView t4){
         if(part.equals(internalsd)||part.equals(externalsd)){
-            //t2.setText("");
             t3.setText(part);
-            //t4.setText("");
         }
         else{
             CMDProcessor.CommandResult cr=null;
