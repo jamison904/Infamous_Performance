@@ -56,7 +56,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
         for (int awi : appWidgetIds) {
-            String max;
+            /*String max;
             String min;
             if(new File(DYN_MAX_FREQ_PATH).exists()){
                 max = Helpers.toMHz(Helpers.readOneLine(DYN_MAX_FREQ_PATH));
@@ -70,16 +70,21 @@ public class PCWidget extends AppWidgetProvider implements Constants {
             else{
                 min = Helpers.toMHz(Helpers.readOneLine(MIN_FREQ_PATH));
             }
-            String gov = Helpers.readOneLine(GOVERNOR_PATH);
-            String io = Helpers.getIOScheduler();
-            onUpdateWidget(context, appWidgetManager, awi, max, min, gov, io);
+            */
+            if(MainActivity.mMaxFreqSetting==null) MainActivity.mMaxFreqSetting=Helpers.getMaxSpeed(0);
+            if(MainActivity.mMinFreqSetting==null) MainActivity.mMinFreqSetting=Helpers.getMinSpeed(0);
+            if(MainActivity.mCurGovernor==null) MainActivity.mCurGovernor = Helpers.readOneLine(GOVERNOR_PATH);
+            if(MainActivity.mCurIO==null) MainActivity.mCurIO = Helpers.getIOScheduler();
+            //String io = Helpers.getIOScheduler();
+            //if((MainActivity.mMaxFreqSetting!=null)&&(MainActivity.mMinFreqSetting!=null))
+            onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(MainActivity.mMaxFreqSetting), Helpers.toMHz(MainActivity.mMinFreqSetting), MainActivity.mCurGovernor, MainActivity.mCurIO);
         }
     }
 
     public void onUpdateWidget(Context context,AppWidgetManager appWidgetManager, int appWidgetId, String max,String min, String gov, String io) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.widget);
-        int bgColor = mPreferences.getInt(PREF_WIDGET_BG_COLOR, 0xff000000);
+        int bgColor = mPreferences.getInt(PREF_WIDGET_BG_COLOR, 0x00000000);
         int textColor = mPreferences.getInt(PREF_WIDGET_TEXT_COLOR, 0xff808080);
         views.setImageViewBitmap(R.id.widget_bg, Helpers.getBackground(bgColor));
 

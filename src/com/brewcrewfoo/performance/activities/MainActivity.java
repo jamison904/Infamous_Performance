@@ -51,6 +51,10 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     private static boolean mVoltageExists;
     private boolean mIsLightTheme;
     public static Boolean thide=false;
+    public static String mCurGovernor;
+    public static String mCurIO;
+    public static String mMaxFreqSetting;
+    public static String mMinFreqSetting;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

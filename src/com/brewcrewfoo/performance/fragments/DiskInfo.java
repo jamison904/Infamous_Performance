@@ -268,7 +268,7 @@ public class DiskInfo extends Fragment implements Constants {
                 break;
             }
         }
-        if(externalsd!=""){
+        if(!externalsd.equals("")){
             set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
             Log.d(TAG, "SDCard 2: " + externalsd );
         }
