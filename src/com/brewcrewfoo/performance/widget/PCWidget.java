@@ -55,6 +55,8 @@ public class PCWidget extends AppWidgetProvider implements Constants {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
+        int i=0;
+        int nCpus=Helpers.getNumOfCpus();
         for (int awi : appWidgetIds) {
             /*String max;
             String min;
@@ -71,23 +73,26 @@ public class PCWidget extends AppWidgetProvider implements Constants {
                 min = Helpers.toMHz(Helpers.readOneLine(MIN_FREQ_PATH));
             }
             */
-            if(MainActivity.mMaxFreqSetting==null) MainActivity.mMaxFreqSetting=Helpers.getMaxSpeed(0);
-            if(MainActivity.mMinFreqSetting==null) MainActivity.mMinFreqSetting=Helpers.getMinSpeed(0);
+
+            if(MainActivity.mMaxFreqSetting==null) MainActivity.mMaxFreqSetting=Helpers.getMaxSpeed(i);
+            if(MainActivity.mMinFreqSetting==null) MainActivity.mMinFreqSetting=Helpers.getMinSpeed(i);
             if(MainActivity.mCurGovernor==null) MainActivity.mCurGovernor = Helpers.readOneLine(GOVERNOR_PATH);
             if(MainActivity.mCurIO==null) MainActivity.mCurIO = Helpers.getIOScheduler();
             //String io = Helpers.getIOScheduler();
             //if((MainActivity.mMaxFreqSetting!=null)&&(MainActivity.mMinFreqSetting!=null))
-            onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(MainActivity.mMaxFreqSetting), Helpers.toMHz(MainActivity.mMinFreqSetting), MainActivity.mCurGovernor, MainActivity.mCurIO);
+            onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(MainActivity.mMaxFreqSetting), Helpers.toMHz(MainActivity.mMinFreqSetting), MainActivity.mCurGovernor, MainActivity.mCurIO,(i+1));
+            if(i>=(nCpus-1)) i=0;
+            else  i++;
         }
     }
 
-    public void onUpdateWidget(Context context,AppWidgetManager appWidgetManager, int appWidgetId, String max,String min, String gov, String io) {
+    public void onUpdateWidget(Context context,AppWidgetManager appWidgetManager, int appWidgetId, String max,String min, String gov, String io,int curcpu) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.widget);
         int bgColor = mPreferences.getInt(PREF_WIDGET_BG_COLOR, 0x00000000);
         int textColor = mPreferences.getInt(PREF_WIDGET_TEXT_COLOR, 0xff808080);
         views.setImageViewBitmap(R.id.widget_bg, Helpers.getBackground(bgColor));
-
+        views.setTextViewText(R.id.curcpu, "CPU "+curcpu);
         views.setTextViewText(R.id.max, max);
         views.setTextViewText(R.id.min, min);
         views.setTextViewText(R.id.gov, gov);
