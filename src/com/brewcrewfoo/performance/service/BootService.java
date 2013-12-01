@@ -98,15 +98,11 @@ public class BootService extends Service implements Constants {
                     min = preferences.getString(PREF_MIN_CPU+i, Helpers.readOneLine(MIN_FREQ_PATH).replace("cpu0","cpu"+i));
                     if(new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists() && i>0){
 
-                        if(preferences.getBoolean("cpuon"+i, false)){
+                        if(preferences.getString("cpuon"+i, "0").equals("1")){
                             sb.append("busybox chmod 644 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                             sb.append("busybox echo \"1\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                             sb.append("busybox chmod 444 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                         }
-                        //else{
-                        //    sb.append("busybox echo \"0\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-                        //}
-
                     }
 
                     sb.append("busybox echo ").append(max).append(" > ").append(MAX_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");

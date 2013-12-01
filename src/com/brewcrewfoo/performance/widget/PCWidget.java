@@ -58,14 +58,12 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         int nCpus=Helpers.getNumOfCpus();
         for (int awi : appWidgetIds) {
             if(MainActivity.mMaxFreqSetting==null || MainActivity.mMinFreqSetting==null || MainActivity.mCurGovernor==null || MainActivity.mCurIO==null){
-                Helpers.get_assetsScript("utils",context,"","");
-                new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );
-                CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor(context.getFilesDir()+"/utils -getcpu "+i);
-                if(cr.success()){
-                    MainActivity.mMinFreqSetting=cr.stdout.split(":")[0];
-                    MainActivity.mMaxFreqSetting=cr.stdout.split(":")[1];
-                    MainActivity.mCurGovernor=cr.stdout.split(":")[2];
-                    MainActivity.mCurIO=cr.stdout.split(":")[3];
+                final String v=Helpers.readCPU(context,i);
+                if(v!=null){
+                    MainActivity.mMinFreqSetting=v.split(":")[0];
+                    MainActivity.mMaxFreqSetting=v.split(":")[1];
+                    MainActivity.mCurGovernor=v.split(":")[2];
+                    MainActivity.mCurIO=v.split(":")[3];
                 }
             }
             onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(MainActivity.mMaxFreqSetting), Helpers.toMHz(MainActivity.mMinFreqSetting), MainActivity.mCurGovernor, MainActivity.mCurIO,(i+1));
@@ -91,7 +89,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         views.setTextColor(R.id.gov, textColor);
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.putExtra("cpu",curcpu);
+        intent.putExtra("cpu",curcpu-1);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_bg, pendingIntent);

@@ -56,6 +56,7 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public static String mCurIO;
     public static String mMaxFreqSetting;
     public static String mMinFreqSetting;
+    public static String mCPUon;
     public static int curcpu=0;
 
     @Override

@@ -507,6 +507,15 @@ public class Helpers implements Constants {
                 smenu.add(0,idx +i+1, 0, vp.getAdapter().getPageTitle(i));
         }
     }
+
+    public static String readCPU(Context context,int i){
+        Helpers.get_assetsScript("utils",context,"","");
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );
+        CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor(context.getFilesDir()+"/utils -getcpu "+i);
+        if(cr.success()) return cr.stdout;
+        else return null;
+    }
+
     public static String bln_path() {
         if (new File("/sys/class/misc/backlightnotification/enabled").exists()) {
             return "/sys/class/misc/backlightnotification/enabled";
