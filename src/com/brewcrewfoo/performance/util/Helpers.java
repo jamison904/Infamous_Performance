@@ -422,7 +422,7 @@ public class Helpers implements Constants {
 
 	public static String shExec(StringBuilder s,Context c,Boolean su){
         get_assetsScript("run", c, "", s.toString());
-        new CMDProcessor().su.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
         CMDProcessor.CommandResult cr = null;
         if(su)
 		    cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
@@ -566,38 +566,5 @@ public class Helpers implements Constants {
             return null;
         }
     }
-    public static String getMaxSpeed(int i){
-        if (new File(TEGRA_MAX_FREQ_PATH).exists()) {
-            String curTegraMaxSpeed = Helpers.readOneLine(TEGRA_MAX_FREQ_PATH);
-            int curTegraMax = 0;
-            try {
-                curTegraMax = Integer.parseInt(curTegraMaxSpeed);
-                if (curTegraMax > 0) {
-                    return Integer.toString(curTegraMax);
-                }
-            }
-            catch (NumberFormatException ex) {
-                return "0";
-            }
-        }
-        else{
-            if(new File(DYN_MAX_FREQ_PATH).exists()){
-                return Helpers.readOneLine(DYN_MAX_FREQ_PATH);
-            }
-            else{
-                return Helpers.readOneLine(MAX_FREQ_PATH.replace("cpu0","cpu"+i));
-            }
-        }
-        return "0";
-    }
-    public static String getMinSpeed(int i){
-        String mCurMinSpeed;
-        if(new File(DYN_MIN_FREQ_PATH).exists()){
-            mCurMinSpeed = Helpers.readOneLine(DYN_MIN_FREQ_PATH);
-        }
-        else{
-            mCurMinSpeed = Helpers.readOneLine(MIN_FREQ_PATH.replace("cpu0","cpu"+i));
-        }
-        return mCurMinSpeed;
-    }
+
 }

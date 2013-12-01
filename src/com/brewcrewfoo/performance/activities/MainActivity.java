@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public static String mCurIO;
     public static String mMaxFreqSetting;
     public static String mMinFreqSetting;
+    public static int curcpu=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,8 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
         mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
         mPagerTabStrip.setDrawFullUnderline(true);
-
+        Intent i=getIntent();
+        curcpu=i.getIntExtra("cpu",0);
         checkForSu();
     }
 

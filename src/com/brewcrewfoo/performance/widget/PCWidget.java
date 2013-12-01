@@ -30,10 +30,9 @@ import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.MainActivity;
+import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
-
-import java.io.File;
 
 public class PCWidget extends AppWidgetProvider implements Constants {
 
@@ -58,28 +57,17 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         int i=0;
         int nCpus=Helpers.getNumOfCpus();
         for (int awi : appWidgetIds) {
-            /*String max;
-            String min;
-            if(new File(DYN_MAX_FREQ_PATH).exists()){
-                max = Helpers.toMHz(Helpers.readOneLine(DYN_MAX_FREQ_PATH));
+            if(MainActivity.mMaxFreqSetting==null || MainActivity.mMinFreqSetting==null || MainActivity.mCurGovernor==null || MainActivity.mCurIO==null){
+                Helpers.get_assetsScript("utils",context,"","");
+                new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );
+                CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor(context.getFilesDir()+"/utils -getcpu "+i);
+                if(cr.success()){
+                    MainActivity.mMinFreqSetting=cr.stdout.split(":")[0];
+                    MainActivity.mMaxFreqSetting=cr.stdout.split(":")[1];
+                    MainActivity.mCurGovernor=cr.stdout.split(":")[2];
+                    MainActivity.mCurIO=cr.stdout.split(":")[3];
+                }
             }
-            else{
-                max = Helpers.toMHz(Helpers.readOneLine(MAX_FREQ_PATH));
-            }
-            if(new File(DYN_MIN_FREQ_PATH).exists()){
-                min = Helpers.toMHz(Helpers.readOneLine(DYN_MIN_FREQ_PATH));
-            }
-            else{
-                min = Helpers.toMHz(Helpers.readOneLine(MIN_FREQ_PATH));
-            }
-            */
-
-            if(MainActivity.mMaxFreqSetting==null) MainActivity.mMaxFreqSetting=Helpers.getMaxSpeed(i);
-            if(MainActivity.mMinFreqSetting==null) MainActivity.mMinFreqSetting=Helpers.getMinSpeed(i);
-            if(MainActivity.mCurGovernor==null) MainActivity.mCurGovernor = Helpers.readOneLine(GOVERNOR_PATH);
-            if(MainActivity.mCurIO==null) MainActivity.mCurIO = Helpers.getIOScheduler();
-            //String io = Helpers.getIOScheduler();
-            //if((MainActivity.mMaxFreqSetting!=null)&&(MainActivity.mMinFreqSetting!=null))
             onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(MainActivity.mMaxFreqSetting), Helpers.toMHz(MainActivity.mMinFreqSetting), MainActivity.mCurGovernor, MainActivity.mCurIO,(i+1));
             if(i>=(nCpus-1)) i=0;
             else  i++;
@@ -92,7 +80,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         int bgColor = mPreferences.getInt(PREF_WIDGET_BG_COLOR, 0x00000000);
         int textColor = mPreferences.getInt(PREF_WIDGET_TEXT_COLOR, 0xff808080);
         views.setImageViewBitmap(R.id.widget_bg, Helpers.getBackground(bgColor));
-        views.setTextViewText(R.id.curcpu, "CPU "+curcpu);
+        views.setTextViewText(R.id.curcpu, "CPU " + curcpu);
         views.setTextViewText(R.id.max, max);
         views.setTextViewText(R.id.min, min);
         views.setTextViewText(R.id.gov, gov);
@@ -103,6 +91,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         views.setTextColor(R.id.gov, textColor);
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.putExtra("cpu",curcpu);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_bg, pendingIntent);

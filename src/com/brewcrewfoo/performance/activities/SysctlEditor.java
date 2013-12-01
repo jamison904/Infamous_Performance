@@ -94,7 +94,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/"+mod+".conf" );
         }
         Helpers.get_assetsScript("utils",context,"","");
-        new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
