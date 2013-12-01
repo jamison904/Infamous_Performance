@@ -112,7 +112,12 @@ public class HideTabs extends Activity implements Constants, ActivityThemeChange
                     public void onClick(View v) {
                         CheckBox cb = (CheckBox) v ;
                         Tab t = (Tab) cb.getTag();
-                        mPreferences.edit().putBoolean(cb.getText().toString(),cb.isChecked()).apply();
+                        if(cb.isChecked()){
+                            mPreferences.edit().remove(cb.getText().toString()).apply();
+                        }
+                        else{
+                            mPreferences.edit().putBoolean(cb.getText().toString(),cb.isChecked()).apply();
+                        }
                         t.setSelected(cb.isChecked());
                         MainActivity.thide=true;
                     }

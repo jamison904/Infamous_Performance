@@ -211,7 +211,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                         final String r=Helpers.readCPU(context,i);
                         if(v!=null){
                             editor.putString(PREF_MIN_CPU+i, r.split(":")[0]);
-                            editor.putString(PREF_MAX_CPU+i, r.split(":")[0]);
+                            editor.putString(PREF_MAX_CPU+i, r.split(":")[1]);
                             editor.putString(PREF_GOV, r.split(":")[2]);
                             editor.putString(PREF_IO, r.split(":")[3]);
                             editor.putString("cpuon" + i, r.split(":")[4]);
