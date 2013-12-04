@@ -30,7 +30,6 @@ import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.MainActivity;
-import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 

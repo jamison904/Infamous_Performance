@@ -6,7 +6,6 @@ package com.brewcrewfoo.performance.activities;
 import java.util.Arrays;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;

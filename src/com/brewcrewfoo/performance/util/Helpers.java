@@ -258,12 +258,7 @@ public class Helpers implements Constants {
      * @return available performance scheduler
      */
     public static Boolean GovernorExist(String gov) {
-		if(readOneLine(GOVERNORS_LIST_PATH).indexOf(gov)>-1){
-			return true;
-		}
-		else{
-			return false;
-		}
+        return readOneLine(GOVERNORS_LIST_PATH).indexOf(gov) > -1;
     }
 
     /**
@@ -339,7 +334,7 @@ public class Helpers implements Constants {
      */
     public static String toMHz(String mhzString) {
         if(mhzString==null) return "";
-        else return new StringBuilder().append(Integer.parseInt(mhzString) / 1000).append(" MHz").toString();
+        else return String.valueOf(Integer.parseInt(mhzString) / 1000) + " MHz";
     }
 
     /**
@@ -398,8 +393,7 @@ public class Helpers implements Constants {
         CMDProcessor.CommandResult cr = null;
         cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox ps | busybox grep "+b+" | busybox grep -v \"busybox grep "+b+"\" | busybox awk '{print $1}'`");
         Log.d(TAG, "Module: "+cr.stdout);
-        if (cr.success() && !cr.stdout.equals("")){ return  true; }
-        else{ return false;}
+        return cr.success() && !cr.stdout.equals("");
     }
 
     public static long getTotMem() {

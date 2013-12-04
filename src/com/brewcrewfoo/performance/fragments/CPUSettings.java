@@ -242,10 +242,10 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 startActivity(intent);
                 break;
             case R.id.gov_settings:
-                for(byte i=0;i<supported.length;i++){
-                    if(supported[i].equals(MainActivity.mCurGovernor)){
+                for (String aSupported : supported) {
+                    if (aSupported.equals(MainActivity.mCurGovernor)) {
                         intent = new Intent(context, GovSetActivity.class);
-                        intent.putExtra("cpu",Integer.toString(MainActivity.curcpu));
+                        intent.putExtra("cpu", Integer.toString(MainActivity.curcpu));
                         startActivity(intent);
                         break;
                     }

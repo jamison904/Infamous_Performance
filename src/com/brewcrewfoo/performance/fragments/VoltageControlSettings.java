@@ -77,8 +77,8 @@ public class VoltageControlSettings extends Fragment implements Constants {
 
 
         if (mVoltages.isEmpty()) {
-            ((TextView) view.findViewById(R.id.emptyList)).setVisibility(View.VISIBLE);
-            ((RelativeLayout) view.findViewById(R.id.BottomBar)).setVisibility(View.GONE);
+            (view.findViewById(R.id.emptyList)).setVisibility(View.VISIBLE);
+            (view.findViewById(R.id.BottomBar)).setVisibility(View.GONE);
         }
 
         setOnBoot.setChecked(mPreferences.getBoolean(VOLTAGE_SOB, false));
@@ -112,7 +112,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
                     }
                 });
 
-        ((Button) view.findViewById(R.id.applyBtn)).setOnClickListener(new OnClickListener() {
+        (view.findViewById(R.id.applyBtn)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 			final StringBuilder sb = new StringBuilder();
@@ -120,9 +120,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
 				for (final Voltage volt : mVoltages) {
 					if(!volt.getSavedMV().equals(volt.getCurrentMv())){
 						for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-							sb.append("busybox echo "
-								+ volt.getFreq()+" "+volt.getSavedMV() + " > "
-								+ Helpers.getVoltagePath().replace("cpu0","cpu" + i) + " \n");
+							sb.append("busybox echo ").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(" \n");
 						}
 					}
 				}
@@ -133,9 +131,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
 					b.append(volt.getSavedMV()).append(" ");
 				}
 				for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-					sb.append("busybox echo "
-					+ b.toString() + " > "
-					+ Helpers.getVoltagePath().replace("cpu0","cpu" + i) + " \n");
+					sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(" \n");
 				}
 			}
 			Helpers.shExec(sb,context,true);

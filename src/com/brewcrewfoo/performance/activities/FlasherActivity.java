@@ -103,7 +103,7 @@ public class FlasherActivity extends Activity implements Constants, ActivityThem
 
     private static String getValue(String tag, org.w3c.dom.Element element) {
         NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
-        Node node = (Node) nodes.item(0);
+        Node node = nodes.item(0);
         return node.getNodeValue();
     }
 

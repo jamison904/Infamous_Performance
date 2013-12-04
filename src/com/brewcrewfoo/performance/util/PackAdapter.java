@@ -46,7 +46,7 @@ public class PackAdapter extends BaseAdapter {
     }
 
     public String getItem(int position) {
-        return pList.get(position).toString();
+        return pList.get(position);
     }
 
     public long getItemId(int position) {

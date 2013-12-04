@@ -180,7 +180,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         else{
             int maxdisk = (int) Helpers.getTotMem() / 1024;
-            int curdisk=mPreferences.getInt(PREF_ZRAM,(int) maxdisk /2);
+            int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
             mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
         }
     }
@@ -364,7 +364,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                         break;
                     case 2:
                         int maxdisk = (int) Helpers.getTotMem() / 1024;
-                        int curdisk=mPreferences.getInt(PREF_ZRAM,(int) maxdisk /2);
+                        int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
                         mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
                         break;
                 }
