@@ -75,7 +75,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
     public void onUpdateWidget(Context context,AppWidgetManager appWidgetManager, int appWidgetId, String max,String min, String gov, String io,int curcpu) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.widget);
-        int bgColor = mPreferences.getInt(PREF_WIDGET_BG_COLOR, 0x00000000);
+        int bgColor = mPreferences.getInt(PREF_WIDGET_BG_COLOR, 0xff000000);
         int textColor = mPreferences.getInt(PREF_WIDGET_TEXT_COLOR, 0xff808080);
         views.setImageViewBitmap(R.id.widget_bg, Helpers.getBackground(bgColor));
         views.setTextViewText(R.id.curcpu, "CPU " + curcpu);
