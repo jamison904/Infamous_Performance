@@ -329,9 +329,9 @@ public class BootService extends Service implements Constants {
     	@Override
     	protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            Helpers.updateAppWidget(c);
             servicesStarted = true;
             stopSelf();
+            Helpers.updateAppWidget(c);
         }
 	}
 
