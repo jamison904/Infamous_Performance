@@ -178,7 +178,7 @@ public interface Constants {
     public static final String PREF_UNFRREZE = "unfreeze_packs";
 
     //zRam
-    public static final String ISZRAM = "busybox echo `busybox zcat /proc/config.gz | busybox grep ZRAM | busybox grep -v ^#'`";
+    public static final String ISZRAM = "busybox echo `busybox zcat /proc/config.gz | busybox grep ZRAM | busybox grep -v '^#'`";
     public static final String ZRAM_DEV = "/dev/block/zram0";
     public static final String ZRAM_SYS = "/sys/block/zram0";
     public static final String ZRAM_SIZE_PATH = "/sys/block/zram0/disksize";

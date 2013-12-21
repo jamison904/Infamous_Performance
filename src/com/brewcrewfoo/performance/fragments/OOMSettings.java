@@ -174,7 +174,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         ispm=(!Helpers.binExist("pm").equals(NOT_FOUND));
 
-        if(!new File(ZRAM_SYS).exists() && !new File("/system/lib/modules/zram.ko").exists()){
+        if(!Helpers.isZRAM()){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("zram");
             getPreferenceScreen().removePreference(hideCat);
         }

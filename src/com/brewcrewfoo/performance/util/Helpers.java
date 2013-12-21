@@ -413,7 +413,11 @@ public class Helpers implements Constants {
     public static boolean showBattery() {
 	    return ((new File(BLX_PATH).exists()) || (fastcharge_path()!=null));
     }
-
+    public static boolean isZRAM() {
+        CMDProcessor.CommandResult cr =new CMDProcessor().sh.runWaitFor(ISZRAM);
+        if(cr.success() && !cr.stdout.equals("")) return true;
+        return false;
+    }
 	public static String shExec(StringBuilder s,Context c,Boolean su){
         get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
