@@ -174,7 +174,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         ispm=(!Helpers.binExist("pm").equals(NOT_FOUND));
 
-        if(!new File(ZRAM_SYS).exists()){
+        if(!new File(ZRAM_SYS).exists() && !new File("/system/lib/modules/zram.ko").exists()){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("zram");
             getPreferenceScreen().removePreference(hideCat);
         }
@@ -333,6 +333,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             startActivityForResult(new Intent(getActivity(), KSMActivity.class), 1);
         }
         else if (preference.equals(mZRAMsettings)){
+
             startActivityForResult(new Intent(getActivity(), ZramActivity.class), 1);
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);

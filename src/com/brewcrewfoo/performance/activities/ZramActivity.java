@@ -56,6 +56,9 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         setTheme();
         setContentView(R.layout.zram_settings);
 
+        if(new File("/system/lib/modules/zram.ko").exists()){
+            new CMDProcessor().su.runWaitFor("busybox insmod /system/lib/modules/zram.ko");
+        }
         nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(2);
 
@@ -208,7 +211,8 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     }
     protected Handler mCurHandler = new Handler() {
         public void handleMessage(Message msg) {
-            if (ist1) t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)))));
+            //final String v=(String) msg.obj;
+            if (ist1) t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0", "zram" + curcpu)))));
             if (ist3) t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)))));
             if (ist5) t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
             if(ist1&&ist3&&ist5){
@@ -268,9 +272,11 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 sb.append("busybox echo 1 > ").append(ZRAM_RESET_PATH.replace("zram0", "zram" + i)).append(";\n");
                 sb.append("busybox echo 0 > ").append(ZRAM_RESET_PATH.replace("zram0", "zram" + i)).append(";\n");
             }
-            sb.append("busybox modprobe -r zram 2>/dev/null;\n");
+            //sb.append("sleep 1;\n");
+            //sb.append("busybox modprobe -r zram 2>/dev/null;\n");
+            //sb.append("busybox rmmod zram;\n");
             Helpers.shExec(sb,context,true);
-            return null;
+            return "";
         }
         @Override
         protected void onPostExecute(String result) {
@@ -284,26 +290,24 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
             else {
                 start_btn.setText(getString(R.string.mt_start));
                 mdisksize.setEnabled(true);
+                if (mCurThread != null) {
+                    if (mCurThread.isAlive()) {
+                        mCurThread.interrupt();
+                        try {
+                            mCurThread.join();
+                            mCurThread=null;
+                        }
+                        catch (InterruptedException e) {
+                        }
+                    }
+                }
             }
-            if (mCurThread == null) {
-                mCurThread = new CurThread();
-                mCurThread.start();
-            }
+
         }
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(ZramActivity.this, null, getString(R.string.wait));
-            if (mCurThread != null) {
-                if (mCurThread.isAlive()) {
-                    mCurThread.interrupt();
-                    try {
-                        mCurThread.join();
-                        mCurThread=null;
-                    }
-                    catch (InterruptedException e) {
-                    }
-                }
-            }
+
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -318,7 +322,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
             final StringBuilder sb = new StringBuilder();
             sb.append("zramstart ").append(ncpus).append(" ").append(v).append(";\n");
             Helpers.shExec(sb,context,true);
-            return null;
+            return "";
         }
         @Override
         protected void onPostExecute(String result) {
@@ -328,11 +332,16 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
             if (is_zram_on()) {
                 start_btn.setText(getString(R.string.mt_stop));
                 mdisksize.setEnabled(false);
+                if (mCurThread == null) {
+                    mCurThread = new CurThread();
+                    mCurThread.start();
+                }
             }
             else {
                 start_btn.setText(getString(R.string.mt_start));
                 mdisksize.setEnabled(true);
             }
+
         }
         @Override
         protected void onPreExecute() {

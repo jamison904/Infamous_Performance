@@ -2,6 +2,9 @@
 zramstart(){
 cpus=$1;
 val=$2;
+if busybox [ -f /system/lib/modules/zram.ko ]; then
+    busybox insmod /system/lib/modules/zram.ko;
+fi;
 busybox modprobe zram zram_num_devices=$cpus 2>/dev/null;
 num_cpus=`busybox expr $cpus - 1`;
 for i in `busybox seq 0 $num_cpus`; do
