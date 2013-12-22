@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -51,6 +52,12 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     private static boolean mVoltageExists;
     private boolean mIsLightTheme;
     public static Boolean thide=false;
+    public static String mCurGovernor;
+    public static String mCurIO;
+    public static String mMaxFreqSetting;
+    public static String mMinFreqSetting;
+    public static String mCPUon;
+    public static int curcpu=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +77,8 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
         mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
         mPagerTabStrip.setDrawFullUnderline(true);
-
+        Intent i=getIntent();
+        curcpu=i.getIntExtra("cpu",0);
         checkForSu();
     }
 
@@ -218,17 +226,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setView(firstRunDialog)
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,int which) {
-                                String message = getString(R.string.su_cancel_message);
-                                SharedPreferences.Editor e = mPreferences.edit();
-                                e.putBoolean("rootcanceled", true);
-                                e.commit();
-                                suResultDialog(failedTitle, message);
-                            }
-                        })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

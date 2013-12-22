@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="10dip"
     android:paddingRight="10dip"
@@ -11,72 +11,75 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:id="@+id/lname">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/prop_name"
-            android:id="@+id/text1"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:id="@+id/lname">
 
-        <EditText
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/nprop"
+                android:text="@string/prop_name"
+                android:id="@+id/text1"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nprop"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:lines="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lval"
+            android:layout_marginTop="10dip">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prop_val"
+                android:id="@+id/text2"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vprop"
                 android:inputType="text"
-                android:singleLine="true"
-                android:lines="1" />
-    </LinearLayout>
+                    android:singleLine="true"
+                    android:lines="1" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lval"
-        android:layout_below="@+id/lname"
-        android:layout_marginTop="10dip">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/prop_val"
-            android:id="@+id/text2"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:id="@+id/lpresets"
+            android:layout_marginTop="10dip">
 
-        <EditText
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prop_preset"
+                android:id="@+id/text3"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/vprop"
-            android:inputType="text"
-                android:singleLine="true"
-                android:lines="1" />
+                android:id="@+id/spinner" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lpresets"
-        android:layout_below="@+id/lval"
-        android:layout_marginTop="10dip">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prop_preset"
-            android:id="@+id/text3"
-            android:textStyle="bold"
-            android:textSize="16sp" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner" />
-    </LinearLayout>
-
-</RelativeLayout>
+</ScrollView>

@@ -17,37 +17,33 @@
         android:id="@+id/preview"
         android:paddingBottom="20dip">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="10dp"
             android:id="@+id/relativeLayout3"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ksm_pagsharing"
-                android:id="@+id/t5"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="0dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp" />
+                android:id="@+id/t5" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/t6"
-                android:layout_toRightOf="@+id/t5"
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
                 android:gravity="right"/>
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -61,24 +57,19 @@
                 android:text="@string/ksm_pagshared"
                 android:id="@+id/t1"
                 android:layout_gravity="center"
-                android:textSize="14dip"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="5dp" />
+                android:textSize="14dip" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/t2"
                 android:textSize="18dip"
                 android:textStyle="bold"
-                android:layout_toRightOf="@+id/t1"
                 android:layout_alignParentEnd="true"
                 android:gravity="right" />
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -91,24 +82,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ksm_pagunshared"
-                android:id="@+id/t3"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="0dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp" />
+                android:id="@+id/t3" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/t4"
-                android:layout_toRightOf="@+id/t3"
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
                 android:gravity="right"/>
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -121,24 +107,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ksm_pagvolatile"
-                android:id="@+id/t7"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="0dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp" />
+                android:id="@+id/t7" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/t8"
-                android:layout_toRightOf="@+id/t7"
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
                 android:gravity="right"/>
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -151,22 +132,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ksm_fullscans"
-                android:id="@+id/t9"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="0dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp" />
+                android:id="@+id/t9" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/t10"
-                android:layout_toRightOf="@+id/t9"
                 android:textSize="18dip"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
                 android:gravity="right"/>
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -189,28 +165,28 @@
             android:id="@+id/tval1"
             android:layout_marginBottom="8dp" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <SeekBar
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/val1"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/edit1" />
+                android:layout_weight="0.7" />
 
             <EditText
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit1"
-                android:layout_alignParentEnd="true"
                 android:inputType="number"
                 android:gravity="right"
                 android:singleLine="true"
-                android:numeric="integer" />
+                android:numeric="integer"
+                android:layout_weight="0.3" />
 
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -231,28 +207,27 @@
             android:id="@+id/tval2"
             android:layout_marginBottom="8dp" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
             <SeekBar
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/val2"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/edit2" />
+                android:layout_weight="0.7" />
 
             <EditText
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit2"
-                android:layout_alignParentEnd="true"
                 android:inputType="number"
                 android:gravity="right"
                 android:singleLine="true"
-                android:numeric="integer" />
+                android:numeric="integer"
+                android:layout_weight="0.3" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

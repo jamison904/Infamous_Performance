@@ -21,13 +21,14 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.8";
+    public static final String VERSION_NUM = "2.1.9 beta1";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
     public static final Boolean NO_FLASH = false;
 
     // CPU settings
+    public static final String CPU_ON_PATH = "/sys/devices/system/cpu/cpu0/online";
     public static final String CUR_CPU_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
     public static final String MAX_FREQ_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
     public static final String TEGRA_MAX_FREQ_PATH = "/sys/module/cpu_tegra/parameters/cpu_user_cap";
@@ -177,7 +178,7 @@ public interface Constants {
     public static final String PREF_UNFRREZE = "unfreeze_packs";
 
     //zRam
-    public static final String ISZRAM = "busybox echo `busybox zcat /proc/config.gz | busybox grep ZRAM | busybox grep -v ^#'`";
+    public static final String ISZRAM = "busybox echo `busybox zcat /proc/config.gz | busybox grep ZRAM | busybox grep -v '^#'`";
     public static final String ZRAM_DEV = "/dev/block/zram0";
     public static final String ZRAM_SYS = "/sys/block/zram0";
     public static final String ZRAM_SIZE_PATH = "/sys/block/zram0/disksize";

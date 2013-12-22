@@ -132,13 +132,16 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 
         mZRAMsettings= findPreference("zram_settings");
 
+        String names="";
         if (!new File(USER_PROC_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("notkill_user_proc");
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
             mUserON.setChecked(Helpers.readOneLine(USER_PROC_PATH).equals("1"));
-            mPreferences.edit().putString(PREF_USER_NAMES, Helpers.readOneLine(USER_PROC_NAMES_PATH)).apply();
+            names=Helpers.readOneLine(USER_PROC_NAMES_PATH);
+            if(names==null) names="";
+            mPreferences.edit().putString(PREF_USER_NAMES, names).apply();
         }
         if (!new File(SYS_PROC_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("notkill_sys_proc");
@@ -146,7 +149,9 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         else{
             mSysON.setChecked(Helpers.readOneLine(SYS_PROC_PATH).equals("1"));
-            mPreferences.edit().putString(PREF_SYS_NAMES, Helpers.readOneLine(USER_SYS_NAMES_PATH)).apply();
+            names=Helpers.readOneLine(USER_SYS_NAMES_PATH);
+            if(names==null) names="";
+            mPreferences.edit().putString(PREF_SYS_NAMES, names).apply();
         }
         if (!new File(UKSM_RUN_PATH).exists() && !new File(KSM_RUN_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("ksm");
@@ -169,13 +174,13 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         ispm=(!Helpers.binExist("pm").equals(NOT_FOUND));
 
-        if(!new File(ZRAM_SYS).exists()){
+        if(!Helpers.isZRAM()){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("zram");
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
             int maxdisk = (int) Helpers.getTotMem() / 1024;
-            int curdisk=mPreferences.getInt(PREF_ZRAM,(int) maxdisk /2);
+            int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
             mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
         }
     }
@@ -328,6 +333,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             startActivityForResult(new Intent(getActivity(), KSMActivity.class), 1);
         }
         else if (preference.equals(mZRAMsettings)){
+
             startActivityForResult(new Intent(getActivity(), ZramActivity.class), 1);
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -359,7 +365,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                         break;
                     case 2:
                         int maxdisk = (int) Helpers.getTotMem() / 1024;
-                        int curdisk=mPreferences.getInt(PREF_ZRAM,(int) maxdisk /2);
+                        int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
                         mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
                         break;
                 }

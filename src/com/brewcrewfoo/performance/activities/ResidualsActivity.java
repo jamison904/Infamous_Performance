@@ -196,7 +196,7 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
                 t.append(" ");
             }
             Helpers.get_assetsScript("utils",context,"DIRS=\""+t.toString()+"\";","");
-            new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+            new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
         }
 
         @Override

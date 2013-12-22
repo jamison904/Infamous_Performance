@@ -150,7 +150,7 @@ public class Helpers implements Constants {
 	                br.close();
 	            }
 	        } catch (Exception e) {
-	            Log.e(TAG, "IO Exception when reading sys file", e);
+	            //Log.e(TAG, "IO Exception when reading sys file", e);
 	            // attempt to do magic!
 	            return readFileViaShell(fname, true);
 	        }
@@ -258,12 +258,7 @@ public class Helpers implements Constants {
      * @return available performance scheduler
      */
     public static Boolean GovernorExist(String gov) {
-		if(readOneLine(GOVERNORS_LIST_PATH).indexOf(gov)>-1){
-			return true;
-		}
-		else{
-			return false;
-		}
+        return readOneLine(GOVERNORS_LIST_PATH).indexOf(gov) > -1;
     }
 
     /**
@@ -338,7 +333,8 @@ public class Helpers implements Constants {
      * @return tagged and converted String
      */
     public static String toMHz(String mhzString) {
-        return new StringBuilder().append(Integer.parseInt(mhzString) / 1000).append(" MHz").toString();
+        if(mhzString==null) return "";
+        else return String.valueOf(Integer.parseInt(mhzString) / 1000) + " MHz";
     }
 
     /**
@@ -393,6 +389,13 @@ public class Helpers implements Constants {
         else{ return NOT_FOUND;}
     }
 
+    public static Boolean moduleActive(String b) {
+        CMDProcessor.CommandResult cr = null;
+        cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox ps | busybox grep "+b+" | busybox grep -v \"busybox grep "+b+"\" | busybox awk '{print $1}'`");
+        Log.d(TAG, "Module: "+cr.stdout);
+        return cr.success() && !cr.stdout.equals("");
+    }
+
     public static long getTotMem() {
         long v=0;
         CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E -o '[[:digit:]]+'`");
@@ -410,10 +413,14 @@ public class Helpers implements Constants {
     public static boolean showBattery() {
 	    return ((new File(BLX_PATH).exists()) || (fastcharge_path()!=null));
     }
-
+    public static boolean isZRAM() {
+        CMDProcessor.CommandResult cr =new CMDProcessor().sh.runWaitFor(ISZRAM);
+        if(cr.success() && !cr.stdout.equals("")) return true;
+        return false;
+    }
 	public static String shExec(StringBuilder s,Context c,Boolean su){
         get_assetsScript("run", c, "", s.toString());
-        new CMDProcessor().su.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
         CMDProcessor.CommandResult cr = null;
         if(su)
 		    cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
@@ -498,6 +505,15 @@ public class Helpers implements Constants {
                 smenu.add(0,idx +i+1, 0, vp.getAdapter().getPageTitle(i));
         }
     }
+
+    public static String readCPU(Context context,int i){
+        Helpers.get_assetsScript("utils",context,"","");
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );
+        CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor(context.getFilesDir()+"/utils -getcpu "+i);
+        if(cr.success()) return cr.stdout;
+        else return null;
+    }
+
     public static String bln_path() {
         if (new File("/sys/class/misc/backlightnotification/enabled").exists()) {
             return "/sys/class/misc/backlightnotification/enabled";
@@ -557,4 +573,5 @@ public class Helpers implements Constants {
             return null;
         }
     }
+
 }

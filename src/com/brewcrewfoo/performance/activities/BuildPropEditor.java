@@ -158,7 +158,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         @Override
         protected String doInBackground(String... params) {
             Helpers.get_assetsScript("utils",context,"","");
-            new CMDProcessor().su.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+            new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
             CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"*.ogg\"");
             oggs=cr.stdout.split("\n");
             return Helpers.readFileViaShell("/system/build.prop", false);
@@ -391,7 +391,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         props.clear();
         String p[]=s.split("\n");
         for (String aP : p) {
-            if(!aP.contains("#") && aP.trim().length()>0 && aP!=null){
+            if(!aP.contains("#") && aP.trim().length()>0 && aP!=null && aP.contains("=")){
                 aP=aP.replace("[","").replace("]","");
                 String pp[]=aP.split("=");
                 if(pp.length>=2){

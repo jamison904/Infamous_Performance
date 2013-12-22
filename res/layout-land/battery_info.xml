@@ -27,7 +27,8 @@ Copyright (C) 2012  James Roberts
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"
     android:weightSum="100"
-        android:paddingTop="20dip">
+        android:paddingTop="20dip"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:id="@+id/batt_val"
