@@ -188,6 +188,7 @@ public interface Constants {
     public static final String ZRAM_MEMTOT_PATH = "/sys/block/zram0/mem_used_total";
     public static final String PREF_ZRAM = "zram_size";
     public static final String ZRAM_SOB = "zram_boot";
+    public static final String ZRAM_ON = "zram_on";
 
     //sysctl
     public static final String SYSCTL_SOB = "sysctl_sob";

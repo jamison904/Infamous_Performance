@@ -301,7 +301,7 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                 }
             }
-            if(new File("/sys/block/zram0").exists()){
+            if (preferences.getBoolean(ZRAM_ON, false)) {
                 if (preferences.getBoolean(ZRAM_SOB, false)){
                     int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
                     long v = (long)(curdisk/ncpus)*1024*1024;
