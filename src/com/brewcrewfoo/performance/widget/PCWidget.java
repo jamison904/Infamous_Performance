@@ -82,6 +82,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         views.setTextViewText(R.id.min, min);
         views.setTextViewText(R.id.gov, gov);
         views.setTextViewText(R.id.io, io);
+        views.setTextColor(R.id.curcpu, textColor);
         views.setTextColor(R.id.max, textColor);
         views.setTextColor(R.id.min, textColor);
         views.setTextColor(R.id.io, textColor);
