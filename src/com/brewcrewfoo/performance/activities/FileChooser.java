@@ -219,8 +219,11 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
 
             if(tip.equalsIgnoreCase("kernel")){
                 if(iszip){
+                    sb.append("busybox rm -rf /data/dalvik-cache/*\n");
+                    sb.append("busybox rm -rf /cache/*\n");
+
                     try{
-                        new UnzipUtility().unzipfile(nFile,dn,"boot.img");
+                        new UnzipUtility().unzipfile(nFile,dn, new String[]{"boot.img", ".ko"});
                     }
                     catch (Exception e) {
                         Log.d(TAG,"unzip error: "+nFile);
@@ -228,19 +231,30 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                         return null;
                     }
                     nFile=dn+"/boot.img";
+                    File destDir = new File(dn+"/system/lib/modules");
+                    File[]dirs = destDir.listFiles();
+                    if((dirs!=null)&&(dirs.length>0)){
+                        sb.append("busybox mount -o remount,rw /system;\n");
+                        for(File ff: dirs){
+                            if(ff.getName().toLowerCase().endsWith(".ko")){
+                                sb.append("busybox cp ").append(dn).append("/system/lib/modules/").append(ff.getName()).append(" /system/lib/modules/").append(ff.getName()).append(";\n");
+                                sb.append("busybox chmod 644 ").append("/system/lib/modules/").append(ff.getName()).append(";\n");
+                            }
+                        }
+                        sb.append("busybox mount -o remount,ro /system;\n");
+                    }
                     sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
                     sb.append("busybox rm -rf ").append(dn).append("/*\n");
                 }
                 else{
                     sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
                 }
-                sb.append("busybox rm -rf /data/dalvik-cache/*\n");
-                sb.append("busybox rm -rf /cache/*\n");
+
             }
             else{
                 if(iszip){
                     try{
-                        new UnzipUtility().unzipfile(nFile,dn,"recovery.img");
+                        new UnzipUtility().unzipfile(nFile,dn, new String[]{"recovery.img"});
                     }
                     catch (Exception e) {
                         Log.d(TAG,"unzip error: "+nFile);
