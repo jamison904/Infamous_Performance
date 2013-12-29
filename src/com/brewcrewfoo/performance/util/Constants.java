@@ -21,7 +21,7 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.9 beta1";
+    public static final String VERSION_NUM = "2.1.9 beta2";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
@@ -153,6 +153,8 @@ public interface Constants {
 
     // VM settings
     public static final String VM_SOB = "vm_sob";
+    public static final String PREF_VM = "pref_vm";
+    public static final String VM_PATH = "/proc/sys/vm/";
 
     // Voltage control
     public static final String VOLTAGE_SOB = "voltage_sob";

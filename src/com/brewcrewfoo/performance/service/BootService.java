@@ -29,6 +29,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 import com.brewcrewfoo.performance.R;
+import com.brewcrewfoo.performance.activities.VMSettings;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -243,9 +244,19 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox sysctl -p;\n");
                 }
             }
-            if (new File("/system/etc/vm.conf").exists()) {
-                if (preferences.getBoolean(VM_SOB, false)) {
-                    sb.append("busybox sysctl -p /system/etc/vm.conf;\n");
+            if (preferences.getBoolean(VM_SOB, false)) {
+                final String gn = preferences.getString(PREF_VM, "");
+                if (gn.equals(gov)) {
+                    final String gs = preferences.getString(PREF_VM, null);
+                    if(gs != null){
+                        String p[]=gs.split(";");
+                        for (String aP : p) {
+                            if(!aP.equals("") && aP!=null){
+                                final String pn[]=aP.split(":");
+                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(VM_PATH).append(pn[0]).append(";\n");
+                            }
+                        }
+                    }
                 }
             }
             if (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists()) {
@@ -316,8 +327,10 @@ public class BootService extends Service implements Constants {
                         if(gs != null){
                             String p[]=gs.split(";");
                             for (String aP : p) {
-                                final String pn[]=aP.split(":");
-                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(gov).append("/").append(pn[0]).append(";\n");
+                                if(!aP.equals("") && aP!=null){
+                                    final String pn[]=aP.split(":");
+                                    sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(gov).append("/").append(pn[0]).append(";\n");
+                                }
                             }
                         }
                     }

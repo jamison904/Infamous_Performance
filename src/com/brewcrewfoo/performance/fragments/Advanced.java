@@ -40,6 +40,7 @@ import android.widget.TextView;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.activities.SysctlEditor;
+import com.brewcrewfoo.performance.activities.VMSettings;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -163,10 +164,6 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 	    mReadAhead.setValue(readahead);
         mReadAhead.setSummary(getString(R.string.ps_read_ahead, readahead + "  kb"));
 
-        if(Helpers.binExist("sysctl").equals(NOT_FOUND)){
-            PreferenceCategory hideCat = (PreferenceCategory) findPreference("cat_vm");
-            getPreferenceScreen().removePreference(hideCat);
-        }
             
         setHasOptionsMenu(true);
     }
@@ -306,8 +303,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
                 return true;
         }
         else if (preference == mVM) {
-            Intent intent = new Intent(context, SysctlEditor.class);
-            intent.putExtra("mod","vm");
+            Intent intent = new Intent(context, VMSettings.class);
             startActivity(intent);
             return true;
         }
