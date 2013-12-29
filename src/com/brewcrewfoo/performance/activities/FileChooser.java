@@ -227,7 +227,7 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                     catch (Exception e) {
                         Log.d(TAG,"unzip error: "+nFile);
                         e.printStackTrace();
-                        return null;
+                        return "";
                     }
                     nFile=dn+"/boot.img";
                     File destDir = new File(dn+"/system/lib/modules");
@@ -258,7 +258,7 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                     catch (Exception e) {
                         Log.d(TAG,"unzip error: "+nFile);
                         e.printStackTrace();
-                        return null;
+                        return "";
                     }
                     nFile=dn+"/recovery.img";
                     sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
@@ -277,10 +277,10 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
-            if(tip.equalsIgnoreCase("kernel")){
+            if(result.equalsIgnoreCase("kernel")){
                 new CMDProcessor().su.runWaitFor("reboot");
             }
-            else{
+            else if(result.equalsIgnoreCase("recovery")){
                 new CMDProcessor().su.runWaitFor("reboot recovery");
             }
         }
