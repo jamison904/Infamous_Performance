@@ -287,7 +287,6 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         }
         else if (key.equals("pref_sysctl")){
             Intent intent = new Intent(context, SysctlEditor.class);
-            intent.putExtra("mod","sysctl");
             startActivity(intent);
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);

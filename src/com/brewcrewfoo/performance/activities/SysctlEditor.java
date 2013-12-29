@@ -62,11 +62,8 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private List<Prop> props = new ArrayList<Prop>();
     private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/sysctl";
 
-    private String mod="sysctl";
     private final String syspath="/system/etc/";
-    private String cmd="busybox echo `busybox find /proc/sys/* -type f -perm -644 | grep -v \"vm.\"`";
     private String sob=SYSCTL_SOB;
-    private Boolean isdyn=false;
 
 
     @Override
@@ -78,20 +75,13 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         setTheme();
         setContentView(R.layout.prop_view);
 
-        Intent i=getIntent();
-        mod=i.getStringExtra("mod");
-        if(mod.equals("vm")){
-            cmd="busybox echo `busybox find /proc/sys/vm/* -type f -prune -perm -644`";
-            sob=VM_SOB;
-        }
-
 
         new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
-        if(new File(syspath+mod+".conf").exists()){
-            new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/"+mod+".conf"+" "+dn+"/"+mod+".conf" );
+        if(new File(syspath+"sysctl.conf").exists()){
+            new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/sysctl.conf" );
         }
         else{
-            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/"+mod+".conf" );
+            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
         }
         Helpers.get_assetsScript("utils",context,"","");
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
@@ -122,10 +112,10 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
                 sb.append("busybox mount -o remount,rw /system").append(";\n");
-                sb.append("busybox cp ").append(dn).append("/").append(mod).append(".conf").append(" /system/etc/").append(mod).append(".conf").append(";\n");
-                sb.append("busybox chmod 644 ").append("/system/etc/").append(mod).append(".conf").append(";\n");
+                sb.append("busybox cp ").append(dn).append("/").append("sysctl.conf").append(" /system/etc/").append("sysctl.conf").append(";\n");
+                sb.append("busybox chmod 644 ").append("/system/etc/").append("sysctl.conf").append(";\n");
                 sb.append("busybox mount -o remount,ro /system").append(";\n");
-                sb.append("busybox sysctl -p ").append("/system/etc/").append(mod).append(".conf").append(";\n");
+                sb.append("busybox sysctl -p ").append("/system/etc/").append("sysctl.conf").append(";\n");
                 Helpers.shExec(sb,context,true);
             }
         });
@@ -139,7 +129,6 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         });
         tools.setVisibility(View.GONE);
         search.setVisibility(View.GONE);
-        isdyn= (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists());
 
         new GetPropOperation().execute();
 
@@ -163,18 +152,18 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                 search.setVisibility(RelativeLayout.VISIBLE);
                 break;
             case R.id.reset:
-                if(new File(syspath+mod+".conf").exists()){
+                if(new File(syspath+"sysctl.conf").exists()){
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
                     Date now = new Date();
-                    String nf = formatter.format(now)+"_" + mod+".conf";
-                    new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/"+mod+".conf"+" "+dn+"/"+nf );
+                    String nf = formatter.format(now)+"_" + "sysctl.conf";
+                    new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/"+nf );
                     final StringBuilder sb = new StringBuilder();
                     sb.append("busybox mount -o remount,rw /system").append(";\n");
-                    sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append(mod).append(".conf").append(";\n");
+                    sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
                     sb.append("busybox mount -o remount,ro /system").append(";\n");
                     Helpers.shExec(sb,context,true);
                 }
-                new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/"+mod+".conf" );
+                new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
                 break;
         }
         return true;
@@ -194,12 +183,12 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor(cmd);
+            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox find /proc/sys/* -type f -perm -644 | grep -v \"vm.\"`");
             if(cr.success()){
                 return cr.stdout;
             }
             else{
-                Log.d(TAG, mod+" error: " + cr.stderr);
+                Log.d(TAG, "sysctl error: " + cr.stderr);
                 return null;
             }
         }
@@ -290,13 +279,13 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                         if (pp!=null) {
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
-                                new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\" "+dn+"/"+mod+".conf");
+                                new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\" "+dn+"/sysctl.conf");
                             }
                         }
                         else {
                             if (tv.getText().toString() != null && tn.getText().toString() != null && tn.getText().toString().trim().length() > 0){
                                 props.add(new Prop(tn.getText().toString().trim(),tv.getText().toString().trim()));
-                                new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -setprop \""+tn.getText().toString().trim()+"="+tv.getText().toString().trim()+"\" "+dn+"/"+mod+".conf");
+                                new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -setprop \""+tn.getText().toString().trim()+"="+tv.getText().toString().trim()+"\" "+dn+"/sysctl.conf");
                             }
                         }
                         Collections.sort(props);
@@ -312,23 +301,9 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             if(aP.trim().length()>0 && aP!=null){
                 final String pv=Helpers.readOneLine(aP).trim();
                 final String pn=aP.trim().replace("/",".").substring(10, aP.length());
-                if(testprop(pn)){
-                        props.add(new Prop(pn,pv));
-                }
+                props.add(new Prop(pn,pv));
             }
         }
     }
-    public boolean testprop(String s){
-        if(mod.equals("sysctl") || !isdyn){
-            return true;
-        }
-        else{
-            if(s.contains("dirty_writeback_active_centisecs")||s.contains("dynamic_dirty_writeback")|| s.contains("dirty_writeback_suspend_centisecs")){
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
-    }
+
 }
