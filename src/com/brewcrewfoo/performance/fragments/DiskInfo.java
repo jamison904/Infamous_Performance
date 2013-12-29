@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -94,6 +95,12 @@ public class DiskInfo extends Fragment implements Constants {
                 else{
                     set_part_info("/system", "System", sysname, systotal, sysused, sysfree, sysbar, lsys);
                 }
+            }
+        });
+        lsys.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
             }
         });
         ldata=(RelativeLayout) view.findViewById(R.id.data);
@@ -240,7 +247,7 @@ public class DiskInfo extends Fragment implements Constants {
         }
         else{
             CMDProcessor.CommandResult cr=null;
-            cr=new CMDProcessor().sh.runWaitFor("busybox echo `mount | busybox grep "+part+" | busybox awk '{print $1,$3,$4}'`" );
+            cr=new CMDProcessor().su.runWaitFor("busybox echo `mount | busybox grep "+part+" | busybox awk '{print $1,$3,$4}'`" );
             if(cr.success()){
                 t2.setText(cr.stdout.split(" ")[2].split(",")[0].toUpperCase());
                 t3.setText(cr.stdout.split(" ")[0]);
