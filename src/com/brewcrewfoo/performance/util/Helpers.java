@@ -421,9 +421,9 @@ public class Helpers implements Constants {
 	public static String shExec(StringBuilder s,Context c,Boolean su){
         get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
-        CMDProcessor.CommandResult cr = null;
+        CMDProcessor.CommandResult cr;
         if(su)
-		    cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
+            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
         else
             cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
         if(cr.success()){return cr.stdout;}

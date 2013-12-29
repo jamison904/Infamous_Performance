@@ -245,16 +245,13 @@ public class BootService extends Service implements Constants {
                 }
             }
             if (preferences.getBoolean(VM_SOB, false)) {
-                final String gn = preferences.getString(PREF_VM, "");
-                if (gn.equals(gov)) {
-                    final String gs = preferences.getString(PREF_VM, null);
-                    if(gs != null){
-                        String p[]=gs.split(";");
-                        for (String aP : p) {
-                            if(!aP.equals("") && aP!=null){
-                                final String pn[]=aP.split(":");
-                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(VM_PATH).append(pn[0]).append(";\n");
-                            }
+                final String gs = preferences.getString(PREF_VM, null);
+                if(gs != null){
+                    String p[]=gs.split(";");
+                    for (String aP : p) {
+                        if(!aP.equals("") && aP!=null){
+                            final String pn[]=aP.split(":");
+                            sb.append("busybox echo ").append(pn[1]).append(" > ").append(VM_PATH).append(pn[0]).append(";\n");
                         }
                     }
                 }
