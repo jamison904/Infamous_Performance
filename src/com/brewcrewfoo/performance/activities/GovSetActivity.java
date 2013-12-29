@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -162,6 +165,20 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     public void onItemClick(AdapterView<?> parent, View view, int position,long row) {
         final Prop p = adapter.getItem(position);
         editPropDialog(p);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.vm_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.reset_vm) {
+            mPreferences.edit().remove(GOV_SETTINGS).apply();
+        }
+        return true;
     }
     @Override
     public boolean isThemeChanged() {

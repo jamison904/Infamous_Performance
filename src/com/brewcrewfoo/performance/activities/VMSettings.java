@@ -14,6 +14,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -123,7 +126,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         });
         tools.setVisibility(View.GONE);
         search.setVisibility(View.GONE);
-        isdyn= (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists());
+        isdyn= (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists() && Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH).equals("1"));
 
         new GetPropOperation().execute();
 
@@ -134,16 +137,18 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         super.onConfigurationChanged(newConfig);
     }
 
-
     @Override
-    public void onBackPressed(){
-        if(search.isShown()){
-            search.setVisibility(RelativeLayout.GONE);
-            filterText.setText("");
+    public boolean onCreateOptionsMenu (Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.vm_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.reset_vm) {
+            mPreferences.edit().remove(PREF_VM).apply();
         }
-        else{
-            finish();
-        }
+        return true;
     }
 
     private class GetPropOperation extends AsyncTask<String, Void, String> {
@@ -274,12 +279,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         }
     }
     public boolean testprop(String s){
-            if(isdyn && (s.contains("dirty_writeback_active_centisecs")||s.contains("dynamic_dirty_writeback")|| s.contains("dirty_writeback_suspend_centisecs"))){
-                return false;
-            }
-            else{
-                return true;
-            }
+        return !(s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs")) && !(isdyn && s.contains("dirty_writeback_centisecs"));
     }
     public void set_pref(String n, String v){
         final String s=mPreferences.getString(PREF_VM,"");
