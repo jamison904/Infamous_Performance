@@ -218,10 +218,9 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
             final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/tmp";
 
             if(tip.equalsIgnoreCase("kernel")){
+                sb.append("busybox rm -rf /data/dalvik-cache/*\n");
+                sb.append("busybox rm -rf /cache/*\n");
                 if(iszip){
-                    sb.append("busybox rm -rf /data/dalvik-cache/*\n");
-                    sb.append("busybox rm -rf /cache/*\n");
-
                     try{
                         new UnzipUtility().unzipfile(nFile,dn, new String[]{"boot.img", ".ko"});
                     }
