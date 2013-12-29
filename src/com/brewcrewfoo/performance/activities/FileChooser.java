@@ -274,14 +274,15 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
 
         @Override
         protected void onPostExecute(String result) {
-            if (progressDialog != null) {
-                progressDialog.dismiss();
-            }
+
             if(result.equalsIgnoreCase("kernel")){
                 new CMDProcessor().su.runWaitFor("reboot");
             }
             else if(result.equalsIgnoreCase("recovery")){
                 new CMDProcessor().su.runWaitFor("reboot recovery");
+            }
+            else{
+                if (progressDialog != null) progressDialog.dismiss();
             }
         }
 
