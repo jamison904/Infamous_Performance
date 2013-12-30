@@ -1,10 +1,10 @@
 ###### made by h0rn3t ######
 
 sysrw() {
-    busybox mount -o remount,rw /system 2>/dev/null;
+mount -o rw,remount /system
 }
 sysro() {
-    busybox mount -o remount,ro /system 2>/dev/null;
+mount -o ro,remount /system
 }
 
 set_prop() {
@@ -24,7 +24,8 @@ set_prop() {
 		    busybox echo "$prop_key$seperator$prop_value" >> $prop_file;
 		fi;
 		sysro;
-	fi
+	fi;
+	return;
 }
 
 count_files(){
