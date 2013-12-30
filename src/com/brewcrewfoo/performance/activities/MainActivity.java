@@ -57,19 +57,15 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public static String mMinFreqSetting;
     public static String mCPUon;
     public static int curcpu=0;
-    boolean canSu = true;//Helpers.checkSu();
-    boolean canBb = true;//Helpers.checkBusybox();
+    private boolean canSu = Helpers.checkSu();
+    private boolean canBb = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        setTheme();
-        setContentView(R.layout.activity_main);
-
         // If this is the first launch of the application. Check for root.
-        canSu = Helpers.checkSu();
         if(!mPreferences.getBoolean("root",false)){
             canBb = Helpers.checkBusybox();
             canSu = Helpers.checkSu();
@@ -81,6 +77,10 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
             suResultDialog(failedTitle, message);
         }
         else{
+
+            setTheme();
+            setContentView(R.layout.activity_main);
+
             mPreferences.edit().putBoolean("root",true).apply();
             mVoltageExists = Helpers.voltageFileExists();
 
