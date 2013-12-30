@@ -57,31 +57,29 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public static String mMinFreqSetting;
     public static String mCPUon;
     public static int curcpu=0;
-    private boolean canSu = Helpers.checkSu();
-    private boolean canBb = true;
+    private boolean canSu = false;
+    private boolean canBb = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        setTheme();
 
-        // If this is the first launch of the application. Check for root.
-        if(!mPreferences.getBoolean("root",false)){
-            canBb = Helpers.checkBusybox();
-            canSu = Helpers.checkSu();
-        }
+
+        canSu = Helpers.checkSu();
+        canBb = !Helpers.binExist("busybox").equals(NOT_FOUND);
+
         if (!canSu || !canBb) {
-            mPreferences.edit().putBoolean("root",false).apply();
+            //mPreferences.edit().putBoolean("root",false).apply();
             final String failedTitle = getString(R.string.su_failed_title);
             final String message = getString(R.string.su_failed_su_or_busybox);
             suResultDialog(failedTitle, message);
         }
         else{
-
-            setTheme();
             setContentView(R.layout.activity_main);
 
-            mPreferences.edit().putBoolean("root",true).apply();
+            //mPreferences.edit().putBoolean("root",true).apply();
             mVoltageExists = Helpers.voltageFileExists();
 
             mViewPager = (ViewPager) findViewById(R.id.viewpager);
