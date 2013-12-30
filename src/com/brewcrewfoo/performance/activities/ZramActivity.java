@@ -56,9 +56,6 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         setTheme();
         setContentView(R.layout.zram_settings);
 
-        if(new File("/system/lib/modules/zram.ko").exists()){
-            new CMDProcessor().su.runWaitFor("busybox insmod /system/lib/modules/zram.ko");
-        }
         nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(2);
 
@@ -80,23 +77,8 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         t4=(TextView)findViewById(R.id.t4);
         t5=(TextView)findViewById(R.id.t5);
 
-        if(new File(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)).exists()){
-            t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)))));
-            ist1=true;
-        }
-        if(new File(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)).exists()){
-            t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)))));
-            ist3=true;
-        }
-        if(new File(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)).exists()){
-            t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
-            ist5=true;
-        }
+        set_values();
 
-        if(ist1&&ist3&&ist5){
-            t2.setText(nf.format(getCompressionRatio()));
-            t4.setText(nf.format(getUsedRatio()));
-        }
         start_btn=(Button) findViewById(R.id.apply);
         start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +109,10 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         else {
             start_btn.setText(getString(R.string.mt_start));
             mdisksize.setEnabled(true);
+        }
+        if (mCurThread == null) {
+            mCurThread = new CurThread();
+            mCurThread.start();
         }
     }
 
@@ -212,18 +198,11 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     protected Handler mCurHandler = new Handler() {
         public void handleMessage(Message msg) {
             //final String v=(String) msg.obj;
-            if (ist1) t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0", "zram" + curcpu)))));
-            if (ist3) t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)))));
-            if (ist5) t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
-            if(ist1&&ist3&&ist5){
-                t2.setText(nf.format(getCompressionRatio()));
-                t4.setText(nf.format(getUsedRatio()));
-            }
+            set_values();
         }
     };
     public boolean is_zram_on(){
-        CMDProcessor.CommandResult cr = null;
-        cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox cat /proc/swaps | grep zram`");
+        CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox cat /proc/swaps | grep zram`");
         return (cr.success() && !cr.stdout.equals(""));
     }
 
@@ -264,18 +243,8 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         @Override
         protected String doInBackground(String... params) {
             final StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < ncpus; i++) {
-                sb.append("busybox swapoff ").append(ZRAM_DEV.replace("zram0", "zram" + i)).append(";\n");
-            }
-            for (int i = 0; i < ncpus; i++) {
-                sb.append("busybox echo 1 > ").append(ZRAM_RESET_PATH.replace("zram0", "zram" + i)).append(";\n");
-                sb.append("busybox echo 0 > ").append(ZRAM_RESET_PATH.replace("zram0", "zram" + i)).append(";\n");
-            }
-            //sb.append("sleep 1;\n");
-            //sb.append("busybox modprobe -r zram 2>/dev/null;\n");
-            //sb.append("busybox rmmod zram;\n");
-            Helpers.shExec(sb,context,true);
+            sb.append("zramstop ").append(ncpus).append(";\n");
+            Helpers.shExec(sb, context, true);
             return "";
         }
         @Override
@@ -289,20 +258,11 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 mPreferences.edit().putBoolean(ZRAM_ON,true).apply();
             }
             else {
+
                 start_btn.setText(getString(R.string.mt_start));
                 mdisksize.setEnabled(true);
                 mPreferences.edit().putBoolean(ZRAM_ON,false).apply();
-                if (mCurThread != null) {
-                    if (mCurThread.isAlive()) {
-                        mCurThread.interrupt();
-                        try {
-                            mCurThread.join();
-                            mCurThread=null;
-                        }
-                        catch (InterruptedException e) {
-                        }
-                    }
-                }
+
             }
 
         }
@@ -358,5 +318,32 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private int mod(int x, int y){
         int result = x % y;
         return result < 0? result + y : result;
+    }
+    public void set_values(){
+        t1.setText(Helpers.ReadableByteCount(0));
+        t2.setText("0");
+        t3.setText(Helpers.ReadableByteCount(0));
+        t4.setText("0");
+        t5.setText(Helpers.ReadableByteCount(0));
+        ist1=false;
+        ist3=false;
+        ist5=false;
+        if(new File(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)).exists()){
+            t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)))));
+            ist1=true;
+        }
+        if(new File(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)).exists()){
+            t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)))));
+            ist3=true;
+        }
+        if(new File(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)).exists()){
+            t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
+            ist5=true;
+        }
+        if(ist1&&ist3&&ist5){
+            t2.setText(nf.format(getCompressionRatio()));
+            t4.setText(nf.format(getUsedRatio()));
+        }
+
     }
 }

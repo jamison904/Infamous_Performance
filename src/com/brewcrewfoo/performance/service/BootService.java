@@ -309,13 +309,6 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                 }
             }
-            if (preferences.getBoolean(ZRAM_ON, false)) {
-                if (preferences.getBoolean(ZRAM_SOB, false)){
-                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
-                    long v = (long)(curdisk/ncpus)*1024*1024;
-                    sb.append("zramstart ").append(ncpus).append(" ").append(v).append(";\n");
-                }
-            }
 
             if (preferences.getBoolean(GOV_SOB, false)) {
                     final String gn = preferences.getString(GOV_NAME, "");
@@ -332,6 +325,14 @@ public class BootService extends Service implements Constants {
                         }
                     }
              }
+            if (preferences.getBoolean(ZRAM_ON, false)) {
+                if (preferences.getBoolean(ZRAM_SOB, false)){
+                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
+                    long v = (long)(curdisk/ncpus)*1024*1024;
+                    sb.append("zramstart ").append(ncpus).append(" ").append(v).append(";\n");
+                }
+            }
+
             sb.append(preferences.getString(PREF_SH, "# no custom shell command")).append(";\n");
             Helpers.shExec(sb,context,true);
             return null;

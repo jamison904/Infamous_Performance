@@ -4,16 +4,33 @@ cpus=$1;
 val=$2;
 if busybox [ -f /system/lib/modules/zram.ko ]; then
     busybox insmod /system/lib/modules/zram.ko;
+
 fi;
-busybox modprobe zram zram_num_devices=$cpus 2>/dev/null;
+busybox modprobe zram zram_num_devices=$cpus;
 num_cpus=`busybox expr $cpus - 1`;
 for i in `busybox seq 0 $num_cpus`; do
-    busybox echo "$val" > /sys/block/zram$i/disksize
+    busybox echo $val > /sys/block/zram$i/disksize;
 done;
 for i in `busybox seq 0 $num_cpus`; do
-    busybox mkswap /dev/block/zram$i
+    busybox mkswap /dev/block/zram$i;
 done;
 for i in `busybox seq 0 $num_cpus`; do
-    busybox swapon /dev/block/zram$i
+    busybox swapon /dev/block/zram$i;
 done;
+return;
+}
+
+zramstop(){
+cpus=$1;
+num_cpus=`busybox expr $cpus - 1`;
+for i in `busybox seq 0 $num_cpus`; do
+    busybox swapoff /dev/block/zram$i;
+    sleep 1;
+done;
+for i in `busybox seq 0 $num_cpus`; do
+    busybox echo 1 > /sys/block/zram$i/reset;
+done;
+sleep 1;
+busybox modprobe -rf zram;
+return;
 }
