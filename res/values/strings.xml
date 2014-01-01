@@ -52,7 +52,7 @@ Copyright (C) 2012  James Roberts
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="mt_gov_ctrl">Governor Settings</string>
-    <string name="mpdecision">MPDECISION</string>
+
     <!-- Other settings -->
     <string name="prefcat_free_memory">FREE MEMORY</string>
     <string name="prefcat_tweaks">FAST CHARGE</string>
@@ -362,5 +362,7 @@ Copyright (C) 2012  James Roberts
     <string name="dmesg_title">Dmesg</string>
     <string name="dmesg_msg">Dmesg will be dumped on %s. Continue?</string>
     <string name="ps_logs">Dump log on %s.</string>
+    <string name="mpdecision">MPDECISION</string>
+    <string name="ps_mpdecision"></string>
 
 </resources>

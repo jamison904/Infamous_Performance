@@ -17,7 +17,6 @@ import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.GovSetActivity;
 import com.brewcrewfoo.performance.activities.MainActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
-import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
@@ -76,9 +75,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
         mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
 
-        LinearLayout mpdlayout=(LinearLayout) view.findViewById(R.id.mpd);
+ /*        LinearLayout mpdlayout=(LinearLayout) view.findViewById(R.id.mpd);
 
-        Switch mpdsw = (Switch) view.findViewById(R.id.mpd_switch);
+       Switch mpdsw = (Switch) view.findViewById(R.id.mpd_switch);
         if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
             mpdlayout.setVisibility(LinearLayout.VISIBLE);
             Boolean mpdon = Helpers.moduleActive("mpdecision");
@@ -100,7 +99,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 }
             });
         }
-
+*/
         mCurCpu = (TextView) view.findViewById(R.id.curcpu);
         mCurFreq = (TextView) view.findViewById(R.id.current_speed);
         mCurFreq.setOnClickListener(new View.OnClickListener() {

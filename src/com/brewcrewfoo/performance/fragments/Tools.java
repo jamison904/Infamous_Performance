@@ -159,7 +159,7 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.tools_menu, menu);
+        inflater.inflate(R.menu.menu, menu);
         Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
     @Override
