@@ -102,4 +102,14 @@ Copyright (C) 2012  James Roberts
             android:key="pref_sysctl"
             android:title="@string/sysctl_title"/>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:key="category_logs"
+        android:title="@string/prefcat_logs">
+        <Preference
+            android:key="pref_logcat"
+            android:title="@string/logcat_title"/>
+        <Preference
+            android:key="pref_dmesg"
+            android:title="@string/dmesg_title"/>
+    </PreferenceCategory>
 </PreferenceScreen>

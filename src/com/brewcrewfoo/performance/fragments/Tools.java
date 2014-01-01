@@ -33,11 +33,10 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.*;
 
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.*;
 import android.widget.Button;
@@ -56,19 +55,23 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class Tools extends PreferenceFragment implements OnSharedPreferenceChangeListener, Constants {
 
     private static final int NEW_MENU_ID=Menu.FIRST+1;
-    private byte tip;
+    private int tip;
     SharedPreferences mPreferences;
     private EditText settingText;
     private Boolean isrun=false;
     private ProgressDialog progressDialog;
-    private Preference mResidualFiles;
-    private Preference mOptimDB;
+    private Preference mResidualFiles,mOptimDB,mlogcat;
     private Context context;
+    private String nf;
+    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/logs";
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
   	    mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.layout.tools);
+
+        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
 
         mResidualFiles= findPreference(RESIDUAL_FILES);
         mOptimDB= findPreference(PREF_OPTIM_DB);
@@ -90,6 +95,11 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         mOptimDB.setSummary("");
         if (mStartTime>0)
             mOptimDB.setSummary(DateUtils.getRelativeTimeSpanString(mStartTime));
+
+        mlogcat= findPreference("pref_logcat");
+        mlogcat.setSummary(getString(R.string.ps_logs,dn));
+        mlogcat= findPreference("pref_dmesg");
+        mlogcat.setSummary(getString(R.string.ps_logs,dn));
 
         if(Helpers.binExist("dd").equals(NOT_FOUND) || NO_FLASH){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_flash_img");
@@ -107,6 +117,7 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_sysctl");
             getPreferenceScreen().removePreference(hideCat);
         }
+
         setRetainInstance(true);
         setHasOptionsMenu(true);
     }
@@ -125,6 +136,12 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
                     break;
                 case 2:
                     progressDialog = ProgressDialog.show(context, getString(R.string.optim_db_title),getString(R.string.wait));
+                    break;
+                case 3:
+                    progressDialog = ProgressDialog.show(context, getString(R.string.logcat_title),getString(R.string.wait));
+                    break;
+                case 4:
+                    progressDialog = ProgressDialog.show(context, getString(R.string.dmesg_title),getString(R.string.wait));
                     break;
             }
         }
@@ -176,10 +193,47 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
     }
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        String key = preference.getKey();
+        final String key = preference.getKey();
 
         if (key.equals(PREF_SH)) {
-            shEditDialog(key,getString(R.string.sh_title),R.string.sh_msg);
+            Resources res = context.getResources();
+            String cancel = res.getString(R.string.cancel);
+            String ok = res.getString(R.string.ps_volt_save);
+
+            LayoutInflater factory = LayoutInflater.from(context);
+            final View alphaDialog = factory.inflate(R.layout.sh_dialog, null);
+
+
+            settingText = (EditText) alphaDialog.findViewById(R.id.shText);
+            settingText.setHint(R.string.sh_msg);
+            settingText.setText(mPreferences.getString(key,""));
+            settingText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    return true;
+                }
+            });
+
+            new AlertDialog.Builder(context)
+                    .setTitle(getString(R.string.sh_title))
+                    .setView(alphaDialog)
+                    .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog,int which) {
+                        /* nothing */
+                        }
+                    })
+                    .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final SharedPreferences.Editor editor = mPreferences.edit();
+                            editor.putString(key, settingText.getText().toString()).commit();
+
+                        }
+                    })
+                    .create()
+                    .show();
+
         }
         else if(key.equals(PREF_WIPE_CACHE)) {
 
@@ -203,7 +257,7 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
             alertDialog.show();
             //alertDialog.setCancelable(false);
             Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            theButton.setOnClickListener(new WipeCacheListener(alertDialog));
+            theButton.setOnClickListener(new opListener(alertDialog,0));
 
         }
         else if(key.equals(FLASH_KERNEL)) {
@@ -243,7 +297,7 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
                 //alertDialog.setCancelable(false);
 
                 Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                theButton.setOnClickListener(new fpListener(alertDialog));
+                theButton.setOnClickListener(new opListener(alertDialog,1));
 
 
         }
@@ -268,7 +322,7 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
             alertDialog.show();
             //alertDialog.setCancelable(false);
             Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            theButton.setOnClickListener(new sqlListener(alertDialog));
+            theButton.setOnClickListener(new opListener(alertDialog,2));
         }
         else if (key.equals(PREF_FRREZE)){
             Intent intent = new Intent(context, FreezerActivity.class);
@@ -289,20 +343,92 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
             Intent intent = new Intent(context, SysctlEditor.class);
             startActivity(intent);
         }
+        else if(key.equals("pref_logcat")) {
+
+            Date now = new Date();
+            nf = "/logcat_"+formatter.format(now)+".txt";
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(getString(R.string.logcat_title))
+                    .setMessage(getString(R.string.logcat_msg,dn+nf))
+                    .setNegativeButton(getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                    .setPositiveButton(getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                }
+                            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            //alertDialog.setCancelable(false);
+            Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            theButton.setOnClickListener(new opListener(alertDialog,3));
+        }
+        else if(key.equals("pref_dmesg")) {
+
+            Date now = new Date();
+            nf = "/dmesg_"+formatter.format(now)+".txt";
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(getString(R.string.dmesg_title))
+                    .setMessage(getString(R.string.dmesg_msg,dn+nf))
+                    .setNegativeButton(getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                    .setPositiveButton(getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                }
+                            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            //alertDialog.setCancelable(false);
+            Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            theButton.setOnClickListener(new opListener(alertDialog,4));
+        }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
-    class fpListener implements View.OnClickListener {
+
+    class opListener implements View.OnClickListener {
         private final Dialog dialog;
-        public fpListener(Dialog dialog) {
+        private final int mod;
+        public opListener(Dialog dialog,int k) {
             this.dialog = dialog;
+            this.mod = k;
         }
         @Override
         public void onClick(View v) {
             dialog.cancel();
-            new FixPermissionsOperation().execute();
-        }
+            tip=this.mod;
+            switch(tip){
+                case 0:
+                    new WipeCacheOperation().execute();
+                    break;
+                case 1:
+                    new FixPermissionsOperation().execute();
+                    break;
+                case 2:
+                    new DBoptimOperation().execute();
+                    break;
+                case 3:
+                    new LogcatOperation().execute();
+                    break;
+                case 4:
+                    new dmesgOperation().execute();
+                    break;
+            }
 
+        }
     }
 
     private class FixPermissionsOperation extends AsyncTask<String, Void, String> {
@@ -323,28 +449,12 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         @Override
         protected void onPreExecute() {
             isrun=true;
-            tip=1;
             progressDialog = ProgressDialog.show(context, getString(R.string.fix_perms_title),getString(R.string.wait));
             Helpers.get_assetsScript("fix_permissions",context,"#","");
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/fix_permissions" );
         }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
     }
 
-    class WipeCacheListener implements View.OnClickListener {
-        private final Dialog dialog;
-        public WipeCacheListener(Dialog dialog) {
-            this.dialog = dialog;
-        }
-        @Override
-        public void onClick(View v) {
-            dialog.cancel();
-            new WipeCacheOperation().execute();
-        }
-    }
 
     private class WipeCacheOperation extends AsyncTask<String, Void, String> {
         @Override
@@ -368,26 +478,11 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         @Override
         protected void onPreExecute() {
             isrun=true;
-            tip=0;
             progressDialog = ProgressDialog.show(context, getString(R.string.wipe_cache_title),getString(R.string.wait));
         }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
     }
 
-    class sqlListener implements View.OnClickListener {
-        private final Dialog dialog;
-        public sqlListener(Dialog dialog) {
-            this.dialog = dialog;
-        }
-        @Override
-        public void onClick(View v) {
-            dialog.cancel();
-            new DBoptimOperation().execute();
-        }
-    }
+
     private class DBoptimOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -406,73 +501,53 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         @Override
         protected void onPreExecute() {
             isrun=true;
-            tip=2;
             progressDialog = ProgressDialog.show(context, getString(R.string.optim_db_title),getString(R.string.wait));
             mPreferences.edit().putLong(PREF_OPTIM_DB,System.currentTimeMillis()).commit();
             Helpers.get_assetsBinary("sqlite3",context);
             Helpers.get_assetsScript("sql_optimize",context,"busybox chmod 750 "+context.getFilesDir()+"/sqlite3","");
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/sql_optimize" );
         }
+    }
+    private class LogcatOperation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            new CMDProcessor().sh.runWaitFor("logcat -v time -d > "+dn+nf);
+            return null;
+        }
 
         @Override
-        protected void onProgressUpdate(Void... values) {
+        protected void onPostExecute(String result) {
+            isrun=false;
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            isrun=true;
+            progressDialog = ProgressDialog.show(context, getString(R.string.logcat_title),getString(R.string.wait));
         }
     }
+    private class dmesgOperation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            new CMDProcessor().sh.runWaitFor("dmesg > "+dn+nf);
+            return null;
+        }
 
-
-    public void shEditDialog(final String key,String title,int msg) {
-        Resources res = context.getResources();
-        String cancel = res.getString(R.string.cancel);
-        String ok = res.getString(R.string.ps_volt_save);
-
-        LayoutInflater factory = LayoutInflater.from(context);
-        final View alphaDialog = factory.inflate(R.layout.sh_dialog, null);
-
-
-        settingText = (EditText) alphaDialog.findViewById(R.id.shText);
-        settingText.setHint(msg);
-        settingText.setText(mPreferences.getString(key,""));
-        settingText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return true;
+        @Override
+        protected void onPostExecute(String result) {
+            isrun=false;
+            if (progressDialog != null) {
+                progressDialog.dismiss();
             }
-        });
+        }
 
-        settingText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setView(alphaDialog)
-                .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,int which) {
-                        /* nothing */
-                    }
-                })
-                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final SharedPreferences.Editor editor = mPreferences.edit();
-                        editor.putString(key, settingText.getText().toString()).commit();
-
-                    }
-                })
-                .create()
-                .show();
+        @Override
+        protected void onPreExecute() {
+            isrun=true;
+            progressDialog = ProgressDialog.show(context, getString(R.string.dmesg_title),getString(R.string.wait));
+        }
     }
-
-
-
 }
