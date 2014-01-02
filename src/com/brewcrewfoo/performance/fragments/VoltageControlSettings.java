@@ -180,8 +180,22 @@ public class VoltageControlSettings extends Fragment implements Constants {
             IncreasebyStep(-25);
             break;
         case R.id.reset:
-            ResetVolt();
-            Toast.makeText(context, getString(R.string.reset_msg), Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.mt_reset))
+                    .setMessage(getString(R.string.reset_msg))
+                    .setNegativeButton(getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                    .setPositiveButton(getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ResetVolt();
+                                }
+            }).create().show();
             break;
         }
         return true;

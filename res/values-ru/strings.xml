@@ -325,6 +325,8 @@
     <string name="ics_color">Holo</string>
 
     <!-- beta2-->
+    <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
+
     <string name="prefcat_logs">Dump Log Events</string>
     <string name="logcat_title">Logcat</string>
     <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>

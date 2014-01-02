@@ -328,6 +328,8 @@ Translation by Laurentiu1996
     <string name="ics_color">Holo</string>
 
     <!-- beta2-->
+    <string name="reset_msg">Valorile curente vor fi șterse și vor fi aplicate valorile iniţiale după repornire. Continuaţi?</string>
+
     <string name="prefcat_logs">Salvează Log-uri</string>
     <string name="logcat_title">Logcat</string>
     <string name="logcat_msg">Logcat va fi salvat în %s. Continue?</string>

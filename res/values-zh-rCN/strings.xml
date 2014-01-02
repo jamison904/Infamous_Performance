@@ -358,6 +358,8 @@ Copyright (C) 2012  James Roberts
     <string name="ics_color">Holo</string>
 
     <!-- beta2-->
+    <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
+
     <string name="prefcat_logs">转储日志事件</string>
     <string name="logcat_title">Logcat</string>
     <string name="logcat_msg">Logcat 的将被倾倒在 %s. 要继续吗？</string>

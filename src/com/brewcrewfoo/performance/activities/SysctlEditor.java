@@ -33,7 +33,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -161,19 +160,33 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                 }
                 break;
             case R.id.reset:
-                if(new File(syspath+"sysctl.conf").exists()){
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                    Date now = new Date();
-                    String nf = formatter.format(now)+"_" + "sysctl.conf";
-                    new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/"+nf );
-                    final StringBuilder sb = new StringBuilder();
-                    sb.append("busybox mount -o remount,rw /system").append(";\n");
-                    sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
-                    sb.append("busybox mount -o remount,ro /system").append(";\n");
-                    Helpers.shExec(sb,context,true);
-                }
-                new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
-                Toast.makeText(context, getString(R.string.reset_msg), Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.mt_reset))
+                        .setMessage(getString(R.string.reset_msg))
+                        .setNegativeButton(getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                        .setPositiveButton(getString(R.string.yes),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if(new File(syspath+"sysctl.conf").exists()){
+                                            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                                            Date now = new Date();
+                                            String nf = formatter.format(now)+"_" + "sysctl.conf";
+                                            new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/"+nf );
+                                            final StringBuilder sb = new StringBuilder();
+                                            sb.append("busybox mount -o remount,rw /system").append(";\n");
+                                            sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
+                                            sb.append("busybox mount -o remount,ro /system").append(";\n");
+                                            Helpers.shExec(sb,context,true);
+                                        }
+                                        new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
+                                    }
+                }).create().show();
                 break;
         }
         return true;
