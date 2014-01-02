@@ -151,7 +151,13 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.search_prop:
-                search.setVisibility(RelativeLayout.VISIBLE);
+                if(search.isShown()){
+                    search.setVisibility(RelativeLayout.GONE);
+                    filterText.setText("");
+                }
+                else{
+                    search.setVisibility(RelativeLayout.VISIBLE);
+                }
                 break;
             case R.id.reset:
                 if(new File(syspath+"sysctl.conf").exists()){
@@ -225,9 +231,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             nofiles.setVisibility(View.GONE);
             tools.setVisibility(View.GONE);
         }
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
+
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,long row) {

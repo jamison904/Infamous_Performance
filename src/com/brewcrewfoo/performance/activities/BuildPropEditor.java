@@ -136,7 +136,13 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                 editPropDialog(null);
                 break;
             case R.id.search_prop:
-                search.setVisibility(RelativeLayout.VISIBLE);
+                if(search.isShown()){
+                    search.setVisibility(RelativeLayout.GONE);
+                    filterText.setText("");
+                }
+                else{
+                    search.setVisibility(RelativeLayout.VISIBLE);
+                }
                 break;
             case R.id.restore_prop:
                 makedialog(getString(R.string.prefcat_build_prop),getString(R.string.prop_restore_msg),(byte)0,null);
