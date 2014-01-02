@@ -116,6 +116,7 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
                             break;
                         case 4:
                             frags[j] = new VoltageControlSettings();
+                            break;
                         case 5:
                             frags[j] = new Advanced();
                             break;
