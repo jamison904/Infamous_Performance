@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -106,7 +107,10 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         new GetPropOperation().execute();
 
     }
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         private List<Prop> props = new ArrayList<Prop>();
 
