@@ -10,13 +10,14 @@ Translation by Laurentiu1996
     <string-array name="tabs">
         <item>Setări CPU</item>
         <item>Baterie</item>
+        <item>Setări avansate CPU</item>
         <item>Setări memorie</item>
         <item>Setări Tensiune</item>
         <item>Setări Avansate</item>
         <item>Timp de lucru</item>
-        <item>Informaţii Generale</item>
         <item>Informatii Disk</item>
         <item>Utile</item>
+        <item>Informaţii Generale</item>
     </string-array>
 
     <string name="menu_tab">Tab-uri</string>
@@ -37,7 +38,7 @@ Translation by Laurentiu1996
     <string name="ok">OK</string>
     <string name="cancel">Renunţă</string>
     <string name="mt_gov_ctrl">Setare Governor</string>
-    <string name="mpdecision">MPDECISION</string>
+
     <!-- Other settings -->
     <string name="prefcat_free_memory">MEMORIE LIBERĂ</string>
     <string name="prefcat_tweaks">ÎNCĂRCARE RAPIDĂ</string>
@@ -326,4 +327,15 @@ Translation by Laurentiu1996
     <string name="set">Setaţi</string>
     <string name="ics_color">Holo</string>
 
+    <!-- beta2-->
+    <string name="prefcat_logs">Salvează Log-uri</string>
+    <string name="logcat_title">Logcat</string>
+    <string name="logcat_msg">Logcat va fi salvat în %s. Continue?</string>
+    <string name="dmesg_title">Dmesg</string>
+    <string name="dmesg_msg">Dmesg va fi salvat în %s. Continue?</string>
+    <string name="ps_logs">Salvează log în %s.</string>
+
+    <string name="mpdecision">MPDECISION</string>
+    <string name="pt_mpdecision">Activaţi MPDecision</string>
+    <string name="ps_mpdecision"></string>
 </resources>

@@ -29,9 +29,9 @@ Copyright (C) 2012  James Roberts
         <item>Voltage Settings</item>
         <item>Advanced Settings</item>
         <item>Time In State</item>
-        <item>General Info</item>
         <item>Disk Info</item>
         <item>Tools</item>
+        <item>General Info</item>
     </string-array>
 
 

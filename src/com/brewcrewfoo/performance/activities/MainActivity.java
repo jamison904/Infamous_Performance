@@ -123,13 +123,13 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
                             frags[j] = new TimeInState();
                             break;
                         case 7:
-                            frags[j] = new CPUInfo();
-                            break;
-                        case 8:
                             frags[j] = new DiskInfo();
                             break;
-                        case 9:
+                        case 8:
                             frags[j] = new Tools();
+                            break;
+                        case 9:
+                            frags[j] = new CPUInfo();
                             break;
                     }
                     j++;

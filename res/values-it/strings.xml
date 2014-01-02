@@ -9,14 +9,15 @@ translation by Stefano187
     <!-- Main tabs -->
     <string-array name="tabs">
         <item>Impostazioni CPU</item>
+        <item>CPU Avanzato</item>
         <item>Batteria</item>
         <item>Impostazioni Memoria</item>
         <item>Impostazioni Voltaggio</item>
         <item>Informazioni Avanzate</item>
         <item>Frequenza e Tempo</item>
-        <item>Informazioni Generali</item>
         <item>Informazioni Disco</item>
         <item>Strumenti</item>
+        <item>Informazioni Generali</item>
     </string-array>
 
     <string name="menu_tab">Tabs</string>
@@ -37,7 +38,7 @@ translation by Stefano187
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
     <string name="mt_gov_ctrl">Impostazioni Governor</string>
-    <string name="mpdecision">MPDECISION</string>
+
     <!-- Other settings -->
     <string name="prefcat_free_memory">MEMORIA LIBERA</string>
     <string name="prefcat_tweaks">CARICA RAPIDA</string>
@@ -340,4 +341,15 @@ translation by Stefano187
     <string name="set">Set</string>
     <string name="ics_color">Holo</string>
 
+    <!-- beta2-->
+    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="logcat_title">Logcat</string>
+    <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
+    <string name="dmesg_title">Dmesg</string>
+    <string name="dmesg_msg">Dmesg will be dumped on %s. Continue?</string>
+    <string name="ps_logs">Dump log on %s.</string>
+
+    <string name="mpdecision">MPDECISION</string>
+    <string name="pt_mpdecision">Enable MPDecision</string>
+    <string name="ps_mpdecision"></string>
 </resources>

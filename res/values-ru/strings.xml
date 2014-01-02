@@ -5,14 +5,15 @@
     <!-- Main tabs -->
     <string-array name="tabs">
         <item>Настройки Процессора</item>
+        <item>Процессор Расширенные</item>
         <item>Аккумулятор</item>
         <item>Настройки Памяти</item>
         <item>Настройки Напряжения</item>
         <item>Расширенные настройки</item>
         <item>Время в Действии</item>
-        <item>Общая информация</item>
         <item>О Диске</item>
         <item>Инструменты</item>
+        <item>Общая информация</item>
     </string-array>
 
     <string name="menu_tab">Вкладки</string>
@@ -33,7 +34,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Отменить</string>
     <string name="mt_gov_ctrl">Настройки Говернора</string>
-    <string name="mpdecision">MPDECISION</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">СВОБОДНАЯ ПАМЯТЬ</string>
     <string name="prefcat_tweaks">БЫСТРАЯ ЗАРЯДКА</string>
@@ -323,4 +323,16 @@
     <string name="hex_hint">#FF000000</string>
     <string name="set">Установить</string>
     <string name="ics_color">Holo</string>
+
+    <!-- beta2-->
+    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="logcat_title">Logcat</string>
+    <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
+    <string name="dmesg_title">Dmesg</string>
+    <string name="dmesg_msg">Dmesg will be dumped on %s. Continue?</string>
+    <string name="ps_logs">Dump log on %s.</string>
+
+    <string name="mpdecision">MPDECISION</string>
+    <string name="pt_mpdecision">Enable MPDecision</string>
+    <string name="ps_mpdecision"></string>
 </resources>

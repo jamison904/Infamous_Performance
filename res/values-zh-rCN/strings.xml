@@ -23,14 +23,15 @@ Copyright (C) 2012  James Roberts
     <!-- Main tabs -->
     <string-array name="tabs">
         <item>CPU 设置</item>
+        <item>高级CPU</item>
         <item>电池</item>
         <item>内存设置</item>
         <item>电压设置</item>
         <item>高级设置</item>
         <item>状态时间统计</item>
-        <item>基本信息</item>
         <item>存储信息</item>
         <item>工具</item>
+        <item>基本信息</item>
     </string-array>
 
 
@@ -52,7 +53,7 @@ Copyright (C) 2012  James Roberts
     <string name="ok">确认</string>
     <string name="cancel">取消</string>
     <string name="mt_gov_ctrl">调速器设置</string>
-    <string name="mpdecision">MPDECISION</string>
+
     <!-- Other settings -->
     <string name="prefcat_free_memory">空闲内存</string>
     <string name="prefcat_tweaks">快速充电</string>
@@ -356,4 +357,15 @@ Copyright (C) 2012  James Roberts
     <string name="set">设置</string>
     <string name="ics_color">Holo</string>
 
+    <!-- beta2-->
+    <string name="prefcat_logs">转储日志事件</string>
+    <string name="logcat_title">Logcat</string>
+    <string name="logcat_msg">Logcat 的将被倾倒在 %s. 要继续吗？</string>
+    <string name="dmesg_title">Dmesg</string>
+    <string name="dmesg_msg">Dmesg 的将被倾倒在 %s. 要继续吗？</string>
+    <string name="ps_logs">转储日志在 %s.</string>
+
+    <string name="mpdecision">MPDECISION</string>
+    <string name="pt_mpdecision">启用 MPDecision</string>
+    <string name="ps_mpdecision"></string>
 </resources>
