@@ -31,7 +31,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
-
 import com.brewcrewfoo.performance.widget.PCWidget;
 
 import java.io.*;
@@ -518,6 +517,7 @@ public class Helpers implements Constants {
         }
         return true;
     }
+
     public static String readCPU(Context context,int i){
         Helpers.get_assetsScript("utils",context,"","");
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );

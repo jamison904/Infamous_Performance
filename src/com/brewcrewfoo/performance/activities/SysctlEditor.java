@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -172,6 +173,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                     Helpers.shExec(sb,context,true);
                 }
                 new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
+                Toast.makeText(context, getString(R.string.reset_msg), Toast.LENGTH_LONG).show();
                 break;
         }
         return true;

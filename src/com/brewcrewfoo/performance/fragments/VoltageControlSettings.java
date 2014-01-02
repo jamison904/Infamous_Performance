@@ -181,31 +181,32 @@ public class VoltageControlSettings extends Fragment implements Constants {
             break;
         case R.id.reset:
             ResetVolt();
+            Toast.makeText(context, getString(R.string.reset_msg), Toast.LENGTH_LONG).show();
             break;
         }
         return true;
     }
 
     private void ResetVolt() {
-	for (final Voltage volt : mVoltages) {
-		SharedPreferences.Editor editor = mPreferences.edit();
-                editor.remove(volt.getFreq()).commit();
-	}
-	final List<Voltage> volts = getVolts(mPreferences);
-	mVoltages.clear();
-	mVoltages.addAll(volts);
-	mAdapter.notifyDataSetChanged();
+        for (final Voltage volt : mVoltages) {
+            SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.remove(volt.getFreq()).commit();
+        }
+        final List<Voltage> volts = getVolts(mPreferences);
+        mVoltages.clear();
+        mVoltages.addAll(volts);
+        mAdapter.notifyDataSetChanged();
     }
     private void IncreasebyStep(final int pas) {
-	for (final Voltage volt : mVoltages) {
-		String value=Integer.toString( Integer.parseInt(volt.getSavedMV())+pas);
-		SharedPreferences.Editor editor = mPreferences.edit();
-                editor.putString(volt.getFreq(), value).commit();
-	}
-	final List<Voltage> volts = getVolts(mPreferences);
-	mVoltages.clear();
-	mVoltages.addAll(volts);
-	mAdapter.notifyDataSetChanged();
+        for (final Voltage volt : mVoltages) {
+            String value=Integer.toString( Integer.parseInt(volt.getSavedMV())+pas);
+            SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putString(volt.getFreq(), value).commit();
+        }
+        final List<Voltage> volts = getVolts(mPreferences);
+        mVoltages.clear();
+        mVoltages.addAll(volts);
+        mAdapter.notifyDataSetChanged();
     }
     
     

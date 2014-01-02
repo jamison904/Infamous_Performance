@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -181,6 +182,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.reset_vm) {
             mPreferences.edit().remove(GOV_SETTINGS).apply();
+            Toast.makeText(context, getString(R.string.reset_msg), Toast.LENGTH_LONG).show();
         }
         return true;
     }
@@ -222,7 +224,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if ((tv.getText().toString() != null) && (tv.getText().toString().length() > 0) && !vcur.equals(tv.getText().toString())) {
+                        if ((tv.getText().toString() != null) && (tv.getText().toString().length() > 0)) {
                             pp.setVal(tv.getText().toString().trim());
                             set_pref(tn.getText().toString().trim(), tv.getText().toString().trim());
                         }

@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -147,6 +148,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.reset_vm) {
             mPreferences.edit().remove(PREF_VM).apply();
+            Toast.makeText(context, getString(R.string.reset_msg), Toast.LENGTH_LONG).show();
         }
         return true;
     }
@@ -248,7 +250,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                     public void onClick(DialogInterface dialog, int which) {
 
                         if (pp!=null) {
-                            if ((tv.getText().toString() != null) && !vcur.equals(tv.getText().toString())){
+                            if ((tv.getText().toString() != null)&&(tv.getText().toString().length() > 0)){
                                 pp.setVal(tv.getText().toString().trim());
                                 set_pref(tn.getText().toString().trim(),tv.getText().toString().trim());
                             }
