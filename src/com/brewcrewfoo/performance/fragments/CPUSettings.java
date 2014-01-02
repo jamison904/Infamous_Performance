@@ -75,31 +75,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
         mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
 
- /*        LinearLayout mpdlayout=(LinearLayout) view.findViewById(R.id.mpd);
-
-       Switch mpdsw = (Switch) view.findViewById(R.id.mpd_switch);
-        if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
-            mpdlayout.setVisibility(LinearLayout.VISIBLE);
-            Boolean mpdon = Helpers.moduleActive("mpdecision");
-            mpdsw.setChecked(mpdon);
-            mPreferences.edit().putBoolean("mpdecision",mpdon).apply();
-
-            mpdsw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton v, boolean checked) {
-                    if (checked) {
-                        new CMDProcessor().su.runWaitFor("stop mpdecision");
-                        mPreferences.edit().putBoolean("mpdecision",false).apply();
-                    }
-                    else{
-                        new CMDProcessor().su.runWaitFor("start mpdecision");
-                        mPreferences.edit().putBoolean("mpdecision",true).apply();
-                    }
-
-                }
-            });
-        }
-*/
         mCurCpu = (TextView) view.findViewById(R.id.curcpu);
         mCurFreq = (TextView) view.findViewById(R.id.current_speed);
         mCurFreq.setOnClickListener(new View.OnClickListener() {
