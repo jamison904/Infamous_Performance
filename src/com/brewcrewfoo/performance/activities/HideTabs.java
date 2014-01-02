@@ -50,15 +50,15 @@ public class HideTabs extends Activity implements Constants, ActivityThemeChange
                 default:
                     TabList.add(t);
                     break;
-                case 1:
-                    if(Helpers.getNumOfCpus()>0) TabList.add(t);
+               /* case 1:
+                    if(Helpers.getNumOfCpus()>1) TabList.add(t);
                     break;
                 case 2:
                     if(Helpers.showBattery()) TabList.add(t);
                     break;
                 case 4:
                     if (Helpers.voltageFileExists()) TabList.add(t);
-                    break;
+                    break;*/
             }
             //TabList.add(t);
             i++;
