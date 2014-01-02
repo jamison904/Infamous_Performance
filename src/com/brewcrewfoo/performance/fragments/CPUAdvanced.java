@@ -27,7 +27,6 @@ import com.brewcrewfoo.performance.util.Helpers;
 
 public class CPUAdvanced extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,Constants {
 
-    private static final int NEW_MENU_ID= Menu.FIRST+1;
     SharedPreferences mPreferences;
     private CheckBoxPreference mMpdecision;
 
@@ -62,13 +61,14 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
-        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Helpers.removeCurItem(item,Menu.FIRST+1,(ViewPager) getView().getParent());
         switch(item.getItemId()){
+            case R.id.tablist:
+                Helpers.getTabList(getString(R.string.menu_tab),(ViewPager) getView().getParent(),getActivity());
+                break;
             case R.id.app_settings:
                 Intent intent = new Intent(getActivity(), PCSettings.class);
                 startActivity(intent);

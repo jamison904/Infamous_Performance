@@ -1,7 +1,9 @@
 package com.brewcrewfoo.performance.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -38,7 +40,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     SharedPreferences mPreferences;
     private boolean mIsTegra3 = false;
     private boolean mIsDynFreq = false;
-    private static final int NEW_MENU_ID=Menu.FIRST+1;
     private Context context;
     private final String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
 
@@ -204,13 +205,14 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.cpu_settings_menu, menu);
-        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Helpers.removeCurItem(item,NEW_MENU_ID,(ViewPager) getView().getParent());
         switch(item.getItemId()){
+            case R.id.tablist:
+                Helpers.getTabList(getString(R.string.menu_tab),(ViewPager) getView().getParent(),getActivity());
+                break;
             case R.id.app_settings:
                 Intent intent = new Intent(context, PCSettings.class);
                 startActivity(intent);

@@ -43,7 +43,6 @@ import com.brewcrewfoo.performance.util.Helpers;
 import java.io.File;
 
 public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeListener, Constants {
-    private static final int NEW_MENU_ID=Menu.FIRST+1;
     TextView mbattery_percent;
     TextView mbattery_volt;
     TextView mbattery_status;
@@ -67,12 +66,13 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
-        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Helpers.removeCurItem(item,NEW_MENU_ID,(ViewPager) getView().getParent());
         switch(item.getItemId()){
+            case R.id.tablist:
+                Helpers.getTabList(getString(R.string.menu_tab),(ViewPager) getView().getParent(),getActivity());
+                break;
                 case R.id.app_settings:
                 Intent intent = new Intent(context, PCSettings.class);
                 startActivity(intent);

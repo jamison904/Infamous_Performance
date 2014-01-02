@@ -48,8 +48,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoltageControlSettings extends Fragment implements Constants {
-
-    private static final int NEW_MENU_ID=Menu.FIRST+1;
     public static final int DIALOG_EDIT_VOLT = 0;
     private List<Voltage> mVoltages;
     private ListAdapter mAdapter;
@@ -162,41 +160,42 @@ public class VoltageControlSettings extends Fragment implements Constants {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.voltage_control_menu, menu);
-        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Helpers.removeCurItem(item,Menu.FIRST+1,(ViewPager) getView().getParent());
         switch (item.getItemId()){
-        case R.id.app_settings:
-            Intent intent = new Intent(context, PCSettings.class);
-            startActivity(intent);
-            break;
-        case R.id.volt_increase:
-            IncreasebyStep(25);
-            break;
-        case R.id.volt_decrease:
-            IncreasebyStep(-25);
-            break;
-        case R.id.reset:
-            new AlertDialog.Builder(getActivity())
-                    .setTitle(getString(R.string.mt_reset))
-                    .setMessage(getString(R.string.reset_msg))
-                    .setNegativeButton(getString(R.string.cancel),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+            case R.id.tablist:
+                Helpers.getTabList(getString(R.string.menu_tab),(ViewPager) getView().getParent(),getActivity());
+                break;
+            case R.id.app_settings:
+                Intent intent = new Intent(context, PCSettings.class);
+                startActivity(intent);
+                break;
+            case R.id.volt_increase:
+                IncreasebyStep(25);
+                break;
+            case R.id.volt_decrease:
+                IncreasebyStep(-25);
+                break;
+            case R.id.reset:
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.mt_reset))
+                        .setMessage(getString(R.string.reset_msg))
+                        .setNegativeButton(getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
                                 }
-                            })
-                    .setPositiveButton(getString(R.string.yes),
+                                })
+                        .setPositiveButton(getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     ResetVolt();
-                                }
-            }).create().show();
-            break;
+                                        }
+                }).create().show();
+                break;
         }
         return true;
     }

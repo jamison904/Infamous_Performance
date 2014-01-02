@@ -32,7 +32,6 @@ import java.io.File;
 
 public class DiskInfo extends Fragment implements Constants {
 
-    private static final int NEW_MENU_ID=Menu.FIRST+1;
     private RelativeLayout lsys;
     private RelativeLayout ldata;
     private RelativeLayout lcache;
@@ -198,12 +197,13 @@ public class DiskInfo extends Fragment implements Constants {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.disk_info_menu, menu);
-        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Helpers.removeCurItem(item,NEW_MENU_ID,(ViewPager) getView().getParent());
         switch (item.getItemId()){
+            case R.id.tablist:
+                Helpers.getTabList(getString(R.string.menu_tab),(ViewPager) getView().getParent(),getActivity());
+                break;
             case R.id.refresh:
                 loadData();
                 break;

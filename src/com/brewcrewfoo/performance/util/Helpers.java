@@ -19,9 +19,11 @@
 package com.brewcrewfoo.performance.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -34,6 +36,8 @@ import android.view.SubMenu;
 import com.brewcrewfoo.performance.widget.PCWidget;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Helpers implements Constants {
 
@@ -491,20 +495,26 @@ public class Helpers implements Constants {
         String pre = String.valueOf("KMGTPE".charAt(exp-1));
         return String.format("%.1f %sB", bytes / Math.pow(1024, exp), pre);
     }
-    public static void removeCurItem(MenuItem item,int idx,ViewPager vp){
+
+    public static void getTabList(String strTitle, final ViewPager vp,Activity activity) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle(strTitle);
+
+        List<String> listItems = new ArrayList<String>();
         for(byte i=0;i< vp.getAdapter().getCount();i++){
-            if(item.getItemId() == idx+i+1) {
-                vp.setCurrentItem(i);
-            }
+           // if(i!=vp.getCurrentItem())
+                listItems.add(vp.getAdapter().getPageTitle(i).toString());
         }
+        alertDialogBuilder.setItems(listItems.toArray(new CharSequence[listItems.size()]),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        vp.setCurrentItem(which);
+                    }
+                }
+        ).show();
     }
-    public static void addItems2Menu(Menu menu,int idx,String nume,ViewPager vp){
-        final SubMenu smenu = menu.addSubMenu(0, idx, 0,nume);
-        for(byte i=0;i< vp.getAdapter().getCount();i++){
-            if(i!=vp.getCurrentItem())
-                smenu.add(0,idx +i+1, 0, vp.getAdapter().getPageTitle(i));
-        }
-    }
+
     public static boolean is_Tab_available(int i){
         if(i==1){
             return (Helpers.getNumOfCpus()>1);
