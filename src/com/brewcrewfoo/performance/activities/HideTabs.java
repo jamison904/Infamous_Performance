@@ -46,21 +46,7 @@ public class HideTabs extends Activity implements Constants, ActivityThemeChange
         int i=0;
         while (i<getResources().getStringArray(R.array.tabs).length) {
             Tab t = new Tab(getResources().getStringArray(R.array.tabs)[i],mPreferences.getBoolean(getResources().getStringArray(R.array.tabs)[i],true));
-            switch(i){
-                default:
-                    TabList.add(t);
-                    break;
-               /* case 1:
-                    if(Helpers.getNumOfCpus()>1) TabList.add(t);
-                    break;
-                case 2:
-                    if(Helpers.showBattery()) TabList.add(t);
-                    break;
-                case 4:
-                    if (Helpers.voltageFileExists()) TabList.add(t);
-                    break;*/
-            }
-            //TabList.add(t);
+            if(Helpers.is_Tab_available(i)) TabList.add(t);
             i++;
         }
         dataAdapter = new MyCustomAdapter(this,R.layout.tab_item, TabList);

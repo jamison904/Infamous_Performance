@@ -506,7 +506,18 @@ public class Helpers implements Constants {
                 smenu.add(0,idx +i+1, 0, vp.getAdapter().getPageTitle(i));
         }
     }
-
+    public static boolean is_Tab_available(int i){
+        if(i==1){
+            return (Helpers.getNumOfCpus()>1);
+        }
+        else if(i==2){
+            return Helpers.showBattery();
+        }
+        else if(i==4){
+            return Helpers.voltageFileExists();
+        }
+        return true;
+    }
     public static String readCPU(Context context,int i){
         Helpers.get_assetsScript("utils",context,"","");
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );

@@ -47,8 +47,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     SharedPreferences mPreferences;
     PagerTabStrip mPagerTabStrip;
     ViewPager mViewPager;
-
-    private static boolean mVoltageExists;
     private boolean mIsLightTheme;
     public static Boolean thide=false;
     public static String mCurGovernor;
@@ -57,8 +55,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public static String mMinFreqSetting;
     public static String mCPUon;
     public static int curcpu=0;
-    private boolean canSu = false;
-    private boolean canBb = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,20 +63,16 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         setTheme();
 
 
-        canSu = Helpers.checkSu();
-        canBb = !Helpers.binExist("busybox").equals(NOT_FOUND);
+        boolean canSu = Helpers.checkSu();
+        boolean canBb = !Helpers.binExist("busybox").equals(NOT_FOUND);
 
         if (!canSu || !canBb) {
-            //mPreferences.edit().putBoolean("root",false).apply();
             final String failedTitle = getString(R.string.su_failed_title);
             final String message = getString(R.string.su_failed_su_or_busybox);
             suResultDialog(failedTitle, message);
         }
         else{
             setContentView(R.layout.activity_main);
-
-            //mPreferences.edit().putBoolean("root",true).apply();
-            mVoltageExists = Helpers.voltageFileExists();
 
             mViewPager = (ViewPager) findViewById(R.id.viewpager);
             TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
@@ -108,63 +100,40 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
             int j=0;
             while (i<getResources().getStringArray(R.array.tabs).length) {
                 boolean isvisible=mPreferences.getBoolean(getResources().getStringArray(R.array.tabs)[i],true);
-                switch(i){
-                    case 0:
-                        if(isvisible){
+                if(Helpers.is_Tab_available(i) && isvisible){
+                    switch(i){
+                        case 0:
                             frags[j] = new CPUSettings();
-                            j++;
-                        }
-                        break;
-                    case 1:
-                        if(Helpers.showBattery()&&isvisible){
+                            break;
+                        case 1:
+                            frags[j] = new CPUAdvanced();
+                            break;
+                        case 2:
                             frags[j] = new BatteryInfo();
-                            j++;
-                        }
-                        break;
-                    case 2:
-                        if(isvisible){
+                            break;
+                        case 3:
                             frags[j] = new OOMSettings();
-                            j++;
-                        }
-                        break;
-                    case 3:
-                        if (mVoltageExists&&isvisible) {
+                            break;
+                        case 4:
                             frags[j] = new VoltageControlSettings();
-                            j++;
-                        }
-                        break;
-                    case 4:
-                        if(isvisible){
+                        case 5:
                             frags[j] = new Advanced();
-                            j++;
-                        }
-                        break;
-                    case 5:
-                        if(isvisible){
+                            break;
+                        case 6:
                             frags[j] = new TimeInState();
-                            j++;
-                        }
-                        break;
-                    case 6:
-                        if(isvisible){
+                            break;
+                        case 7:
                             frags[j] = new CPUInfo();
-                            j++;
-                        }
-                        break;
-                    case 7:
-                        if(isvisible){
+                            break;
+                        case 8:
                             frags[j] = new DiskInfo();
-                            j++;
-                        }
-                        break;
-                    case 8:
-                        if(isvisible){
+                            break;
+                        case 9:
                             frags[j] = new Tools();
-                            j++;
-                        }
-                        break;
+                            break;
+                    }
+                    j++;
                 }
-
                 i++;
             }
         }
@@ -216,30 +185,10 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     private String[] getTitles() {
         List<String> titleslist = new ArrayList<String>();
         int i=0;
-        int j=0;
         while (i<getResources().getStringArray(R.array.tabs).length) {
             boolean isvisible=mPreferences.getBoolean(getResources().getStringArray(R.array.tabs)[i],true);
-            switch(i){
-                case 1:
-                    if(Helpers.showBattery()&&isvisible){
-                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
-                        j++;
-                    }
-                    break;
-                case 3:
-                    if (mVoltageExists&&isvisible) {
-                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
-                        j++;
-                    }
-                    break;
-                default:
-                    if(isvisible){
-                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
-                        j++;
-                    }
-                    break;
-            }
-
+            if(Helpers.is_Tab_available(i) && isvisible)
+                titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
             i++;
         }
         return titleslist.toArray(new String[titleslist.size()]);
