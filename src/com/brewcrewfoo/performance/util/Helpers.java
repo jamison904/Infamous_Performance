@@ -210,12 +210,10 @@ public class Helpers implements Constants {
             try {
                 int cpuStart = Integer.parseInt(cpuCount[0]);
                 int cpuEnd = Integer.parseInt(cpuCount[1]);
-
                 numOfCpu = cpuEnd - cpuStart + 1;
-
-                if (numOfCpu < 0)
-                    numOfCpu = 1;
-            } catch (NumberFormatException ex) {
+                if (numOfCpu < 0) numOfCpu = 1;
+            }
+            catch (NumberFormatException ex) {
                 numOfCpu = 1;
             }
         }
@@ -226,13 +224,16 @@ public class Helpers implements Constants {
         if (new File(UV_MV_PATH).exists()) {
             setVoltagePath(UV_MV_PATH);
             return true;
-        } else if (new File(VDD_PATH).exists()) {
+        }
+        else if (new File(VDD_PATH).exists()) {
             setVoltagePath(VDD_PATH);
             return true;
-        } else if (new File(VDD_SYSFS_PATH).exists()) {
+        }
+        else if (new File(VDD_SYSFS_PATH).exists()) {
             setVoltagePath(VDD_SYSFS_PATH);
             return true;
-        } else if (new File(COMMON_VDD_PATH).exists()) {
+        }
+        else if (new File(COMMON_VDD_PATH).exists()) {
             setVoltagePath(COMMON_VDD_PATH);
             return true;
         }
@@ -282,7 +283,8 @@ public class Helpers implements Constants {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawColor(bgcolor);
             return bitmap;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return null;
         }
     }
@@ -322,18 +324,6 @@ public class Helpers implements Constants {
         if(cr.success() && !cr.stdout.equals("")) return true;
         return false;
     }
-	public static String shExec(StringBuilder s,Context c,Boolean su){
-        get_assetsScript("run", c, "", s.toString());
-        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
-        CMDProcessor.CommandResult cr;
-        if(su)
-            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
-        else
-            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
-        if(cr.success()){return cr.stdout;}
-        else{Log.d(TAG, "execute: "+cr.stderr);return null;}
-	}
-
     public static void get_assetsScript(String fn,Context c,String prefix,String postfix){
         byte[] buffer;
         final AssetManager assetManager = c.getAssets();
@@ -389,6 +379,26 @@ public class Helpers implements Constants {
             e.printStackTrace();
         }
     }
+    public static String shExec(StringBuilder s,Context c,Boolean su){
+        get_assetsScript("run", c, "", s.toString());
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
+        CMDProcessor.CommandResult cr;
+        if(su)
+            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
+        else
+            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
+        if(cr.success()){return cr.stdout;}
+        else{Log.d(TAG, "execute: "+cr.stderr);return null;}
+    }
+
+    public static String readCPU(Context context,int i){
+        Helpers.get_assetsScript("utils", context, "", "");
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );
+        CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor(context.getFilesDir()+"/utils -getcpu "+i);
+        if(cr.success()) return cr.stdout;
+        else return null;
+    }
+      
     public static String ReadableByteCount(long bytes) {
         if (bytes < 1024) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(1024));
@@ -426,14 +436,6 @@ public class Helpers implements Constants {
             return Helpers.voltageFileExists();
         }
         return true;
-    }
-
-    public static String readCPU(Context context,int i){
-        Helpers.get_assetsScript("utils",context,"","");
-        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );
-        CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor(context.getFilesDir()+"/utils -getcpu "+i);
-        if(cr.success()) return cr.stdout;
-        else return null;
     }
 
     public static String bln_path() {

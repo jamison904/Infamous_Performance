@@ -218,11 +218,11 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
             final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/tmp";
 
             if(tip.equalsIgnoreCase("kernel")){
-                sb.append("busybox rm -rf /data/dalvik-cache/*\n");
-                sb.append("busybox rm -rf /cache/*\n");
+                sb.append("busybox rm -rf /data/dalvik-cache/*;\n");
+                sb.append("busybox rm -rf /cache/*;\n");
                 if(iszip){
                     try{
-                        new UnzipUtility().unzipfile(nFile,dn, new String[]{"boot.img", ".ko"});
+                        new UnzipUtility().unzipfile(nFile,dn, new String[]{"boot.img",".ko"});
                     }
                     catch (Exception e) {
                         Log.d(TAG,"unzip error: "+nFile);
@@ -234,6 +234,7 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                     File[]dirs = destDir.listFiles();
                     if((dirs!=null)&&(dirs.length>0)){
                         sb.append("busybox mount -o remount,rw /system;\n");
+                        sb.append("busybox rm -rf /system/lib/modules/*;\n");
                         for(File ff: dirs){
                             if(ff.getName().toLowerCase().endsWith(".ko")){
                                 sb.append("busybox cp ").append(dn).append("/system/lib/modules/").append(ff.getName()).append(" /system/lib/modules/").append(ff.getName()).append(";\n");
@@ -243,10 +244,10 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                         sb.append("busybox mount -o remount,ro /system;\n");
                     }
                     sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
-                    sb.append("busybox rm -rf ").append(dn).append("/*\n");
+                    sb.append("busybox rm -rf ").append(dn).append("/*;\n");
                 }
                 else{
-                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append(";\n");
                 }
 
             }
@@ -261,11 +262,11 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                         return "";
                     }
                     nFile=dn+"/recovery.img";
-                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
-                    sb.append("busybox rm -rf ").append(dn).append("/*\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append(";\n");
+                    sb.append("busybox rm -rf ").append(dn).append("/*;\n");
                 }
                 else{
-                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append(";\n");
                 }
             }
             Helpers.shExec(sb,context,true);
