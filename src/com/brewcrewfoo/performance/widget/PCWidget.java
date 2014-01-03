@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.MainActivity;
@@ -55,13 +56,14 @@ public class PCWidget extends AppWidgetProvider implements Constants {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
         int i=0;
         int nCpus=Helpers.getNumOfCpus();
-        String Fmin=null;
-        String Fmax=null;
-        String cGov=null;
-        String cIO=null;
+        String Fmin="0";
+        String Fmax="0";
+        String cGov="";
+        String cIO="";
         for (int awi : appWidgetIds) {
             if((MainActivity.mMaxFreqSetting == null) || (MainActivity.mMinFreqSetting == null) || (MainActivity.mCurGovernor == null) || (MainActivity.mCurIO == null)){
                 final String v=Helpers.readCPU(context,i);
+                Log.i(TAG, " widget read via shell: "+v);
                 if(v!=null){
                     Fmin=v.split(":")[0];
                     Fmax=v.split(":")[1];
@@ -74,6 +76,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
                 Fmax=MainActivity.mMaxFreqSetting;
                 cGov=MainActivity.mCurGovernor;
                 cIO=MainActivity.mCurIO;
+                Log.i(TAG, " widget read local: "+Fmin+":"+Fmax+":"+cGov+":"+cIO);
             }
             onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(Fmax), Helpers.toMHz(Fmin), cGov, cIO,(i+1));
             if(i>=(nCpus-1)) i=0;
