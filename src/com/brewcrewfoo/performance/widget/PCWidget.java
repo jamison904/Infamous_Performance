@@ -42,8 +42,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         Bundle extras = intent.getExtras();
-        if (extras == null)
-            return;
+        if (extras == null) return;
         final AppWidgetManager awm = AppWidgetManager.getInstance(context);
         final ComponentName nm = new ComponentName(context, PCWidget.class);
         final String action = intent.getAction();
@@ -63,7 +62,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         for (int awi : appWidgetIds) {
             if((MainActivity.mMaxFreqSetting == null) || (MainActivity.mMinFreqSetting == null) || (MainActivity.mCurGovernor == null) || (MainActivity.mCurIO == null)){
                 final String v=Helpers.readCPU(context,i);
-                Log.i(TAG, " widget read via shell: "+v);
+                Log.i(TAG, " widget "+Integer.toString(i)+" read via shell: "+v);
                 if(v!=null){
                     Fmin=v.split(":")[0];
                     Fmax=v.split(":")[1];
@@ -76,11 +75,10 @@ public class PCWidget extends AppWidgetProvider implements Constants {
                 Fmax=MainActivity.mMaxFreqSetting;
                 cGov=MainActivity.mCurGovernor;
                 cIO=MainActivity.mCurIO;
-                Log.i(TAG, " widget read local: "+Fmin+":"+Fmax+":"+cGov+":"+cIO);
+                Log.i(TAG, " widget "+Integer.toString(i)+" read local: "+Fmin+":"+Fmax+":"+cGov+":"+cIO);
             }
             onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(Fmax), Helpers.toMHz(Fmin), cGov, cIO,(i+1));
-            if(i>=(nCpus-1)) i=0;
-            else  i++;
+            if(++i==nCpus) i=0;
         }
     }
 
