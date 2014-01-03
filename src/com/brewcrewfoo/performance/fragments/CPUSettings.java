@@ -263,7 +263,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             }
         }
         Helpers.shExec(sb,context,true);
-        Helpers.updateAppWidget(context);
     }
 
     public class GovListener implements OnItemSelectedListener {
