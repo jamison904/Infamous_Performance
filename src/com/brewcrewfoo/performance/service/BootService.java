@@ -44,9 +44,7 @@ public class BootService extends Service implements Constants {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent == null) {
-            stopSelf();
-        }
+        if (intent == null) stopSelf();
         new BootWorker(this).execute();
         return START_STICKY;
     }
