@@ -78,7 +78,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
             final SharedPreferences.Editor editor = mPreferences.edit();
             editor.putInt(PREF_WIDGET_BG_COLOR, intHex);
             editor.commit();
-            Helpers.updateAppWidget(this);
+            //Helpers.updateAppWidget(this);
             return true;
         }
         else if (preference == mWidgetTextColorPref) {
@@ -88,7 +88,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
             final SharedPreferences.Editor editor = mPreferences.edit();
             editor.putInt(PREF_WIDGET_TEXT_COLOR, intHex);
             editor.commit();
-            Helpers.updateAppWidget(this);
+            //Helpers.updateAppWidget(this);
             return true;
         }
         return false;
