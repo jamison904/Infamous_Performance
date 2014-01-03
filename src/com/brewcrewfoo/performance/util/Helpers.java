@@ -255,8 +255,7 @@ public class Helpers implements Constants {
     }
 
     public static void restartPC(final Activity activity) {
-        if (activity == null)
-            return;
+        if (activity == null) return;
         final int enter_anim = android.R.anim.fade_in;
         final int exit_anim = android.R.anim.fade_out;
         activity.overridePendingTransition(enter_anim, exit_anim);
