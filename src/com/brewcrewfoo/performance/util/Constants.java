@@ -53,6 +53,12 @@ public interface Constants {
     public static final String GOV_NAME = "gov_name";
     public static final String GOV_SETTINGS_PATH = "/sys/devices/system/cpu/cpufreq/";
 
+    public static final String ECO_MODE="/sys/module/intelli_plug/parameters/eco_mode_active";
+    public static final String MC_PS="/sys/devices/system/cpu/sched_mc_power_savings";//multi core power saving
+    public static final String INTELLI_PLUG="/sys/module/intelli_plug/parameters/intelli_plug_active";
+    public static final String GEN_HP="/sys/module/omap2plus_cpufreq/parameters/generic_hotplug";//generic hotplug
+
+
     // CPU info
     public static String KERNEL_INFO_PATH = "/proc/version";
     public static String CPU_INFO_PATH = "/proc/cpuinfo";

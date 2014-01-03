@@ -1,20 +1,22 @@
 
+### PERFORMANCE CONTROL ###
 zramstart(){
 cpus=$1;
 val=$2;
 if busybox [ -f /system/lib/modules/zram.ko ]; then
-    busybox insmod /system/lib/modules/zram.ko;
-
+    if busybox [ -z "`busybox lsmod | busybox grep zram`" ]; then
+        busybox insmod /system/lib/modules/zram.ko;
+    fi;
+    busybox modprobe zram zram_num_devices=$cpus;
 fi;
-busybox modprobe zram zram_num_devices=$cpus;
-num_cpus=`busybox expr $cpus - 1`;
-for i in `busybox seq 0 $num_cpus`; do
+ncpus=`busybox expr $cpus - 1`;
+for i in `busybox seq 0 $ncpus`; do
     busybox echo $val > /sys/block/zram$i/disksize;
 done;
-for i in `busybox seq 0 $num_cpus`; do
+for i in `busybox seq 0 $ncpus`; do
     busybox mkswap /dev/block/zram$i;
 done;
-for i in `busybox seq 0 $num_cpus`; do
+for i in `busybox seq 0 $ncpus`; do
     busybox swapon /dev/block/zram$i;
 done;
 return;
@@ -22,12 +24,12 @@ return;
 
 zramstop(){
 cpus=$1;
-num_cpus=`busybox expr $cpus - 1`;
-for i in `busybox seq 0 $num_cpus`; do
+ncpus=`busybox expr $cpus - 1`;
+for i in `busybox seq 0 $ncpus`; do
     busybox swapoff /dev/block/zram$i;
-    sleep 1;
 done;
-for i in `busybox seq 0 $num_cpus`; do
+sleep 1;
+for i in `busybox seq 0 $ncpus`; do
     busybox echo 1 > /sys/block/zram$i/reset;
 done;
 sleep 1;
