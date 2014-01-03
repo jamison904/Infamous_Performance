@@ -78,6 +78,6 @@ if busybox [ "$arg" == "-count" ]; then
 elif busybox [ "$arg" == "-setprop" ]; then
     set_prop "$2" $3;
 elif busybox [ "$arg" == "-getcpu" ]; then
-    get_cpu "$2";
+    get_cpu $2;
 fi;
 exit;

@@ -29,7 +29,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 import com.brewcrewfoo.performance.R;
-import com.brewcrewfoo.performance.activities.VMSettings;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -42,11 +41,9 @@ import java.util.List;
 
 public class BootService extends Service implements Constants {
     public static boolean servicesStarted = false;
-    Context context;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        context=this;
         if (intent == null) {
             stopSelf();
         }
@@ -281,7 +278,6 @@ public class BootService extends Service implements Constants {
                         else{
                             sb.append("busybox echo 0 > " + USER_PROC_PATH + ";\n");
                         }
-
                     }
             }
             if (new File(SYS_PROC_PATH).exists()) {
@@ -293,7 +289,6 @@ public class BootService extends Service implements Constants {
                         else{
                             sb.append("busybox echo 0 > " + SYS_PROC_PATH + ";\n");
                         }
-
                     }
             }
 
@@ -334,7 +329,7 @@ public class BootService extends Service implements Constants {
             }
 
             sb.append(preferences.getString(PREF_SH, "# no custom shell command")).append(";\n");
-            Helpers.shExec(sb,context,true);
+            Helpers.shExec(sb,c,true);
             return null;
         }
     	@Override
@@ -342,7 +337,6 @@ public class BootService extends Service implements Constants {
             super.onPostExecute(result);
             servicesStarted = true;
             stopSelf();
-            Helpers.updateAppWidget(c);
         }
 	}
 

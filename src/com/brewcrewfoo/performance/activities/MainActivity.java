@@ -49,11 +49,11 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     ViewPager mViewPager;
     private boolean mIsLightTheme;
     public static Boolean thide=false;
-    public static String mCurGovernor;
-    public static String mCurIO;
-    public static String mMaxFreqSetting;
-    public static String mMinFreqSetting;
-    public static String mCPUon;
+    public static String mCurGovernor=null;
+    public static String mCurIO=null;
+    public static String mMaxFreqSetting=null;
+    public static String mMinFreqSetting=null;
+    public static String mCPUon=null;
     public static int curcpu=0;
 
     @Override

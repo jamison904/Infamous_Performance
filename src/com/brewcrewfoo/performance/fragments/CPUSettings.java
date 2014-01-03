@@ -1,9 +1,7 @@
 package com.brewcrewfoo.performance.fragments;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -45,7 +43,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
 
     private int nCpus=0;
     private TextView mCurCpu;
-    private String[] mAvailableGovernors;
     private Resources res;
 
     @Override
@@ -115,7 +112,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
 
 
         mAvailableFrequencies = new String[0];
-        mAvailableGovernors = Helpers.readOneLine(GOVERNORS_LIST_PATH).split(" ");
+        String[] mAvailableGovernors = Helpers.readOneLine(GOVERNORS_LIST_PATH).split(" ");
 
         String availableFrequenciesLine = Helpers.readOneLine(STEPS_PATH);
         if (availableFrequenciesLine != null) {
@@ -324,7 +321,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
 
     @Override
     public void onPause() {
-        //Helpers.updateAppWidget(context);
         super.onPause();
     }
 
