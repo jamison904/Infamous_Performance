@@ -408,11 +408,10 @@ public class Helpers implements Constants {
 
     public static void getTabList(String strTitle, final ViewPager vp,Activity activity) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-        alertDialogBuilder.setTitle(strTitle);
+        alertDialogBuilder.setTitle(null);
 
         List<String> listItems = new ArrayList<String>();
         for(byte i=0;i< vp.getAdapter().getCount();i++){
-           // if(i!=vp.getCurrentItem())
                 listItems.add(vp.getAdapter().getPageTitle(i).toString());
         }
         alertDialogBuilder.setItems(listItems.toArray(new CharSequence[listItems.size()]),
@@ -497,5 +496,15 @@ public class Helpers implements Constants {
             return null;
         }
     }
-
+    public static String doubletap2wake_path() {
+        if (new File("/sys/module/lge_touch_core/parameters/doubletap_to_wake").exists()) {
+            return "/sys/module/lge_touch_core/parameters/doubletap_to_wake";
+        }
+        else if (new File("/sys/module/lge_touch_core/parameters/touch_to_wake").exists()) {
+            return "/sys/module/lge_touch_core/parameters/touch_to_wake";
+        }
+        else{
+            return null;
+        }
+    }
 }

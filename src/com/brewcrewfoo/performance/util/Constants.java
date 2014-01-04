@@ -201,6 +201,17 @@ public interface Constants {
     //sysctl
     public static final String SYSCTL_SOB = "sysctl_sob";
 
+    //touch screen
+    public static final String SLIDE2WAKE="/sys/devices/virtual/sec/tsp/tsp_slide2wake";
+    public static final String SWIPE2WAKE="/sys/android_touch/sweep2wake";
+    public static final String HOME2WAKE="/sys/android_touch/home2wake";
+    public static final String LOGO2WAKE="/sys/android_touch/logo2wake";
+    public static final String LOGO2MENU="/sys/android_touch/logo2menu";
+    public static final String PICK2WAKE="/sys/devices/virtual/htc_g_sensor/g_sensor/pick2wake";
+    public static final String FLICK2SLEEP="/sys/devices/virtual/htc_g_sensor/g_sensor/flick2sleep";
+    public static final String FLICK2SLEEP_SENSITIVE="/sys/devices/virtual/htc_g_sensor/g_sensor/f2w_sensitivity_values";
+    public static final String POCKET_DETECT=" /sys/android_touch/pocket_detect";
+
     // PC Settings
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";
     public static final String PREF_WIDGET_BG_COLOR = "widget_bg_color";
