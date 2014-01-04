@@ -395,8 +395,8 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                     break;
                 case 1:
                     final StringBuilder sb = new StringBuilder();
-                    sb.append("mount -o rw,remount /system'\n");
-                    sb.append("busybox sed -i '/").append(p.getName()).append("/d' ").append("/system/build.prop;\n");
+                    sb.append("mount -o rw,remount /system;\n");
+                    sb.append("busybox sed -i '/").append(p.getName().replace(".","\\.")).append("/d' ").append("/system/build.prop;\n");
                     sb.append("mount -o ro,remount /system;\n");
                     Helpers.shExec(sb,context,true);
                     adapter.remove(p);
