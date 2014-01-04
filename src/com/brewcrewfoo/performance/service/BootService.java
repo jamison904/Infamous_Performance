@@ -27,8 +27,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.brewcrewfoo.performance.R;
+import com.brewcrewfoo.performance.activities.MainActivity;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -54,14 +56,16 @@ public class BootService extends Service implements Constants {
         return null;
     }
 
-    class BootWorker extends AsyncTask<Void, Void, Void> {
+    class BootWorker extends AsyncTask<Void, Void, String> {
         Context c;
+        final int ncpus=Helpers.getNumOfCpus();
+
         public BootWorker(Context c) {
             this.c = c;
         }
         @SuppressWarnings("deprecation")
         @Override
-        protected Void doInBackground(Void... args) {
+        protected String doInBackground(Void... args) {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
             final StringBuilder sb = new StringBuilder();
@@ -69,7 +73,7 @@ public class BootService extends Service implements Constants {
             final String VIBE_PATH=Helpers.vibe_path();
             final String BLN_PATH=Helpers.bln_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
-            final int ncpus=Helpers.getNumOfCpus();
+
             String max,min;
             int ksm=0;
             String ksmpath=KSM_RUN_PATH;
@@ -327,14 +331,27 @@ public class BootService extends Service implements Constants {
             }
 
             sb.append(preferences.getString(PREF_SH, "# no custom shell command")).append(";\n");
-            Helpers.shExec(sb,c,true);
-            return null;
+            sb.append("get_cpu ").append(ncpus).append(";\n");
+            return Helpers.shExec(sb,c,true);
         }
     	@Override
-    	protected void onPostExecute(Void result) {
+    	protected void onPostExecute(String result) {
+            Log.i(TAG, result);
             super.onPostExecute(result);
             servicesStarted = true;
             stopSelf();
+            if(result!=null){
+                final String lines[]=result.split("\n");
+                final String line =lines[lines.length-1];
+                for(int p=0; p < ncpus;p++){
+                    MainActivity.mMinFreqSetting[p]=line.split(":")[p*4];
+                    MainActivity.mMaxFreqSetting[p]=line.split(":")[p*4+1];
+                    MainActivity.mCurGovernor[p]=line.split(":")[p*4+2];
+                    MainActivity.mCurIO[p]=line.split(":")[p*4+3];
+                    MainActivity.mCPUon[p]=line.split(":")[p*4+4];
+                }
+
+            }
         }
 	}
 

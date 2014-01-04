@@ -49,11 +49,12 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     ViewPager mViewPager;
     private boolean mIsLightTheme;
     public static Boolean thide=false;
-    public static String mCurGovernor=null;
-    public static String mCurIO=null;
-    public static String mMaxFreqSetting=null;
-    public static String mMinFreqSetting=null;
-    public static String mCPUon=null;
+    public static int nCpus=Helpers.getNumOfCpus();
+    public static String[] mCurGovernor=new String[nCpus];
+    public static String[] mCurIO=new String[nCpus];
+    public static String[] mMaxFreqSetting=new String[nCpus];
+    public static String[] mMinFreqSetting=new String[nCpus];
+    public static String[] mCPUon=new String[nCpus];
     public static int curcpu=0;
 
     @Override

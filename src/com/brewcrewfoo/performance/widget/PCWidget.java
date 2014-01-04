@@ -57,7 +57,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         int nCpus=Helpers.getNumOfCpus();
         String wv[]={};
         for (int awi : appWidgetIds) {
-                if((MainActivity.mMaxFreqSetting == null) || (MainActivity.mMinFreqSetting == null) || (MainActivity.mCurGovernor == null) || (MainActivity.mCurIO == null)){
+                if((MainActivity.mMaxFreqSetting[i] == null) || (MainActivity.mMinFreqSetting[i] == null) || (MainActivity.mCurGovernor[i] == null) || (MainActivity.mCurIO[i] == null)){
                     final String v=Helpers.readCPU(context,i);
                     if(v!=null)
                         onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(v.split(":")[1]), Helpers.toMHz(v.split(":")[0]), v.split(":")[2], v.split(":")[3],(i+1));
@@ -66,8 +66,8 @@ public class PCWidget extends AppWidgetProvider implements Constants {
                     Log.i(TAG, " widget "+Integer.toString(i)+" read shell: "+v);
                 }
                 else{
-                    onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(MainActivity.mMaxFreqSetting), Helpers.toMHz(MainActivity.mMinFreqSetting), MainActivity.mCurGovernor, MainActivity.mCurIO,(i+1));
-                    Log.i(TAG, " widget "+Integer.toString(i)+" read local: "+MainActivity.mMinFreqSetting+":"+MainActivity.mMaxFreqSetting+":"+MainActivity.mCurGovernor+":"+MainActivity.mCurIO);
+                    onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(MainActivity.mMaxFreqSetting[i]), Helpers.toMHz(MainActivity.mMinFreqSetting[i]), MainActivity.mCurGovernor[i], MainActivity.mCurIO[i],(i+1));
+                    Log.i(TAG, " widget "+Integer.toString(i)+" read local: "+MainActivity.mMinFreqSetting[i]+":"+MainActivity.mMaxFreqSetting[i]+":"+MainActivity.mCurGovernor[i]+":"+MainActivity.mCurIO[i]);
                 }
 
                 if(++i==nCpus) i=0;
