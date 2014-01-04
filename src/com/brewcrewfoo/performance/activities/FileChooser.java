@@ -233,15 +233,15 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
                     File destDir = new File(dn+"/system/lib/modules");
                     File[]dirs = destDir.listFiles();
                     if((dirs!=null)&&(dirs.length>0)){
-                        sb.append("busybox mount -o remount,rw /system;\n");
-                        sb.append("busybox rm -rf /system/lib/modules/*;\n");
+                        sb.append("mount -o rw,remount /system;\n");
+                        sb.append("busybox rm -rf /system/lib/modules/*.ko;\n");
                         for(File ff: dirs){
                             if(ff.getName().toLowerCase().endsWith(".ko")){
                                 sb.append("busybox cp ").append(dn).append("/system/lib/modules/").append(ff.getName()).append(" /system/lib/modules/").append(ff.getName()).append(";\n");
                                 sb.append("busybox chmod 644 ").append("/system/lib/modules/").append(ff.getName()).append(";\n");
                             }
                         }
-                        sb.append("busybox mount -o remount,ro /system;\n");
+                        sb.append("mount -o ro,remount /system;\n");
                     }
                     sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
                     sb.append("busybox rm -rf ").append(dn).append("/*;\n");

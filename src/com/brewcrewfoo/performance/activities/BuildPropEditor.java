@@ -382,10 +382,10 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                 case 0:
                     if(new File(dn+"/"+buildname).exists()){
                         final StringBuilder sb = new StringBuilder();
-                        sb.append("busybox mount -o remount,rw /system").append(";\n");
+                        sb.append("mount -o rw,remount /system;\n");
                         sb.append("busybox cp ").append(dn).append("/").append(buildname).append(" /system/build.prop;\n");
                         sb.append("busybox chmod 644 ").append("/system/build.prop;\n");
-                        sb.append("busybox mount -o remount,ro /system").append(";\n");
+                        sb.append("mount -o ro,remount /system;\n");
                         Helpers.shExec(sb,context,true);
                         new GetPropOperation().execute();
                     }
@@ -395,9 +395,9 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                     break;
                 case 1:
                     final StringBuilder sb = new StringBuilder();
-                    sb.append("busybox mount -o remount,rw /system").append(";\n");
+                    sb.append("mount -o rw,remount /system'\n");
                     sb.append("busybox sed -i '/").append(p.getName()).append("/d' ").append("/system/build.prop;\n");
-                    sb.append("busybox mount -o remount,ro /system").append(";\n");
+                    sb.append("mount -o ro,remount /system;\n");
                     Helpers.shExec(sb,context,true);
                     adapter.remove(p);
                     adapter.notifyDataSetChanged();

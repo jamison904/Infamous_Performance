@@ -108,7 +108,7 @@ public class Helpers implements Constants {
                 return true;
             }
         }
-        return (cmd.su.runWaitFor("busybox mount -o remount," + mount + " /system").success());
+        return (cmd.su.runWaitFor("mount -o "+mount+",remount /system").success());
     }
 
     public static String readOneLine(String fname) {

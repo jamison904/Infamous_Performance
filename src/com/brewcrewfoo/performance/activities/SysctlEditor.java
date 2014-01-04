@@ -113,10 +113,10 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-                sb.append("busybox mount -o remount,rw /system").append(";\n");
+                sb.append("mount -o rw,remount /system;\n");
                 sb.append("busybox cp ").append(dn).append("/").append("sysctl.conf").append(" /system/etc/").append("sysctl.conf").append(";\n");
                 sb.append("busybox chmod 644 ").append("/system/etc/").append("sysctl.conf").append(";\n");
-                sb.append("busybox mount -o remount,ro /system").append(";\n");
+                sb.append("mount -o ro,remount /system;\n");
                 sb.append("busybox sysctl -p ").append("/system/etc/").append("sysctl.conf").append(";\n");
                 Helpers.shExec(sb,context,true);
             }
@@ -179,9 +179,9 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                                             String nf = formatter.format(now)+"_" + "sysctl.conf";
                                             new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/"+nf );
                                             final StringBuilder sb = new StringBuilder();
-                                            sb.append("busybox mount -o remount,rw /system").append(";\n");
+                                            sb.append("mount -o rw,remount /system;\n");
                                             sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
-                                            sb.append("busybox mount -o remount,ro /system").append(";\n");
+                                            sb.append("mount -o ro,remount /system;\n");
                                             Helpers.shExec(sb,context,true);
                                         }
                                         new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
