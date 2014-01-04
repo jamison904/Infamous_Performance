@@ -336,7 +336,6 @@ public class BootService extends Service implements Constants {
         }
     	@Override
     	protected void onPostExecute(String result) {
-            Log.i(TAG, result);
             super.onPostExecute(result);
             if(result!=null){
                 final String lines[]=result.split("\n");
@@ -349,6 +348,7 @@ public class BootService extends Service implements Constants {
                     MainActivity.mCPUon[p]=line.split(":")[p*4+4];
                 }
             }
+            //Log.i(TAG, result);
             servicesStarted = true;
             stopSelf();
         }
