@@ -55,7 +55,6 @@ public class PCWidget extends AppWidgetProvider implements Constants {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
         int i=0;
         int nCpus=Helpers.getNumOfCpus();
-        String wv[]={};
         for (int awi : appWidgetIds) {
                 if((MainActivity.mMaxFreqSetting[i] == null) || (MainActivity.mMinFreqSetting[i] == null) || (MainActivity.mCurGovernor[i] == null) || (MainActivity.mCurIO[i] == null)){
                     final String v=Helpers.readCPU(context,i);
@@ -71,7 +70,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
                 }
 
                 if(++i==nCpus) i=0;
-            }
+        }
     }
 
     public void onUpdateWidget(Context context,AppWidgetManager appWidgetManager, int appWidgetId, String max,String min, String gov, String io,int curcpu) {

@@ -338,8 +338,6 @@ public class BootService extends Service implements Constants {
     	protected void onPostExecute(String result) {
             Log.i(TAG, result);
             super.onPostExecute(result);
-            servicesStarted = true;
-            stopSelf();
             if(result!=null){
                 final String lines[]=result.split("\n");
                 final String line =lines[lines.length-1];
@@ -350,8 +348,9 @@ public class BootService extends Service implements Constants {
                     MainActivity.mCurIO[p]=line.split(":")[p*4+3];
                     MainActivity.mCPUon[p]=line.split(":")[p*4+4];
                 }
-
             }
+            servicesStarted = true;
+            stopSelf();
         }
 	}
 
