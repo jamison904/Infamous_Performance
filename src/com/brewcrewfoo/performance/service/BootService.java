@@ -28,6 +28,7 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.MainActivity;
@@ -349,6 +350,7 @@ public class BootService extends Service implements Constants {
                 }
             }
             //Log.i(TAG, result);
+            Toast.makeText(c, TAG+ " boot complete", Toast.LENGTH_SHORT).show();
             servicesStarted = true;
             stopSelf();
         }
