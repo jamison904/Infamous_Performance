@@ -408,7 +408,7 @@ public class Helpers implements Constants {
 
     public static void getTabList(String strTitle, final ViewPager vp,Activity activity) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-        alertDialogBuilder.setTitle(null);
+        alertDialogBuilder.setTitle(strTitle);
 
         List<String> listItems = new ArrayList<String>();
         for(byte i=0;i< vp.getAdapter().getCount();i++){
@@ -425,15 +425,9 @@ public class Helpers implements Constants {
     }
 
     public static boolean is_Tab_available(int i){
-        if(i==1){
-            return (Helpers.getNumOfCpus()>10);
-        }
-        else if(i==2){
-            return Helpers.showBattery();
-        }
-        else if(i==4){
-            return Helpers.voltageFileExists();
-        }
+        if(i==1) return (Helpers.getNumOfCpus()>10);
+        else if(i==2) return Helpers.showBattery();
+        else if(i==4) return Helpers.voltageFileExists();
         return true;
     }
 
