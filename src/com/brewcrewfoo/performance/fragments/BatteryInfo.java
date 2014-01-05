@@ -159,7 +159,7 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
         if (mFastChargePath!=null) {
 
             mFastchargeOnBoot = (Switch) view.findViewById(R.id.fastcharge_sob);
-            mFastchargeOnBoot.setChecked(mPreferences.getBoolean(PREF_FASTCHARGE, false));
+            mFastchargeOnBoot.setChecked(mPreferences.getBoolean(PREF_FASTCHARGE, Helpers.readOneLine(mFastChargePath).equals("1")));
             mFastchargeOnBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v,boolean checked) {
