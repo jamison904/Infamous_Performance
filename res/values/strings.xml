@@ -386,8 +386,8 @@ Copyright (C) 2012  James Roberts
     <string name="toucht9s">Sensitivity</string>
     <string name="toucht10">Touch to Wake</string>
     <string-array name="asens">
-    <item name="high">High</item>
-    <item name="low">Low</item>
+        <item name="high">High</item>
+        <item name="low">Low</item>
     </string-array>
     <!-- beta2-->
 

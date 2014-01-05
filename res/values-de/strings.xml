@@ -350,4 +350,25 @@ Translation by Rhonin86 & Evisceration
     <string name="mpdecision">MPDECISION</string>
     <string name="pt_mpdecision">Enable MPDecision</string>
     <string name="ps_mpdecision"></string>
+
+    <string name="prefcat_touchscr">TOUCHSCREEN</string>
+    <string name="ps_touchscr">TouchScreen Control</string>
+    <string name="ps_touchscr_boot">If enabled will restore all touchcreen settings on reboot</string>
+    <string name="toucht1">Slide to Wake</string>
+    <string name="toucht2">Sweep to Wake</string>
+    <string name="toucht21">Sweep to Sleep</string>
+    <string name="toucht3">Home to Wake</string>
+    <string name="toucht4">Logo to Wake</string>
+    <string name="toucht5">Logo to Menu</string>
+    <string name="toucht6">Double Tap to Wake</string>
+    <string name="toucht7">Pocket Detect</string>
+    <string name="toucht8">Pick to Wake</string>
+    <string name="toucht9">Flick to Sleep</string>
+    <string name="toucht9s">Sensitivity</string>
+    <string name="toucht10">Touch to Wake</string>
+    <string-array name="asens">
+        <item name="high">High</item>
+        <item name="low">Low</item>
+    </string-array>
+    <!-- beta2-->
 </resources>
