@@ -202,15 +202,30 @@ public interface Constants {
     public static final String SYSCTL_SOB = "sysctl_sob";
 
     //touch screen
+    public static final String TOUCHSCREEN_SOB = "touchscreen_boot";
+    public static final String PREF_SLIDE2WAKE = "pref_slide2wake";
+    public static final String PREF_SWIPE2WAKE = "pref_swipe2wake";
+    public static final String PREF_HOME2WAKE = "pref_home2wake";
+    public static final String PREF_LOGO2WAKE = "pref_logo2wake";
+    public static final String PREF_LOGO2MENU = "pref_logo2menu";
+    public static final String PREF_POCKET_DETECT = "pref_pocket_detect";
+    public static final String PREF_PICK2WAKE = "pref_pick2wake";
+    public static final String PREF_DOUBLETAP2WAKE = "pref_doubletap2wake";
+    public static final String PREF_FLICK2SLEEP = "pref_flick2sleep";
+    public static final String PREF_TOUCH2WAKE = "pref_touch2wake";
+    public static final String PREF_FLICK2SLEEP_SENSITIVE="flick2sleep_sensitivity";
+
     public static final String SLIDE2WAKE="/sys/devices/virtual/sec/tsp/tsp_slide2wake";
-    public static final String SWIPE2WAKE="/sys/android_touch/sweep2wake";
+    public static final String SWIPE2WAKE="/sys/android_touch/sweep2wake";//0,1,2=off,s2w+s2s,s2s
     public static final String HOME2WAKE="/sys/android_touch/home2wake";
     public static final String LOGO2WAKE="/sys/android_touch/logo2wake";
     public static final String LOGO2MENU="/sys/android_touch/logo2menu";
+    public static final String POCKET_DETECT=" /sys/android_touch/pocket_detect";
     public static final String PICK2WAKE="/sys/devices/virtual/htc_g_sensor/g_sensor/pick2wake";
     public static final String FLICK2SLEEP="/sys/devices/virtual/htc_g_sensor/g_sensor/flick2sleep";
+    public static final String DOUBLETAP2WAKE="/sys/android_touch/doubletap2wake";
     public static final String FLICK2SLEEP_SENSITIVE="/sys/devices/virtual/htc_g_sensor/g_sensor/f2w_sensitivity_values";
-    public static final String POCKET_DETECT=" /sys/android_touch/pocket_detect";
+
 
     // PC Settings
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";

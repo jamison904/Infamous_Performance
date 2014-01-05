@@ -39,11 +39,12 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.PCSettings;
-import com.brewcrewfoo.performance.activities.SysctlEditor;
+import com.brewcrewfoo.performance.activities.TouchScreenSettings;
 import com.brewcrewfoo.performance.activities.VMSettings;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
+import com.brewcrewfoo.performance.util.VibratorClass;
 
 import java.io.File;
 
@@ -51,7 +52,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
     SharedPreferences mPreferences;
 	private Preference mBltimeout,mViber,mHomeAllowedIrqs,mHomeReportWait,
             mMenuBackIrqChecks,mMenuBackFirstErrWait,mMenuBackLastErrWait,
-            mDynamicWriteBackActive,mDynamicWriteBackSuspend,mVM;
+            mDynamicWriteBackActive,mDynamicWriteBackSuspend,mVM,mTouchScr;
 	private CheckBoxPreference mBltouch;
 
     private CheckBoxPreference mBln,mHomeOn,mMenuBackOn,mDynamicWriteBackOn,mDsync;
@@ -61,6 +62,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 	private String sreadahead;
     private String BLN_PATH,VIBE_PATH;
     private Context context;
+    VibratorClass vib=new VibratorClass();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         mBltimeout= findPreference(PREF_BLTIMEOUT);
         mBltouch=(CheckBoxPreference) findPreference(PREF_BLTOUCH);
         mBln=(CheckBoxPreference) findPreference(PREF_BLN);
+        mTouchScr=findPreference("touchscr_settings");
         mViber= findPreference("pref_viber");
         mVM= findPreference("vm_settings");
 
@@ -138,8 +141,14 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         else{
             mBln.setChecked(Helpers.readOneLine(BLN_PATH).equals("1"));
         }
+        if (no_touchscreen()) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("touch_scr");
+            getPreferenceScreen().removePreference(hideCat);
+        }
 
-        VIBE_PATH=Helpers.vibe_path();
+
+        VIBE_PATH=vib.get_path();
+
         if (VIBE_PATH==null) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("viber");
             getPreferenceScreen().removePreference(hideCat);
@@ -226,10 +235,15 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
             }
             return true;
         }
+        else if (preference == mTouchScr) {
+            Intent intent = new Intent(context, TouchScreenSettings.class);
+            startActivity(intent);
+            return true;
+        }
         else if (preference == mViber){
             String title = getString(R.string.viber_title);
             int currentProgress = Integer.parseInt(Helpers.readOneLine(VIBE_PATH));
-            openDialog(currentProgress, title, 0,500, preference,VIBE_PATH, "pref_viber");
+            openDialog(currentProgress, title, vib.get_min(),vib.get_max(), preference,VIBE_PATH, "pref_viber");
             return true;
         }
         else if (preference == mHomeOn){
@@ -502,6 +516,9 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
                     }
                 }
             }).create().show();
+    }
+    private boolean no_touchscreen(){
+        return (!new File(SLIDE2WAKE).exists() && !new File(SWIPE2WAKE).exists() && !new File(HOME2WAKE).exists() && !new File(LOGO2WAKE).exists() && !new File(LOGO2MENU).exists() && !new File(POCKET_DETECT).exists() && !new File(PICK2WAKE).exists() && !new File(FLICK2SLEEP).exists() && Helpers.touch2wake_path() == null);
     }
 }
 

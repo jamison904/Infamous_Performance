@@ -32,6 +32,8 @@
 
         <activity android:name="com.brewcrewfoo.performance.activities.HideTabs"/>
 
+        <activity android:name="com.brewcrewfoo.performance.activities.TouchScreenSettings"/>
+
         <activity android:name="com.brewcrewfoo.performance.activities.KSMActivity"
                   android:windowSoftInputMode="stateHidden"/>
 

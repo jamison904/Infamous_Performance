@@ -467,30 +467,8 @@ public class Helpers implements Constants {
             return null;
         }
     }
-    public static String vibe_path() {
-        if (new File("/sys/class/vibetonz/immDuty/pwmvalue_intensity").exists()) {
-            return "/sys/class/vibetonz/immDuty/pwmvalue_intensity";
-        }
-        else if (new File("/sys/vibrator/pwmvalue").exists()) {
-            return "/sys/vibrator/pwmvalue";
-        }
-        else if (new File("/sys/class/misc/vibratorcontrol/vibrator_strength").exists()) {
-            return "/sys/class/misc/vibratorcontrol/vibrator_strength";
-        }
-        else if (new File("/sys/vibe/pwmduty").exists()) {
-            return "/sys/vibe/pwmduty";
-        }
-        else if (new File("/sys/class/timed_output/vibrator/amp").exists()) {
-            return "/sys/class/timed_output/vibrator/amp";
-        }
-        else if (new File("/sys/class/misc/pwm_duty/pwm_duty").exists()) {
-            return "/sys/class/misc/pwm_duty/pwm_duty";
-        }
-        else{
-            return null;
-        }
-    }
-    public static String doubletap2wake_path() {
+
+    public static String touch2wake_path() {
         if (new File("/sys/module/lge_touch_core/parameters/doubletap_to_wake").exists()) {
             return "/sys/module/lge_touch_core/parameters/doubletap_to_wake";
         }
