@@ -306,7 +306,7 @@
     <string name="sysctl_title">Редактировать SysCtl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">ВИБРАЦИЯ</string>
-    <string name="viber_title">Настройка Интенсивности вибраци</string>
+    <string name="viber_title">Настройка Интенсивности вибрации</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Использовать светлую тему</string>
     <string name="ps_use_light_theme">Если выбрать, приложение будет использовать светлую тему Holo</string>
@@ -325,37 +325,37 @@
     <string name="ics_color">Holo</string>
 
     <!-- beta2-->
-    <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
+    <string name="reset_msg">Текущие значения будут удалены и стандартные будут восстановлены после перезагрузки. Продолжить?</string>
 
-    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="prefcat_logs">Записать Лог</string>
     <string name="logcat_title">Logcat</string>
-    <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
+    <string name="logcat_msg">Logcat будет записан в %s. Продолжить?</string>
     <string name="dmesg_title">Dmesg</string>
-    <string name="dmesg_msg">Dmesg will be dumped on %s. Continue?</string>
-    <string name="ps_logs">Dump log on %s.</string>
+    <string name="dmesg_msg">Dmesg будет записан в %s. Продолжить?</string>
+    <string name="ps_logs">Записать лог в %s.</string>
 
     <string name="mpdecision">MPDECISION</string>
-    <string name="pt_mpdecision">Enable MPDecision</string>
+    <string name="pt_mpdecision">Включить MPDecision</string>
     <string name="ps_mpdecision"></string>
 
-    <string name="prefcat_touchscr">TOUCHSCREEN</string>
-    <string name="ps_touchscr">TouchScreen Control</string>
-    <string name="ps_touchscr_boot">If enabled will restore all touchcreen settings on reboot</string>
-    <string name="toucht1">Slide to Wake</string>
-    <string name="toucht2">Sweep to Wake</string>
-    <string name="toucht21">Sweep to Sleep</string>
-    <string name="toucht3">Home to Wake</string>
-    <string name="toucht4">Logo to Wake</string>
-    <string name="toucht5">Logo to Menu</string>
-    <string name="toucht6">Double Tap to Wake</string>
-    <string name="toucht7">Pocket Detect</string>
-    <string name="toucht8">Pick to Wake</string>
-    <string name="toucht9">Flick to Sleep</string>
-    <string name="toucht9s">Sensitivity</string>
-    <string name="toucht10">Touch to Wake</string>
+    <string name="prefcat_touchscr">ТАЧСКРИН</string>
+    <string name="ps_touchscr">ТачСкрин Контроль</string>
+    <string name="ps_touchscr_boot">Если выбрать, то все тачскрин настройки будут восстановлены после перезагрузки</string>
+    <string name="toucht1">Скользнуть для пробуждения</string>
+    <string name="toucht2">Махнуть для пробуждения</string>
+    <string name="toucht21">Махнуть для усыпления</string>
+    <string name="toucht3">Клавиша Домой для пробуждения</string>
+    <string name="toucht4">Нажать логотип для пробуждения</string>
+    <string name="toucht5">Нажать логотип для входа в Меню</string>
+    <string name="toucht6">Двойной тап для пробуждения</string>
+    <string name="toucht7">Определять Карман</string>
+    <string name="toucht8">Выбор для пробуждения</string>
+    <string name="toucht9">Слегка ударить для усыпления</string>
+    <string name="toucht9s">Чувствительность</string>
+    <string name="toucht10">Коснуться для для пробуждения</string>
     <string-array name="asens">
-        <item name="high">High</item>
-        <item name="low">Low</item>
+        <item name="high">Высокий</item>
+        <item name="low">Низкий</item>
     </string-array>
     <!-- beta2-->
 </resources>
