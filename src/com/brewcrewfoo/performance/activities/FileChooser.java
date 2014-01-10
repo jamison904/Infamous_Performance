@@ -218,41 +218,55 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
             final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/tmp";
 
             if(tip.equalsIgnoreCase("kernel")){
+                sb.append("busybox rm -rf /data/dalvik-cache/*;\n");
+                sb.append("busybox rm -rf /cache/*;\n");
                 if(iszip){
                     try{
-                        new UnzipUtility().unzipfile(nFile,dn,"boot.img");
+                        new UnzipUtility().unzipfile(nFile,dn, new String[]{"boot.img",".ko"});
                     }
                     catch (Exception e) {
                         Log.d(TAG,"unzip error: "+nFile);
                         e.printStackTrace();
-                        return null;
+                        return "";
                     }
                     nFile=dn+"/boot.img";
+                    File destDir = new File(dn+"/system/lib/modules");
+                    File[]dirs = destDir.listFiles();
+                    if((dirs!=null)&&(dirs.length>0)){
+                        sb.append("mount -o rw,remount /system;\n");
+                        sb.append("busybox rm -rf /system/lib/modules/*.ko;\n");
+                        for(File ff: dirs){
+                            if(ff.getName().toLowerCase().endsWith(".ko")){
+                                sb.append("busybox cp ").append(dn).append("/system/lib/modules/").append(ff.getName()).append(" /system/lib/modules/").append(ff.getName()).append(";\n");
+                                sb.append("busybox chmod 644 ").append("/system/lib/modules/").append(ff.getName()).append(";\n");
+                            }
+                        }
+                        sb.append("mount -o ro,remount /system;\n");
+                    }
                     sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
-                    sb.append("busybox rm -rf ").append(dn).append("/*\n");
+                    sb.append("busybox rm -rf ").append(dn).append("/*;\n");
                 }
                 else{
-                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append(";\n");
                 }
-                sb.append("busybox rm -rf /data/dalvik-cache/*\n");
-                sb.append("busybox rm -rf /cache/*\n");
+
             }
             else{
                 if(iszip){
                     try{
-                        new UnzipUtility().unzipfile(nFile,dn,"recovery.img");
+                        new UnzipUtility().unzipfile(nFile,dn, new String[]{"recovery.img"});
                     }
                     catch (Exception e) {
                         Log.d(TAG,"unzip error: "+nFile);
                         e.printStackTrace();
-                        return null;
+                        return "";
                     }
                     nFile=dn+"/recovery.img";
-                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
-                    sb.append("busybox rm -rf ").append(dn).append("/*\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append(";\n");
+                    sb.append("busybox rm -rf ").append(dn).append("/*;\n");
                 }
                 else{
-                    sb.append("dd if=").append(nFile).append(" of=").append(part).append("\n");
+                    sb.append("dd if=").append(nFile).append(" of=").append(part).append(";\n");
                 }
             }
             Helpers.shExec(sb,context,true);
@@ -261,14 +275,15 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
 
         @Override
         protected void onPostExecute(String result) {
-            if (progressDialog != null) {
-                progressDialog.dismiss();
-            }
-            if(tip.equalsIgnoreCase("kernel")){
+
+            if(result.equalsIgnoreCase("kernel")){
                 new CMDProcessor().su.runWaitFor("reboot");
             }
-            else{
+            else if(result.equalsIgnoreCase("recovery")){
                 new CMDProcessor().su.runWaitFor("reboot recovery");
+            }
+            else{
+                if (progressDialog != null) progressDialog.dismiss();
             }
         }
 

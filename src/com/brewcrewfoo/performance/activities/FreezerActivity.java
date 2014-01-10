@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -37,7 +38,8 @@ public class FreezerActivity extends Activity implements Constants, AdapterView.
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private LinearLayout linlaHeaderProgress;
-    private LinearLayout linNopack;
+    private LinearLayout linNopack,llist;
+    private TextView itxt;
     private String pmList[];
     private PackageManager packageManager;
     private ListView packList;
@@ -66,6 +68,9 @@ public class FreezerActivity extends Activity implements Constants, AdapterView.
 
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         linNopack = (LinearLayout) findViewById(R.id.noproc);
+
+        llist = (LinearLayout) findViewById(R.id.llist);
+        itxt = (TextView) findViewById(R.id.infotxt);
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
@@ -147,6 +152,18 @@ public class FreezerActivity extends Activity implements Constants, AdapterView.
                 adapter = new PackAdapter(FreezerActivity.this, pmList, packageManager);
                 packList.setAdapter(adapter);
                 linNopack.setVisibility(View.GONE);
+                llist.setVisibility(LinearLayout.VISIBLE);
+                if(!freeze){
+                    itxt.setText(getString(R.string.ps_unfreeze));
+                }
+                else{
+                    if(packs.equals("sys")){
+                        itxt.setText(getString(R.string.mt_system_packs));
+                    }
+                    else{
+                        itxt.setText(getString(R.string.mt_user_packs));
+                    }
+                }
             }
             else{
                 linNopack.setVisibility(View.VISIBLE);
@@ -157,6 +174,7 @@ public class FreezerActivity extends Activity implements Constants, AdapterView.
         protected void onPreExecute() {
             linlaHeaderProgress.setVisibility(View.VISIBLE);
             linNopack.setVisibility(View.GONE);
+            llist.setVisibility(LinearLayout.GONE);
         }
 
         @Override
@@ -244,8 +262,10 @@ public class FreezerActivity extends Activity implements Constants, AdapterView.
             if(result.equals("ok")){
                 adapter.delItem(curpos);
                 adapter.notifyDataSetChanged();
-                if(adapter.isEmpty())
+                if(adapter.isEmpty()){
+                    llist.setVisibility(LinearLayout.GONE);
                     linNopack.setVisibility(View.VISIBLE);
+                }
             }
         }
 

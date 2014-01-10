@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <PreferenceCategory
+        android:key="mpdecision"
+        android:title="@string/mpdecision">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_mpdecision"
+            android:summary="@string/ps_mpdecision"
+            android:title="@string/pt_mpdecision"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="mpd_boot"
+            android:summary="@string/ps_restore_boot"
+            android:title="@string/sob"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

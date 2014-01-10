@@ -21,7 +21,7 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.9 beta1";
+    public static final String VERSION_NUM = "2.1.9 beta2";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
@@ -52,6 +52,12 @@ public interface Constants {
     public static final String GOV_SETTINGS = "gov_settings";
     public static final String GOV_NAME = "gov_name";
     public static final String GOV_SETTINGS_PATH = "/sys/devices/system/cpu/cpufreq/";
+
+    public static final String ECO_MODE="/sys/module/intelli_plug/parameters/eco_mode_active";
+    public static final String MC_PS="/sys/devices/system/cpu/sched_mc_power_savings";//multi core power saving
+    public static final String INTELLI_PLUG="/sys/module/intelli_plug/parameters/intelli_plug_active";
+    public static final String GEN_HP="/sys/module/omap2plus_cpufreq/parameters/generic_hotplug";//generic hotplug
+
 
     // CPU info
     public static String KERNEL_INFO_PATH = "/proc/version";
@@ -153,6 +159,8 @@ public interface Constants {
 
     // VM settings
     public static final String VM_SOB = "vm_sob";
+    public static final String PREF_VM = "pref_vm";
+    public static final String VM_PATH = "/proc/sys/vm/";
 
     // Voltage control
     public static final String VOLTAGE_SOB = "voltage_sob";
@@ -188,9 +196,36 @@ public interface Constants {
     public static final String ZRAM_MEMTOT_PATH = "/sys/block/zram0/mem_used_total";
     public static final String PREF_ZRAM = "zram_size";
     public static final String ZRAM_SOB = "zram_boot";
+    public static final String ZRAM_ON = "zram_on";
 
     //sysctl
     public static final String SYSCTL_SOB = "sysctl_sob";
+
+    //touch screen
+    public static final String TOUCHSCREEN_SOB = "touchscreen_boot";
+    public static final String PREF_SLIDE2WAKE = "pref_slide2wake";
+    public static final String PREF_SWIPE2WAKE = "pref_swipe2wake";
+    public static final String PREF_HOME2WAKE = "pref_home2wake";
+    public static final String PREF_LOGO2WAKE = "pref_logo2wake";
+    public static final String PREF_LOGO2MENU = "pref_logo2menu";
+    public static final String PREF_POCKET_DETECT = "pref_pocket_detect";
+    public static final String PREF_PICK2WAKE = "pref_pick2wake";
+    public static final String PREF_DOUBLETAP2WAKE = "pref_doubletap2wake";
+    public static final String PREF_FLICK2SLEEP = "pref_flick2sleep";
+    public static final String PREF_TOUCH2WAKE = "pref_touch2wake";
+    public static final String PREF_FLICK2SLEEP_SENSITIVE="flick2sleep_sensitivity";
+
+    public static final String SLIDE2WAKE="/sys/devices/virtual/sec/tsp/tsp_slide2wake";
+    public static final String SWIPE2WAKE="/sys/android_touch/sweep2wake";//0,1,2=off,s2w+s2s,s2s
+    public static final String HOME2WAKE="/sys/android_touch/home2wake";
+    public static final String LOGO2WAKE="/sys/android_touch/logo2wake";
+    public static final String LOGO2MENU="/sys/android_touch/logo2menu";
+    public static final String POCKET_DETECT=" /sys/android_touch/pocket_detect";
+    public static final String PICK2WAKE="/sys/devices/virtual/htc_g_sensor/g_sensor/pick2wake";
+    public static final String FLICK2SLEEP="/sys/devices/virtual/htc_g_sensor/g_sensor/flick2sleep";
+    public static final String DOUBLETAP2WAKE="/sys/android_touch/doubletap2wake";
+    public static final String FLICK2SLEEP_SENSITIVE="/sys/devices/virtual/htc_g_sensor/g_sensor/f2w_sensitivity_values";
+
 
     // PC Settings
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";

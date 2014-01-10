@@ -225,28 +225,6 @@ Copyright (C) 2012  James Roberts
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="0.5"
-                    android:id="@+id/mpd"
-                    android:gravity="center_horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/mpd_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mpdecision"
-                        android:textSize="14sp" />
-
-                    <Switch
-                        android:id="@+id/mpd_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

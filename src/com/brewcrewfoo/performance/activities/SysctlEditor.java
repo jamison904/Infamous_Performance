@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -24,12 +23,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -62,11 +63,9 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private List<Prop> props = new ArrayList<Prop>();
     private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/sysctl";
 
-    private String mod="sysctl";
     private final String syspath="/system/etc/";
-    private String cmd="busybox echo `busybox find /proc/sys/* -type f -perm -644 | grep -v \"vm.\"`";
     private String sob=SYSCTL_SOB;
-    private Boolean isdyn=false;
+    private String[] tcp={};
 
 
     @Override
@@ -78,20 +77,13 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         setTheme();
         setContentView(R.layout.prop_view);
 
-        Intent i=getIntent();
-        mod=i.getStringExtra("mod");
-        if(mod.equals("vm")){
-            cmd="busybox echo `busybox find /proc/sys/vm/* -type f -prune -perm -644`";
-            sob=VM_SOB;
-        }
-
 
         new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
-        if(new File(syspath+mod+".conf").exists()){
-            new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/"+mod+".conf"+" "+dn+"/"+mod+".conf" );
+        if(new File(syspath+"sysctl.conf").exists()){
+            new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/sysctl.conf" );
         }
         else{
-            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/"+mod+".conf" );
+            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
         }
         Helpers.get_assetsScript("utils",context,"","");
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
@@ -121,11 +113,11 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-                sb.append("busybox mount -o remount,rw /system").append(";\n");
-                sb.append("busybox cp ").append(dn).append("/").append(mod).append(".conf").append(" /system/etc/").append(mod).append(".conf").append(";\n");
-                sb.append("busybox chmod 644 ").append("/system/etc/").append(mod).append(".conf").append(";\n");
-                sb.append("busybox mount -o remount,ro /system").append(";\n");
-                sb.append("busybox sysctl -p ").append("/system/etc/").append(mod).append(".conf").append(";\n");
+                sb.append("mount -o rw,remount /system;\n");
+                sb.append("busybox cp ").append(dn).append("/").append("sysctl.conf").append(" /system/etc/").append("sysctl.conf").append(";\n");
+                sb.append("busybox chmod 644 ").append("/system/etc/").append("sysctl.conf").append(";\n");
+                sb.append("mount -o ro,remount /system;\n");
+                sb.append("busybox sysctl -p ").append("/system/etc/").append("sysctl.conf").append(";\n");
                 Helpers.shExec(sb,context,true);
             }
         });
@@ -139,7 +131,6 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         });
         tools.setVisibility(View.GONE);
         search.setVisibility(View.GONE);
-        isdyn= (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists());
 
         new GetPropOperation().execute();
 
@@ -160,21 +151,42 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.search_prop:
-                search.setVisibility(RelativeLayout.VISIBLE);
+                if(search.isShown()){
+                    search.setVisibility(RelativeLayout.GONE);
+                    filterText.setText("");
+                }
+                else{
+                    search.setVisibility(RelativeLayout.VISIBLE);
+                }
                 break;
             case R.id.reset:
-                if(new File(syspath+mod+".conf").exists()){
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                    Date now = new Date();
-                    String nf = formatter.format(now)+"_" + mod+".conf";
-                    new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/"+mod+".conf"+" "+dn+"/"+nf );
-                    final StringBuilder sb = new StringBuilder();
-                    sb.append("busybox mount -o remount,rw /system").append(";\n");
-                    sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append(mod).append(".conf").append(";\n");
-                    sb.append("busybox mount -o remount,ro /system").append(";\n");
-                    Helpers.shExec(sb,context,true);
-                }
-                new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/"+mod+".conf" );
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.mt_reset))
+                        .setMessage(getString(R.string.reset_msg))
+                        .setNegativeButton(getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                        .setPositiveButton(getString(R.string.yes),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if(new File(syspath+"sysctl.conf").exists()){
+                                            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                                            Date now = new Date();
+                                            String nf = formatter.format(now)+"_" + "sysctl.conf";
+                                            new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/"+nf );
+                                            final StringBuilder sb = new StringBuilder();
+                                            sb.append("mount -o rw,remount /system;\n");
+                                            sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
+                                            sb.append("mount -o ro,remount /system;\n");
+                                            Helpers.shExec(sb,context,true);
+                                        }
+                                        new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
+                                    }
+                }).create().show();
                 break;
         }
         return true;
@@ -194,12 +206,17 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor(cmd);
+            CMDProcessor.CommandResult cr=null;
+            cr=new CMDProcessor().sh.runWaitFor("busybox echo `sysctl -n net.ipv4.tcp_available_congestion_control`");
+            if(cr.success()){
+                tcp=cr.stdout.split(" ");
+            }
+            cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox find /proc/sys/* -type f -perm -644 | grep -v \"vm.\"`");
             if(cr.success()){
                 return cr.stdout;
             }
             else{
-                Log.d(TAG, mod+" error: " + cr.stderr);
+                Log.d(TAG, "sysctl error: " + cr.stderr);
                 return null;
             }
         }
@@ -229,9 +246,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             nofiles.setVisibility(View.GONE);
             tools.setVisibility(View.GONE);
         }
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
+
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,long row) {
@@ -261,19 +276,63 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         String titlu="";
 
         LayoutInflater factory = LayoutInflater.from(this);
-        final View editDialog = factory.inflate(R.layout.prop_edit_dialog, null);
+        final View editDialog = factory.inflate(R.layout.build_prop_dialog, null);
         final EditText tv = (EditText) editDialog.findViewById(R.id.vprop);
-        final TextView tn = (TextView) editDialog.findViewById(R.id.nprop);
+        final EditText tn = (EditText) editDialog.findViewById(R.id.nprop);
+        final TextView tt = (TextView) editDialog.findViewById(R.id.text1);
+        final Spinner sp = (Spinner) editDialog.findViewById(R.id.spinner);
+        final LinearLayout lpresets = (LinearLayout) editDialog.findViewById(R.id.lpresets);
+        ArrayAdapter<CharSequence> vAdapter = new ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item);
+        vAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vAdapter.clear();
 
         if(pp!=null){
+            final String v=pp.getVal();
+            final String n=pp.getName();
+            lpresets.setVisibility(LinearLayout.GONE);
+            if(n.contains("net.ipv4.tcp_congestion_control")){
+                if(tcp.length>0){
+                    vAdapter.add(v);
+                    for (String vtcp : tcp) {
+                        if(!vtcp.equals(v)) vAdapter.add(vtcp);
+                    }
+                    lpresets.setVisibility(LinearLayout.VISIBLE);
+                    sp.setAdapter(vAdapter);
+                }
+            }
+            if(v.equals("0")){
+                vAdapter.add("0");
+                vAdapter.add("1");
+                lpresets.setVisibility(LinearLayout.VISIBLE);
+                sp.setAdapter(vAdapter);
+            }
+            else if(v.equals("1")){
+                vAdapter.add("1");
+                vAdapter.add("0");
+                lpresets.setVisibility(LinearLayout.VISIBLE);
+                sp.setAdapter(vAdapter);
+            }
             tv.setText(pp.getVal());
             tn.setText(pp.getName());
+            tn.setVisibility(EditText.GONE);
+            tt.setText(pp.getName());
             titlu=getString(R.string.edit_prop_title);
         }
         else{//add
             titlu=getString(R.string.add_prop_title);
+            lpresets.setVisibility(LinearLayout.GONE);
+            tt.setText(getString(R.string.prop_name));
+            tn.setVisibility(EditText.VISIBLE);
         }
-
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                tv.setText(sp.getSelectedItem().toString().trim());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
         new AlertDialog.Builder(this)
                 .setTitle(titlu)
                 .setView(editDialog)
@@ -290,13 +349,13 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                         if (pp!=null) {
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
-                                new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\" "+dn+"/"+mod+".conf");
+                                new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\" "+dn+"/sysctl.conf");
                             }
                         }
                         else {
                             if (tv.getText().toString() != null && tn.getText().toString() != null && tn.getText().toString().trim().length() > 0){
                                 props.add(new Prop(tn.getText().toString().trim(),tv.getText().toString().trim()));
-                                new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -setprop \""+tn.getText().toString().trim()+"="+tv.getText().toString().trim()+"\" "+dn+"/"+mod+".conf");
+                                new CMDProcessor().sh.runWaitFor(getFilesDir()+"/utils -setprop \""+tn.getText().toString().trim()+"="+tv.getText().toString().trim()+"\" "+dn+"/sysctl.conf");
                             }
                         }
                         Collections.sort(props);
@@ -312,23 +371,9 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             if(aP.trim().length()>0 && aP!=null){
                 final String pv=Helpers.readOneLine(aP).trim();
                 final String pn=aP.trim().replace("/",".").substring(10, aP.length());
-                if(testprop(pn)){
-                        props.add(new Prop(pn,pv));
-                }
+                props.add(new Prop(pn,pv));
             }
         }
     }
-    public boolean testprop(String s){
-        if(mod.equals("sysctl") || !isdyn){
-            return true;
-        }
-        else{
-            if(s.contains("dirty_writeback_active_centisecs")||s.contains("dynamic_dirty_writeback")|| s.contains("dirty_writeback_suspend_centisecs")){
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
-    }
+
 }

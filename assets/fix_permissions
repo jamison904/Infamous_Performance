@@ -1,10 +1,10 @@
 #
 #
 sysrw() {
-busybox mount -o remount,rw /system
+mount -o rw,remount /system
 }
 sysro() {
-busybox mount -o remount,ro /system
+mount -o ro,remount /system
 }
 
 get_runtime() {

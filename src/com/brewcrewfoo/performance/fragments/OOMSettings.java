@@ -50,9 +50,6 @@ import com.brewcrewfoo.performance.util.Helpers;
 import java.io.File;
 
 public class OOMSettings extends PreferenceFragment implements OnSharedPreferenceChangeListener,Constants {
-
-    private static final int NEW_MENU_ID=Menu.FIRST+1;
-
     SharedPreferences mPreferences;
 	
 	private int mSeekbarProgress;
@@ -192,14 +189,15 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.oom_menu, menu);
-        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
+        inflater.inflate(R.menu.menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Helpers.removeCurItem(item,Menu.FIRST+1,(ViewPager) getView().getParent());
         switch(item.getItemId()){
+            case R.id.tablist:
+                Helpers.getTabList(getString(R.string.menu_tab),(ViewPager) getView().getParent(),getActivity());
+                break;
             case R.id.app_settings:
                 Intent intent = new Intent(getActivity(), PCSettings.class);
                 startActivity(intent);

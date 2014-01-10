@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
@@ -84,9 +86,9 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position,long id) {
                 final Prop p = adapter.getItem(position);
-                if(p.getName().contains("fingerprint")) return true;
-                makedialog(getString(R.string.del_prop_title),getString(R.string.del_prop_msg,p.getName()),(byte)1,p);
-                return false;
+                if(!p.getName().contains("fingerprint"))
+                    makedialog(getString(R.string.del_prop_title),getString(R.string.del_prop_msg,p.getName()),(byte)1,p);
+                return true;
             }
         });
         packList.setOnItemClickListener(this);
@@ -134,7 +136,13 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                 editPropDialog(null);
                 break;
             case R.id.search_prop:
-                search.setVisibility(RelativeLayout.VISIBLE);
+                if(search.isShown()){
+                    search.setVisibility(RelativeLayout.GONE);
+                    filterText.setText("");
+                }
+                else{
+                    search.setVisibility(RelativeLayout.VISIBLE);
+                }
                 break;
             case R.id.restore_prop:
                 makedialog(getString(R.string.prefcat_build_prop),getString(R.string.prop_restore_msg),(byte)0,null);
@@ -222,14 +230,17 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         final View editDialog = factory.inflate(R.layout.build_prop_dialog, null);
         final EditText tv = (EditText) editDialog.findViewById(R.id.vprop);
         final EditText tn = (EditText) editDialog.findViewById(R.id.nprop);
+        final TextView tt = (TextView) editDialog.findViewById(R.id.text1);
         final Spinner sp = (Spinner) editDialog.findViewById(R.id.spinner);
         final LinearLayout lpresets = (LinearLayout) editDialog.findViewById(R.id.lpresets);
         ArrayAdapter<CharSequence> vAdapter = new ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item);
         vAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vAdapter.clear();
 
+
         if(pp!=null){
             final String v=pp.getVal();
+
             lpresets.setVisibility(LinearLayout.GONE);
             if(v.equals("0")){
                 vAdapter.add("0");
@@ -270,6 +281,8 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
 
             tv.setText(pp.getVal());
             tn.setText(pp.getName());
+            tn.setVisibility(EditText.GONE);
+            tt.setText(pp.getName());
             titlu=getString(R.string.edit_prop_title);
 
         }
@@ -282,6 +295,9 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
             vAdapter.add("false");
             sp.setAdapter(vAdapter);
             lpresets.setVisibility(LinearLayout.VISIBLE);
+            tt.setText(getString(R.string.prop_name));
+            tn.setVisibility(EditText.VISIBLE);
+
         }
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -308,6 +324,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
                                 new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\"");
+                                //Log.d(TAG, "/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\"");
                             }
                         }
                         else {
@@ -316,6 +333,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                                 new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop \""+tn.getText().toString().trim()+"="+tv.getText().toString().trim()+"\"");
                             }
                         }
+
                         Collections.sort(props);
                         adapter.notifyDataSetChanged();
                     }
@@ -364,10 +382,10 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                 case 0:
                     if(new File(dn+"/"+buildname).exists()){
                         final StringBuilder sb = new StringBuilder();
-                        sb.append("busybox mount -o remount,rw /system").append(";\n");
+                        sb.append("mount -o rw,remount /system;\n");
                         sb.append("busybox cp ").append(dn).append("/").append(buildname).append(" /system/build.prop;\n");
                         sb.append("busybox chmod 644 ").append("/system/build.prop;\n");
-                        sb.append("busybox mount -o remount,ro /system").append(";\n");
+                        sb.append("mount -o ro,remount /system;\n");
                         Helpers.shExec(sb,context,true);
                         new GetPropOperation().execute();
                     }
@@ -377,9 +395,9 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                     break;
                 case 1:
                     final StringBuilder sb = new StringBuilder();
-                    sb.append("busybox mount -o remount,rw /system").append(";\n");
-                    sb.append("busybox sed -i '/").append(p.getName()).append("/d' ").append("/system/build.prop;\n");
-                    sb.append("busybox mount -o remount,ro /system").append(";\n");
+                    sb.append("mount -o rw,remount /system;\n");
+                    sb.append("busybox sed -i '/").append(p.getName().replace(".","\\.")).append("/d' ").append("/system/build.prop;\n");
+                    sb.append("mount -o ro,remount /system;\n");
                     Helpers.shExec(sb,context,true);
                     adapter.remove(p);
                     adapter.notifyDataSetChanged();

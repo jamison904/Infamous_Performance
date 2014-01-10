@@ -19,6 +19,7 @@ import android.widget.ListView;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.Constants;
+import com.brewcrewfoo.performance.util.Helpers;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ public class HideTabs extends Activity implements Constants, ActivityThemeChange
         int i=0;
         while (i<getResources().getStringArray(R.array.tabs).length) {
             Tab t = new Tab(getResources().getStringArray(R.array.tabs)[i],mPreferences.getBoolean(getResources().getStringArray(R.array.tabs)[i],true));
-            TabList.add(t);
+            if(Helpers.is_Tab_available(i)) TabList.add(t);
             i++;
         }
         dataAdapter = new MyCustomAdapter(this,R.layout.tab_item, TabList);

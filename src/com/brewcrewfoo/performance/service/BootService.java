@@ -27,11 +27,15 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
+import com.brewcrewfoo.performance.activities.MainActivity;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
+import com.brewcrewfoo.performance.util.VibratorClass;
 import com.brewcrewfoo.performance.util.Voltage;
 
 
@@ -41,14 +45,10 @@ import java.util.List;
 
 public class BootService extends Service implements Constants {
     public static boolean servicesStarted = false;
-    Context context;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        context=this;
-        if (intent == null) {
-            stopSelf();
-        }
+        if (intent == null) stopSelf();
         new BootWorker(this).execute();
         return START_STICKY;
     }
@@ -58,22 +58,24 @@ public class BootService extends Service implements Constants {
         return null;
     }
 
-    class BootWorker extends AsyncTask<Void, Void, Void> {
+    class BootWorker extends AsyncTask<Void, Void, String> {
         Context c;
+        final int ncpus=Helpers.getNumOfCpus();
+        final String FASTCHARGE_PATH=Helpers.fastcharge_path();
+
         public BootWorker(Context c) {
             this.c = c;
         }
         @SuppressWarnings("deprecation")
         @Override
-        protected Void doInBackground(Void... args) {
+        protected String doInBackground(Void... args) {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
             final StringBuilder sb = new StringBuilder();
-            final String FASTCHARGE_PATH=Helpers.fastcharge_path();
-            final String VIBE_PATH=Helpers.vibe_path();
+            final String VIBE_PATH=new VibratorClass().get_path();
             final String BLN_PATH=Helpers.bln_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
-            final int ncpus=Helpers.getNumOfCpus();
+
             String max,min;
             int ksm=0;
             String ksmpath=KSM_RUN_PATH;
@@ -161,21 +163,10 @@ public class BootService extends Service implements Constants {
             if (FASTCHARGE_PATH!=null) {
                 if(preferences.getBoolean(PREF_FASTCHARGE, false)){
                     sb.append("busybox echo 1 > ").append(FASTCHARGE_PATH).append(";\n");
+
                     Intent i = new Intent();
                     i.setAction(INTENT_ACTION_FASTCHARGE);
                     c.sendBroadcast(i);
-                    // add notification to warn user they can only charge
-                    CharSequence contentTitle = c.getText(R.string.fast_charge_notification_title);
-                    CharSequence contentText = c.getText(R.string.fast_charge_notification_message);
-
-                    Notification n = new Notification.Builder(c)
-                        .setAutoCancel(true).setContentTitle(contentTitle)
-                        .setContentText(contentText)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setWhen(System.currentTimeMillis()).getNotification();
-
-                    NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.notify(1337, n);
                 }
             }
             if (new File(BLX_PATH).exists()) {
@@ -243,9 +234,16 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox sysctl -p;\n");
                 }
             }
-            if (new File("/system/etc/vm.conf").exists()) {
-                if (preferences.getBoolean(VM_SOB, false)) {
-                    sb.append("busybox sysctl -p /system/etc/vm.conf;\n");
+            if (preferences.getBoolean(VM_SOB, false)) {
+                final String gs = preferences.getString(PREF_VM, null);
+                if(gs != null){
+                    String p[]=gs.split(";");
+                    for (String aP : p) {
+                        if(!aP.equals("") && aP!=null){
+                            final String pn[]=aP.split(":");
+                            sb.append("busybox echo ").append(pn[1]).append(" > ").append(VM_PATH).append(pn[0]).append(";\n");
+                        }
+                    }
                 }
             }
             if (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists()) {
@@ -273,7 +271,6 @@ public class BootService extends Service implements Constants {
                         else{
                             sb.append("busybox echo 0 > " + USER_PROC_PATH + ";\n");
                         }
-
                     }
             }
             if (new File(SYS_PROC_PATH).exists()) {
@@ -285,7 +282,6 @@ public class BootService extends Service implements Constants {
                         else{
                             sb.append("busybox echo 0 > " + SYS_PROC_PATH + ";\n");
                         }
-
                     }
             }
 
@@ -301,13 +297,6 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                 }
             }
-            if(new File("/sys/block/zram0").exists()){
-                if (preferences.getBoolean(ZRAM_SOB, false)){
-                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
-                    long v = (long)(curdisk/ncpus)*1024*1024;
-                    sb.append("zramstart ").append(ncpus).append(" ").append(v).append(";\n");
-                }
-            }
 
             if (preferences.getBoolean(GOV_SOB, false)) {
                     final String gn = preferences.getString(GOV_NAME, "");
@@ -316,22 +305,92 @@ public class BootService extends Service implements Constants {
                         if(gs != null){
                             String p[]=gs.split(";");
                             for (String aP : p) {
-                                final String pn[]=aP.split(":");
-                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(gov).append("/").append(pn[0]).append(";\n");
+                                if(!aP.equals("") && aP!=null){
+                                    final String pn[]=aP.split(":");
+                                    sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(gov).append("/").append(pn[0]).append(";\n");
+                                }
                             }
                         }
                     }
              }
+            if (preferences.getBoolean(TOUCHSCREEN_SOB, false)) {
+                if (new File(SLIDE2WAKE).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_SLIDE2WAKE, Helpers.readOneLine(SLIDE2WAKE))).append(" > ").append(SLIDE2WAKE).append(";\n");
+                }
+                if (new File(SWIPE2WAKE).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_SWIPE2WAKE, Helpers.readOneLine(SWIPE2WAKE))).append(" > ").append(SWIPE2WAKE).append(";\n");
+                }
+                if (new File(HOME2WAKE).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_HOME2WAKE, Helpers.readOneLine(HOME2WAKE))).append(" > ").append(HOME2WAKE).append(";\n");
+                }
+                if (new File(LOGO2WAKE).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_LOGO2WAKE, Helpers.readOneLine(LOGO2WAKE))).append(" > ").append(LOGO2WAKE).append(";\n");
+                }
+                if (new File(LOGO2MENU).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_LOGO2MENU, Helpers.readOneLine(LOGO2MENU))).append(" > ").append(LOGO2MENU).append(";\n");
+                }
+                if (new File(DOUBLETAP2WAKE).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_DOUBLETAP2WAKE, Helpers.readOneLine(DOUBLETAP2WAKE))).append(" > ").append(DOUBLETAP2WAKE).append(";\n");
+                }
+                if (new File(POCKET_DETECT).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_POCKET_DETECT, Helpers.readOneLine(POCKET_DETECT))).append(" > ").append(POCKET_DETECT).append(";\n");
+                }
+                if (new File(PICK2WAKE).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_PICK2WAKE, Helpers.readOneLine(PICK2WAKE))).append(" > ").append(PICK2WAKE).append(";\n");
+                }
+                if (new File(FLICK2SLEEP).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_FLICK2SLEEP, Helpers.readOneLine(FLICK2SLEEP))).append(" > ").append(FLICK2SLEEP).append(";\n");
+                }
+                if (new File(FLICK2SLEEP_SENSITIVE).exists()) {
+                    sb.append("busybox echo ").append(preferences.getString(PREF_FLICK2SLEEP_SENSITIVE, "0")).append(" > ").append(FLICK2SLEEP_SENSITIVE).append(";\n");
+                }
+                if (Helpers.touch2wake_path()!=null) {
+                    final String touch2wakepath=Helpers.touch2wake_path();
+                    sb.append("busybox echo ").append(preferences.getString(PREF_TOUCH2WAKE, Helpers.readOneLine(touch2wakepath))).append(" > ").append(touch2wakepath).append(";\n");
+                }
+            }
+            if (preferences.getBoolean(ZRAM_ON, false)) {
+                if (preferences.getBoolean(ZRAM_SOB, false)){
+                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
+                    long v = (long)(curdisk/ncpus)*1024*1024;
+                    sb.append("zramstart ").append(ncpus).append(" ").append(v).append(";\n");
+                }
+            }
+
             sb.append(preferences.getString(PREF_SH, "# no custom shell command")).append(";\n");
-            Helpers.shExec(sb,context,true);
-            return null;
+            sb.append("get_cpu ").append(ncpus).append(";\n");
+            return Helpers.shExec(sb,c,true);
         }
     	@Override
-    	protected void onPostExecute(Void result) {
+    	protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if(result!=null){
+                final String lines[]=result.split("\n");
+                final String line =lines[lines.length-1];
+                for(int p=0; p < ncpus;p++){
+                    MainActivity.mMinFreqSetting[p]=line.split(":")[p*4];
+                    MainActivity.mMaxFreqSetting[p]=line.split(":")[p*4+1];
+                    MainActivity.mCurGovernor[p]=line.split(":")[p*4+2];
+                    MainActivity.mCurIO[p]=line.split(":")[p*4+3];
+                    MainActivity.mCPUon[p]=line.split(":")[p*4+4];
+                }
+            }
+            if(Helpers.readOneLine(FASTCHARGE_PATH).equals("1")){
+                // add notification to warn user they can only charge
+                CharSequence contentTitle = c.getText(R.string.fast_charge_notification_title);
+                CharSequence contentText = c.getText(R.string.fast_charge_notification_message);
+                Notification n = new Notification.Builder(c)
+                        .setAutoCancel(true).setContentTitle(contentTitle)
+                        .setContentText(contentText)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setWhen(System.currentTimeMillis()).getNotification();
+                NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                nm.notify(1337, n);
+            }
+            //Log.i(TAG, result);
+            Toast.makeText(c, TAG+ " boot complete", Toast.LENGTH_SHORT).show();
             servicesStarted = true;
             stopSelf();
-            Helpers.updateAppWidget(c);
         }
 	}
 

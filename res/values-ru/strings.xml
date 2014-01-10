@@ -5,14 +5,15 @@
     <!-- Main tabs -->
     <string-array name="tabs">
         <item>Настройки Процессора</item>
+        <item>Процессор Расширенные</item>
         <item>Аккумулятор</item>
         <item>Настройки Памяти</item>
         <item>Настройки Напряжения</item>
         <item>Расширенные настройки</item>
         <item>Время в Действии</item>
-        <item>Общая информация</item>
         <item>О Диске</item>
         <item>Инструменты</item>
+        <item>Общая информация</item>
     </string-array>
 
     <string name="menu_tab">Вкладки</string>
@@ -33,7 +34,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Отменить</string>
     <string name="mt_gov_ctrl">Настройки Говернора</string>
-    <string name="mpdecision">MPDECISION</string>
     <!-- Other settings -->
     <string name="prefcat_free_memory">СВОБОДНАЯ ПАМЯТЬ</string>
     <string name="prefcat_tweaks">БЫСТРАЯ ЗАРЯДКА</string>
@@ -306,7 +306,7 @@
     <string name="sysctl_title">Редактировать SysCtl</string>
     <!-- Vibration Intensity -->
     <string name="prefcat_viber">ВИБРАЦИЯ</string>
-    <string name="viber_title">Настройка Интенсивности вибраци</string>
+    <string name="viber_title">Настройка Интенсивности вибрации</string>
     <!-- PC Settings -->
     <string name="pt_use_light_theme">Использовать светлую тему</string>
     <string name="ps_use_light_theme">Если выбрать, приложение будет использовать светлую тему Holo</string>
@@ -323,4 +323,39 @@
     <string name="hex_hint">#FF000000</string>
     <string name="set">Установить</string>
     <string name="ics_color">Holo</string>
+
+    <!-- beta2-->
+    <string name="reset_msg">Текущие значения будут удалены и стандартные будут восстановлены после перезагрузки. Продолжить?</string>
+
+    <string name="prefcat_logs">Записать Лог</string>
+    <string name="logcat_title">Logcat</string>
+    <string name="logcat_msg">Logcat будет записан в %s. Продолжить?</string>
+    <string name="dmesg_title">Dmesg</string>
+    <string name="dmesg_msg">Dmesg будет записан в %s. Продолжить?</string>
+    <string name="ps_logs">Записать лог в %s.</string>
+
+    <string name="mpdecision">MPDECISION</string>
+    <string name="pt_mpdecision">Включить MPDecision</string>
+    <string name="ps_mpdecision"></string>
+
+    <string name="prefcat_touchscr">ТАЧСКРИН</string>
+    <string name="ps_touchscr">ТачСкрин Контроль</string>
+    <string name="ps_touchscr_boot">Если выбрать, то все тачскрин настройки будут восстановлены после перезагрузки</string>
+    <string name="toucht1">Скользнуть для пробуждения</string>
+    <string name="toucht2">Махнуть для пробуждения</string>
+    <string name="toucht21">Махнуть для усыпления</string>
+    <string name="toucht3">Клавиша Домой для пробуждения</string>
+    <string name="toucht4">Нажать логотип для пробуждения</string>
+    <string name="toucht5">Нажать логотип для входа в Меню</string>
+    <string name="toucht6">Двойной тап для пробуждения</string>
+    <string name="toucht7">Определять Карман</string>
+    <string name="toucht8">Выбор для пробуждения</string>
+    <string name="toucht9">Слегка ударить для усыпления</string>
+    <string name="toucht9s">Чувствительность</string>
+    <string name="toucht10">Коснуться для для пробуждения</string>
+    <string-array name="asens">
+        <item name="high">Высокий</item>
+        <item name="low">Низкий</item>
+    </string-array>
+    <!-- beta2-->
 </resources>

@@ -19,39 +19,35 @@
 package com.brewcrewfoo.performance.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SubMenu;
-
 import com.brewcrewfoo.performance.widget.PCWidget;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Helpers implements Constants {
 
     private static String mVoltagePath;
 
-    /**
-     * Checks device for SuperUser permission
-     *
-     * @return If SU was granted or denied
-     */
     public static boolean checkSu() {
         if (!new File("/system/bin/su").exists() && !new File("/system/xbin/su").exists()) {
             Log.e(TAG, "su does not exist!!!");
             return false; // tell caller to bail...
         }
         try {
-            if ((new CMDProcessor().su.runWaitFor("ls /data/app-private")).success()) {
+            //if ((new CMDProcessor().su.runWaitFor("ls /data/app-private")).success()) {
+            if ((new CMDProcessor().su.runWaitFor("su -c id")).success()) {
                 Log.i(TAG, " SU exists and we have permission");
                 return true;
             } else {
@@ -65,11 +61,6 @@ public class Helpers implements Constants {
         }
     }
 
-    /**
-     * Checks to see if Busybox is installed in "/system/"
-     *
-     * @return If busybox exists
-     */
     public static boolean checkBusybox() {
         if (!new File("/system/bin/busybox").exists() && !new File("/system/xbin/busybox").exists()) {
             Log.e(TAG, "Busybox not in xbin or bin!");
@@ -88,12 +79,6 @@ public class Helpers implements Constants {
         return true;
     }
 
-    /**
-     * Return mount points
-     *
-     * @param path
-     * @return line if present
-     */
     public static String[] getMounts(final String path) {
         try {
             BufferedReader br = new BufferedReader(new FileReader("/proc/mounts"), 256);
@@ -112,12 +97,6 @@ public class Helpers implements Constants {
         return null;
     }
 
-    /**
-     * Get mounts
-     *
-     * @param mount
-     * @return success or failure
-     */
     public static boolean getMount(final String mount) {
         final CMDProcessor cmd = new CMDProcessor();
         final String mounts[] = getMounts("/system");
@@ -129,15 +108,9 @@ public class Helpers implements Constants {
                 return true;
             }
         }
-        return (cmd.su.runWaitFor("busybox mount -o remount," + mount + " /system").success());
+        return (cmd.su.runWaitFor("mount -o "+mount+",remount /system").success());
     }
 
-    /**
-     * Read one line from file
-     *
-     * @param fname
-     * @return line
-     */
     public static String readOneLine(String fname) {
         String line = null;
         if (new File(fname).exists()) {
@@ -158,13 +131,6 @@ public class Helpers implements Constants {
         return line;
     }
 
-    /**
-     * Read file via shell
-     *
-     * @param filePath
-     * @param useSu
-     * @return file output
-     */
     public static String readFileViaShell(String filePath, boolean useSu) {
         CMDProcessor.CommandResult cr = null;
         if (useSu) {
@@ -177,13 +143,6 @@ public class Helpers implements Constants {
         return null;
     }
 
-    /**
-     * Write one line to a file
-     *
-     * @param fname
-     * @param value
-     * @return if line was written
-     */
     public static boolean writeOneLine(String fname, String value) {
     	if (!new File(fname).exists()) {return false;}
         try {
@@ -201,11 +160,6 @@ public class Helpers implements Constants {
         return true;
     }
 
-    /**
-     * Gets available schedulers from file
-     *
-     * @return available schedulers
-     */
     public static String[] getAvailableIOSchedulers() {
         String[] schedulers = null;
         String[] aux = readStringArray(IO_SCHEDULER_PATH);
@@ -222,12 +176,6 @@ public class Helpers implements Constants {
         return schedulers;
     }
 
-    /**
-     * Reads string array from file
-     *
-     * @param fname
-     * @return string array
-     */
     private static String[] readStringArray(String fname) {
         String line = readOneLine(fname);
         if (line != null) {
@@ -236,11 +184,6 @@ public class Helpers implements Constants {
         return null;
     }
 
-    /**
-     * Get current IO Scheduler
-     *
-     * @return current io scheduler
-     */
     public static String getIOScheduler() {
         String scheduler = null;
         String[] schedulers = readStringArray(IO_SCHEDULER_PATH);
@@ -254,17 +197,11 @@ public class Helpers implements Constants {
         }
         return scheduler;
     }
-/*
-     * @return available performance scheduler
-     */
+
     public static Boolean GovernorExist(String gov) {
         return readOneLine(GOVERNORS_LIST_PATH).indexOf(gov) > -1;
     }
 
-    /**
-     * Get total number of cpus
-     * @return total number of cpus
-     */
     public static int getNumOfCpus() {
         int numOfCpu = 1;
         String numOfCpus = Helpers.readOneLine(NUM_OF_CPUS_PATH);
@@ -273,77 +210,53 @@ public class Helpers implements Constants {
             try {
                 int cpuStart = Integer.parseInt(cpuCount[0]);
                 int cpuEnd = Integer.parseInt(cpuCount[1]);
-
                 numOfCpu = cpuEnd - cpuStart + 1;
-
-                if (numOfCpu < 0)
-                    numOfCpu = 1;
-            } catch (NumberFormatException ex) {
+                if (numOfCpu < 0) numOfCpu = 1;
+            }
+            catch (NumberFormatException ex) {
                 numOfCpu = 1;
             }
         }
         return numOfCpu;
     }
 
-    /**
-     * Check if any voltage control tables exist and set the voltage path if a
-     * file is found.
-     * <p/>
-     * If false is returned, there was no tables found and none will be used.
-     *
-     * @return true/false if uv table exists
-     */
     public static boolean voltageFileExists() {
         if (new File(UV_MV_PATH).exists()) {
             setVoltagePath(UV_MV_PATH);
             return true;
-        } else if (new File(VDD_PATH).exists()) {
+        }
+        else if (new File(VDD_PATH).exists()) {
             setVoltagePath(VDD_PATH);
             return true;
-        } else if (new File(VDD_SYSFS_PATH).exists()) {
+        }
+        else if (new File(VDD_SYSFS_PATH).exists()) {
             setVoltagePath(VDD_SYSFS_PATH);
             return true;
-        } else if (new File(COMMON_VDD_PATH).exists()) {
+        }
+        else if (new File(COMMON_VDD_PATH).exists()) {
             setVoltagePath(COMMON_VDD_PATH);
             return true;
         }
         return false;
     }
 
-    /**
-     * Sets the voltage file to be used by the rest of the app elsewhere.
-     * @param voltageFile
-     */
     public static void setVoltagePath(String voltageFile) {
         Log.d(TAG, "UV table path detected: "+voltageFile);
         mVoltagePath = voltageFile;
     }
 
-    /**
-     * Gets the currently set voltage path
-     * @return voltage path
-     */
+
     public static String getVoltagePath() {
         return mVoltagePath;
     }
 
-    /**
-     * Convert to MHz and append a tag
-     * @param mhzString
-     * @return tagged and converted String
-     */
     public static String toMHz(String mhzString) {
         if(mhzString==null) return "";
         else return String.valueOf(Integer.parseInt(mhzString) / 1000) + " MHz";
     }
 
-    /**
-     * Restart the activity smoothly
-     * @param activity
-     */
     public static void restartPC(final Activity activity) {
-        if (activity == null)
-            return;
+        if (activity == null) return;
         final int enter_anim = android.R.anim.fade_in;
         final int exit_anim = android.R.anim.fade_out;
         activity.overridePendingTransition(enter_anim, exit_anim);
@@ -352,10 +265,7 @@ public class Helpers implements Constants {
         activity.startActivity(activity.getIntent());
     }
 
-    /**
-     * Helper to update the app widget
-     * @param context
-     */
+
     public static void updateAppWidget(Context context) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
         ComponentName widgetComponent = new ComponentName(context, PCWidget.class);
@@ -366,11 +276,6 @@ public class Helpers implements Constants {
         context.sendBroadcast(update);
     }
 
-    /**
-     * Helper to create a bitmap to set as imageview or bg
-     * @param bgcolor
-     * @return bitmap
-     */
     public static Bitmap getBackground(int bgcolor) {
         try {
             Bitmap.Config config = Bitmap.Config.ARGB_8888;
@@ -378,7 +283,8 @@ public class Helpers implements Constants {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawColor(bgcolor);
             return bitmap;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return null;
         }
     }
@@ -418,18 +324,6 @@ public class Helpers implements Constants {
         if(cr.success() && !cr.stdout.equals("")) return true;
         return false;
     }
-	public static String shExec(StringBuilder s,Context c,Boolean su){
-        get_assetsScript("run", c, "", s.toString());
-        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
-        CMDProcessor.CommandResult cr = null;
-        if(su)
-		    cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
-        else
-            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
-        if(cr.success()){return cr.stdout;}
-        else{Log.d(TAG, "execute: "+cr.stderr);return null;}
-	}
-
     public static void get_assetsScript(String fn,Context c,String prefix,String postfix){
         byte[] buffer;
         final AssetManager assetManager = c.getAssets();
@@ -485,33 +379,56 @@ public class Helpers implements Constants {
             e.printStackTrace();
         }
     }
+    public static String shExec(StringBuilder s,Context c,Boolean su){
+        get_assetsScript("run", c, "", s.toString());
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
+        CMDProcessor.CommandResult cr;
+        if(su)
+            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
+        else
+            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
+        if(cr.success()){return cr.stdout;}
+        else{Log.d(TAG, "execute: "+cr.stderr);return null;}
+    }
+
+    public static String readCPU(Context context,int i){
+        Helpers.get_assetsScript("utils", context, "", "");
+        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );
+        CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor(context.getFilesDir()+"/utils -getcpu "+i);
+        if(cr.success()) return cr.stdout;
+        else return null;
+    }
+      
     public static String ReadableByteCount(long bytes) {
         if (bytes < 1024) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(1024));
         String pre = String.valueOf("KMGTPE".charAt(exp-1));
         return String.format("%.1f %sB", bytes / Math.pow(1024, exp), pre);
     }
-    public static void removeCurItem(MenuItem item,int idx,ViewPager vp){
+
+    public static void getTabList(String strTitle, final ViewPager vp,Activity activity) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle(strTitle);
+
+        List<String> listItems = new ArrayList<String>();
         for(byte i=0;i< vp.getAdapter().getCount();i++){
-            if(item.getItemId() == idx+i+1) {
-                vp.setCurrentItem(i);
-            }
+                listItems.add(vp.getAdapter().getPageTitle(i).toString());
         }
-    }
-    public static void addItems2Menu(Menu menu,int idx,String nume,ViewPager vp){
-        final SubMenu smenu = menu.addSubMenu(0, idx, 0,nume);
-        for(byte i=0;i< vp.getAdapter().getCount();i++){
-            if(i!=vp.getCurrentItem())
-                smenu.add(0,idx +i+1, 0, vp.getAdapter().getPageTitle(i));
-        }
+        alertDialogBuilder.setItems(listItems.toArray(new CharSequence[listItems.size()]),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        vp.setCurrentItem(which);
+                    }
+                }
+        ).show();
     }
 
-    public static String readCPU(Context context,int i){
-        Helpers.get_assetsScript("utils",context,"","");
-        new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+context.getFilesDir()+"/utils" );
-        CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor(context.getFilesDir()+"/utils -getcpu "+i);
-        if(cr.success()) return cr.stdout;
-        else return null;
+    public static boolean is_Tab_available(int i){
+        if(i==1) return (Helpers.getNumOfCpus()>10);
+        else if(i==2) return Helpers.showBattery();
+        else if(i==4) return Helpers.voltageFileExists();
+        return true;
     }
 
     public static String bln_path() {
@@ -550,28 +467,16 @@ public class Helpers implements Constants {
             return null;
         }
     }
-    public static String vibe_path() {
-        if (new File("/sys/class/vibetonz/immDuty/pwmvalue_intensity").exists()) {
-            return "/sys/class/vibetonz/immDuty/pwmvalue_intensity";
+
+    public static String touch2wake_path() {
+        if (new File("/sys/module/lge_touch_core/parameters/doubletap_to_wake").exists()) {
+            return "/sys/module/lge_touch_core/parameters/doubletap_to_wake";
         }
-        else if (new File("/sys/vibrator/pwmvalue").exists()) {
-            return "/sys/vibrator/pwmvalue";
-        }
-        else if (new File("/sys/class/misc/vibratorcontrol/vibrator_strength").exists()) {
-            return "/sys/class/misc/vibratorcontrol/vibrator_strength";
-        }
-        else if (new File("/sys/vibe/pwmduty").exists()) {
-            return "/sys/vibe/pwmduty";
-        }
-        else if (new File("/sys/class/timed_output/vibrator/amp").exists()) {
-            return "/sys/class/timed_output/vibrator/amp";
-        }
-        else if (new File("/sys/class/misc/pwm_duty/pwm_duty").exists()) {
-            return "/sys/class/misc/pwm_duty/pwm_duty";
+        else if (new File("/sys/module/lge_touch_core/parameters/touch_to_wake").exists()) {
+            return "/sys/module/lge_touch_core/parameters/touch_to_wake";
         }
         else{
             return null;
         }
     }
-
 }

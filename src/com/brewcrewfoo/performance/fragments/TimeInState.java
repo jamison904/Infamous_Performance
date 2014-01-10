@@ -46,7 +46,6 @@ import java.util.Map;
 
 public class TimeInState extends Fragment implements Constants {
 
-    private static final int NEW_MENU_ID=Menu.FIRST+1;
     private LinearLayout mStatesView;
     private TextView mAdditionalStates;
     private TextView mTotalStateTime;
@@ -104,13 +103,14 @@ public class TimeInState extends Fragment implements Constants {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.time_in_state_menu, menu);
-        Helpers.addItems2Menu(menu, NEW_MENU_ID, getString(R.string.menu_tab), (ViewPager) getView().getParent());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Helpers.removeCurItem(item,Menu.FIRST+1,(ViewPager) getView().getParent());
         switch (item.getItemId()){
+            case R.id.tablist:
+                Helpers.getTabList(getString(R.string.menu_tab),(ViewPager) getView().getParent(),getActivity());
+                break;
             case R.id.refresh:
                 refreshData();
                 break;

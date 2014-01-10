@@ -6,12 +6,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -76,42 +80,26 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-                final StringBuilder sbs = new StringBuilder();
-                for(int i=0;i<adapter.getCount();i++){
-                    Prop p=adapter.getItem(i);
-                    if(i==0){
-                        sb.append(p.getName()).append(":").append(p.getVal());
+
+                final String s=mPreferences.getString(GOV_SETTINGS,"");
+
+                if(!s.equals("")){
+                    String p[]=s.split(";");
+                    for (String aP : p) {
+                        if(!aP.equals("")&& aP!=null){
+                            final String pn[]=aP.split(":");
+                            sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(pn[0]).append(";\n");
+                        }
                     }
-                    else{
-                        sb.append(";").append(p.getName()).append(":").append(p.getVal());
-                    }
-                    sbs.append("busybox echo ").append(p.getVal()).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(p.getName()).append(";\n");
+                    Helpers.shExec(sb,context,true);
                 }
-                mPreferences.edit().putString(GOV_NAME,curgov).putString(GOV_SETTINGS, sb.toString()).commit();
-                Helpers.shExec(sbs,context,true);
+
             }
         });
 
         setOnBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    final StringBuilder sb = new StringBuilder();
-                    for(int i=0;i<adapter.getCount();i++){
-                        Prop p=adapter.getItem(i);
-                        if (i == 0) {
-                            sb.append(p.getName()).append(":").append(p.getVal());
-
-                        } else {
-                            sb.append(";").append(p.getName()).append(":").append(p.getVal());
-
-                        }
-                    }
-                    mPreferences.edit().putString(GOV_NAME,curgov).putString(GOV_SETTINGS, sb.toString()).apply();
-                }
-                else{
-                    mPreferences.edit().remove(GOV_SETTINGS).remove(GOV_NAME).apply();
-                }
                 mPreferences.edit().putBoolean(GOV_SOB, isChecked).apply();
             }
         });
@@ -119,7 +107,10 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         new GetPropOperation().execute();
 
     }
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         private List<Prop> props = new ArrayList<Prop>();
 
@@ -179,6 +170,35 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         final Prop p = adapter.getItem(position);
         editPropDialog(p);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.vm_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.reset_vm) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.mt_reset))
+                    .setMessage(getString(R.string.reset_msg))
+                    .setNegativeButton(getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                    .setPositiveButton(getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mPreferences.edit().remove(GOV_SETTINGS).apply();
+                                }
+             }).create().show();
+        }
+        return true;
+    }
     @Override
     public boolean isThemeChanged() {
     final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
@@ -204,6 +224,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         final TextView tn = (TextView) editDialog.findViewById(R.id.nprop);
         tv.setText(pp.getVal());
         tn.setText(pp.getName());
+        final String vcur=tv.getText().toString();
         new AlertDialog.Builder(this)
                 .setTitle(curgov)
                 .setView(editDialog)
@@ -216,10 +237,31 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (tv.getText().toString() != null && tv.getText().toString().length() > 0)
+                        if ((tv.getText().toString() != null) && (tv.getText().toString().length() > 0)) {
                             pp.setVal(tv.getText().toString().trim());
+                            set_pref(tn.getText().toString().trim(), tv.getText().toString().trim());
+                        }
                         adapter.notifyDataSetChanged();
                     }
                 }).create().show();
+    }
+
+    public void set_pref(String n, String v){
+        final String s=mPreferences.getString(GOV_SETTINGS,"");
+        final StringBuilder sb = new StringBuilder();
+        if(!s.equals("")){
+            String p[]=s.split(";");
+            for (String aP : p) {
+                if(!aP.equals("") && aP!=null){
+                    final String pn[]=aP.split(":");
+                    if(!pn[0].equals(n)){
+                        sb.append(pn[0]+':'+pn[1]+';');
+                    }
+                }
+            }
+        }
+        sb.append(n+':'+v+';');
+
+        mPreferences.edit().putString(GOV_NAME, curgov).putString(GOV_SETTINGS, sb.toString()).commit();
     }
 }

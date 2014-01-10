@@ -19,13 +19,12 @@
 package com.brewcrewfoo.performance.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -48,38 +47,47 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     SharedPreferences mPreferences;
     PagerTabStrip mPagerTabStrip;
     ViewPager mViewPager;
-
-    private static boolean mVoltageExists;
     private boolean mIsLightTheme;
     public static Boolean thide=false;
-    public static String mCurGovernor;
-    public static String mCurIO;
-    public static String mMaxFreqSetting;
-    public static String mMinFreqSetting;
-    public static String mCPUon;
+    public static int nCpus=Helpers.getNumOfCpus();
+    public static String[] mCurGovernor=new String[nCpus];
+    public static String[] mCurIO=new String[nCpus];
+    public static String[] mMaxFreqSetting=new String[nCpus];
+    public static String[] mMinFreqSetting=new String[nCpus];
+    public static String[] mCPUon=new String[nCpus];
     public static int curcpu=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         setTheme();
-        setContentView(R.layout.activity_main);
-        mVoltageExists = Helpers.voltageFileExists();
 
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
-        mViewPager.setAdapter(titleAdapter);
-        mViewPager.setCurrentItem(0);
 
-        mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
-        mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
-        mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
-        mPagerTabStrip.setDrawFullUnderline(true);
-        Intent i=getIntent();
-        curcpu=i.getIntExtra("cpu",0);
-        checkForSu();
+        boolean canSu = Helpers.checkSu();
+        boolean canBb = !Helpers.binExist("busybox").equals(NOT_FOUND);
+
+        if (!canSu || !canBb) {
+            final String failedTitle = getString(R.string.su_failed_title);
+            final String message = getString(R.string.su_failed_su_or_busybox);
+            suResultDialog(failedTitle, message);
+        }
+        else{
+            setContentView(R.layout.activity_main);
+
+            mViewPager = (ViewPager) findViewById(R.id.viewpager);
+            TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
+            mViewPager.setAdapter(titleAdapter);
+            mViewPager.setCurrentItem(0);
+
+            mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
+            mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
+            mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
+            mPagerTabStrip.setDrawFullUnderline(true);
+            Intent i=getIntent();
+            curcpu=i.getIntExtra("cpu",0);
+        }
+
     }
 
     class TitleAdapter extends FragmentPagerAdapter {
@@ -93,63 +101,41 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
             int j=0;
             while (i<getResources().getStringArray(R.array.tabs).length) {
                 boolean isvisible=mPreferences.getBoolean(getResources().getStringArray(R.array.tabs)[i],true);
-                switch(i){
-                    case 0:
-                        if(isvisible){
+                if(Helpers.is_Tab_available(i) && isvisible){
+                    switch(i){
+                        case 0:
                             frags[j] = new CPUSettings();
-                            j++;
-                        }
-                        break;
-                    case 1:
-                        if(Helpers.showBattery()&&isvisible){
+                            break;
+                        case 1:
+                            frags[j] = new CPUAdvanced();
+                            break;
+                        case 2:
                             frags[j] = new BatteryInfo();
-                            j++;
-                        }
-                        break;
-                    case 2:
-                        if(isvisible){
+                            break;
+                        case 3:
                             frags[j] = new OOMSettings();
-                            j++;
-                        }
-                        break;
-                    case 3:
-                        if (mVoltageExists&&isvisible) {
+                            break;
+                        case 4:
                             frags[j] = new VoltageControlSettings();
-                            j++;
-                        }
-                        break;
-                    case 4:
-                        if(isvisible){
+                            break;
+                        case 5:
                             frags[j] = new Advanced();
-                            j++;
-                        }
-                        break;
-                    case 5:
-                        if(isvisible){
+                            break;
+                        case 6:
                             frags[j] = new TimeInState();
-                            j++;
-                        }
-                        break;
-                    case 6:
-                        if(isvisible){
-                            frags[j] = new CPUInfo();
-                            j++;
-                        }
-                        break;
-                    case 7:
-                        if(isvisible){
+                            break;
+                        case 7:
                             frags[j] = new DiskInfo();
-                            j++;
-                        }
-                        break;
-                    case 8:
-                        if(isvisible){
+                            break;
+                        case 8:
                             frags[j] = new Tools();
-                            j++;
-                        }
-                        break;
+                            break;
+                        case 9:
+                            frags[j] = new CPUInfo();
+                            break;
+                    }
+                    j++;
                 }
-
                 i++;
             }
         }
@@ -179,94 +165,17 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         }
     }
 
-    /**
-     * Check if root access, and prompt the user to grant PC access
-     */
-    private void checkForSu() {
-        // If this is the first launch of the application. Check for root.
-        boolean firstrun = mPreferences.getBoolean("firstrun", true);
-        // Continue to bug the user that options will not work.
-        boolean rootWasCanceled = mPreferences.getBoolean("rootcanceled", false);
-
-        // Don't bother AOKP users ;)
-        PackageManager pm = getPackageManager();
-        boolean rcInstalled = false;
-        /*try {
-            pm.getPackageInfo("com.aokp.romcontrol",PackageManager.GET_ACTIVITIES);
-            rcInstalled = true;
-        }
-        catch (PackageManager.NameNotFoundException e) {
-            rcInstalled = false;
-        }*/
-
-        // Now that we've decided what to do. Launch the appropriate dialog
-        if (firstrun || rootWasCanceled) {
-            SharedPreferences.Editor e = mPreferences.edit();
-            e.putBoolean("firstrun", false);
-            e.commit();
-            if (rcInstalled) {
-                Helpers.checkSu();
-            }
-            else {
-                launchFirstRunDialog();
-            }
-        }
-    }
-
-    /**
-     * Alert the user that a check for root will be run
-     */
-    private void launchFirstRunDialog() {
-        String title = getString(R.string.first_run_title);
-        final String failedTitle = getString(R.string.su_failed_title);
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View firstRunDialog = factory.inflate(R.layout.su_dialog, null);
-        TextView tv = (TextView) firstRunDialog.findViewById(R.id.message);
-        tv.setText(R.string.first_run_message);
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setView(firstRunDialog)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        boolean canSu = Helpers.checkSu();
-                        boolean canBb = Helpers.checkBusybox();
-                        if (canSu && canBb) {
-                            String title = getString(R.string.su_success_title);
-                            String message = getString(R.string.su_success_message);
-                            SharedPreferences.Editor e = mPreferences.edit();
-                            e.putBoolean("rootcanceled", false);
-                            e.commit();
-                            suResultDialog(title, message);
-                        }
-                        if (!canSu || !canBb) {
-                            String message = getString(R.string.su_failed_su_or_busybox);
-                            SharedPreferences.Editor e = mPreferences.edit();
-                            e.putBoolean("rootcanceled", true);
-                            e.commit();
-                            suResultDialog(failedTitle, message);
-                        }
-                    }
-                }).create().show();
-    }
-
-    /**
-     * Display the result of the check for root access so the user knows what to
-     * expect in respect to functionality of the application.
-     *
-     * @param title   Oops or OK depending on the result
-     * @param message Success or fail message
-     */
     private void suResultDialog(String title, String message) {
         LayoutInflater factory = LayoutInflater.from(this);
         final View suResultDialog = factory.inflate(R.layout.su_dialog, null);
         TextView tv = (TextView) suResultDialog.findViewById(R.id.message);
         tv.setText(message);
-        new AlertDialog.Builder(this).setTitle(title).setView(suResultDialog)
+        new ProgressDialog.Builder(this).setTitle(title).setView(suResultDialog)
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        finish();
                     }
                 }).create().show();
     }
@@ -278,30 +187,10 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     private String[] getTitles() {
         List<String> titleslist = new ArrayList<String>();
         int i=0;
-        int j=0;
         while (i<getResources().getStringArray(R.array.tabs).length) {
             boolean isvisible=mPreferences.getBoolean(getResources().getStringArray(R.array.tabs)[i],true);
-            switch(i){
-                case 1:
-                    if(Helpers.showBattery()&&isvisible){
-                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
-                        j++;
-                    }
-                    break;
-                case 3:
-                    if (mVoltageExists&&isvisible) {
-                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
-                        j++;
-                    }
-                    break;
-                default:
-                    if(isvisible){
-                        titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
-                        j++;
-                    }
-                    break;
-            }
-
+            if(Helpers.is_Tab_available(i) && isvisible)
+                titleslist.add(getResources().getStringArray(R.array.tabs)[i]);
             i++;
         }
         return titleslist.toArray(new String[titleslist.size()]);

@@ -1,35 +1,31 @@
 ###### made by h0rn3t ######
 
 sysrw() {
-    busybox mount -o remount,rw /system 2>/dev/null;
+mount -o rw,remount /system
 }
 sysro() {
-    busybox mount -o remount,ro /system 2>/dev/null;
+mount -o ro,remount /system
 }
 
 set_prop() {
 	prop_key=$(busybox echo "$1" | cut -d'=' -f1);
 	prop_value=$(busybox echo "$1" | cut -d'=' -f2);
 	prop_file=${2:-/system/build.prop}
-	seperator="="
-	exit_status=1;
+	seperator="=";
 	if busybox [ -e $prop_file ];then
 	    sysrw
-		prop_line=` busybox grep -m 1 $prop_key $prop_file `
-		if busybox [ -n "${prop_line}" ]
-		then
+		prop_line=`busybox grep -m 1 $prop_key $prop_file`;
+		if busybox [ -n "${prop_line}" ];then
 			if busybox [ -n "$( echo $prop_line | busybox grep ' = ' )" ];then
-				seperator=" = "
+				seperator=" = ";
 			fi
-			busybox sed -i "s|${prop_key}${seperator}.*|${prop_key}${seperator}${prop_value}|g" $prop_file
-			exit_status=$?
+			busybox sed -i "s|${prop_key}${seperator}.*|${prop_key}${seperator}${prop_value}|g" $prop_file;
 		else
 		    busybox echo "$prop_key$seperator$prop_value" >> $prop_file;
-		    exit_status=$?
 		fi;
 		sysro;
-	fi
-	return $exit_status
+	fi;
+	return;
 }
 
 count_files(){
@@ -82,6 +78,6 @@ if busybox [ "$arg" == "-count" ]; then
 elif busybox [ "$arg" == "-setprop" ]; then
     set_prop "$2" $3;
 elif busybox [ "$arg" == "-getcpu" ]; then
-    get_cpu "$2";
+    get_cpu $2;
 fi;
 exit;

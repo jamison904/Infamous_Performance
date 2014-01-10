@@ -43,7 +43,6 @@ import com.brewcrewfoo.performance.util.Helpers;
 import java.io.File;
 
 public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeListener, Constants {
-    private static final int NEW_MENU_ID=Menu.FIRST+1;
     TextView mbattery_percent;
     TextView mbattery_volt;
     TextView mbattery_status;
@@ -66,13 +65,14 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.battery_menu, menu);
-        Helpers.addItems2Menu(menu,NEW_MENU_ID,getString(R.string.menu_tab),(ViewPager) getView().getParent());
+        inflater.inflate(R.menu.menu, menu);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Helpers.removeCurItem(item,NEW_MENU_ID,(ViewPager) getView().getParent());
         switch(item.getItemId()){
+            case R.id.tablist:
+                Helpers.getTabList(getString(R.string.menu_tab),(ViewPager) getView().getParent(),getActivity());
+                break;
                 case R.id.app_settings:
                 Intent intent = new Intent(context, PCSettings.class);
                 startActivity(intent);
@@ -159,7 +159,7 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
         if (mFastChargePath!=null) {
 
             mFastchargeOnBoot = (Switch) view.findViewById(R.id.fastcharge_sob);
-            mFastchargeOnBoot.setChecked(mPreferences.getBoolean(PREF_FASTCHARGE, false));
+            mFastchargeOnBoot.setChecked(mPreferences.getBoolean(PREF_FASTCHARGE, Helpers.readOneLine(mFastChargePath).equals("1")));
             mFastchargeOnBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v,boolean checked) {

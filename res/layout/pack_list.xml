@@ -51,7 +51,8 @@
             android:id="@+id/applist"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fastScrollEnabled="true"/>
+            android:fastScrollEnabled="true"
+            android:smoothScrollbar="true" />
     </LinearLayout>
 
     <LinearLayout
