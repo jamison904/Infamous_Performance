@@ -6,10 +6,12 @@ package com.brewcrewfoo.performance.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -217,11 +218,22 @@ public class DiskInfo extends Fragment implements Constants {
 
     public static long Freebytes(File f) {
         StatFs stat = new StatFs(f.getPath());
-        return (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return stat.getFreeBytes();
+        }
+        else {
+            return (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
+        }
+
     }
     public static long Totalbytes(File f) {
         StatFs stat = new StatFs(f.getPath());
-        return (long)stat.getBlockSize() * (long)stat.getBlockCount();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return stat.getTotalBytes();
+        }
+        else {
+            return (long)stat.getBlockSize() * (long)stat.getBlockCount();
+        }
     }
 
     public Boolean set_part_info(String part,String titlu,TextView t1,TextView t2,TextView t3,TextView t4,ProgressBar b,RelativeLayout l){
@@ -246,8 +258,7 @@ public class DiskInfo extends Fragment implements Constants {
             t3.setText(part);
         }
         else{
-            CMDProcessor.CommandResult cr=null;
-            cr=new CMDProcessor().su.runWaitFor("busybox echo `mount | busybox grep "+part+" | busybox awk '{print $1,$3,$4}'`" );
+            CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor("busybox echo `mount | busybox grep "+part+" | busybox awk '{print $1,$3,$4}'`" );
             if(cr.success()){
                 t2.setText(cr.stdout.split(" ")[2].split(",")[0].toUpperCase());
                 t3.setText(cr.stdout.split(" ")[0]);
@@ -256,7 +267,6 @@ public class DiskInfo extends Fragment implements Constants {
         }
     }
     public void loadData(){
-        CMDProcessor.CommandResult cr=null;
         set_part_info("/system","System",sysname,systotal,sysused,sysfree,sysbar,lsys);
         set_part_info("/data","Data",dataname,datatotal,dataused,datafree,databar,ldata);
         set_part_info("/cache","Cache",cachename,cachetotal,cacheused,cachefree,cachebar,lcache);
@@ -267,17 +277,20 @@ public class DiskInfo extends Fragment implements Constants {
             set_part_info(internalsd,"SD card 1",sd1name,sd1total,sd1used,sd1free,sd1bar,lsd1);
             Log.d(TAG, "SDCard 1: " + internalsd);
         }
-        final String externalstorage[]=System.getenv("SECONDARY_STORAGE").split(":");
-        for ( final String dirs : externalstorage ) {
-            final File dir= new File(dirs);
-            if ( dir.isDirectory() && dir.canRead() && (dir.listFiles().length > 0) ) {
-                externalsd=dirs;
-                break;
+        if(!TextUtils.isEmpty(System.getenv("SECONDARY_STORAGE"))){
+            final String externalstorage[]=System.getenv("SECONDARY_STORAGE").split(":");
+            for ( final String dirs : externalstorage ) {
+                Log.d(TAG, "Storage: " + dirs );
+                final File dir= new File(dirs);
+                if ( dir.isDirectory() && dir.canRead() && (dir.listFiles().length > 0) ) {
+                    externalsd=dirs;
+                    Log.d(TAG, "SDCard 2: " + externalsd );
+                    //break;
+                }
             }
         }
         if(!externalsd.equals("")){
-            set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
-            Log.d(TAG, "SDCard 2: " + externalsd );
+            //set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
         }
 
     }
