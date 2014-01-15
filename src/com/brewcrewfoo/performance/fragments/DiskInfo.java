@@ -280,18 +280,18 @@ public class DiskInfo extends Fragment implements Constants {
         if(!TextUtils.isEmpty(System.getenv("SECONDARY_STORAGE"))){
             final String externalstorage[]=System.getenv("SECONDARY_STORAGE").split(":");
             for ( final String dirs : externalstorage ) {
-                Log.d(TAG, "Storage: " + dirs );
                 final File dir= new File(dirs);
                 if ( dir.isDirectory() && dir.canRead() && (dir.listFiles().length > 0) ) {
                     externalsd=dirs;
                     Log.d(TAG, "SDCard 2: " + externalsd );
-                    //break;
+                    break;
                 }
             }
+            if(!externalsd.equals("")){
+                set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
+            }
         }
-        if(!externalsd.equals("")){
-            //set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
-        }
+
 
     }
 }
