@@ -78,6 +78,7 @@ public class DiskInfo extends Fragment implements Constants {
         super.onCreate(savedInstanceState);
         context=getActivity();
         //setRetainInstance(true);
+
         setHasOptionsMenu(true);
     }
     @Override
@@ -191,6 +192,7 @@ public class DiskInfo extends Fragment implements Constants {
         return view;
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -218,22 +220,22 @@ public class DiskInfo extends Fragment implements Constants {
 
     public static long Freebytes(File f) {
         StatFs stat = new StatFs(f.getPath());
-       // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-        //    return stat.getFreeBytes();
-        //}
-        //else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return stat.getFreeBytes();
+        }
+        else {
             return (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
-        //}
+        }
 
     }
     public static long Totalbytes(File f) {
         StatFs stat = new StatFs(f.getPath());
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-        //    return stat.getTotalBytes();
-        //}
-        //else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return stat.getTotalBytes();
+        }
+        else {
             return (long)stat.getBlockSize() * (long)stat.getBlockCount();
-        //}
+        }
     }
 
     public Boolean set_part_info(String part,String titlu,TextView t1,TextView t2,TextView t3,TextView t4,ProgressBar b,RelativeLayout l){
