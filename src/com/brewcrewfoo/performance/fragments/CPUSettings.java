@@ -39,7 +39,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private boolean mIsTegra3 = false;
     private boolean mIsDynFreq = false;
     private Context context;
-    private final String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative"};
+    private final String supported[]={"ondemand","ondemandplus","lulzactive","lulzactiveW","interactive","hyper","conservative","lionheart","adaptive","intellidemand"};
 
     private TextView mCurCpu;
     private Resources res;
