@@ -52,12 +52,53 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
     SharedPreferences mPreferences;
     private String mFastChargePath;
     private Context context;
+    private BroadcastReceiver batteryInfoReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=getActivity();
   	    mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        batteryInfoReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //int  health= intent.getIntExtra(BatteryManager.EXTRA_HEALTH,0);
+                //String  technology= intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY);
+                //int  plugged= intent.getIntExtra(BatteryManager.EXTRA_PLUGGED,0);
+                //boolean  present= intent.getExtras().getBoolean(BatteryManager.EXTRA_PRESENT);
+                int  scale= intent.getIntExtra(BatteryManager.EXTRA_SCALE,0);
+                int  level= intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
+                int  status= intent.getIntExtra(BatteryManager.EXTRA_STATUS,0);
+                int  temperature= intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0);
+                int  rawvoltage= intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0);
+
+                level=level*scale/100;
+                mbattery_percent.setText(level+"%");
+
+                switch ((int) Math.ceil(level / 20.0)){
+                    case 0:
+                        mBattIcon.setImageResource(R.drawable.battery_0);
+                        break;
+                    case 1:
+                        mBattIcon.setImageResource(R.drawable.battery_1);
+                        break;
+                    case 2:
+                        mBattIcon.setImageResource(R.drawable.battery_2);
+                        break;
+                    case 3:
+                        mBattIcon.setImageResource(R.drawable.battery_3);
+                        break;
+                    case 4:
+                        mBattIcon.setImageResource(R.drawable.battery_4);
+                        break;
+                    case 5:
+                        mBattIcon.setImageResource(R.drawable.battery_5);
+                        break;
+                }
+                mbattery_status.setText((temperature/10)+"°C  "+getResources().getStringArray(R.array.batt_status)[status]);
+            }
+        };
+        getActivity().registerReceiver(batteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED) );
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
@@ -217,62 +258,30 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        // we have a break now, write the values..
         new CMDProcessor().su.runWaitFor("busybox echo " + seekBar.getProgress() + " > " + BLX_PATH);
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putInt(PREF_BLX, seekBar.getProgress()).commit();
     }
     @Override
     public void onStop() {
+        try{
+            getActivity().unregisterReceiver(batteryInfoReceiver);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         super.onStop();
-        context=getActivity();
-        context.unregisterReceiver(this.batteryInfoReceiver);
     }
     @Override
     public void onResume() {
         super.onResume();
-        context=getActivity();
-        context.registerReceiver(this.batteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED) );
-    }
-    private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //int  health= intent.getIntExtra(BatteryManager.EXTRA_HEALTH,0);
-            //String  technology= intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY);
-            //int  plugged= intent.getIntExtra(BatteryManager.EXTRA_PLUGGED,0);
-            //boolean  present= intent.getExtras().getBoolean(BatteryManager.EXTRA_PRESENT);
-            int  scale= intent.getIntExtra(BatteryManager.EXTRA_SCALE,0);
-            int  level= intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
-            int  status= intent.getIntExtra(BatteryManager.EXTRA_STATUS,0);
-            int  temperature= intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0);
-            int  rawvoltage= intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0);
-
-            level=level*scale/100;
-            mbattery_percent.setText(level+"%");
-
-            switch ((int) Math.ceil(level / 20.0)){
-                case 0:
-                    mBattIcon.setImageResource(R.drawable.battery_0);
-                    break;
-                case 1:
-                    mBattIcon.setImageResource(R.drawable.battery_1);
-                    break;
-                case 2:
-                    mBattIcon.setImageResource(R.drawable.battery_2);
-                    break;
-                case 3:
-                    mBattIcon.setImageResource(R.drawable.battery_3);
-                    break;
-                case 4:
-                    mBattIcon.setImageResource(R.drawable.battery_4);
-                    break;
-                case 5:
-                    mBattIcon.setImageResource(R.drawable.battery_5);
-                    break;
-            }
-            mbattery_status.setText((temperature/10)+"°C  "+getResources().getStringArray(R.array.batt_status)[status]);
-
+        try{
+            getActivity().registerReceiver(batteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED) );
         }
-    };
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
 }

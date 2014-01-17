@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -230,11 +231,13 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            if (seekBar.getId() == R.id.max_slider) {
-                setMaxSpeed(seekBar, progress);
-            }
-            else if (seekBar.getId() == R.id.min_slider) {
-                setMinSpeed(seekBar, progress);
+            switch (seekBar.getId()){
+                case R.id.max_slider:
+                    setMaxSpeed(seekBar, progress);
+                    break;
+                case R.id.min_slider:
+                    setMinSpeed(seekBar, progress);
+                    break;
             }
         }
     }
@@ -246,21 +249,24 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         final StringBuilder sb = new StringBuilder();
-        if (seekBar.getId() == R.id.max_slider){
-            sb.append("busybox echo ").append(MainActivity.mMaxFreqSetting[MainActivity.curcpu]).append(" > ").append(MAX_FREQ_PATH.replace("cpu0", "cpu" + MainActivity.curcpu)).append(";\n");
-            if (mIsDynFreq) {
-                sb.append("busybox echo ").append(MainActivity.mMaxFreqSetting[MainActivity.curcpu]).append(" > ").append(DYN_MAX_FREQ_PATH).append(";\n");
-            }
-            if (mIsTegra3) {
-                sb.append("busybox echo ").append(MainActivity.mMaxFreqSetting[MainActivity.curcpu]).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
-            }
+        switch (seekBar.getId()){
+            case R.id.max_slider:
+                sb.append("busybox echo ").append(MainActivity.mMaxFreqSetting[MainActivity.curcpu]).append(" > ").append(MAX_FREQ_PATH.replace("cpu0", "cpu" + MainActivity.curcpu)).append(";\n");
+                if (mIsDynFreq) {
+                    sb.append("busybox echo ").append(MainActivity.mMaxFreqSetting[MainActivity.curcpu]).append(" > ").append(DYN_MAX_FREQ_PATH).append(";\n");
+                }
+                if (mIsTegra3) {
+                    sb.append("busybox echo ").append(MainActivity.mMaxFreqSetting[MainActivity.curcpu]).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
+                }
+                break;
+            case R.id.min_slider:
+                sb.append("busybox echo ").append(MainActivity.mMinFreqSetting[MainActivity.curcpu]).append(" > ").append(MIN_FREQ_PATH.replace("cpu0", "cpu" + MainActivity.curcpu)).append(";\n");
+                if (mIsDynFreq) {
+                    sb.append("busybox echo ").append(MainActivity.mMinFreqSetting[MainActivity.curcpu]).append(" > ").append(DYN_MIN_FREQ_PATH).append(";\n");
+                }
+                break;
         }
-        else if(seekBar.getId() == R.id.min_slider){
-            sb.append("busybox echo ").append(MainActivity.mMinFreqSetting[MainActivity.curcpu]).append(" > ").append(MIN_FREQ_PATH.replace("cpu0", "cpu" + MainActivity.curcpu)).append(";\n");
-            if (mIsDynFreq) {
-                sb.append("busybox echo ").append(MainActivity.mMinFreqSetting[MainActivity.curcpu]).append(" > ").append(DYN_MIN_FREQ_PATH).append(";\n");
-            }
-        }
+
         Helpers.shExec(sb,context,true);
     }
 
@@ -331,6 +337,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                     mCurCPUThread.join();
                 }
                 catch (InterruptedException e) {
+                    Log.d(TAG, "CPU thread error " + e);
                 }
             }
         }
@@ -385,7 +392,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             mMaxSlider.setEnabled(true);
             mMinSlider.setEnabled(true);
         }
-        if(MainActivity.mCPUon.equals("0")){
+        if(MainActivity.mCPUon[MainActivity.curcpu].equals("0")){
              mCurCpu.setTextColor(res.getColor(R.color.pc_red));
              mMaxSlider.setEnabled(false);
              mMinSlider.setEnabled(false);
@@ -411,11 +418,10 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                     else{
                         mCurCPUHandler.sendMessage(mCurCPUHandler.obtainMessage(0,"0"));
                     }
-
                 }
             }
             catch (InterruptedException e) {
-                //return;
+                Log.d(TAG, "CPU thread error "+e);
             }
         }
     }

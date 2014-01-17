@@ -52,14 +52,20 @@ echo "$r";
 
 get_cpu(){
 c="$1";
-max=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq`;
+max=0;
+if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq ]; then
+    max=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq`;
+fi;
 if busybox [ -f /sys/module/cpu_tegra/parameters/cpu_user_cap ]; then
     max=`busybox cat /sys/module/cpu_tegra/parameters/cpu_user_cap`;
 fi;
 if busybox [ -f /sys/power/cpufreq_max_limit ]; then
     max=`busybox cat /sys/power/cpufreq_max_limit`;
 fi;
-min=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq`;
+min=0;
+if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq ]; then
+    min=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq`;
+fi;
 if busybox [ -f /sys/power/cpufreq_min_limit ]; then
     min=`busybox cat /sys/power/cpufreq_min_limit`;
 fi;
