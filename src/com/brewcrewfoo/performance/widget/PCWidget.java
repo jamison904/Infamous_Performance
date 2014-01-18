@@ -70,7 +70,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         int bgColor = mPreferences.getInt(PREF_WIDGET_BG_COLOR, 0xff000000);
         int textColor = mPreferences.getInt(PREF_WIDGET_TEXT_COLOR, 0xff808080);
         views.setImageViewBitmap(R.id.widget_bg, Helpers.getBackground(bgColor));
-        views.setTextViewText(R.id.curcpu, "CPU " + curcpu);
+        views.setTextViewText(R.id.curcpu, "CPU "+curcpu);
         views.setTextViewText(R.id.max, max);
         views.setTextViewText(R.id.min, min);
         views.setTextViewText(R.id.gov, gov);
