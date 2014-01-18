@@ -433,7 +433,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         }
     }
 
-
     protected Handler mCurCPUHandler = new Handler() {
         public void handleMessage(Message msg) {
         mCurFreq.setText(Helpers.toMHz((String) msg.obj));
