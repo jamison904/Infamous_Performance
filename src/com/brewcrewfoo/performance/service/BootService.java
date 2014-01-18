@@ -81,13 +81,12 @@ public class BootService extends Service implements Constants {
                 ksm=1;
                 ksmpath=UKSM_RUN_PATH;
             }
-
-            if (preferences.getBoolean(CPU_SOB, false)) {
                 /*if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
                     if(!preferences.getBoolean("mpdecision",true) && Helpers.moduleActive("mpdecision")){
                         sb.append("stop mpdecision;\n");
                     }
                 }*/
+            if (preferences.getBoolean(CPU_SOB, false)) {
                 for (int i = 0; i < ncpus; i++) {
                     if (new File(MAX_FREQ_PATH.replace("cpu0","cpu"+i)).exists()) {
                         final String max = preferences.getString(PREF_MAX_CPU+i, Helpers.readOneLine(MAX_FREQ_PATH).replace("cpu0","cpu"+i));
