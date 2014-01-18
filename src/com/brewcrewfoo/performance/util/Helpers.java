@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import com.brewcrewfoo.performance.widget.PCWidget;
@@ -296,7 +297,7 @@ public class Helpers implements Constants {
     }
 
     public static Boolean moduleActive(String b) {
-        CMDProcessor.CommandResult cr = null;
+        CMDProcessor.CommandResult cr;
         cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox ps | busybox grep "+b+" | busybox grep -v \"busybox grep "+b+"\" | busybox awk '{print $1}'`");
         Log.d(TAG, "Module: "+cr.stdout);
         return cr.success() && !cr.stdout.equals("");
@@ -305,7 +306,7 @@ public class Helpers implements Constants {
     public static long getTotMem() {
         long v=0;
         CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E -o '[[:digit:]]+'`");
-        if(cr.success()){
+        if(cr.success() && !cr.stdout.equals("")){
             try{
                v = (long) Integer.parseInt(cr.stdout);//kb
             }
@@ -384,6 +385,7 @@ public class Helpers implements Constants {
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
         CMDProcessor.CommandResult cr;
         if(su)
+            //cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > "+ Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/logs/run.log 2>&1");
             cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
         else
             cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");

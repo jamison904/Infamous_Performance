@@ -8,10 +8,10 @@ mount -o ro,remount /system
 }
 
 set_prop() {
-	prop_key=$(busybox echo "$1" | cut -d'=' -f1);
-	prop_value=$(busybox echo "$1" | cut -d'=' -f2);
-	prop_file=${2:-/system/build.prop}
-	seperator="=";
+	local prop_key=$(busybox echo "$1" | cut -d'=' -f1);
+	local prop_value=$(busybox echo "$1" | cut -d'=' -f2);
+	local prop_file=${2:-/system/build.prop}
+	local seperator="=";
 	if busybox [ -e $prop_file ];then
 	    sysrw
 		prop_line=`busybox grep -m 1 $prop_key $prop_file`;
@@ -29,12 +29,11 @@ set_prop() {
 }
 
 count_files(){
+local ext="$2";
+local r="";
 if busybox [ "X$2" == "X" ]; then
     ext="*";
-else
-    ext="$2";
 fi;
-r="";
 for d in $1; do
     if busybox [ -d $d ]; then
         i=$( busybox find $d -type f -name "$ext" | busybox wc -l );
@@ -51,31 +50,43 @@ echo "$r";
 }
 
 get_cpu(){
-c="$1";
-max=0;
-if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq ]; then
-    max=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq`;
-fi;
-if busybox [ -f /sys/module/cpu_tegra/parameters/cpu_user_cap ]; then
-    max=`busybox cat /sys/module/cpu_tegra/parameters/cpu_user_cap`;
-fi;
-if busybox [ -f /sys/power/cpufreq_max_limit ]; then
-    max=`busybox cat /sys/power/cpufreq_max_limit`;
-fi;
-min=0;
-if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq ]; then
-    min=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq`;
-fi;
-if busybox [ -f /sys/power/cpufreq_min_limit ]; then
-    min=`busybox cat /sys/power/cpufreq_min_limit`;
-fi;
-gov=`busybox cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`;
-io=`busybox awk -F'[][]' '{print $2}' /sys/block/mmcblk0/queue/scheduler`;
-online=1;
-if busybox [ -f /sys/devices/system/cpu/cpu0/online ]; then
-    online=`busybox cat /sys/devices/system/cpu/cpu0/online`;
-fi;
-echo "$min:$max:$gov:$io:$online";
+    local cpus=$1;
+    local ncpus=`busybox expr $cpus - 1`;
+    local ret="";
+    local gov=`busybox cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`;
+    local io=`busybox awk -F'[][]' '{print $2}' /sys/block/mmcblk0/queue/scheduler`;
+    local max=0;
+    local min=0;
+    for c in `busybox seq 0 $ncpus`; do
+
+        if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq ]; then
+            max=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq`;
+        fi;
+        if busybox [ -f /sys/module/cpu_tegra/parameters/cpu_user_cap ]; then
+            max=`busybox cat /sys/module/cpu_tegra/parameters/cpu_user_cap`;
+        fi;
+        if busybox [ -f /sys/power/cpufreq_max_limit ]; then
+            max=`busybox cat /sys/power/cpufreq_max_limit`;
+        fi;
+
+        if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq ]; then
+            min=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq`;
+        fi;
+        if busybox [ -f /sys/power/cpufreq_min_limit ]; then
+            min=`busybox cat /sys/power/cpufreq_min_limit`;
+        fi;
+        online=1;
+        if busybox [ -f /sys/devices/system/cpu/cpu0/online ]; then
+            online=`busybox cat /sys/devices/system/cpu/cpu0/online`;
+        fi;
+
+        if busybox [ "X$ret" == "X" ]; then
+            ret="$min:$max:$gov:$io:$online";
+        else
+            ret="$ret:$min:$max:$gov:$io:$online";
+        fi;
+    done;
+echo "$ret";
 }
 
 arg=$1;

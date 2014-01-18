@@ -98,7 +98,7 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
                 mbattery_status.setText((temperature/10)+"°C  "+getResources().getStringArray(R.array.batt_status)[status]);
             }
         };
-        getActivity().registerReceiver(batteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED) );
+        //getActivity().registerReceiver(batteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED) );
         setRetainInstance(true);
         setHasOptionsMenu(true);
 

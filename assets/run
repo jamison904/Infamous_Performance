@@ -1,8 +1,8 @@
 
 ### PERFORMANCE CONTROL ###
 zramstart(){
-cpus=$1;
-val=$2;
+local cpus=$1;
+local val=$2;
 if busybox [ -f /system/lib/modules/zram.ko ]; then
     if busybox [ -z "`busybox lsmod | busybox grep zram`" ]; then
         busybox insmod /system/lib/modules/zram.ko;
@@ -23,7 +23,7 @@ return;
 }
 
 zramstop(){
-cpus=$1;
+local cpus=$1;
 ncpus=`busybox expr $cpus - 1`;
 for i in `busybox seq 0 $ncpus`; do
     busybox swapoff /dev/block/zram$i;
@@ -35,42 +35,4 @@ done;
 sleep 1;
 busybox modprobe -rf zram;
 return;
-}
-
-get_cpu(){
-    cpus=$1;
-    ncpus=`busybox expr $cpus - 1`;
-    ret="";
-    sleep 1;
-    for c in `busybox seq 0 $ncpus`; do
-        max=0;
-        if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq ]; then
-            max=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq`;
-        fi;
-        if busybox [ -f /sys/module/cpu_tegra/parameters/cpu_user_cap ]; then
-            max=`busybox cat /sys/module/cpu_tegra/parameters/cpu_user_cap`;
-        fi;
-        if busybox [ -f /sys/power/cpufreq_max_limit ]; then
-            max=`busybox cat /sys/power/cpufreq_max_limit`;
-        fi;
-        min=0;
-        if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq ]; then
-            min=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq`;
-        fi;
-        if busybox [ -f /sys/power/cpufreq_min_limit ]; then
-            min=`busybox cat /sys/power/cpufreq_min_limit`;
-        fi;
-        online=1;
-        if busybox [ -f /sys/devices/system/cpu/cpu0/online ]; then
-            online=`busybox cat /sys/devices/system/cpu/cpu0/online`;
-        fi;
-        gov=`busybox cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`;
-        io=`busybox awk -F'[][]' '{print $2}' /sys/block/mmcblk0/queue/scheduler`;
-        if busybox [ "X$ret" == "X" ]; then
-            ret="$min:$max:$gov:$io:$online";
-        else
-            ret="$ret;$min:$max:$gov:$io:$online";
-        fi;
-    done;
-echo "$ret";
 }

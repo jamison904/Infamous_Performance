@@ -20,6 +20,7 @@ package com.brewcrewfoo.performance.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.*;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -66,6 +67,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
             startActivity(new Intent(this, HideTabs.class));
             return true;
         }
+
         return false;
     }
 

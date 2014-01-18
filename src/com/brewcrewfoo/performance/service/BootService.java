@@ -27,11 +27,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
-import com.brewcrewfoo.performance.activities.MainActivity;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -358,28 +356,18 @@ public class BootService extends Service implements Constants {
                 if (preferences.getBoolean(ZRAM_SOB, false)){
                     int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
                     long v = (long)(curdisk/ncpus)*1024*1024;
-                    sb.append("zramstart ").append(ncpus).append(" ").append(v).append(";\n");
+                    sb.append("zramstart \"").append(ncpus).append("\" \"").append(v).append("\";\n");
                 }
             }
-
             sb.append(preferences.getString(PREF_SH, "# no custom shell command")).append(";\n");
-            sb.append("get_cpu ").append(ncpus).append(";\n");
-            return Helpers.shExec(sb,c,true);
+            Helpers.shExec(sb,c,true);
+            return "";
         }
     	@Override
     	protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if(result!=null){
-                final String lines[]=result.split(";");
-                final String line =lines[lines.length-1];
-                for(int p=0; p < ncpus;p++){
-                    MainActivity.mMinFreqSetting[p]=line.split(":")[p*4];
-                    MainActivity.mMaxFreqSetting[p]=line.split(":")[p*4+1];
-                    MainActivity.mCurGovernor[p]=line.split(":")[p*4+2];
-                    MainActivity.mCurIO[p]=line.split(":")[p*4+3];
-                    MainActivity.mCPUon[p]=line.split(":")[p*4+4];
-                }
-            }
+            Toast.makeText(c, TAG+ " boot complete", Toast.LENGTH_SHORT).show();
+
             if(Helpers.readOneLine(FASTCHARGE_PATH).equals("1")){
                 // add notification to warn user they can only charge
                 CharSequence contentTitle = c.getText(R.string.fast_charge_notification_title);
@@ -392,8 +380,7 @@ public class BootService extends Service implements Constants {
                 NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 nm.notify(1337, n);
             }
-            //Log.i(TAG, result);
-            Toast.makeText(c, TAG+ " boot complete", Toast.LENGTH_SHORT).show();
+
             servicesStarted = true;
             stopSelf();
         }

@@ -41,13 +41,9 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private int ncpus=0;
     private int curcpu=0;
     private int curdisk=0;
-    private Boolean ist1=false;
-    private Boolean ist3=false;
-    private Boolean ist5=false;
     private Button start_btn;
     private NumberFormat nf;
     private ProgressDialog progressDialog;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,9 +55,8 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(2);
 
-        long totmem = Helpers.getTotMem();
         ncpus=Helpers.getNumOfCpus();
-        int maxdisk = (int) totmem / 1024;
+        int maxdisk = (int) (Helpers.getTotMem() / 1024);
         curdisk=mPreferences.getInt(PREF_ZRAM,(int) maxdisk /2);
 
         mdisksize = (SeekBar) findViewById(R.id.val1);
@@ -279,10 +274,9 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private class StartZramOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-
             long v=(long)(curdisk/ncpus)*1024*1024;
             final StringBuilder sb = new StringBuilder();
-            sb.append("zramstart ").append(ncpus).append(" ").append(v).append(";\n");
+            sb.append("zramstart \"").append(ncpus).append("\" \"").append(v).append("\";\n");
             Helpers.shExec(sb,context,true);
             return "";
         }
@@ -325,22 +319,22 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         t3.setText(Helpers.ReadableByteCount(0));
         t4.setText("0");
         t5.setText(Helpers.ReadableByteCount(0));
-        ist1=false;
-        ist3=false;
-        ist5=false;
+        Boolean ist1 = false;
+        Boolean ist3 = false;
+        Boolean ist5 = false;
         if(new File(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)).exists()){
             t1.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_COMPR_PATH.replace("zram0","zram"+curcpu)))));
-            ist1=true;
+            ist1 =true;
         }
         if(new File(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)).exists()){
             t3.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_ORIG_PATH.replace("zram0","zram"+curcpu)))));
-            ist3=true;
+            ist3 =true;
         }
         if(new File(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)).exists()){
             t5.setText(Helpers.ReadableByteCount(parseInt(Helpers.readOneLine(ZRAM_MEMTOT_PATH.replace("zram0","zram"+curcpu)))));
-            ist5=true;
+            ist5 =true;
         }
-        if(ist1&&ist3&&ist5){
+        if(ist1 && ist3 && ist5){
             t2.setText(nf.format(getCompressionRatio()));
             t4.setText(nf.format(getUsedRatio()));
         }

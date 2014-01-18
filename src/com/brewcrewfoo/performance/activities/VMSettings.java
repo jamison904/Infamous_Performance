@@ -169,7 +169,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox find "+VM_PATH+"* -type f -perm -644`");
+            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+VM_PATH+"* -type f -perm -644 -print0");
             if(cr.success()){
                 return cr.stdout;
             }
@@ -282,7 +282,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
 
     public void load_prop(String s){
         props.clear();
-        String p[]=s.split(" ");
+        String p[]=s.split("\0");
         for (String aP : p) {
             if(aP.trim().length()>0 && aP!=null){
                 final String pv=Helpers.readOneLine(aP).trim();

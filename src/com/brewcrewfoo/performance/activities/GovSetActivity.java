@@ -116,9 +116,14 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
 
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox find /sys/devices/system/cpu/cpufreq/"+curgov+"/* -type f -prune -perm -644`");
-            if(cr.success()){return cr.stdout;}
-            else{Log.d(TAG,"read governor err: "+cr.stderr); return null; }
+            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+GOV_SETTINGS_PATH+curgov+"/* -type f -prune -perm -644 -print0");
+            if(cr.success()){
+                return cr.stdout;
+            }
+            else{
+                Log.d(TAG,"read governor err: "+cr.stderr);
+                return null;
+            }
         }
         @Override
         protected void onPostExecute(String result) {
@@ -127,7 +132,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             }
             else{
                 props.clear();
-                final String p[]=result.split(" ");
+                final String p[]=result.split("\0");
                 for (String aP : p) {
                     if(aP.trim().length()>0 && aP!=null){
                             props.add(new Prop(aP.substring(aP.lastIndexOf("/") + 1, aP.length()),Helpers.readOneLine(aP).trim()));
@@ -216,7 +221,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         final TextView tn = (TextView) editDialog.findViewById(R.id.nprop);
         tv.setText(pp.getVal());
         tn.setText(pp.getName());
-        final String vcur=tv.getText().toString();
+
         new AlertDialog.Builder(this)
                 .setTitle(curgov)
                 .setView(editDialog)

@@ -23,8 +23,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -49,47 +49,61 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     ViewPager mViewPager;
     private boolean mIsLightTheme;
     public static Boolean thide=false;
-    public static int nCpus=Helpers.getNumOfCpus();
-    public static String[] mCurGovernor=new String[nCpus];
-    public static String[] mCurIO=new String[nCpus];
-    public static String[] mMaxFreqSetting=new String[nCpus];
-    public static String[] mMinFreqSetting=new String[nCpus];
-    public static String[] mCPUon=new String[nCpus];
-    public static int curcpu=0;
+    private boolean canSu;
+    private boolean canBb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme();
+        if(savedInstanceState!=null) {
+            canBb=savedInstanceState.getBoolean("BB",false);
+            canSu=savedInstanceState.getBoolean("SU",false);
+            if (canSu && canBb) {
+                setContentView(R.layout.activity_main);
 
+                mViewPager = (ViewPager) findViewById(R.id.viewpager);
+                TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
+                mViewPager.setAdapter(titleAdapter);
+                mViewPager.setCurrentItem(0);
 
-        boolean canSu = Helpers.checkSu();
-        boolean canBb = !Helpers.binExist("busybox").equals(NOT_FOUND);
-
-        if (!canSu || !canBb) {
-            final String failedTitle = getString(R.string.su_failed_title);
-            final String message = getString(R.string.su_failed_su_or_busybox);
-            suResultDialog(failedTitle, message);
+                mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
+                mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
+                mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
+                mPagerTabStrip.setDrawFullUnderline(true);
+            }
         }
         else{
-            setContentView(R.layout.activity_main);
+            canSu = Helpers.checkSu();
+            canBb = !Helpers.binExist("busybox").equals(NOT_FOUND);
 
-            mViewPager = (ViewPager) findViewById(R.id.viewpager);
-            TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
-            mViewPager.setAdapter(titleAdapter);
-            mViewPager.setCurrentItem(0);
+            if (!canSu || !canBb) {
+                final String failedTitle = getString(R.string.su_failed_title);
+                final String message = getString(R.string.su_failed_su_or_busybox);
+                suResultDialog(failedTitle, message);
+            }
+            else{
+                setContentView(R.layout.activity_main);
 
-            mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
-            mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
-            mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
-            mPagerTabStrip.setDrawFullUnderline(true);
-            Intent i=getIntent();
-            curcpu=i.getIntExtra("cpu",0);
+                mViewPager = (ViewPager) findViewById(R.id.viewpager);
+                TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
+                mViewPager.setAdapter(titleAdapter);
+                mViewPager.setCurrentItem(0);
+
+                mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
+                mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
+                mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
+                mPagerTabStrip.setDrawFullUnderline(true);
+            }
         }
-
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle saveState) {
+        super.onSaveInstanceState(saveState);
+        saveState.putBoolean("BB",canBb);
+        saveState.putBoolean("SU",canSu);
+    }
     class TitleAdapter extends FragmentPagerAdapter {
         String titles[] = getTitles();
         private Fragment frags[] = new Fragment[titles.length];
