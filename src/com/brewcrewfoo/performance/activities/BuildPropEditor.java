@@ -167,8 +167,8 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         protected String doInBackground(String... params) {
             Helpers.get_assetsScript("utils",context,"","");
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
-            CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"*.ogg\"");
-            oggs=cr.stdout.split("\n");
+            CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"*.ogg\" -print0");
+            oggs=cr.stdout.split("\0");
             return Helpers.readFileViaShell("/system/build.prop", false);
         }
         @Override

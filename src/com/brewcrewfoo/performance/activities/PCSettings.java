@@ -66,6 +66,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
             startActivity(new Intent(this, HideTabs.class));
             return true;
         }
+
         return false;
     }
 

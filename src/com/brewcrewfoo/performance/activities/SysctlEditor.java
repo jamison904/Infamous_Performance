@@ -206,12 +206,12 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=null;
+            CMDProcessor.CommandResult cr;
             cr=new CMDProcessor().sh.runWaitFor("busybox echo `sysctl -n net.ipv4.tcp_available_congestion_control`");
             if(cr.success()){
                 tcp=cr.stdout.split(" ");
             }
-            cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox find /proc/sys/* -type f -perm -644 | grep -v \"vm.\"`");
+            cr=new CMDProcessor().sh.runWaitFor("busybox find /proc/sys/* -type f -perm -644 -print0");
             if(cr.success()){
                 return cr.stdout;
             }
@@ -366,12 +366,14 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
 
     public void load_prop(String s){
         props.clear();
-        String p[]=s.split(" ");
+        String p[]=s.split("\0");
         for (String aP : p) {
             if(aP.trim().length()>0 && aP!=null){
+
                 final String pv=Helpers.readOneLine(aP).trim();
                 final String pn=aP.trim().replace("/",".").substring(10, aP.length());
-                props.add(new Prop(pn,pv));
+                if(!pn.startsWith("vm"))
+                    props.add(new Prop(pn,pv));
             }
         }
     }

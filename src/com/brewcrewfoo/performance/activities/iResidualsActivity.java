@@ -207,7 +207,7 @@ public class iResidualsActivity extends Activity implements Constants, AdapterVi
         @Override
         protected String doInBackground(String... params) {
             CMDProcessor.CommandResult cr = null;
-            cr=new CMDProcessor().su.runWaitFor("busybox echo `busybox find "+rpath+" -type f -name \"*\"`");
+            cr=new CMDProcessor().su.runWaitFor("busybox find "+rpath+" -type f -name \"*\" -print0");
             if(cr.success()){ return cr.stdout;}
             else{Log.d(TAG,"residual files err: "+cr.stderr); return null; }
         }
@@ -216,7 +216,7 @@ public class iResidualsActivity extends Activity implements Constants, AdapterVi
         protected void onPostExecute(String result) {
             final List<Item> dir = new ArrayList<Item>();
             if(result!=null){
-                final String fls[]=result.split(" ");
+                final String fls[]=result.split("\0");
                 for (String fl : fls) {
                         final File f=new File(fl);
                         dir.add(new Item(f.getName(), f.getParent(),null, null, "file"));

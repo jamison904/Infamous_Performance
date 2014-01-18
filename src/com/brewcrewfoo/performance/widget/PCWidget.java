@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.MainActivity;
@@ -55,31 +54,24 @@ public class PCWidget extends AppWidgetProvider implements Constants {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
         int i=0;
         int nCpus=Helpers.getNumOfCpus();
+        final String r=Helpers.readCPU(context,nCpus);
         for (int awi : appWidgetIds) {
-                if((MainActivity.mMaxFreqSetting[i] == null) || (MainActivity.mMinFreqSetting[i] == null) || (MainActivity.mCurGovernor[i] == null) || (MainActivity.mCurIO[i] == null)){
-                    final String v=Helpers.readCPU(context,i);
-                    if(v!=null)
-                        onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(v.split(":")[1]), Helpers.toMHz(v.split(":")[0]), v.split(":")[2], v.split(":")[3],(i+1));
-                    else
-                        onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz("0"), Helpers.toMHz("0"), "error", "error",(i+1));
-                    Log.i(TAG, " widget "+Integer.toString(i)+" read shell: "+v);
-                }
-                else{
-                    onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(MainActivity.mMaxFreqSetting[i]), Helpers.toMHz(MainActivity.mMinFreqSetting[i]), MainActivity.mCurGovernor[i], MainActivity.mCurIO[i],(i+1));
-                    Log.i(TAG, " widget "+Integer.toString(i)+" read local: "+MainActivity.mMinFreqSetting[i]+":"+MainActivity.mMaxFreqSetting[i]+":"+MainActivity.mCurGovernor[i]+":"+MainActivity.mCurIO[i]);
-                }
-
-                if(++i==nCpus) i=0;
+            if(r!=null)
+                onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(r.split(":")[i*5+1]), Helpers.toMHz(r.split(":")[i*5]), r.split(":")[i*5+2], r.split(":")[i*5+3],(i+1));
+            else
+                onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz("0"), Helpers.toMHz("0"), "-", "-",(i+1));
+            if(++i==nCpus) i=0;
         }
     }
 
     public void onUpdateWidget(Context context,AppWidgetManager appWidgetManager, int appWidgetId, String max,String min, String gov, String io,int curcpu) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.widget);
+
         int bgColor = mPreferences.getInt(PREF_WIDGET_BG_COLOR, 0xff000000);
         int textColor = mPreferences.getInt(PREF_WIDGET_TEXT_COLOR, 0xff808080);
         views.setImageViewBitmap(R.id.widget_bg, Helpers.getBackground(bgColor));
-        views.setTextViewText(R.id.curcpu, "CPU " + curcpu);
+        views.setTextViewText(R.id.curcpu, "CPU "+curcpu);
         views.setTextViewText(R.id.max, max);
         views.setTextViewText(R.id.min, min);
         views.setTextViewText(R.id.gov, gov);
@@ -89,6 +81,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         views.setTextColor(R.id.min, textColor);
         views.setTextColor(R.id.io, textColor);
         views.setTextColor(R.id.gov, textColor);
+
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.putExtra("cpu",curcpu-1);
