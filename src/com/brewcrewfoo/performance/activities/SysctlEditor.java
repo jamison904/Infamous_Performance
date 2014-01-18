@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -119,6 +120,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                 sb.append("mount -o ro,remount /system;\n");
                 sb.append("busybox sysctl -p ").append("/system/etc/").append("sysctl.conf").append(";\n");
                 Helpers.shExec(sb,context,true);
+                Toast.makeText(context, getString(R.string.applied_ok), Toast.LENGTH_SHORT).show();
             }
         });
         final Switch setOnBoot = (Switch) findViewById(R.id.applyAtBoot);

@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -92,6 +93,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                         }
                     }
                     Helpers.shExec(sb,context,true);
+                    Toast.makeText(context, getString(R.string.applied_ok), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -117,18 +119,19 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         @Override
         protected String doInBackground(String... params) {
             CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+GOV_SETTINGS_PATH+curgov+"/* -type f -prune -perm -644 -print0");
-            if(cr.success()){
+            if(cr.success() && !cr.stdout.equals("")){
                 return cr.stdout;
             }
             else{
-                Log.d(TAG,"read governor err: "+cr.stderr);
-                return null;
+                return "";
             }
         }
         @Override
         protected void onPostExecute(String result) {
-            if((result==null)||(result.length()<=0)) {
-                finish();
+            linlaHeaderProgress.setVisibility(View.GONE);
+            if(result.equals("")) {
+                nofiles.setVisibility(View.VISIBLE);
+                tools.setVisibility(View.GONE);
             }
             else{
                 props.clear();
@@ -138,8 +141,6 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                             props.add(new Prop(aP.substring(aP.lastIndexOf("/") + 1, aP.length()),Helpers.readOneLine(aP).trim()));
                     }
                 }
-
-                linlaHeaderProgress.setVisibility(View.GONE);
                 if(props.isEmpty()){
                         nofiles.setVisibility(View.VISIBLE);
                         tools.setVisibility(View.GONE);

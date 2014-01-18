@@ -360,5 +360,6 @@ Translation by Laurentiu1996
         <item name="high">High</item>
         <item name="low">Low</item>
     </string-array>
+    <string name="applied_ok">Valorile au fost salvate cu succes</string>
     <!-- beta2-->
 </resources>

@@ -390,5 +390,6 @@ Copyright (C) 2012  James Roberts
         <item name="high">High</item>
         <item name="low">Low</item>
     </string-array>
+    <string name="applied_ok">Values ​​were applied successfully</string>
     <!-- beta2-->
 </resources>

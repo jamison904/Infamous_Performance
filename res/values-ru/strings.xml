@@ -357,5 +357,6 @@
         <item name="high">Высокий</item>
         <item name="low">Низкий</item>
     </string-array>
+    <string name="applied_ok">Values ​​were applied successfully</string>
     <!-- beta2-->
 </resources>

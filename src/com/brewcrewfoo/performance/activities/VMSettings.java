@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -112,6 +113,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                         }
                     }
                     Helpers.shExec(sb,context,true);
+                    Toast.makeText(context, getString(R.string.applied_ok), Toast.LENGTH_SHORT).show();
                 }
 
             }
