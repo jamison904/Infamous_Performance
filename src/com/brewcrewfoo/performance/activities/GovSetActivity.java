@@ -11,7 +11,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -138,7 +137,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                 final String p[]=result.split("\0");
                 for (String aP : p) {
                     if(aP.trim().length()>0 && aP!=null){
-                            props.add(new Prop(aP.substring(aP.lastIndexOf("/") + 1, aP.length()),Helpers.readOneLine(aP).trim()));
+                        props.add(new Prop(aP.substring(aP.lastIndexOf("/") + 1, aP.length()),Helpers.readOneLine(aP).trim()));
                     }
                 }
                 if(props.isEmpty()){
