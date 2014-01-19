@@ -125,8 +125,9 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         }
         @Override
         protected void onPostExecute(String result) {
-            linlaHeaderProgress.setVisibility(LinearLayout.GONE);
+
             if((result==null)||(result.length()<=0)) {
+                linlaHeaderProgress.setVisibility(LinearLayout.GONE);
                 nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
@@ -137,6 +138,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                         props.add(new Prop(aP.substring(aP.lastIndexOf("/") + 1, aP.length()),Helpers.readOneLine(aP).trim()));
                     }
                 }
+                linlaHeaderProgress.setVisibility(LinearLayout.GONE);
                 if(props.isEmpty()){
                         nofiles.setVisibility(LinearLayout.VISIBLE);
                 }
