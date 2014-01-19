@@ -101,7 +101,6 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-
                 final String s=mPreferences.getString(PREF_VM,"");
 
                 if(!s.equals("")){
@@ -171,7 +170,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+VM_PATH+"* -type f -perm -644 -print0");
+            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+VM_PATH+"* -type f -perm -600 -print0");
             if(cr.success()){
                 return cr.stdout;
             }
@@ -182,13 +181,14 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         }
         @Override
         protected void onPostExecute(String result) {
+            linlaHeaderProgress.setVisibility(View.GONE);
             if((result==null)||(result.length()<=0)) {
-                finish();
+                nofiles.setVisibility(View.VISIBLE);
             }
             else{
                 load_prop(result);
                 Collections.sort(props);
-                linlaHeaderProgress.setVisibility(View.GONE);
+
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
                 }
@@ -307,13 +307,12 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 if(!aP.equals("") && aP!=null){
                     final String pn[]=aP.split(":");
                     if(!pn[0].equals(n)){
-                        sb.append(pn[0]+':'+pn[1]+';');
+                        sb.append(pn[0]).append(':').append(pn[1]).append(';');
                     }
                 }
             }
         }
-        sb.append(n + ':' + v + ';');
-
+        sb.append(n).append(':').append(v).append(';');
         mPreferences.edit().putString(PREF_VM, sb.toString()).commit();
     }
 }

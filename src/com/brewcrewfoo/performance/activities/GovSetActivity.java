@@ -47,6 +47,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     SharedPreferences mPreferences;
     private final Context context=this;
     Resources res;
+    private List<Prop> props = new ArrayList<Prop>();
     private ListView packList;
     private LinearLayout linlaHeaderProgress;
     private LinearLayout nofiles;
@@ -80,7 +81,6 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-
                 final String s=mPreferences.getString(GOV_SETTINGS,"");
 
                 if(!s.equals("")){
@@ -113,24 +113,21 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         super.onConfigurationChanged(newConfig);
     }
     private class GetPropOperation extends AsyncTask<String, Void, String> {
-        private List<Prop> props = new ArrayList<Prop>();
-
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+GOV_SETTINGS_PATH+curgov+"/* -type f -prune -perm -644 -print0");
-            if(cr.success() && !cr.stdout.equals("")){
+            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+GOV_SETTINGS_PATH+curgov+"/* -type f -prune -perm -600 -print0");
+            if(cr.success()){
                 return cr.stdout;
             }
             else{
-                return "";
+                return null;
             }
         }
         @Override
         protected void onPostExecute(String result) {
-            linlaHeaderProgress.setVisibility(View.GONE);
-            if(result.equals("")) {
-                nofiles.setVisibility(View.VISIBLE);
-                tools.setVisibility(View.GONE);
+            linlaHeaderProgress.setVisibility(LinearLayout.GONE);
+            if((result==null)||(result.length()<=0)) {
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
                 props.clear();
@@ -141,12 +138,11 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                     }
                 }
                 if(props.isEmpty()){
-                        nofiles.setVisibility(View.VISIBLE);
-                        tools.setVisibility(View.GONE);
+                        nofiles.setVisibility(LinearLayout.VISIBLE);
                 }
                 else{
-                        nofiles.setVisibility(View.GONE);
-                        tools.setVisibility(View.VISIBLE);
+                        nofiles.setVisibility(LinearLayout.GONE);
+                        tools.setVisibility(RelativeLayout.VISIBLE);
                         adapter = new PropAdapter(GovSetActivity.this, R.layout.prop_item, props);
                         packList.setAdapter(adapter);
                 }
@@ -154,9 +150,9 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         }
         @Override
         protected void onPreExecute() {
-            linlaHeaderProgress.setVisibility(View.VISIBLE);
-            nofiles.setVisibility(View.GONE);
-            tools.setVisibility(View.GONE);
+            linlaHeaderProgress.setVisibility(LinearLayout.VISIBLE);
+            nofiles.setVisibility(LinearLayout.GONE);
+            tools.setVisibility(RelativeLayout.GONE);
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -252,13 +248,12 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                 if(!aP.equals("") && aP!=null){
                     final String pn[]=aP.split(":");
                     if(!pn[0].equals(n)){
-                        sb.append(pn[0]+':'+pn[1]+';');
+                        sb.append(pn[0]).append(':').append(pn[1]).append(';');
                     }
                 }
             }
         }
-        sb.append(n+':'+v+';');
-
+        sb.append(n).append(':').append(v).append(';');
         mPreferences.edit().putString(GOV_NAME, curgov).putString(GOV_SETTINGS, sb.toString()).commit();
     }
 }

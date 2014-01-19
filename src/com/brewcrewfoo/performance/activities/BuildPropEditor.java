@@ -173,13 +173,14 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         }
         @Override
         protected void onPostExecute(String result) {
+            linlaHeaderProgress.setVisibility(View.GONE);
             if((result==null)||(result.length()<=0)) {
-                finish();
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
                 load_builprop(result);
                 Collections.sort(props);
-                linlaHeaderProgress.setVisibility(View.GONE);
+
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
                 }

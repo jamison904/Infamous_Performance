@@ -213,7 +213,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             if(cr.success()){
                 tcp=cr.stdout.split(" ");
             }
-            cr=new CMDProcessor().sh.runWaitFor("busybox find /proc/sys/* -type f -perm -644 -print0");
+            cr=new CMDProcessor().sh.runWaitFor("busybox find /proc/sys/* -type f -perm -600 -print0");
             if(cr.success()){
                 return cr.stdout;
             }
@@ -224,13 +224,14 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         }
         @Override
         protected void onPostExecute(String result) {
+            linlaHeaderProgress.setVisibility(View.GONE);
             if((result==null)||(result.length()<=0)) {
-                finish();
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
                 load_prop(result);
                 Collections.sort(props);
-                linlaHeaderProgress.setVisibility(View.GONE);
+
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
                 }
