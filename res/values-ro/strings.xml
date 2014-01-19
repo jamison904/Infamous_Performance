@@ -361,10 +361,13 @@ Translation by Laurentiu1996
         <item name="low">Low</item>
     </string-array>
     <string name="applied_ok">Valorile au fost salvate cu succes</string>
-    <string name="chk_update">Checking for updates in progress…</string>
-    <string name="is_update">New update available! Tap for download.</string>
-    <string name="no_update">No updates found.</string>
+    <string name="chk_update">Căutare actualizări in curs…</string>
+    <string name="is_update">O nouă versiune este disponibilă! Apăsaţi pentru descărcare.</string>
+    <string name="no_update">Nu există actualizări.</string>
 
-    <string name="no_param">No parameters</string>
+    <string name="no_param">Nu există parametrii</string>
+    <string name="no_download_manager">Managerul de Descărcare este indisponibil!</string>
+    <string name="btn_download">Descarcă</string>
+    <string name="pt_update">Ce e nou</string>
     <!-- beta2-->
 </resources>

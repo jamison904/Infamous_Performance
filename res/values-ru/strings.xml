@@ -363,5 +363,8 @@
     <string name="no_update">No updates found.</string>
 
     <string name="no_param">No parameters</string>
+    <string name="no_download_manager">Download Manager not available!</string>
+    <string name="btn_download">Download</string>
+    <string name="pt_update">What\'s new</string>
     <!-- beta2-->
 </resources>
