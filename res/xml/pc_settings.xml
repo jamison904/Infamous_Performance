@@ -37,8 +37,7 @@ Copyright (C) 2012  James Roberts
         android:key="visible_tabs"
         android:title="@string/pt_show_tabs"/>
 
-    <Preference android:key="version_info"
-        android:summary="@string/chk_update"/>
+    <Preference android:key="version_info"/>
 
 
 </PreferenceScreen>

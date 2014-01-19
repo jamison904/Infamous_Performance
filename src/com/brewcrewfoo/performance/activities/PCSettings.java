@@ -62,6 +62,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
     private Context c=this;
     private String ver="";
     private String det="";
+    private Boolean isupdate=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,10 +78,12 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
         mWidgetTextColorPref.setOnPreferenceChangeListener(this);
         mVersion = findPreference("version_info");
         mVersion.setTitle(getString(R.string.pt_ver) + VERSION_NUM);
-
-
         setTheme();
-        new GetUpdates().execute();
+
+        if(!NO_UPDATE){
+            mVersion.setSummary(getString(R.string.chk_update));
+            new GetUpdates().execute();
+        }
     }
 
     @Override
@@ -95,7 +98,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
             return true;
         }
         else if(key.equals("version_info")){
-            if(testver(ver)) {
+            if(isupdate && !NO_UPDATE) {
                 new AlertDialog.Builder(c)
                         .setTitle(getString(R.string.pt_update))
                         .setMessage(det)
@@ -210,6 +213,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
                     det=json.getString("log").replace("<br>","\n");
                     if(testver(ver)){
                         mVersion.setSummary(getString(R.string.is_update));
+                        isupdate=true;
                     }
                     else{
                         mVersion.setSummary(getString(R.string.no_update));

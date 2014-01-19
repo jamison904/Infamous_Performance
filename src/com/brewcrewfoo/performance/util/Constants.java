@@ -26,6 +26,10 @@ public interface Constants {
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
     public static final Boolean NO_FLASH = false;
+    public static final Boolean NO_UPDATE = false;
+    //hide builtin update
+    // NO_UPDATE=true > hide update
+    // NO_UPDATE=false > show update
     public static final String URL = "http://m.softutil.ro/pc/";
     // CPU settings
     public static final String CPU_ON_PATH = "/sys/devices/system/cpu/cpu0/online";
