@@ -369,7 +369,6 @@ Copyright (C) 2012  James Roberts
 
     <string name="mpdecision">MPDECISION</string>
     <string name="pt_mpdecision">启用 MPDecision</string>
-    <string name="ps_mpdecision"></string>
 
     <string name="prefcat_touchscr">TOUCHSCREEN</string>
     <string name="ps_touchscr">TouchScreen Control</string>

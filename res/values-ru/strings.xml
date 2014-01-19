@@ -336,7 +336,6 @@
 
     <string name="mpdecision">MPDECISION</string>
     <string name="pt_mpdecision">Включить MPDecision</string>
-    <string name="ps_mpdecision"></string>
 
     <string name="prefcat_touchscr">ТАЧСКРИН</string>
     <string name="ps_touchscr">ТачСкрин Контроль</string>
