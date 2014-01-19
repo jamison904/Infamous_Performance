@@ -143,10 +143,10 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                         nofiles.setVisibility(LinearLayout.VISIBLE);
                 }
                 else{
-                        nofiles.setVisibility(LinearLayout.GONE);
-                        tools.setVisibility(RelativeLayout.VISIBLE);
-                        adapter = new PropAdapter(GovSetActivity.this, R.layout.prop_item, props);
-                        packList.setAdapter(adapter);
+                    nofiles.setVisibility(LinearLayout.GONE);
+                    tools.setVisibility(RelativeLayout.VISIBLE);
+                    adapter = new PropAdapter(GovSetActivity.this, R.layout.prop_item, props);
+                    packList.setAdapter(adapter);
                 }
             }
         }
