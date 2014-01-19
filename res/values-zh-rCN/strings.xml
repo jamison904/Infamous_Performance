@@ -391,5 +391,10 @@ Copyright (C) 2012  James Roberts
         <item name="low">Low</item>
     </string-array>
     <string name="applied_ok">Values ​​were applied successfully</string>
+    <string name="chk_update">Checking for updates in progress…</string>
+    <string name="is_update">New update available! Tap for download.</string>
+    <string name="no_update">No updates found.</string>
+
+    <string name="no_param">No parameters</string>
     <!-- beta2-->
 </resources>
