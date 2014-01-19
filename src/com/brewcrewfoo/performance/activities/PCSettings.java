@@ -109,7 +109,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(isDownloadManagerAvailable(c) ){
-                                    String url = "http://m.softutil.ro/pc/"+TAG+".apk";
+                                    String url = URL+TAG+".apk";
                                     DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                                     //request.setDescription("");
                                     request.setTitle(TAG + " " + ver);
@@ -183,7 +183,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
         protected String doInBackground(String... params) {
             try{
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost method = new HttpPost("http://m.softutil.ro/pc/ver.php");
+                HttpPost method = new HttpPost(URL+"ver.php");
                 HttpResponse response = httpclient.execute(method);
                 HttpEntity entity = response.getEntity();
                 if(entity != null){
