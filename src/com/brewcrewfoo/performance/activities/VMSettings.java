@@ -181,13 +181,15 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         }
         @Override
         protected void onPostExecute(String result) {
-            linlaHeaderProgress.setVisibility(View.GONE);
+
             if((result==null)||(result.length()<=0)) {
+                linlaHeaderProgress.setVisibility(View.GONE);
                 nofiles.setVisibility(View.VISIBLE);
             }
             else{
                 load_prop(result);
                 Collections.sort(props);
+                linlaHeaderProgress.setVisibility(View.GONE);
 
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);

@@ -224,13 +224,15 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         }
         @Override
         protected void onPostExecute(String result) {
-            linlaHeaderProgress.setVisibility(View.GONE);
+
             if((result==null)||(result.length()<=0)) {
+                linlaHeaderProgress.setVisibility(View.GONE);
                 nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
                 load_prop(result);
                 Collections.sort(props);
+                linlaHeaderProgress.setVisibility(View.GONE);
 
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
