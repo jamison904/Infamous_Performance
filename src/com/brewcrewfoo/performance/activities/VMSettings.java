@@ -170,7 +170,11 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+VM_PATH+"* -type f -perm -600 -print0");
+            Helpers.get_assetsScript("utils",context,"","");
+            new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+            CMDProcessor.CommandResult cr =null;
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+VM_PATH+"/*\"");
+            //CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+VM_PATH+"* -type f -perm -600 -print0");
             if(cr.success()){
                 return cr.stdout;
             }
@@ -286,6 +290,20 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
 
     public void load_prop(String s){
         props.clear();
+        final String p[]=s.split(";");
+        for (String aP : p) {
+            if(aP.trim().length()>0 && aP!=null){
+                final String pv= aP.split(":")[1].trim();
+                String pn=aP.split(":")[0];
+                pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
+                if(testprop(pn)){
+                    props.add(new Prop(pn,pv));
+                }
+            }
+        }
+    }
+ /*   public void load_prop(String s){
+        props.clear();
         String p[]=s.split("\0");
         for (String aP : p) {
             if(aP.trim().length()>0 && aP!=null){
@@ -296,7 +314,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 }
             }
         }
-    }
+    }*/
     public boolean testprop(String s){
         return !(s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs")) && !(isdyn && s.contains("dirty_writeback_centisecs"));
     }

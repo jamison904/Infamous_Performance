@@ -82,7 +82,7 @@ public class BootService extends Service implements Constants {
                 ksmpath=UKSM_RUN_PATH;
             }
             if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
-                if(!preferences.getBoolean("mpdecision",true) && Helpers.moduleActive("mpdecision")){
+                if(!preferences.getBoolean("pref_mpdecision",true) && Helpers.moduleActive("mpdecision")){
                     sb.append("stop mpdecision;\n");
                 }
             }

@@ -214,9 +214,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             case R.id.gov_settings:
                 for (String aSupported : supported) {
                     if (aSupported.equals(MainActivity.mCurGovernor[MainActivity.curcpu])) {
-                        if(new File(GOV_SETTINGS_PATH+MainActivity.mCurGovernor[MainActivity.curcpu]).exists()){
+                        if(new File(GOV_SETTINGS_PATH + MainActivity.mCurGovernor[MainActivity.curcpu]).exists()){
                             intent = new Intent(context, GovSetActivity.class);
-                            intent.putExtra("cpu", Integer.toString(MainActivity.curcpu));
+                            intent.putExtra("curgov", MainActivity.mCurGovernor[MainActivity.curcpu]);
                             startActivity(intent);
                         }
                         break;
@@ -232,10 +232,10 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         if (fromUser) {
             switch (seekBar.getId()){
                 case R.id.max_slider:
-                    setMaxSpeed(seekBar, progress);
+                    setMaxSpeed(progress);
                     break;
                 case R.id.min_slider:
-                    setMinSpeed(seekBar, progress);
+                    setMinSpeed(progress);
                     break;
             }
         }
@@ -344,7 +344,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         super.onDestroy();
     }
 
-    public void setMaxSpeed(SeekBar seekBar, int progress) {
+    public void setMaxSpeed(int progress) {
         String current = "";
         current = mAvailableFrequencies[progress];
         int minSliderProgress = mMinSlider.getProgress();
@@ -358,7 +358,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         updateSharedPrefs(PREF_MAX_CPU+MainActivity.curcpu, current);
     }
 
-    public void setMinSpeed(SeekBar seekBar, int progress) {
+    public void setMinSpeed(int progress) {
         String current = "";
         current = mAvailableFrequencies[progress];
         int maxSliderProgress = mMaxSlider.getProgress();
@@ -381,9 +381,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mMinSpeedText.setText(Helpers.toMHz(MainActivity.mMinFreqSetting[i]));
         mMinSlider.setProgress(Arrays.asList(mAvailableFrequencies).indexOf(MainActivity.mMinFreqSetting[i]));
 
-        mCurCpu.setText(Integer.toString(i+1));
-        mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
-
         if(mIsDynFreq && MainActivity.curcpu>0){
             mMaxSlider.setEnabled(false);
             mMinSlider.setEnabled(false);
@@ -392,6 +389,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             mMaxSlider.setEnabled(true);
             mMinSlider.setEnabled(true);
         }
+        mCurCpu.setText(Integer.toString(i+1));
+        mCurCpu.setTextColor(res.getColor(R.color.pc_blue));
+
         if(MainActivity.mCPUon[MainActivity.curcpu].equals("0")){
              mCurCpu.setTextColor(res.getColor(R.color.pc_red));
              mMaxSlider.setEnabled(false);

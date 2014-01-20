@@ -7,7 +7,9 @@ import java.io.File;
  * http://forum.xda-developers.com/member.php?u=4674443
  */
 public class VibratorClass {
-    private int max,min;
+    private int max=0;
+    private int min=0;
+
     public int get_min(){
         return min;
     }

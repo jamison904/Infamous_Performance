@@ -497,7 +497,8 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 							val=max;
 						}
 						seekbar.setProgress(val);
-					} catch (NumberFormatException ex) {
+					}
+                    catch (NumberFormatException ex) {
 					}
 			}
         });

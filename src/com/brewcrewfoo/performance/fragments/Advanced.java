@@ -37,6 +37,8 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.activities.TouchScreenSettings;
@@ -418,7 +420,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 		}
     }
 
-    public void openDialog(int currentProgress, String title, final int min, final int max,final Preference pref, final String path, final String key) {
+    public void openDialog(int currentProgress, String title, final int min, final int max, final Preference pref, final String path, final String key) {
         Resources res = context.getResources();
         String cancel = res.getString(R.string.cancel);
         String ok = res.getString(R.string.ok);
@@ -427,22 +429,28 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 
         final SeekBar seekbar = (SeekBar) alphaDialog.findViewById(R.id.seek_bar);
 
-        seekbar.setMax(max);
+        seekbar.setMax(max-min);
+        if(currentProgress>max) currentProgress=max-min;
+        else if(currentProgress<min) currentProgress=0;
+        else currentProgress=currentProgress-min;
+
         seekbar.setProgress(currentProgress);
         
         settingText = (EditText) alphaDialog.findViewById(R.id.setting_text);
+        settingText.setText(Integer.toString(currentProgress+min));
+
         settingText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				int val = Integer.parseInt(settingText.getText().toString());
+				int val = Integer.parseInt(settingText.getText().toString())-min;
 				seekbar.setProgress(val);
 				return true;
 			}
 			return false;
 		}
 		});
-        settingText.setText(Integer.toString(currentProgress));
+
         settingText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before,int count) {
@@ -460,8 +468,9 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
                         s.replace(0, s.length(), Integer.toString(max));
                         val=max;
                     }
-                    seekbar.setProgress(val);
-                } catch (NumberFormatException ex) {
+                    seekbar.setProgress(val-min);
+                }
+                catch (NumberFormatException ex) {
                 }
             }
         });
@@ -471,7 +480,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
             public void onProgressChanged(SeekBar seekbar, int progress, boolean fromUser) {
 				mSeekbarProgress = seekbar.getProgress();
 				if(fromUser){
-					settingText.setText(Integer.toString(mSeekbarProgress));
+					settingText.setText(Integer.toString(mSeekbarProgress+min));
 				}
             }
             @Override
@@ -497,20 +506,21 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 			.setPositiveButton(ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    int val = Integer.parseInt(settingText.getText().toString());
-                    if (val < min) {
-                        val = min;
-                    }
-                    seekbar.setProgress(val);
-                    int newProgress = seekbar.getProgress();
+                    int val = min;
+                    if (!settingText.getText().toString().equals(""))
+                        val = Integer.parseInt(settingText.getText().toString());
+                    if (val < min) val = min;
+                    seekbar.setProgress(val - min);
+                    int newProgress = seekbar.getProgress() + min;
+                    //Toast.makeText(context, Integer.toString(newProgress), Toast.LENGTH_SHORT).show();
 
-                    new CMDProcessor().su.runWaitFor("busybox echo " + newProgress + " > " + path);
+                    new CMDProcessor().su.runWaitFor("busybox echo " + Integer.toString(newProgress) + " > " + path);
                     final String v=Helpers.readOneLine(path);
                     final SharedPreferences.Editor editor = mPreferences.edit();
                     editor.putInt(key, Integer.parseInt(v));
                     editor.commit();
                     pref.setSummary(v);
-                    if (key == "pref_viber") {
+                    if (key.equals("pref_viber")) {
                         Vibrator vb = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                         vb.vibrate(1000);
                     }
