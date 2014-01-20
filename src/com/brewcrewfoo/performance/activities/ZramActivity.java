@@ -197,7 +197,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         }
     };
     public boolean is_zram_on(){
-        CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox cat /proc/swaps | grep zram`");
+        CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox cat /proc/swaps | busybox grep zram`");
         return (cr.success() && !cr.stdout.equals(""));
     }
 

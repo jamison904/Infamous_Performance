@@ -6,15 +6,6 @@ mount -o rw,remount /system
 sysro() {
 mount -o ro,remount /system
 }
-set_val() {
-    if busybox [ "`busybox find \"$1\" -prune -perm -200`" ]; then
-        echo $2 > $1
-    else
-        busybox chmod a+w $1
-        echo $2 > $1
-        busybox chmod a-w $1
-    fi
-}
 set_prop() {
 	local prop_key=$(busybox echo "$1" | cut -d'=' -f1);
 	local prop_value=$(busybox echo "$1" | cut -d'=' -f2);

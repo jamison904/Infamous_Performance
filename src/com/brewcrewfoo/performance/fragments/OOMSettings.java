@@ -319,7 +319,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             }
         }
         else if (preference.equals(mKSM)){
-            if (Integer.parseInt(Helpers.readOneLine(ksmpath))==0){
+            if ((Integer.parseInt(Helpers.readOneLine(ksmpath))==0)||(Integer.parseInt(Helpers.readOneLine(ksmpath))==2)){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + ksmpath);
             }
             else{

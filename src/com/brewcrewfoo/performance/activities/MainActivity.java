@@ -51,6 +51,13 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public static Boolean thide=false;
     private boolean canSu;
     private boolean canBb;
+    public static final int nCpus=Helpers.getNumOfCpus();
+    public static String[] mCurGovernor=new String[nCpus];
+    public static String[] mCurIO=new String[nCpus];
+    public static String[] mMaxFreqSetting=new String[nCpus];
+    public static String[] mMinFreqSetting=new String[nCpus];
+    public static String[] mCPUon=new String[nCpus];
+    public static int curcpu=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

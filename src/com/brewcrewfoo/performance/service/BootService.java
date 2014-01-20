@@ -101,6 +101,7 @@ public class BootService extends Service implements Constants {
                         final String min = preferences.getString(PREF_MIN_CPU+i, Helpers.readOneLine(MIN_FREQ_PATH).replace("cpu0","cpu"+i));
                         sb.append("busybox echo ").append(min).append(" > ").append(MIN_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                     }
+
                     sb.append("busybox echo ").append(gov).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                 }
 
@@ -284,7 +285,8 @@ public class BootService extends Service implements Constants {
                         sb.append("busybox echo 1 > ").append(ksmpath).append(";\n");
                     }
                     else{
-                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n");
+                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
+                        sb.append("busybox echo 2 > ").append(ksmpath).append(";\n");
                     }
                     sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
                     sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
@@ -342,8 +344,10 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getString(PREF_TOUCH2WAKE, Helpers.readOneLine(touch2wakepath))).append(" > ").append(touch2wakepath).append(";\n");
                 }
             }
-            if (preferences.getBoolean(ZRAM_ON, false)) {
-                if (preferences.getBoolean(ZRAM_SOB, false)){
+
+            if (preferences.getBoolean(ZRAM_SOB, false)){
+                sb.append("zramstop ").append(ncpus).append(";\n");
+                if (preferences.getBoolean(ZRAM_ON, false)) {
                     int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
                     long v = (long)(curdisk/ncpus)*1024*1024;
                     sb.append("zramstart \"").append(ncpus).append("\" \"").append(v).append("\";\n");

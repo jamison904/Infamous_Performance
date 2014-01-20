@@ -1,5 +1,14 @@
 
 ### PERFORMANCE CONTROL ###
+set_val() {
+    if busybox [ "`busybox find \"$1\" -prune -perm -200`" ]; then
+        echo $2 > $1
+    else
+        busybox chmod a+w $1
+        echo $2 > $1
+        busybox chmod a-w $1
+    fi
+}
 zramstart(){
 local cpus=$1;
 local val=$2;
@@ -24,15 +33,17 @@ return;
 
 zramstop(){
 local cpus=$1;
+if busybox [ "`busybox grep zram /proc/swaps`" != "" ]; then
 ncpus=`busybox expr $cpus - 1`;
 for i in `busybox seq 0 $ncpus`; do
-    busybox swapoff /dev/block/zram$i;
+    if busybox [ "`busybox grep zram$i /proc/swaps`" != "" ]; then
+        busybox swapoff /dev/block/zram$i;
+        #sleep 0.5;
+        busybox echo 1 > /sys/block/zram$i/reset;
+    fi;
 done;
-sleep 1;
-for i in `busybox seq 0 $ncpus`; do
-    busybox echo 1 > /sys/block/zram$i/reset;
-done;
-sleep 1;
+sleep 0.5;
 busybox modprobe -rf zram;
+fi;
 return;
 }
