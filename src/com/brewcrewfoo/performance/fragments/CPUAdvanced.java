@@ -17,7 +17,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.PCSettings;
@@ -44,7 +43,7 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
 
         if (Helpers.binExist("mpdecision").equals(NOT_FOUND)){
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("mpdecision");
-           // getPreferenceScreen().removePreference(hideCat);
+            getPreferenceScreen().removePreference(hideCat);
         }
         else{
             Boolean mpdon = Helpers.moduleActive("mpdecision");
@@ -82,11 +81,9 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
         if (preference.equals(mMpdecision)) {
             if(mMpdecision.isChecked()){
                 new CMDProcessor().su.runWaitFor("start mpdecision");
-                //Toast.makeText(getActivity(), "start", Toast.LENGTH_LONG).show();
             }
             else{
                 new CMDProcessor().su.runWaitFor("stop mpdecision");
-                //Toast.makeText(getActivity(), "stop", Toast.LENGTH_LONG).show();
             }
             return true;
         }

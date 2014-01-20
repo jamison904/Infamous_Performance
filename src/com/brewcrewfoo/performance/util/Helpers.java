@@ -427,7 +427,7 @@ public class Helpers implements Constants {
     }
 
     public static boolean is_Tab_available(int i){
-        if(i==1) return (Helpers.getNumOfCpus()>10);
+        if(i==1) return (Helpers.getNumOfCpus()>1);
         else if(i==2) return Helpers.showBattery();
         else if(i==4) return Helpers.voltageFileExists();
         return true;
