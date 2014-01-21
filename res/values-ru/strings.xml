@@ -100,7 +100,7 @@
     <!-- bl_timeout -->
     <string name="prefcat_bltimeout">Тайм-аут подсветки </string>
     <string name="ps_bltimeout">%s мс</string>
-    <string name="bltimeout_title">Тайм-аут подсветки</string>
+    <string name="bltimeout_title">Тайм-аут подсветки (мс)</string>
     <!-- bl_touch -->
     <string name="prefcat_bltouch">Подсветка Дисплеем</string>
     <string name="pt_bltouch">Подсветка Дисплеем</string>
@@ -110,12 +110,12 @@
     <string name="pt_home_enabled">Фильтр кнопки "Домой"</string>
     <string name="ps_home_enabled">Игнорировать нажатие кнопки: %s</string>
     <string name="home_allowed_irq_title">Максимально разрешённые прерывания</string>
-    <string name="home_report_wait_title">Уведомить о времени ожидания</string>
+    <string name="home_report_wait_title">Уведомить о времени ожидания (мс)</string>
     <string name="pt_menuback_enabled">Фильтр кнопок Меню/Назад</string>
     <string name="ps_menuback_enabled">Игнорировать нажатие кнопки: %s</string>
     <string name="menuback_interrupt_checks_title">Проверка прерываний</string>
-    <string name="menuback_first_err_wait_title">Время ожидания первой ошибки</string>
-    <string name="menuback_last_err_wait_title">Время ожидания последней ошибки</string>
+    <string name="menuback_first_err_wait_title">Время ожидания первой ошибки (мс)</string>
+    <string name="menuback_last_err_wait_title">Время ожидания последней ошибки (мс)</string>
     <string name="ps_pfk_set_on_boot">Все ФСНК настройки будут восстановлены при перезагрузке, если этот параметр активирован</string>
     <!-- dynamic write back -->
     <string name="dynamic_writeback_info">Динамическое управление\nАвтор Cristoforo Cataldo (Christopher83)</string>

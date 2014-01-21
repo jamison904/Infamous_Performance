@@ -109,7 +109,7 @@ Translation by DaniPhii
     <!-- Tiempo de suspensión -->
     <string name="prefcat_bltimeout">MODO DE SUSPENSIÓN</string>
     <string name="ps_bltimeout">%s ms</string>
-    <string name="bltimeout_title">Modo de suspensión</string>
+    <string name="bltimeout_title">Modo de suspensión (ms)</string>
     <!-- Iluminar pantalla -->
     <string name="prefcat_bltouch">ILUMINAR PANTALLA</string>
     <string name="pt_bltouch">Iluminar al tocar pantalla</string>
@@ -119,13 +119,13 @@ Translation by DaniPhii
     <string name="pt_home_enabled">Botón HOME</string>
     <string name="ps_home_enabled">Ignorar pulsación: %s</string>
     <string name="home_allowed_irq_title">Interrupciones máximas</string>
-    <string name="home_report_wait_title">Tiempo de espera del informe</string>
+    <string name="home_report_wait_title">Tiempo de espera del informe (ms)</string>
 
     <string name="pt_menuback_enabled">Botones Menú/Atrás</string>
     <string name="ps_menuback_enabled">Ignorar pulsación: %s</string>
     <string name="menuback_interrupt_checks_title">Comprobar interrupciones</string>
-    <string name="menuback_first_err_wait_title">Tiempo de espera del primer error</string>
-    <string name="menuback_last_err_wait_title">Tiempo de espera del último error</string>
+    <string name="menuback_first_err_wait_title">Tiempo de espera del primer error (ms)</string>
+    <string name="menuback_last_err_wait_title">Tiempo de espera del último error (ms)</string>
     <string name="ps_pfk_set_on_boot">Si se activa, se aplicarán los valores actuales del PKF al arranque</string>
     <!-- Dynamic Dirty Page Writebacks -->
     <string name="dynamic_writeback_info">Sobre la funcionalidad Dynamic Dirty Page Writebacks\nAutor: Cristoforo Cataldo (@Christopher83)</string>

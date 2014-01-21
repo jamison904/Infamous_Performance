@@ -296,25 +296,11 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 final String pv= aP.split(":")[1].trim();
                 String pn=aP.split(":")[0];
                 pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
-                if(testprop(pn)){
-                    props.add(new Prop(pn,pv));
-                }
+                if(testprop(pn)) props.add(new Prop(pn,pv));
             }
         }
     }
- /*   public void load_prop(String s){
-        props.clear();
-        String p[]=s.split("\0");
-        for (String aP : p) {
-            if(aP.trim().length()>0 && aP!=null){
-                final String pv=Helpers.readOneLine(aP).trim();
-                final String pn=aP.substring(aP.lastIndexOf("/") + 1, aP.length());
-                if(testprop(pn)){
-                    props.add(new Prop(pn,pv));
-                }
-            }
-        }
-    }*/
+
     public boolean testprop(String s){
         return !(s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs")) && !(isdyn && s.contains("dirty_writeback_centisecs"));
     }

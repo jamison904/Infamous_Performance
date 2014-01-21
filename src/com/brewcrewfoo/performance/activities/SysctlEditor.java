@@ -376,9 +376,8 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             if(aP.trim().length()>0 && aP!=null){
 
                 final String pv=Helpers.readOneLine(aP).trim();
-                final String pn=aP.trim().replace("/",".").substring(10, aP.length());
-                if(!pn.startsWith("vm"))
-                    props.add(new Prop(pn,pv));
+                final String pn=aP.trim().substring(10, aP.length()).replace("/",".");
+                if(!pn.startsWith("vm")) props.add(new Prop(pn,pv));
             }
         }
     }

@@ -89,10 +89,10 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                 final String s=mPreferences.getString(GOV_SETTINGS,"");
 
                 if(!s.equals("")){
-                    String p[]=s.split(";");
+                    String p[]=s.split("\\;");
                     for (String aP : p) {
                         if(!aP.equals("")&& aP!=null){
-                            final String pn[]=aP.split(":");
+                            final String pn[]=aP.split("\\:");
                             sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(pn[0]).append(";\n");
                         }
                     }
@@ -248,10 +248,10 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         final String s=mPreferences.getString(GOV_SETTINGS,"");
         final StringBuilder sb = new StringBuilder();
         if(!s.equals("")){
-            String p[]=s.split(";");
+            String p[]=s.split("\\;");
             for (String aP : p) {
                 if(!aP.equals("") && aP!=null){
-                    final String pn[]=aP.split(":");
+                    final String pn[]=aP.split("\\:");
                     if(!pn[0].equals(n)){
                         sb.append(pn[0]).append(':').append(pn[1]).append(';');
                     }
@@ -263,11 +263,11 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     }
     public void load_prop(String s){
         props.clear();
-        final String p[]=s.split(";");
+        final String p[]=s.split("\\;");
         for (String aP : p) {
             if(aP.trim().length()>0 && aP!=null){
-                final String pv= aP.split(":")[1].trim();
-                String pn=aP.split(":")[0];
+                final String pv=aP.split("\\:")[1].trim();
+                String pn=aP.split("\\:")[0];
                 pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
                 props.add(new Prop(pn,pv));
             }
