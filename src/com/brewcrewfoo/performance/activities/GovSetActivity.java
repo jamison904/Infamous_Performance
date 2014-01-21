@@ -66,7 +66,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
 
         Intent i=getIntent();
         curgov=i.getStringExtra("curgov");
-        Log.d(TAG, curgov);
+        //Log.d(TAG, curgov);
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);

@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <PreferenceCategory
+        android:key="so_min_max"
+        android:title="@string/so_min_max">
+
+        <ListPreference
+            android:dialogTitle="@string/pt_so_max"
+            android:key="pref_so_max"
+            android:persistent="true"
+            android:title="@string/pt_so_max"/>
+        <ListPreference
+            android:dialogTitle="@string/pt_so_min"
+            android:key="pref_so_min"
+            android:persistent="true"
+            android:title="@string/pt_so_min"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="so_minmax_boot"
+            android:summary="@string/ps_blx_boot"
+            android:title="@string/sob"/>
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="mpdecision"
@@ -13,7 +33,25 @@
             android:key="pref_mpdecision"
             android:summary="@string/ps_dsync"
             android:title="@string/pt_mpdecision"/>
+    </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="intelliplug"
+        android:title="@string/intelliplug">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_intelliplug"
+            android:summary="@string/ps_dsync"
+            android:title="@string/pt_intelliplug"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="ecomode"
+        android:title="@string/ecomode">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_ecomode"
+            android:summary="@string/ps_dsync"
+            android:title="@string/pt_ecomode"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -369,6 +369,15 @@ Copyright (C) 2012  James Roberts
     <string name="mpdecision">MPDECISION</string>
     <string name="pt_mpdecision">Enable MPDecision</string>
 
+    <string name="intelliplug">INTELLIPLUG</string>
+    <string name="pt_intelliplug">Enable Intelliplug</string>
+    <string name="ecomode">ECOMODE</string>
+    <string name="pt_ecomode">Enable EcoMode</string>
+    <string name="so_min_max">SCREEN OFF FREQUENCIES</string>
+    <string name="pt_so_max">Screen off maximum frequency</string>
+    <string name="ps_so_minmax">Current value: </string>
+    <string name="pt_so_min">Screen off minimum frequency</string>
+
     <string name="prefcat_touchscr">TOUCHSCREEN</string>
     <string name="ps_touchscr">TouchScreen Control</string>
     <string name="ps_touchscr_boot">If enabled will restore all touchcreen settings on reboot</string>

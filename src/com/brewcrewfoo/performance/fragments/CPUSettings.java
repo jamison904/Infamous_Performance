@@ -111,7 +111,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
 
 
         mAvailableFrequencies = new String[0];
-        String availableFrequenciesLine = Helpers.readOneLine(STEPS_PATH);
+        final String availableFrequenciesLine = Helpers.readOneLine(STEPS_PATH);
         if (availableFrequenciesLine != null) {
             mAvailableFrequencies = availableFrequenciesLine.split(" ");
             Arrays.sort(mAvailableFrequencies, new Comparator<String>() {

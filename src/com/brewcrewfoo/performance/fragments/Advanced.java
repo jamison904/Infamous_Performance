@@ -204,7 +204,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
 
         if (preference == mDsync){
-            if (Integer.parseInt(Helpers.readOneLine(DSYNC_PATH))==0){
+            if (Helpers.readOneLine(DSYNC_PATH).equals("0")){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DSYNC_PATH);
             }
             else{
@@ -219,7 +219,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
                 return true;
         }
         else if (preference == mBltouch){
-            if (Integer.parseInt(Helpers.readOneLine(BL_TOUCH_ON_PATH))==0){
+            if (Helpers.readOneLine(BL_TOUCH_ON_PATH).equals("0")){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BL_TOUCH_ON_PATH);
             }
             else{
@@ -228,7 +228,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
             return true;
         }
         else if (preference == mBln){
-            if (Integer.parseInt(Helpers.readOneLine(BLN_PATH))==0){
+            if (Helpers.readOneLine(BLN_PATH).equals("0")){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BLN_PATH);
             }
             else{
@@ -248,7 +248,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
             return true;
         }
         else if (preference == mHomeOn){
-            if (Integer.parseInt(Helpers.readOneLine(PFK_HOME_ENABLED))==0){
+            if (Helpers.readOneLine(PFK_HOME_ENABLED).equals("0")){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + PFK_HOME_ENABLED);
             }
             else{
@@ -257,7 +257,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
                 return true;
         }
         else if (preference == mMenuBackOn){
-            if (Integer.parseInt(Helpers.readOneLine(PFK_MENUBACK_ENABLED))==0){
+            if (Helpers.readOneLine(PFK_MENUBACK_ENABLED).equals("0")){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + PFK_MENUBACK_ENABLED);
             }
             else{
@@ -296,7 +296,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
                 return true;
         }
         else if (preference == mDynamicWriteBackOn){
-            if (Integer.parseInt(Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH))==0){
+            if (Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH).equals("0")){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
             }
             else{
