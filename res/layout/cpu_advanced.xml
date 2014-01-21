@@ -31,8 +31,12 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_mpdecision"
-            android:summary="@string/ps_dsync"
             android:title="@string/pt_mpdecision"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="mpdecision_boot"
+            android:summary="@string/ps_dsync"
+            android:title="@string/sob"/>
     </PreferenceCategory>
 
     <PreferenceCategory

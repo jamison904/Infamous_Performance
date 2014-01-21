@@ -81,9 +81,16 @@ public class BootService extends Service implements Constants {
                 ksm=1;
                 ksmpath=UKSM_RUN_PATH;
             }
-            if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
-                if(!preferences.getBoolean("pref_mpdecision",true) && Helpers.moduleActive("mpdecision")){
-                    sb.append("stop mpdecision;\n");
+            if(!Helpers.binExist("mpdecision").equals(NOT_FOUND) && preferences.getBoolean("mpdecision_boot",false)){
+                if(preferences.getBoolean("pref_mpdecision",false)){
+                    if(!Helpers.moduleActive("mpdecision")){
+                        sb.append("mpdecisionstart;\n");
+                    }
+                }
+                else{
+                    if(Helpers.moduleActive("mpdecision")){
+                        sb.append("stop mpdecision;\n");
+                    }
                 }
             }
             if (preferences.getBoolean(CPU_SOB, false)) {
@@ -123,6 +130,26 @@ public class BootService extends Service implements Constants {
                         final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
                         sb.append("busybox echo ").append(io).append(" > ").append(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).append(";\n");
                     }
+                }
+            }
+            if (preferences.getBoolean("so_minmax_boot", false)) {
+                if (new File(SO_MAX_FREQ).exists()) {
+                    final String v=preferences.getString("pref_so_max", Helpers.readOneLine(SO_MAX_FREQ));
+                    sb.append("busybox echo ").append(v).append(" > ").append(SO_MAX_FREQ).append(";\n");
+                }
+                if (new File(SO_MIN_FREQ).exists()) {
+                    final String v=preferences.getString("pref_so_min", Helpers.readOneLine(SO_MIN_FREQ));
+                    sb.append("busybox echo ").append(v).append(" > ").append(SO_MIN_FREQ).append(";\n");
+                }
+            }
+            if (new File(INTELLI_PLUG).exists()) {
+                if(preferences.getBoolean("pref_intelliplug", false)){
+                    sb.append("busybox echo 1 > ").append(INTELLI_PLUG).append(";\n");
+                }
+            }
+            if (new File(ECO_MODE).exists()) {
+                if(preferences.getBoolean("pref_ecomode", false)){
+                    sb.append("busybox echo 1 > ").append(ECO_MODE).append(";\n");
                 }
             }
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {

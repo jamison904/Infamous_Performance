@@ -2,12 +2,18 @@
 ### PERFORMANCE CONTROL ###
 set_val() {
     if busybox [ "`busybox find \"$1\" -prune -perm -200`" ]; then
-        echo $2 > $1
+        echo $2 > $1;
     else
-        busybox chmod a+w $1
-        echo $2 > $1
-        busybox chmod a-w $1
-    fi
+        busybox chmod a+w $1;
+        echo $2 > $1;
+        busybox chmod a-w $1;
+    fi;
+}
+mpdecisionstart(){
+if busybox [ -f /system/bin/thermald ] && busybox [ `cat /sys/module/msm_thermal/parameters/enabled|tr '[YN]' '[10]'` -eq 0 ]; then
+    start thermald;
+fi;
+start mpdecision `grep 'service.*mpdecision' /*.rc|grep -m 1 -o '\-\-.*'`;
 }
 zramstart(){
 local cpus=$1;
