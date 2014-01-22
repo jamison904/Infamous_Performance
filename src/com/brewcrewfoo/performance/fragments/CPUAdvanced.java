@@ -4,6 +4,7 @@ package com.brewcrewfoo.performance.fragments;
  * Created by h0rn3t on 02.01.2014.
  * http://forum.xda-developers.com/member.php?u=4674443
  */
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,10 +34,12 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
     private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode;
     private ListPreference mSOmax,mSOmin;
     private String pso="";
+    private Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context=getActivity();
         setHasOptionsMenu(true);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -126,7 +129,9 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference==mMpdecision) {
             if(mMpdecision.isChecked()){
-                new CMDProcessor().su.runWaitFor("start mpdecision");
+                final StringBuilder sb = new StringBuilder();
+                sb.append("mpdecisionstart;\n");
+                Helpers.shExec(sb,context,true);
             }
             else{
                 new CMDProcessor().su.runWaitFor("stop mpdecision");

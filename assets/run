@@ -10,10 +10,10 @@ set_val() {
     fi;
 }
 mpdecisionstart(){
-if busybox [ -f /system/bin/thermald ] && busybox [ `cat /sys/module/msm_thermal/parameters/enabled|tr '[YN]' '[10]'` -eq 0 ]; then
+if busybox [ -f /system/bin/thermald ] && busybox [ `busybox cat /sys/module/msm_thermal/parameters/enabled | busybox tr '[YN]' '[10]'` -eq 0 ]; then
     start thermald;
 fi;
-start mpdecision `grep 'service.*mpdecision' /*.rc|grep -m 1 -o '\-\-.*'`;
+start mpdecision `busybox grep 'service.*mpdecision' /*.rc | busybox grep -m 1 -o '\-\-.*'`;
 }
 zramstart(){
 local cpus=$1;
