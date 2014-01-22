@@ -381,5 +381,6 @@ Translation by DaniPhii
     <string name="no_download_manager">Download Manager not available!</string>
     <string name="btn_download">Download</string>
     <string name="pt_update">What\'s new</string>
+    <string name="ps_zram_info">must be stopped\nin order to change disk size</string>
     <!-- beta2-->
 </resources>

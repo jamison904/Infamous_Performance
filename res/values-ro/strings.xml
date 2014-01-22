@@ -368,5 +368,6 @@ Translation by Laurentiu1996
     <string name="no_download_manager">Managerul de Descărcare este indisponibil!</string>
     <string name="btn_download">Descarcă</string>
     <string name="pt_update">Ce e nou</string>
+    <string name="ps_zram_info">trebuie oprit\npentru a ajusta valoarea</string>
     <!-- beta2-->
 </resources>

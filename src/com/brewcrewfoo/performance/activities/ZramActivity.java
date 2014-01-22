@@ -100,6 +100,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         if (is_zram_on()) {
             start_btn.setText(getString(R.string.mt_stop));
             mdisksize.setEnabled(false);
+            Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
         }
         else {
             start_btn.setText(getString(R.string.mt_start));
@@ -254,6 +255,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 start_btn.setText(getString(R.string.mt_stop));
                 mdisksize.setEnabled(false);
                 mPreferences.edit().putBoolean(ZRAM_ON,true).apply();
+                Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
             }
             else {
                 start_btn.setText(getString(R.string.mt_start));
@@ -289,6 +291,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 start_btn.setText(getString(R.string.mt_stop));
                 mdisksize.setEnabled(false);
                 mPreferences.edit().putBoolean(ZRAM_ON,true).apply();
+                Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
                 if (mCurThread == null) {
                     mCurThread = new CurThread();
                     mCurThread.start();
