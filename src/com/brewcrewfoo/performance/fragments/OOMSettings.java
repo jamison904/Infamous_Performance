@@ -87,6 +87,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     private Boolean ispm;
     private int ksm=0;
     private String ksmpath=KSM_RUN_PATH;
+    private float maxdisk = Helpers.getTotMem() / 1024;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,9 +177,9 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
-            int maxdisk = (int) Helpers.getTotMem() / 1024;
-            int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
-            mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
+            final int curdisk=mPreferences.getInt(PREF_ZRAM, Math.round(maxdisk*18/100));
+            final int percent=Math.round(curdisk * 100 / maxdisk);
+            mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024))+" ("+String.valueOf(percent)+"%)");
         }
     }
 
@@ -347,7 +348,6 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     			sharedPreferences.edit().remove(PREF_MINFREE).apply();
     		}
 	    }
-
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -356,15 +356,14 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             if(resultCode == Activity.RESULT_OK){
                 final int r=data.getIntExtra("result",0);
                 Log.d(TAG, "input = "+r);
-                //mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+r.split(":")[0]+" | "+getString(R.string.ksm_sleep)+" "+r.split(":")[1]);
                 switch(r){
                     case 1:
                         mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
                         break;
                     case 2:
-                        int maxdisk = (int) Helpers.getTotMem() / 1024;
-                        int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
-                        mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
+                        final int curdisk=mPreferences.getInt(PREF_ZRAM, Math.round(maxdisk*18/100));
+                        final int percent=Math.round(curdisk * 100 / maxdisk);
+                        mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024))+" ("+String.valueOf(percent)+"%)");
                         break;
                 }
             }
