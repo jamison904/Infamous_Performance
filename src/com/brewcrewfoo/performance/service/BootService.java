@@ -70,7 +70,7 @@ public class BootService extends Service implements Constants {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
             final StringBuilder sb = new StringBuilder();
-            final String VIBE_PATH=new VibratorClass().get_path();
+            VibratorClass vib=new VibratorClass();
             final String BLN_PATH=Helpers.bln_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
 
@@ -224,9 +224,10 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo 0 > ").append(BLN_PATH).append(";\n");
                 }
             }
+            final String VIBE_PATH=vib.get_path();
             if (VIBE_PATH!=null) {
                 if (preferences.getBoolean("viber_sob", false)) {
-                    sb.append("busybox echo ").append(preferences.getInt("pref_viber", Integer.parseInt(Helpers.readOneLine(VIBE_PATH)))).append(" > ").append(VIBE_PATH).append(";\n");
+                    sb.append("busybox echo ").append(preferences.getInt("pref_viber", Integer.parseInt(vib.get_val(VIBE_PATH)))).append(" > ").append(VIBE_PATH).append(";\n");
                 }
             }
             if (new File(PFK_HOME_ENABLED).exists() && new File(PFK_MENUBACK_ENABLED).exists()) {
@@ -308,6 +309,8 @@ public class BootService extends Service implements Constants {
 
             if (new File(ksmpath).exists()) {
                 if (preferences.getBoolean(KSM_SOB, false)) {
+                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
+                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                     if (preferences.getBoolean(PREF_RUN_KSM, false)) {
                         sb.append("busybox echo 1 > ").append(ksmpath).append(";\n");
                     }
@@ -315,8 +318,6 @@ public class BootService extends Service implements Constants {
                         sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
                         sb.append("busybox echo 2 > ").append(ksmpath).append(";\n");
                     }
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                 }
             }
 
