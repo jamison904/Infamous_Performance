@@ -327,7 +327,6 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
                                 new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\"");
-                                //Log.d(TAG, "/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\"");
                             }
                         }
                         else {

@@ -36,7 +36,6 @@ for i in `busybox seq 0 $ncpus`; do
 done;
 return;
 }
-
 zramstop(){
 local cpus=$1;
 if busybox [ "`busybox grep zram /proc/swaps`" != "" ]; then

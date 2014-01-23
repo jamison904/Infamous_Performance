@@ -45,12 +45,16 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private Button start_btn;
     private NumberFormat nf;
     private ProgressDialog progressDialog;
+    private boolean showinfo=true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme();
+        if(savedInstanceState!=null) {
+            showinfo=savedInstanceState.getBoolean("showinfo");
+        }
         setContentView(R.layout.zram_settings);
 
         nf = NumberFormat.getInstance();
@@ -92,7 +96,10 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
             @Override
             public boolean onLongClick(View v) {
                 curcpu=mod(curcpu+1,ncpus);
-                Toast.makeText(context, "CPU "+(curcpu+1), Toast.LENGTH_SHORT).show();
+                if (showinfo) {
+                    Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                    showinfo=false;
+                }
                 return true;
             }
         });
@@ -100,7 +107,11 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         if (is_zram_on()) {
             start_btn.setText(getString(R.string.mt_stop));
             mdisksize.setEnabled(false);
-            Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+            if (showinfo) {
+                Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                showinfo=false;
+            }
+
         }
         else {
             start_btn.setText(getString(R.string.mt_start));
@@ -111,7 +122,11 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
             mCurThread.start();
         }
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle saveState) {
+        super.onSaveInstanceState(saveState);
+        saveState.putBoolean("showinfo",showinfo);
+    }
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
@@ -255,7 +270,10 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 start_btn.setText(getString(R.string.mt_stop));
                 mdisksize.setEnabled(false);
                 mPreferences.edit().putBoolean(ZRAM_ON,true).apply();
-                Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                if (showinfo) {
+                    Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                    showinfo=false;
+                }
             }
             else {
                 start_btn.setText(getString(R.string.mt_start));
@@ -291,7 +309,10 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 start_btn.setText(getString(R.string.mt_stop));
                 mdisksize.setEnabled(false);
                 mPreferences.edit().putBoolean(ZRAM_ON,true).apply();
-                Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                if (showinfo) {
+                    Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                    showinfo=false;
+                }
                 if (mCurThread == null) {
                     mCurThread = new CurThread();
                     mCurThread.start();

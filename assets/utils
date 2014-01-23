@@ -8,17 +8,11 @@ sysro() {
 mount -o ro,remount /system
 }
 get_prop(){
-local r="";
 local d="$1";
 for i in `busybox find $d -type f -perm -600 `; do
     v=`busybox cat $i`;
-    if busybox [ "X$r" == "X" ]; then
-        r="$i:$v";
-    else
-        r="$r;$i:$v";
-    fi;
+    busybox echo "$i::$v";
 done;
-echo "$r";
 }
 set_prop() {
 	local prop_key=$(busybox echo "$1" | cut -d'=' -f1);
@@ -56,7 +50,7 @@ for d in $1; do
     if busybox [ "X$r" == "X" ]; then
         r="$i";
     else
-        r="$r:$i";
+        r="$r::$i";
     fi;
 done;
 echo "$r";

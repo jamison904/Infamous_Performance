@@ -206,8 +206,7 @@ public class iResidualsActivity extends Activity implements Constants, AdapterVi
     private class LongOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr = null;
-            cr=new CMDProcessor().su.runWaitFor("busybox find "+rpath+" -type f -name \"*\" -print0");
+            CMDProcessor.CommandResult cr=new CMDProcessor().su.runWaitFor("busybox find "+rpath+" -type f -name \"*\" -print0");
             if(cr.success()){ return cr.stdout;}
             else{Log.d(TAG,"residual files err: "+cr.stderr); return null; }
         }

@@ -125,21 +125,21 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             CMDProcessor.CommandResult cr =null;
             cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+GOV_SETTINGS_PATH+curgov+"/*\"");
             if(cr.success()){
-                return cr.stdout;
+                load_prop(cr.stdout);
+                return "ok";
             }
             else{
                 Log.d(TAG, "GovSettings error: " + cr.stderr);
-                return null;
+                return "nok";
             }
         }
         @Override
         protected void onPostExecute(String result) {
-            if((result==null)||(result.length()<=0)) {
+            if(result.equals("nok")) {
                 linlaHeaderProgress.setVisibility(LinearLayout.GONE);
                 nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
-                load_prop(result);
                 linlaHeaderProgress.setVisibility(LinearLayout.GONE);
                 if(props.isEmpty()){
                         nofiles.setVisibility(LinearLayout.VISIBLE);
@@ -260,12 +260,16 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     }
     public void load_prop(String s){
         props.clear();
-        final String p[]=s.split("\\;");
+        final String p[]=s.split("\n");
         for (String aP : p) {
-            if(aP!=null && aP.contains(":")){
-                String pn=aP.split("\\:")[0];
-                pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
-                props.add(new Prop(pn,aP.split("\\:")[1].trim()));
+            try{
+                if(aP!=null && aP.contains("::")){
+                    String pn=aP.split("::")[0];
+                    pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
+                    props.add(new Prop(pn,aP.split("::")[1].trim()));
+                }
+            }
+            catch (Exception e){
             }
         }
     }
