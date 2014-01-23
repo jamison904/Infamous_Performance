@@ -1,5 +1,6 @@
-#
-#
+
+### PERFORMANCE CONTROL ###
+
 function optimize(){
 sql3=`busybox which sqlite3`;
 db=0;

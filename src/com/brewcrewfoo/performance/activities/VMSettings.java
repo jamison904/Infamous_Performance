@@ -256,7 +256,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         else{//add
             titlu=getString(R.string.add_prop_title);
         }
-        final String vcur=tv.getText().toString();
+
         new AlertDialog.Builder(this)
                 .setTitle(titlu)
                 .setView(editDialog)
@@ -271,7 +271,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                     public void onClick(DialogInterface dialog, int which) {
 
                         if (pp!=null) {
-                            if ((tv.getText().toString() != null)&&(tv.getText().toString().length() > 0)){
+                            if ((tv.getText().toString()!= null)&&(tv.getText().toString().length() > 0)){
                                 pp.setVal(tv.getText().toString().trim());
                                 set_pref(tn.getText().toString().trim(),tv.getText().toString().trim());
                             }
@@ -292,11 +292,10 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         props.clear();
         final String p[]=s.split(";");
         for (String aP : p) {
-            if(aP.trim().length()>0 && aP!=null){
-                final String pv= aP.split(":")[1].trim();
+            if(aP!=null && aP.contains(":")){
                 String pn=aP.split(":")[0];
                 pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
-                if(testprop(pn)) props.add(new Prop(pn,pv));
+                if(testprop(pn)) props.add(new Prop(pn,aP.split(":")[1].trim()));
             }
         }
     }
@@ -310,7 +309,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         if(!s.equals("")){
             String p[]=s.split(";");
             for (String aP : p) {
-                if(!aP.equals("") && aP!=null){
+                if(aP!=null && aP.contains(":")){
                     final String pn[]=aP.split(":");
                     if(!pn[0].equals(n)){
                         sb.append(pn[0]).append(':').append(pn[1]).append(';');

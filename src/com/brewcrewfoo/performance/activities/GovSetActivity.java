@@ -249,11 +249,9 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         if(!s.equals("")){
             String p[]=s.split("\\;");
             for (String aP : p) {
-                if(!aP.equals("") && aP!=null){
+                if(aP!=null && aP.contains(":")){
                     final String pn[]=aP.split("\\:");
-                    if(!pn[0].equals(n)){
-                        sb.append(pn[0]).append(':').append(pn[1]).append(';');
-                    }
+                    if(!pn[0].equals(n)) sb.append(pn[0]).append(':').append(pn[1]).append(';');
                 }
             }
         }
@@ -264,11 +262,10 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         props.clear();
         final String p[]=s.split("\\;");
         for (String aP : p) {
-            if(aP.trim().length()>0 && aP!=null){
-                final String pv=aP.split("\\:")[1].trim();
+            if(aP!=null && aP.contains(":")){
                 String pn=aP.split("\\:")[0];
                 pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
-                props.add(new Prop(pn,pv));
+                props.add(new Prop(pn,aP.split("\\:")[1].trim()));
             }
         }
     }

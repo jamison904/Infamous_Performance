@@ -1,5 +1,6 @@
 #
-#
+### PERFORMANCE CONTROL ###
+
 sysrw() {
 mount -o rw,remount /system
 }

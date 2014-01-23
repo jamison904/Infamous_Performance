@@ -1,4 +1,5 @@
-###### made by h0rn3t ######
+
+### PERFORMANCE CONTROL ###
 
 sysrw() {
 mount -o rw,remount /system
