@@ -400,7 +400,7 @@ public class BootService extends Service implements Constants {
                     Notification n = new Notification.Builder(c)
                             .setAutoCancel(true).setContentTitle(contentTitle)
                             .setContentText(contentText)
-                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setSmallIcon(R.drawable.ic_notify)
                             .setWhen(System.currentTimeMillis()).getNotification();
                     NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(1337, n);
