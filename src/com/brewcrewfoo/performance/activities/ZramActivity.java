@@ -41,7 +41,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private int ncpus=Helpers.getNumOfCpus();
     private int curcpu=0;
     private int curdisk=0;
-    private float maxdisk = (Helpers.getTotMem() / 1024);
+    private float maxdisk = (Helpers.getMem("MemTotal") / 1024);
     private Button start_btn;
     private NumberFormat nf;
     private ProgressDialog progressDialog;
@@ -60,7 +60,9 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(2);
 
-        curdisk=mPreferences.getInt(PREF_ZRAM,Math.round(maxdisk*18/100));
+        Intent i=getIntent();
+        curdisk=i.getIntExtra("curdisk",mPreferences.getInt(PREF_ZRAM,Math.round(maxdisk*18/100)));
+        //curdisk=mPreferences.getInt(PREF_ZRAM,Math.round(maxdisk*18/100));
 
         mdisksize = (SeekBar) findViewById(R.id.val1);
         mdisksize.setOnSeekBarChangeListener(this);

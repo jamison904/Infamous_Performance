@@ -303,15 +303,15 @@ public class Helpers implements Constants {
         return cr.success() && !cr.stdout.equals("");
     }
 
-    public static long getTotMem() {
+    public static long getMem(String tip) {
         long v=0;
-        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E -o '[[:digit:]]+'`");
+        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep "+tip+" /proc/meminfo | busybox grep -E -o '[[:digit:]]+'`");
         if(cr.success() && !cr.stdout.equals("")){
             try{
                v = (long) Integer.parseInt(cr.stdout);//kb
             }
             catch (NumberFormatException e) {
-                Log.d(TAG, "MemTot conversion err: "+e);
+                Log.d(TAG, tip+" conversion err: "+e);
             }
         }
         return v;

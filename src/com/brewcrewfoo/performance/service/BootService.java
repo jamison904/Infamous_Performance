@@ -376,7 +376,7 @@ public class BootService extends Service implements Constants {
             if (preferences.getBoolean(ZRAM_SOB, false)){
                 sb.append("zramstop ").append(ncpus).append(";\n");
                 if (preferences.getBoolean(ZRAM_ON, false)) {
-                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
+                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getMem("MemTotal")/2048);
                     long v = (long)(curdisk/ncpus)*1024*1024;
                     sb.append("zramstart \"").append(ncpus).append("\" \"").append(v).append("\";\n");
                 }
