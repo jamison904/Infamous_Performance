@@ -285,9 +285,6 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 }).create().show();
     }
 
-    public boolean testprop(String s){
-        return !(s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs")) && !(isdyn && s.contains("dirty_writeback_centisecs"));
-    }
     public void set_pref(String n, String v){
         final String s=mPreferences.getString(PREF_VM,"");
         final StringBuilder sb = new StringBuilder();
@@ -305,6 +302,13 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         sb.append(n).append(':').append(v).append(';');
         mPreferences.edit().putString(PREF_VM, sb.toString()).commit();
     }
+
+    public boolean testprop(String s){
+        if (s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs") || isdyn && s.contains("dirty_writeback_centisecs")) {
+            return false;
+        }
+        return true;
+    }
     public void load_prop(String s){
         props.clear();
         final String p[]=s.split("\n");
@@ -313,7 +317,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 if(aP!=null && aP.contains("::")){
                     String pn=aP.split("::")[0];
                     pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
-                    props.add(new Prop(pn,aP.split("::")[1].trim()));
+                    if(testprop(pn)) props.add(new Prop(pn,aP.split("::")[1].trim()));
                 }
             }
             catch (Exception e){
