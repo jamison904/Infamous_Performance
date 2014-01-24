@@ -398,10 +398,11 @@ public class BootService extends Service implements Constants {
                     CharSequence contentTitle = c.getText(R.string.fast_charge_notification_title);
                     CharSequence contentText = c.getText(R.string.fast_charge_notification_message);
                     Notification n = new Notification.Builder(c)
-                            .setAutoCancel(true).setContentTitle(contentTitle)
+                            .setAutoCancel(true)
+                            .setContentTitle(contentTitle)
                             .setContentText(contentText)
                             .setSmallIcon(R.drawable.ic_notify)
-                            .setWhen(System.currentTimeMillis()).getNotification();
+                            .setWhen(System.currentTimeMillis()).build();
                     NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(1337, n);
                 }
