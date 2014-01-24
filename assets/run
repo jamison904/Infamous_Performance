@@ -43,9 +43,11 @@ ncpus=`busybox expr $cpus - 1`;
 for i in `busybox seq 0 $ncpus`; do
     if busybox [ "`busybox grep zram$i /proc/swaps`" != "" ]; then
         busybox swapoff /dev/block/zram$i;
-        #sleep 0.5;
-        busybox echo 1 > /sys/block/zram$i/reset;
     fi;
+done;
+sleep 0.5;
+for i in `busybox seq 0 $ncpus`; do
+    busybox echo 1 > /sys/block/zram$i/reset;
 done;
 sleep 0.5;
 busybox modprobe -rf zram;
