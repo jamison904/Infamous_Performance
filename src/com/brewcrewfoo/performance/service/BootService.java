@@ -132,7 +132,7 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-            if (preferences.getBoolean("so_minmax_boot", false)) {
+       /*     if (preferences.getBoolean("so_minmax_boot", false)) {
                 if (new File(SO_MAX_FREQ).exists()) {
                     final String v=preferences.getString("pref_so_max", Helpers.readOneLine(SO_MAX_FREQ));
                     sb.append("busybox echo ").append(v).append(" > ").append(SO_MAX_FREQ).append(";\n");
@@ -152,6 +152,7 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo 1 > ").append(ECO_MODE).append(";\n");
                 }
             }
+            */
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
                 if(Helpers.voltageFileExists()){
                     final List<Voltage> volts = VoltageControlSettings.getVolts(preferences);
