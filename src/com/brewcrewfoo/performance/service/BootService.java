@@ -114,15 +114,15 @@ public class BootService extends Service implements Constants {
 
 
                 if (new File(TEGRA_MAX_FREQ_PATH).exists()) {
-                    final String tegramax=preferences.getString(PREF_MAX_CPU+0, Helpers.readOneLine(TEGRA_MAX_FREQ_PATH));
+                    final String tegramax=preferences.getString(PREF_MAX_CPU+"0", Helpers.readOneLine(TEGRA_MAX_FREQ_PATH));
                     sb.append("busybox echo ").append(tegramax).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
                 }
                 if(new File(DYN_MAX_FREQ_PATH).exists()){
-                    final String max0=preferences.getString(PREF_MAX_CPU+0, Helpers.readOneLine(MAX_FREQ_PATH).replace("cpu0","cpu"+0));
+                    final String max0=preferences.getString(PREF_MAX_CPU+"0", Helpers.readOneLine(MAX_FREQ_PATH));
                     sb.append("busybox echo ").append(max0).append(" > ").append(DYN_MAX_FREQ_PATH).append(";\n");
                 }
                 if(new File(DYN_MIN_FREQ_PATH).exists()){
-                    final String min0=preferences.getString(PREF_MIN_CPU+0, Helpers.readOneLine(MIN_FREQ_PATH).replace("cpu0","cpu"+0));
+                    final String min0=preferences.getString(PREF_MIN_CPU+"0", Helpers.readOneLine(MIN_FREQ_PATH));
                     sb.append("busybox echo ").append(min0).append(" > ").append(DYN_MIN_FREQ_PATH).append(";\n");
                 }
                 for(byte i=0;i<2; i++){
