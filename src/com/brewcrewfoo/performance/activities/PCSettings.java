@@ -238,6 +238,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
         int i=0;
         final String[] sv1=VERSION_NUM.split("\\.");
         final String[] sv2=v.split("\\.");
+        if(sv1.length!=sv2.length) return true;
         while(i<sv2.length){
             if(sv1[i].equals(sv2[i])) i++;
             else return (Integer.parseInt(sv1[i]) <= Integer.parseInt(sv2[i]));

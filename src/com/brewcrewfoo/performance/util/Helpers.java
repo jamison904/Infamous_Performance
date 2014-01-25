@@ -46,8 +46,8 @@ public class Helpers implements Constants {
             return false; // tell caller to bail...
         }
         try {
-            //if ((new CMDProcessor().su.runWaitFor("ls /data/app-private")).success()) {
-            if ((new CMDProcessor().su.runWaitFor("su -c id")).success()) {
+            if ((new CMDProcessor().su.runWaitFor("ls /data/app-private")).success()) {
+            //if ((new CMDProcessor().su.runWaitFor("su -c id")).success()) {
                 Log.i(TAG, " SU exists and we have permission");
                 return true;
             } else {
@@ -59,24 +59,6 @@ public class Helpers implements Constants {
             Log.e(TAG, e.getMessage());
             return false;
         }
-    }
-
-    public static boolean checkBusybox() {
-        if (!new File("/system/bin/busybox").exists() && !new File("/system/xbin/busybox").exists()) {
-            Log.e(TAG, "Busybox not in xbin or bin!");
-            return false;
-        }
-        try {
-            if (!new CMDProcessor().su.runWaitFor("busybox mount").success()) {
-                Log.e(TAG, " Busybox is there but it is borked! ");
-                return false;
-            }
-        }
-        catch (final NullPointerException e) {
-            Log.e(TAG, e.getMessage());
-            return false;
-        }
-        return true;
     }
 
     public static String[] getMounts(final String path) {
@@ -291,7 +273,10 @@ public class Helpers implements Constants {
     public static String binExist(String b) {
         CMDProcessor.CommandResult cr = null;
         cr = new CMDProcessor().sh.runWaitFor("busybox which " + b);
-        if (cr.success() && cr.stdout!=null && cr.stdout.contains(b)){ return  cr.stdout; }
+        if (cr.success() && cr.stdout!=null && cr.stdout.contains(b)){
+            Log.d(TAG, b + " detected on: "+cr.stdout);
+            return  cr.stdout;
+        }
         else{ return NOT_FOUND;}
     }
 
