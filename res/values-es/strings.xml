@@ -340,47 +340,47 @@ Translation by DaniPhii
     <string name="set">OK</string>
     <string name="ics_color">Holo</string>
 
-    <!-- beta2-->
-    <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
+    <!-- beta 2 -->
+    <string name="reset_msg">Se borrarán los valores actuales y los predeterminados ​​se aplicarán tras el reinicio. ¿Desea continuar?</string>
 
-    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="prefcat_logs">Volcar registro de eventos</string>
     <string name="logcat_title">Logcat</string>
-    <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
+    <string name="logcat_msg">Logcat se volcará en %s. ¿Desea continuar?</string>
     <string name="dmesg_title">Dmesg</string>
-    <string name="dmesg_msg">Dmesg will be dumped on %s. Continue?</string>
-    <string name="ps_logs">Dump log on %s.</string>
+    <string name="dmesg_msg">Dmesg se volcará en %s. ¿Desea continuar?</string>
+    <string name="ps_logs">Se volcará el registro en %s.</string>
 
     <string name="mpdecision">MPDECISION</string>
-    <string name="pt_mpdecision">Enable MPDecision</string>
+    <string name="pt_mpdecision">Activar MPDecision</string>
 
-    <string name="prefcat_touchscr">TOUCHSCREEN</string>
-    <string name="ps_touchscr">TouchScreen Control</string>
-    <string name="ps_touchscr_boot">If enabled will restore all touchcreen settings on reboot</string>
-    <string name="toucht1">Slide to Wake</string>
-    <string name="toucht2">Sweep to Wake</string>
-    <string name="toucht21">Sweep to Sleep</string>
-    <string name="toucht3">Home to Wake</string>
-    <string name="toucht4">Logo to Wake</string>
-    <string name="toucht5">Logo to Menu</string>
-    <string name="toucht6">Double Tap to Wake</string>
-    <string name="toucht7">Pocket Detect</string>
-    <string name="toucht8">Pick to Wake</string>
-    <string name="toucht9">Flick to Sleep</string>
-    <string name="toucht9s">Sensitivity</string>
-    <string name="toucht10">Touch to Wake</string>
+    <string name="prefcat_touchscr">PANTALLA TÁCTIL</string>
+    <string name="ps_touchscr">Control de la pantalla táctil</string>
+    <string name="ps_touchscr_boot">Si se activa, se restaurará toda la configuración al reiniciar</string>
+    <string name="toucht1">Deslizar para reanudar</string>
+    <string name="toucht2">Barrer para reanudar</string>
+    <string name="toucht21">Barrer para suspender</string>
+    <string name="toucht3">Home para reanudar</string>
+    <string name="toucht4">Logo para reanudar</string>
+    <string name="toucht5">Logo para el menú</string>
+    <string name="toucht6">Doble toque para reanudar</string>
+    <string name="toucht7">Detectar bolsillo</string>
+    <string name="toucht8">Toque para reanudar</string>
+    <string name="toucht9">Giro rápido para suspender</string>
+    <string name="toucht9s">Sensibilidad</string>
+    <string name="toucht10">Tocar para reanudar</string>
     <string-array name="asens">
-        <item name="high">High</item>
-        <item name="low">Low</item>
+        <item name="high">Alta</item>
+        <item name="low">Baja</item>
     </string-array>
-    <string name="applied_ok">Values ​​were applied successfully</string>
-    <string name="chk_update">Checking for updates in progress…</string>
-    <string name="is_update">New update available! Tap for download.</string>
-    <string name="no_update">No updates found.</string>
+    <string name="applied_ok">Los valores ​​se han aplicado correctamente.</string>
+    <string name="chk_update">Comprobando si hay actualizaciones…</string>
+    <string name="is_update">¡Actualización disponible! Toca para descargar.</string>
+    <string name="no_update">No se encontraron actualizaciones.</string>
 
-    <string name="no_param">No parameters</string>
-    <string name="no_download_manager">Download Manager not available!</string>
-    <string name="btn_download">Download</string>
-    <string name="pt_update">What\'s new</string>
-    <string name="ps_zram_info">Zram must be stopped in order to change disk size</string>
-    <!-- beta2-->
+    <string name="no_param">Sin parámetros</string>
+    <string name="no_download_manager">¡El administrador de descargas no está disponible!</string>
+    <string name="btn_download">Descargar</string>
+    <string name="pt_update">Novedades:</string>
+    <string name="ps_zram_info">El servicio ZRAM debe detenerse para cambiar el tamaño del disco</string>
+    <!-- beta 2 -->
 </resources>
