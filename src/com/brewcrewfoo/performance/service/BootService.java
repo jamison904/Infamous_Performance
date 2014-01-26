@@ -132,7 +132,7 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-       /*     if (preferences.getBoolean("so_minmax_boot", false)) {
+            if (preferences.getBoolean("so_minmax_boot", false)) {
                 if (new File(SO_MAX_FREQ).exists()) {
                     final String v=preferences.getString("pref_so_max", Helpers.readOneLine(SO_MAX_FREQ));
                     sb.append("busybox echo ").append(v).append(" > ").append(SO_MAX_FREQ).append(";\n");
@@ -152,17 +152,16 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo 1 > ").append(ECO_MODE).append(";\n");
                 }
             }
-            */
+
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
                 if(Helpers.voltageFileExists()){
                     final List<Voltage> volts = VoltageControlSettings.getVolts(preferences);
-                    final String vpath=Helpers.getVoltagePath();
 
-                    if (vpath.equals(VDD_PATH)) {
+                    if (Helpers.getVoltagePath().equals(VDD_PATH)) {
                         for (final Voltage volt : volts) {
                             if(!volt.getSavedMV().equals(volt.getCurrentMv())){
                                 for (byte i = 0; i < ncpus; i++) {
-                                    if (new File(vpath.replace("cpu0", "cpu" + i)).exists()) sb.append("busybox echo ").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append(" > ").append(vpath.replace("cpu0", "cpu" + i)).append(";\n");
+                                    sb.append("busybox echo ").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
                                 }
                             }
                         }
@@ -173,8 +172,13 @@ public class BootService extends Service implements Constants {
                         for (final Voltage volt : volts) {
                             b.append(volt.getSavedMV()).append(" ");
                         }
-                        for (byte i = 0; i < ncpus; i++) {
-                            if (new File(vpath.replace("cpu0", "cpu" + i)).exists()) sb.append("busybox echo ").append(b.toString()).append(" > ").append(vpath.replace("cpu0", "cpu" + i)).append(";\n");
+                        if(Helpers.getVoltagePath().equals(COMMON_VDD_PATH)){
+                            sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath()).append(";\n");
+                        }
+                        else{
+                            for (byte i = 0; i < ncpus; i++) {
+                                sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
+                            }
                         }
                     }
                 }

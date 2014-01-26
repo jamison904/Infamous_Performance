@@ -41,6 +41,7 @@ import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Voltage;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -118,7 +119,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
 				for (final Voltage volt : mVoltages) {
 					if(!volt.getSavedMV().equals(volt.getCurrentMv())){
 						for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-							sb.append("busybox echo ").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(" \n");
+                            sb.append("busybox echo ").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
 						}
 					}
 				}
@@ -128,9 +129,14 @@ public class VoltageControlSettings extends Fragment implements Constants {
 				for (final Voltage volt : mVoltages) {
 					b.append(volt.getSavedMV()).append(" ");
 				}
-				for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-					sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(" \n");
-				}
+                if(Helpers.getVoltagePath().equals(COMMON_VDD_PATH)){
+                    sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath()).append(";\n");
+                }
+                else{
+                    for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
+                        sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
+                    }
+                }
 			}
 			Helpers.shExec(sb,context,true);
 
