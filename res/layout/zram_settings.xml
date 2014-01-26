@@ -150,27 +150,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
         android:id="@+id/set1"
         android:layout_below="@+id/preview"
         android:paddingBottom="10dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/zram_disk_size"
             android:id="@+id/tval1"
-            android:layout_marginBottom="8dp"
             android:gravity="center_horizontal" />
 
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/val1"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
     </LinearLayout>
 
@@ -189,6 +190,7 @@
                 android:id="@+id/apply"
                 android:layout_weight="0.5"
                 android:textSize="14dp" />
+
         </LinearLayout>
     </RelativeLayout>
     </ScrollView>

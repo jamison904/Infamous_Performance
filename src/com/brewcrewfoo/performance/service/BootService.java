@@ -70,7 +70,7 @@ public class BootService extends Service implements Constants {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
             final StringBuilder sb = new StringBuilder();
-            final String VIBE_PATH=new VibratorClass().get_path();
+            VibratorClass vib=new VibratorClass();
             final String BLN_PATH=Helpers.bln_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
 
@@ -81,13 +81,25 @@ public class BootService extends Service implements Constants {
                 ksm=1;
                 ksmpath=UKSM_RUN_PATH;
             }
-                /*if(!Helpers.binExist("mpdecision").equals(NOT_FOUND)){
-                    if(!preferences.getBoolean("mpdecision",true) && Helpers.moduleActive("mpdecision")){
+            if(!Helpers.binExist("mpdecision").equals(NOT_FOUND) && preferences.getBoolean("mpdecision_boot",false)){
+                if(preferences.getBoolean("pref_mpdecision",false)){
+                    if(!Helpers.moduleActive("mpdecision")){
+                        sb.append("mpdecisionstart;\n");
+                    }
+                }
+                else{
+                    if(Helpers.moduleActive("mpdecision")){
                         sb.append("stop mpdecision;\n");
                     }
-                }*/
+                }
+            }
             if (preferences.getBoolean(CPU_SOB, false)) {
                 for (int i = 0; i < ncpus; i++) {
+                    if(new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists() && i>0){
+                        if(preferences.getString("cpuon"+i, "0").equals("1")){
+                            sb.append("set_val \"").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append("\" \"1\";\n");
+                        }
+                    }
                     if (new File(MAX_FREQ_PATH.replace("cpu0","cpu"+i)).exists()) {
                         final String max = preferences.getString(PREF_MAX_CPU+i, Helpers.readOneLine(MAX_FREQ_PATH).replace("cpu0","cpu"+i));
                         sb.append("busybox echo ").append(max).append(" > ").append(MAX_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
@@ -97,29 +109,20 @@ public class BootService extends Service implements Constants {
                         sb.append("busybox echo ").append(min).append(" > ").append(MIN_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                     }
 
-                    /*if(new File(CPU_ON_PATH.replace("cpu0","cpu"+i)).exists() && i>0){
-
-                        if(preferences.getString("cpuon"+i, "0").equals("1")){
-                            sb.append("busybox chmod 644 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-                            sb.append("busybox echo \"1\" > ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-                            sb.append("busybox chmod 444 ").append(CPU_ON_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-                        }
-                    }*/
-
                     sb.append("busybox echo ").append(gov).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                 }
 
 
                 if (new File(TEGRA_MAX_FREQ_PATH).exists()) {
-                    final String tegramax=preferences.getString(PREF_MAX_CPU+0, Helpers.readOneLine(TEGRA_MAX_FREQ_PATH));
+                    final String tegramax=preferences.getString(PREF_MAX_CPU+"0", Helpers.readOneLine(TEGRA_MAX_FREQ_PATH));
                     sb.append("busybox echo ").append(tegramax).append(" > ").append(TEGRA_MAX_FREQ_PATH).append(";\n");
                 }
                 if(new File(DYN_MAX_FREQ_PATH).exists()){
-                    final String max0=preferences.getString(PREF_MAX_CPU+0, Helpers.readOneLine(MAX_FREQ_PATH).replace("cpu0","cpu"+0));
+                    final String max0=preferences.getString(PREF_MAX_CPU+"0", Helpers.readOneLine(MAX_FREQ_PATH));
                     sb.append("busybox echo ").append(max0).append(" > ").append(DYN_MAX_FREQ_PATH).append(";\n");
                 }
                 if(new File(DYN_MIN_FREQ_PATH).exists()){
-                    final String min0=preferences.getString(PREF_MIN_CPU+0, Helpers.readOneLine(MIN_FREQ_PATH).replace("cpu0","cpu"+0));
+                    final String min0=preferences.getString(PREF_MIN_CPU+"0", Helpers.readOneLine(MIN_FREQ_PATH));
                     sb.append("busybox echo ").append(min0).append(" > ").append(DYN_MIN_FREQ_PATH).append(";\n");
                 }
                 for(byte i=0;i<2; i++){
@@ -129,14 +132,36 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
+            if (preferences.getBoolean("so_minmax_boot", false)) {
+                if (new File(SO_MAX_FREQ).exists()) {
+                    final String v=preferences.getString("pref_so_max", Helpers.readOneLine(SO_MAX_FREQ));
+                    sb.append("busybox echo ").append(v).append(" > ").append(SO_MAX_FREQ).append(";\n");
+                }
+                if (new File(SO_MIN_FREQ).exists()) {
+                    final String v=preferences.getString("pref_so_min", Helpers.readOneLine(SO_MIN_FREQ));
+                    sb.append("busybox echo ").append(v).append(" > ").append(SO_MIN_FREQ).append(";\n");
+                }
+            }
+            if (new File(INTELLI_PLUG).exists()) {
+                if(preferences.getBoolean("pref_intelliplug", false)){
+                    sb.append("busybox echo 1 > ").append(INTELLI_PLUG).append(";\n");
+                }
+            }
+            if (new File(ECO_MODE).exists()) {
+                if(preferences.getBoolean("pref_ecomode", false)){
+                    sb.append("busybox echo 1 > ").append(ECO_MODE).append(";\n");
+                }
+            }
+
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
                 if(Helpers.voltageFileExists()){
                     final List<Voltage> volts = VoltageControlSettings.getVolts(preferences);
-                    if (Helpers.getVoltagePath().equals(VDD_PATH)) {
+                    final String vdd=Helpers.getVoltagePath();
+                    if (vdd.equals(VDD_PATH)) {
                         for (final Voltage volt : volts) {
                             if(!volt.getSavedMV().equals(volt.getCurrentMv())){
                                 for (byte i = 0; i < ncpus; i++) {
-                                    sb.append("busybox echo ").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
+                                    sb.append("busybox echo \"").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append("\" > ").append(vdd.replace("cpu0", "cpu" + i)).append(";\n");
                                 }
                             }
                         }
@@ -147,8 +172,13 @@ public class BootService extends Service implements Constants {
                         for (final Voltage volt : volts) {
                             b.append(volt.getSavedMV()).append(" ");
                         }
-                        for (byte i = 0; i < ncpus; i++) {
-                            sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
+                        if(vdd.equals(COMMON_VDD_PATH)){
+                            sb.append("busybox echo \"").append(b.toString()).append("\" > ").append(vdd).append(";\n");
+                        }
+                        else{
+                            for (byte i = 0; i < ncpus; i++) {
+                                sb.append("busybox echo \"").append(b.toString()).append("\" > ").append(vdd.replace("cpu0", "cpu" + i)).append(";\n");
+                            }
                         }
                     }
                 }
@@ -201,9 +231,10 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo 0 > ").append(BLN_PATH).append(";\n");
                 }
             }
+            final String VIBE_PATH=vib.get_path();
             if (VIBE_PATH!=null) {
                 if (preferences.getBoolean("viber_sob", false)) {
-                    sb.append("busybox echo ").append(preferences.getInt("pref_viber", Integer.parseInt(Helpers.readOneLine(VIBE_PATH)))).append(" > ").append(VIBE_PATH).append(";\n");
+                    sb.append("busybox echo ").append(preferences.getInt("pref_viber", Integer.parseInt(vib.get_val(VIBE_PATH)))).append(" > ").append(VIBE_PATH).append(";\n");
                 }
             }
             if (new File(PFK_HOME_ENABLED).exists() && new File(PFK_MENUBACK_ENABLED).exists()) {
@@ -285,14 +316,15 @@ public class BootService extends Service implements Constants {
 
             if (new File(ksmpath).exists()) {
                 if (preferences.getBoolean(KSM_SOB, false)) {
+                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
+                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                     if (preferences.getBoolean(PREF_RUN_KSM, false)) {
                         sb.append("busybox echo 1 > ").append(ksmpath).append(";\n");
                     }
                     else{
-                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n");
+                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
+                        sb.append("busybox echo 2 > ").append(ksmpath).append(";\n");
                     }
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                 }
             }
 
@@ -347,9 +379,11 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getString(PREF_TOUCH2WAKE, Helpers.readOneLine(touch2wakepath))).append(" > ").append(touch2wakepath).append(";\n");
                 }
             }
-            if (preferences.getBoolean(ZRAM_ON, false)) {
-                if (preferences.getBoolean(ZRAM_SOB, false)){
-                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getTotMem()/2048);
+
+            if (preferences.getBoolean(ZRAM_SOB, false)){
+                sb.append("zramstop ").append(ncpus).append(";\n");
+                if (preferences.getBoolean(ZRAM_ON, false)) {
+                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getMem("MemTotal")/2048);
                     long v = (long)(curdisk/ncpus)*1024*1024;
                     sb.append("zramstart \"").append(ncpus).append("\" \"").append(v).append("\";\n");
                 }
@@ -371,14 +405,16 @@ public class BootService extends Service implements Constants {
                     CharSequence contentTitle = c.getText(R.string.fast_charge_notification_title);
                     CharSequence contentText = c.getText(R.string.fast_charge_notification_message);
                     Notification n = new Notification.Builder(c)
-                            .setAutoCancel(true).setContentTitle(contentTitle)
+                            .setAutoCancel(true)
+                            .setContentTitle(contentTitle)
                             .setContentText(contentText)
-                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setSmallIcon(R.drawable.ic_notify)
                             .setWhen(System.currentTimeMillis()).getNotification();
                     NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(1337, n);
                 }
             }
+            //Helpers.updateAppWidget(c);
             servicesStarted = true;
             stopSelf();
         }

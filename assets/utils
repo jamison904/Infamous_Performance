@@ -1,4 +1,5 @@
-###### made by h0rn3t ######
+
+### PERFORMANCE CONTROL ###
 
 sysrw() {
 mount -o rw,remount /system
@@ -6,7 +7,13 @@ mount -o rw,remount /system
 sysro() {
 mount -o ro,remount /system
 }
-
+get_prop(){
+local d="$1";
+for i in `busybox find $d -type f -perm -600 `; do
+    v=`busybox cat $i`;
+    busybox echo "$i::$v";
+done;
+}
 set_prop() {
 	local prop_key=$(busybox echo "$1" | cut -d'=' -f1);
 	local prop_value=$(busybox echo "$1" | cut -d'=' -f2);
@@ -43,7 +50,7 @@ for d in $1; do
     if busybox [ "X$r" == "X" ]; then
         r="$i";
     else
-        r="$r:$i";
+        r="$r::$i";
     fi;
 done;
 echo "$r";
@@ -52,7 +59,7 @@ echo "$r";
 get_cpu(){
     local cpus=$1;
     local ncpus=`busybox expr $cpus - 1`;
-    local ret="";
+    local r="";
     local gov=`busybox cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`;
     local io=`busybox awk -F'[][]' '{print $2}' /sys/block/mmcblk0/queue/scheduler`;
     local max=0;
@@ -80,13 +87,13 @@ get_cpu(){
             online=`busybox cat /sys/devices/system/cpu/cpu0/online`;
         fi;
 
-        if busybox [ "X$ret" == "X" ]; then
-            ret="$min:$max:$gov:$io:$online";
+        if busybox [ "X$r" == "X" ]; then
+            r="$min:$max:$gov:$io:$online";
         else
-            ret="$ret:$min:$max:$gov:$io:$online";
+            r="$r:$min:$max:$gov:$io:$online";
         fi;
     done;
-echo "$ret";
+echo "$r";
 }
 
 arg=$1;
@@ -96,5 +103,7 @@ elif busybox [ "$arg" == "-setprop" ]; then
     set_prop "$2" $3;
 elif busybox [ "$arg" == "-getcpu" ]; then
     get_cpu $2;
+elif busybox [ "$arg" == "-getprop" ]; then
+    get_prop "$2";
 fi;
 exit;

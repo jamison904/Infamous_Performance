@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import com.brewcrewfoo.performance.widget.PCWidget;
@@ -47,8 +46,8 @@ public class Helpers implements Constants {
             return false; // tell caller to bail...
         }
         try {
-            //if ((new CMDProcessor().su.runWaitFor("ls /data/app-private")).success()) {
-            if ((new CMDProcessor().su.runWaitFor("su -c id")).success()) {
+            if ((new CMDProcessor().su.runWaitFor("ls /data/app-private")).success()) {
+            //if ((new CMDProcessor().su.runWaitFor("su -c id")).success()) {
                 Log.i(TAG, " SU exists and we have permission");
                 return true;
             } else {
@@ -60,24 +59,6 @@ public class Helpers implements Constants {
             Log.e(TAG, e.getMessage());
             return false;
         }
-    }
-
-    public static boolean checkBusybox() {
-        if (!new File("/system/bin/busybox").exists() && !new File("/system/xbin/busybox").exists()) {
-            Log.e(TAG, "Busybox not in xbin or bin!");
-            return false;
-        }
-        try {
-            if (!new CMDProcessor().su.runWaitFor("busybox mount").success()) {
-                Log.e(TAG, " Busybox is there but it is borked! ");
-                return false;
-            }
-        }
-        catch (final NullPointerException e) {
-            Log.e(TAG, e.getMessage());
-            return false;
-        }
-        return true;
     }
 
     public static String[] getMounts(final String path) {
@@ -222,22 +203,23 @@ public class Helpers implements Constants {
     }
 
     public static boolean voltageFileExists() {
-        if (new File(UV_MV_PATH).exists()) {
-            setVoltagePath(UV_MV_PATH);
-            return true;
-        }
-        else if (new File(VDD_PATH).exists()) {
+        if (new File(VDD_PATH).exists()) {
             setVoltagePath(VDD_PATH);
-            return true;
-        }
-        else if (new File(VDD_SYSFS_PATH).exists()) {
-            setVoltagePath(VDD_SYSFS_PATH);
             return true;
         }
         else if (new File(COMMON_VDD_PATH).exists()) {
             setVoltagePath(COMMON_VDD_PATH);
             return true;
         }
+        else if (new File(UV_MV_PATH).exists()) {
+            setVoltagePath(UV_MV_PATH);
+            return true;
+        }
+        /*else if (new File(VDD_SYSFS_PATH).exists()) {
+            setVoltagePath(VDD_SYSFS_PATH);
+            return true;
+        }
+*/
         return false;
     }
 
@@ -245,7 +227,6 @@ public class Helpers implements Constants {
         Log.d(TAG, "UV table path detected: "+voltageFile);
         mVoltagePath = voltageFile;
     }
-
 
     public static String getVoltagePath() {
         return mVoltagePath;
@@ -292,7 +273,10 @@ public class Helpers implements Constants {
     public static String binExist(String b) {
         CMDProcessor.CommandResult cr = null;
         cr = new CMDProcessor().sh.runWaitFor("busybox which " + b);
-        if (cr.success()){ return  cr.stdout; }
+        if (cr.success() && cr.stdout!=null && cr.stdout.contains(b)){
+            Log.d(TAG, b + " detected on: "+cr.stdout);
+            return  cr.stdout;
+        }
         else{ return NOT_FOUND;}
     }
 
@@ -300,18 +284,18 @@ public class Helpers implements Constants {
         CMDProcessor.CommandResult cr;
         cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox ps | busybox grep "+b+" | busybox grep -v \"busybox grep "+b+"\" | busybox awk '{print $1}'`");
         Log.d(TAG, "Module: "+cr.stdout);
-        return cr.success() && !cr.stdout.equals("");
+        return (cr.success() && cr.stdout!=null && cr.stdout.length()>0);
     }
 
-    public static long getTotMem() {
+    public static long getMem(String tip) {
         long v=0;
-        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E -o '[[:digit:]]+'`");
-        if(cr.success() && !cr.stdout.equals("")){
+        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep "+tip+" /proc/meminfo | busybox grep -E -o '[[:digit:]]+'`");
+        if(cr.success() && cr.stdout!=null && cr.stdout.length()>0){
             try{
                v = (long) Integer.parseInt(cr.stdout);//kb
             }
             catch (NumberFormatException e) {
-                Log.d(TAG, "MemTot conversion err: "+e);
+                Log.d(TAG, tip+" conversion err: "+e);
             }
         }
         return v;
@@ -322,7 +306,7 @@ public class Helpers implements Constants {
     }
     public static boolean isZRAM() {
         CMDProcessor.CommandResult cr =new CMDProcessor().sh.runWaitFor(ISZRAM);
-        if(cr.success() && !cr.stdout.equals("")) return true;
+        if(cr.success() && cr.stdout!=null && cr.stdout.length()>0) return true;
         return false;
     }
     public static void get_assetsScript(String fn,Context c,String prefix,String postfix){
@@ -427,7 +411,7 @@ public class Helpers implements Constants {
     }
 
     public static boolean is_Tab_available(int i){
-        if(i==1) return (Helpers.getNumOfCpus()>10);
+        if(i==1) return (Helpers.getNumOfCpus()>1);
         else if(i==2) return Helpers.showBattery();
         else if(i==4) return Helpers.voltageFileExists();
         return true;

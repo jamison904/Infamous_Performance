@@ -6,7 +6,6 @@ package com.brewcrewfoo.performance.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
@@ -220,22 +219,11 @@ public class DiskInfo extends Fragment implements Constants {
 
     public static long Freebytes(File f) {
         StatFs stat = new StatFs(f.getPath());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return stat.getFreeBytes();
-        }
-        else {
-            return (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
-        }
-
+        return (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
     }
     public static long Totalbytes(File f) {
         StatFs stat = new StatFs(f.getPath());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return stat.getTotalBytes();
-        }
-        else {
-            return (long)stat.getBlockSize() * (long)stat.getBlockCount();
-        }
+        return (long)stat.getBlockSize() * (long)stat.getBlockCount();
     }
 
     public Boolean set_part_info(String part,String titlu,TextView t1,TextView t2,TextView t3,TextView t4,ProgressBar b,RelativeLayout l){

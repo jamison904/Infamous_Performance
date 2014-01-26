@@ -21,12 +21,16 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.9 beta3";
+    public static final String VERSION_NUM = "2.1.9";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
     public static final Boolean NO_FLASH = false;
-
+    public static final Boolean NO_UPDATE = false;
+    //hide builtin update
+    // NO_UPDATE=true > hide update
+    // NO_UPDATE=false > show update
+    public static final String URL = "http://m.softutil.ro/pc/";
     // CPU settings
     public static final String CPU_ON_PATH = "/sys/devices/system/cpu/cpu0/online";
     public static final String CUR_CPU_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
@@ -53,11 +57,12 @@ public interface Constants {
     public static final String GOV_NAME = "gov_name";
     public static final String GOV_SETTINGS_PATH = "/sys/devices/system/cpu/cpufreq/";
 
-    public static final String ECO_MODE="/sys/module/intelli_plug/parameters/eco_mode_active";
     public static final String MC_PS="/sys/devices/system/cpu/sched_mc_power_savings";//multi core power saving
     public static final String INTELLI_PLUG="/sys/module/intelli_plug/parameters/intelli_plug_active";
+    public static final String ECO_MODE="/sys/module/intelli_plug/parameters/eco_mode_active";
     public static final String GEN_HP="/sys/module/omap2plus_cpufreq/parameters/generic_hotplug";//generic hotplug
-
+    public static final String SO_MAX_FREQ="/sys/devices/system/cpu/cpu0/cpufreq/screen_off_max_freq";
+    public static final String SO_MIN_FREQ="/sys/devices/system/cpu/cpu0/cpufreq/screen_on_min_freq";
 
     // CPU info
     public static String KERNEL_INFO_PATH = "/proc/version";

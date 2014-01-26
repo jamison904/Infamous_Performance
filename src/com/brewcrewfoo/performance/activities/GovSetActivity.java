@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,13 +48,12 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     SharedPreferences mPreferences;
     private final Context context=this;
     Resources res;
+    private List<Prop> props = new ArrayList<Prop>();
     private ListView packList;
-    private LinearLayout linlaHeaderProgress;
-    private LinearLayout nofiles;
+    private LinearLayout linlaHeaderProgress,nofiles;
     private RelativeLayout tools;
     private PropAdapter adapter;
     private String curgov;
-    private int curcpu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,29 +65,33 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         setContentView(R.layout.prop_view);
 
         Intent i=getIntent();
-        curcpu=Integer.parseInt(i.getStringExtra("cpu"));
+        curgov=i.getStringExtra("curgov");
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         nofiles = (LinearLayout) findViewById(R.id.nofiles);
         tools = (RelativeLayout) findViewById(R.id.tools);
+
+        linlaHeaderProgress.setVisibility(LinearLayout.VISIBLE);
+        nofiles.setVisibility(LinearLayout.GONE);
+        tools.setVisibility(RelativeLayout.GONE);
+
         Button applyBtn = (Button) findViewById(R.id.applyBtn);
-        final Switch setOnBoot = (Switch) findViewById(R.id.applyAtBoot);
+        Switch setOnBoot = (Switch) findViewById(R.id.applyAtBoot);
         setOnBoot.setChecked(mPreferences.getBoolean(GOV_SOB, false));
-        curgov=Helpers.readOneLine(GOVERNOR_PATH);
+
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-
                 final String s=mPreferences.getString(GOV_SETTINGS,"");
 
                 if(!s.equals("")){
-                    String p[]=s.split(";");
+                    String p[]=s.split("\\;");
                     for (String aP : p) {
                         if(!aP.equals("")&& aP!=null){
-                            final String pn[]=aP.split(":");
+                            final String pn[]=aP.split("\\:");
                             sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(pn[0]).append(";\n");
                         }
                     }
@@ -112,51 +116,45 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-    private class GetPropOperation extends AsyncTask<String, Void, String> {
-        private List<Prop> props = new ArrayList<Prop>();
 
+    private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+GOV_SETTINGS_PATH+curgov+"/* -type f -prune -perm -644 -print0");
-            if(cr.success() && !cr.stdout.equals("")){
-                return cr.stdout;
+            Helpers.get_assetsScript("utils",context,"","");
+            new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+            CMDProcessor.CommandResult cr =null;
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+GOV_SETTINGS_PATH+curgov+"/*\"");
+            if(cr.success()){
+                load_prop(cr.stdout);
+                return "ok";
             }
             else{
-                return "";
+                Log.d(TAG, "GovSettings error: " + cr.stderr);
+                return "nok";
             }
         }
         @Override
         protected void onPostExecute(String result) {
-            linlaHeaderProgress.setVisibility(View.GONE);
-            if(result.equals("")) {
-                nofiles.setVisibility(View.VISIBLE);
-                tools.setVisibility(View.GONE);
+            if(result.equals("nok")) {
+                linlaHeaderProgress.setVisibility(LinearLayout.GONE);
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
-                props.clear();
-                final String p[]=result.split("\0");
-                for (String aP : p) {
-                    if(aP.trim().length()>0 && aP!=null){
-                        props.add(new Prop(aP.substring(aP.lastIndexOf("/") + 1, aP.length()),Helpers.readOneLine(aP).trim()));
-                    }
-                }
+                linlaHeaderProgress.setVisibility(LinearLayout.GONE);
                 if(props.isEmpty()){
-                        nofiles.setVisibility(View.VISIBLE);
-                        tools.setVisibility(View.GONE);
+                        nofiles.setVisibility(LinearLayout.VISIBLE);
                 }
                 else{
-                        nofiles.setVisibility(View.GONE);
-                        tools.setVisibility(View.VISIBLE);
-                        adapter = new PropAdapter(GovSetActivity.this, R.layout.prop_item, props);
-                        packList.setAdapter(adapter);
+                    nofiles.setVisibility(LinearLayout.GONE);
+                    tools.setVisibility(RelativeLayout.VISIBLE);
+                    adapter = new PropAdapter(GovSetActivity.this, R.layout.prop_item, props);
+                    packList.setAdapter(adapter);
                 }
             }
         }
         @Override
         protected void onPreExecute() {
-            linlaHeaderProgress.setVisibility(View.VISIBLE);
-            nofiles.setVisibility(View.GONE);
-            tools.setVisibility(View.GONE);
+
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -177,22 +175,24 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.reset_vm) {
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.mt_reset))
-                    .setMessage(getString(R.string.reset_msg))
-                    .setNegativeButton(getString(R.string.cancel),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                    .setPositiveButton(getString(R.string.yes),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mPreferences.edit().remove(GOV_SETTINGS).apply();
-                                }
-             }).create().show();
+            if(!props.isEmpty()){
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.mt_reset))
+                        .setMessage(getString(R.string.reset_msg))
+                        .setNegativeButton(getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                        .setPositiveButton(getString(R.string.yes),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mPreferences.edit().remove(GOV_SETTINGS).apply();
+                                    }
+                                }).create().show();
+            }
         }
         return true;
     }
@@ -247,18 +247,30 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         final String s=mPreferences.getString(GOV_SETTINGS,"");
         final StringBuilder sb = new StringBuilder();
         if(!s.equals("")){
-            String p[]=s.split(";");
+            String p[]=s.split("\\;");
             for (String aP : p) {
-                if(!aP.equals("") && aP!=null){
-                    final String pn[]=aP.split(":");
-                    if(!pn[0].equals(n)){
-                        sb.append(pn[0]+':'+pn[1]+';');
-                    }
+                if(aP!=null && aP.contains(":")){
+                    final String pn[]=aP.split("\\:");
+                    if(!pn[0].equals(n)) sb.append(pn[0]).append(':').append(pn[1]).append(';');
                 }
             }
         }
-        sb.append(n+':'+v+';');
-
+        sb.append(n).append(':').append(v).append(';');
         mPreferences.edit().putString(GOV_NAME, curgov).putString(GOV_SETTINGS, sb.toString()).commit();
+    }
+    public void load_prop(String s){
+        props.clear();
+        final String p[]=s.split("\n");
+        for (String aP : p) {
+            try{
+                if(aP!=null && aP.contains("::")){
+                    String pn=aP.split("::")[0];
+                    pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
+                    props.add(new Prop(pn,aP.split("::")[1].trim()));
+                }
+            }
+            catch (Exception e){
+            }
+        }
     }
 }

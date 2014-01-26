@@ -71,7 +71,6 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         setTheme();
         setContentView(R.layout.prop_view);
 
-
         if (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists()){
             isdyn=Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH).equals("1");
         }
@@ -101,7 +100,6 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-
                 final String s=mPreferences.getString(PREF_VM,"");
 
                 if(!s.equals("")){
@@ -171,28 +169,33 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+VM_PATH+"* -type f -perm -644 -print0");
+            Helpers.get_assetsScript("utils",context,"","");
+            new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+            CMDProcessor.CommandResult cr =null;
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+VM_PATH+"/*\"");
             if(cr.success()){
-                return cr.stdout;
+                load_prop(cr.stdout);
+                return "ok";
             }
             else{
                 Log.d(TAG, "VMSettings error: " + cr.stderr);
-                return null;
+                return "nok";
             }
         }
         @Override
         protected void onPostExecute(String result) {
-            if((result==null)||(result.length()<=0)) {
-                finish();
+
+            if(result.equals("nok")) {
+                linlaHeaderProgress.setVisibility(View.GONE);
+                nofiles.setVisibility(View.VISIBLE);
             }
             else{
-                load_prop(result);
-                Collections.sort(props);
                 linlaHeaderProgress.setVisibility(View.GONE);
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
                 }
                 else{
+                    Collections.sort(props);
                     nofiles.setVisibility(View.GONE);
                     tools.setVisibility(View.VISIBLE);
                     adapter = new PropAdapter(VMSettings.this, R.layout.prop_item, props);
@@ -250,7 +253,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         else{//add
             titlu=getString(R.string.add_prop_title);
         }
-        final String vcur=tv.getText().toString();
+
         new AlertDialog.Builder(this)
                 .setTitle(titlu)
                 .setView(editDialog)
@@ -265,7 +268,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                     public void onClick(DialogInterface dialog, int which) {
 
                         if (pp!=null) {
-                            if ((tv.getText().toString() != null)&&(tv.getText().toString().length() > 0)){
+                            if ((tv.getText().toString()!= null)&&(tv.getText().toString().length() > 0)){
                                 pp.setVal(tv.getText().toString().trim());
                                 set_pref(tn.getText().toString().trim(),tv.getText().toString().trim());
                             }
@@ -282,38 +285,43 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 }).create().show();
     }
 
-    public void load_prop(String s){
-        props.clear();
-        String p[]=s.split("\0");
-        for (String aP : p) {
-            if(aP.trim().length()>0 && aP!=null){
-                final String pv=Helpers.readOneLine(aP).trim();
-                final String pn=aP.substring(aP.lastIndexOf("/") + 1, aP.length());
-                if(testprop(pn)){
-                    props.add(new Prop(pn,pv));
-                }
-            }
-        }
-    }
-    public boolean testprop(String s){
-        return !(s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs")) && !(isdyn && s.contains("dirty_writeback_centisecs"));
-    }
     public void set_pref(String n, String v){
         final String s=mPreferences.getString(PREF_VM,"");
         final StringBuilder sb = new StringBuilder();
         if(!s.equals("")){
             String p[]=s.split(";");
             for (String aP : p) {
-                if(!aP.equals("") && aP!=null){
+                if(aP!=null && aP.contains(":")){
                     final String pn[]=aP.split(":");
                     if(!pn[0].equals(n)){
-                        sb.append(pn[0]+':'+pn[1]+';');
+                        sb.append(pn[0]).append(':').append(pn[1]).append(';');
                     }
                 }
             }
         }
-        sb.append(n + ':' + v + ';');
-
+        sb.append(n).append(':').append(v).append(';');
         mPreferences.edit().putString(PREF_VM, sb.toString()).commit();
+    }
+
+    public boolean testprop(String s){
+        if (s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs") || isdyn && s.contains("dirty_writeback_centisecs")) {
+            return false;
+        }
+        return true;
+    }
+    public void load_prop(String s){
+        props.clear();
+        final String p[]=s.split("\n");
+        for (String aP : p) {
+            try{
+                if(aP!=null && aP.contains("::")){
+                    String pn=aP.split("::")[0];
+                    pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
+                    if(testprop(pn)) props.add(new Prop(pn,aP.split("::")[1].trim()));
+                }
+            }
+            catch (Exception e){
+            }
+        }
     }
 }

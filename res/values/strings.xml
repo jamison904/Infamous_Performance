@@ -125,7 +125,7 @@ Copyright (C) 2012  James Roberts
     <!-- bl_timeout -->
    <string name="prefcat_bltimeout">BACKLIGHT TIMEOUT</string>
    <string name="ps_bltimeout">%s ms</string>
-   <string name="bltimeout_title">Backlight timeout</string>
+   <string name="bltimeout_title">Backlight timeout (ms)</string>
     <!-- bl_touch -->
    <string name="prefcat_bltouch">BACKLIGHT ON TOUCHSCREEN</string>
    <string name="pt_bltouch">Backlight on touchscreen</string>	
@@ -135,13 +135,13 @@ Copyright (C) 2012  James Roberts
    <string name="pt_home_enabled">Home key filter</string>
    <string name="ps_home_enabled">Ignored key pressed: %s</string>
    <string name="home_allowed_irq_title">Max allowed interrupts</string>
-   <string name="home_report_wait_title">Report wait time</string>
+   <string name="home_report_wait_title">Report wait time (ms)</string>
 	
    <string name="pt_menuback_enabled">Menu/Back keys filter</string>
    <string name="ps_menuback_enabled">Ignored key pressed: %s</string>
    <string name="menuback_interrupt_checks_title">Interrupts checks</string>
-   <string name="menuback_first_err_wait_title">First error wait time</string>
-   <string name="menuback_last_err_wait_title">Last error wait time</string>
+   <string name="menuback_first_err_wait_title">First error wait time (ms)</string>
+   <string name="menuback_last_err_wait_title">Last error wait time (ms)</string>
    <string name="ps_pfk_set_on_boot">If enabled will restore all pkf settings on reboot</string>
     <!-- dynamic write back -->
    <string name="dynamic_writeback_info">Dynamic Dirty Page Writebacks feature\nAuthor Cristoforo Cataldo (Christopher83)</string>
@@ -368,7 +368,15 @@ Copyright (C) 2012  James Roberts
 
     <string name="mpdecision">MPDECISION</string>
     <string name="pt_mpdecision">Enable MPDecision</string>
-    <string name="ps_mpdecision"></string>
+
+    <string name="intelliplug">INTELLIPLUG</string>
+    <string name="pt_intelliplug">Enable Intelliplug</string>
+    <string name="ecomode">ECOMODE</string>
+    <string name="pt_ecomode">Enable EcoMode</string>
+    <string name="so_min_max">SCREEN OFF FREQUENCIES</string>
+    <string name="pt_so_max">Screen off maximum frequency</string>
+    <string name="ps_so_minmax">Current value: </string>
+    <string name="pt_so_min">Screen off minimum frequency</string>
 
     <string name="prefcat_touchscr">TOUCHSCREEN</string>
     <string name="ps_touchscr">TouchScreen Control</string>
@@ -389,7 +397,17 @@ Copyright (C) 2012  James Roberts
         <item name="high">High</item>
         <item name="low">Low</item>
     </string-array>
+
     <string name="applied_ok">Values ​​were applied successfully</string>
+    <string name="chk_update">Checking for updates in progress…</string>
+    <string name="is_update">New update available! Tap for download.</string>
+    <string name="no_update">No updates found.</string>
+
+    <string name="no_param">No parameters</string>
+    <string name="no_download_manager">Download Manager not available!</string>
+    <string name="btn_download">Download</string>
+    <string name="pt_update">What\'s new</string>
+    <string name="ps_zram_info">Zram must be stopped in order to change disk size</string>
     <!-- beta2-->
 
 </resources>

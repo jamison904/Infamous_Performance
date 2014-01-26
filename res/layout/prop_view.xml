@@ -27,6 +27,7 @@
         android:visibility="gone">
 
         <TextView
+            android:text="@string/no_param"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView"

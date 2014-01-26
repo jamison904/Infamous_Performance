@@ -87,6 +87,9 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     private Boolean ispm;
     private int ksm=0;
     private String ksmpath=KSM_RUN_PATH;
+    private float maxdisk = Helpers.getMem("MemTotal") / 1024;
+    private int swap = Math.round(Helpers.getMem("SwapTotal") / 1024);
+    private int curdisk=0;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +131,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         mKSMsettings= findPreference("ksm_settings");
 
         mZRAMsettings= findPreference("zram_settings");
+        CheckBoxPreference mZRAMboot=(CheckBoxPreference) findPreference("zram_boot");
 
         String names="";
         if (!new File(USER_PROC_PATH).exists()) {
@@ -176,9 +180,17 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
-            int maxdisk = (int) Helpers.getTotMem() / 1024;
-            int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
-            mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
+            int percent=0;
+            if(swap>0){
+                percent=Math.round(swap * 100 / maxdisk);
+                curdisk=Math.round(maxdisk*percent/100);
+                if(mZRAMboot.isChecked()) mPreferences.edit().putInt(PREF_ZRAM,curdisk).apply();
+            }
+            else{
+                curdisk=mPreferences.getInt(PREF_ZRAM, Math.round(maxdisk*18/100));
+                percent=Math.round(curdisk * 100 / maxdisk);
+            }
+            mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024))+" ("+String.valueOf(percent)+"%)");
         }
     }
 
@@ -319,7 +331,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             }
         }
         else if (preference.equals(mKSM)){
-            if (Integer.parseInt(Helpers.readOneLine(ksmpath))==0){
+            if ((Integer.parseInt(Helpers.readOneLine(ksmpath))==0)||(Integer.parseInt(Helpers.readOneLine(ksmpath))==2)){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + ksmpath);
             }
             else{
@@ -332,7 +344,10 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         else if (preference.equals(mZRAMsettings)){
 
-            startActivityForResult(new Intent(getActivity(), ZramActivity.class), 1);
+            //startActivityForResult(new Intent(getActivity(), ZramActivity.class), 1);
+            Intent intent = new Intent(getActivity(), ZramActivity.class);
+            intent.putExtra("curdisk", curdisk);
+            startActivityForResult(intent,1);
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
@@ -347,7 +362,14 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     			sharedPreferences.edit().remove(PREF_MINFREE).apply();
     		}
 	    }
-
+        else if(key.equals(ZRAM_SOB)){
+            if(sharedPreferences.getBoolean(key,false)){
+                sharedPreferences.edit().putInt(PREF_ZRAM,curdisk).apply();
+            }
+            else{
+                sharedPreferences.edit().remove(PREF_ZRAM).apply();
+            }
+        }
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -356,15 +378,14 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             if(resultCode == Activity.RESULT_OK){
                 final int r=data.getIntExtra("result",0);
                 Log.d(TAG, "input = "+r);
-                //mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+r.split(":")[0]+" | "+getString(R.string.ksm_sleep)+" "+r.split(":")[1]);
                 switch(r){
                     case 1:
                         mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
                         break;
                     case 2:
-                        int maxdisk = (int) Helpers.getTotMem() / 1024;
-                        int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
-                        mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
+                        curdisk=mPreferences.getInt(PREF_ZRAM, Math.round(maxdisk*18/100));
+                        final int percent=Math.round(curdisk * 100 / maxdisk);
+                        mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024))+" ("+String.valueOf(percent)+"%)");
                         break;
                 }
             }
@@ -497,7 +518,8 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 							val=max;
 						}
 						seekbar.setProgress(val);
-					} catch (NumberFormatException ex) {
+					}
+                    catch (NumberFormatException ex) {
 					}
 			}
         });

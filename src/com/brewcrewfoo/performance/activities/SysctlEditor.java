@@ -65,6 +65,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/sysctl";
 
     private final String syspath="/system/etc/";
+    private final String SYSCTL="/proc/sys/";
     private String sob=SYSCTL_SOB;
     private String[] tcp={};
 
@@ -208,33 +209,39 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
+            Helpers.get_assetsScript("utils",context,"","");
+            new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+
             CMDProcessor.CommandResult cr;
             cr=new CMDProcessor().sh.runWaitFor("busybox echo `sysctl -n net.ipv4.tcp_available_congestion_control`");
             if(cr.success()){
                 tcp=cr.stdout.split(" ");
             }
-            cr=new CMDProcessor().sh.runWaitFor("busybox find /proc/sys/* -type f -perm -644 -print0");
+            //cr=new CMDProcessor().sh.runWaitFor("busybox find "+SYSCTL+"* -type f -perm -600 -print0");
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+SYSCTL+"*\"");
             if(cr.success()){
-                return cr.stdout;
+                load_prop(cr.stdout);
+                return "ok";
             }
             else{
                 Log.d(TAG, "sysctl error: " + cr.stderr);
-                return null;
+                return "nok";
             }
         }
         @Override
         protected void onPostExecute(String result) {
-            if((result==null)||(result.length()<=0)) {
-                finish();
+            if(result.equals("nok")) {
+                linlaHeaderProgress.setVisibility(View.GONE);
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
-                load_prop(result);
-                Collections.sort(props);
                 linlaHeaderProgress.setVisibility(View.GONE);
+
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
                 }
                 else{
+                    Collections.sort(props);
                     nofiles.setVisibility(View.GONE);
                     tools.setVisibility(View.VISIBLE);
                     adapter = new PropAdapter(SysctlEditor.this, R.layout.prop_item, props);
@@ -365,19 +372,21 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                     }
                 }).create().show();
     }
-
     public void load_prop(String s){
         props.clear();
-        String p[]=s.split("\0");
+        final String p[]=s.split("\n");
         for (String aP : p) {
-            if(aP.trim().length()>0 && aP!=null){
-
-                final String pv=Helpers.readOneLine(aP).trim();
-                final String pn=aP.trim().replace("/",".").substring(10, aP.length());
-                if(!pn.startsWith("vm"))
-                    props.add(new Prop(pn,pv));
+            try{
+                if(aP!=null && aP.contains("::") && !aP.contains("/vm/")){
+                    String pn=aP.split("::")[0];
+                    pn=pn.replace(SYSCTL,"").replace("/",".").trim();
+                    props.add(new Prop(pn,aP.split("::")[1].trim()));
+                }
+            }
+            catch (Exception e){
             }
         }
     }
+
 
 }

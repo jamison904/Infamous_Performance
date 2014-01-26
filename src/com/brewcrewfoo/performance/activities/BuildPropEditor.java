@@ -173,13 +173,16 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         }
         @Override
         protected void onPostExecute(String result) {
+
             if((result==null)||(result.length()<=0)) {
-                finish();
+                linlaHeaderProgress.setVisibility(View.GONE);
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
                 load_builprop(result);
                 Collections.sort(props);
                 linlaHeaderProgress.setVisibility(View.GONE);
+
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
                 }
@@ -324,7 +327,6 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                             if (tv.getText().toString() != null){
                                 pp.setVal(tv.getText().toString().trim());
                                 new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\"");
-                                //Log.d(TAG, "/utils -setprop \""+pp.getName()+"="+pp.getVal()+"\"");
                             }
                         }
                         else {

@@ -1,7 +1,22 @@
 
 ### PERFORMANCE CONTROL ###
+set_val() {
+    if busybox [ "`busybox find \"$1\" -prune -perm -200`" ]; then
+        echo $2 > $1;
+    else
+        busybox chmod a+w $1;
+        echo $2 > $1;
+        busybox chmod a-w $1;
+    fi;
+}
+mpdecisionstart(){
+if busybox [ -f /system/bin/thermald ] && busybox [ `busybox cat /sys/module/msm_thermal/parameters/enabled | busybox tr '[YN]' '[10]'` -eq 0 ]; then
+    start thermald;
+fi;
+start mpdecision `busybox grep 'service.*mpdecision' /*.rc | busybox grep -m 1 -o '\-\-.*'`;
+}
 zramstart(){
-local cpus=$1;
+local cpus=1;
 local val=$2;
 if busybox [ -f /system/lib/modules/zram.ko ]; then
     if busybox [ -z "`busybox lsmod | busybox grep zram`" ]; then
@@ -12,27 +27,28 @@ fi;
 ncpus=`busybox expr $cpus - 1`;
 for i in `busybox seq 0 $ncpus`; do
     busybox echo $val > /sys/block/zram$i/disksize;
-done;
-for i in `busybox seq 0 $ncpus`; do
     busybox mkswap /dev/block/zram$i;
-done;
-for i in `busybox seq 0 $ncpus`; do
     busybox swapon /dev/block/zram$i;
 done;
 return;
 }
-
 zramstop(){
-local cpus=$1;
-ncpus=`busybox expr $cpus - 1`;
-for i in `busybox seq 0 $ncpus`; do
-    busybox swapoff /dev/block/zram$i;
-done;
-sleep 1;
-for i in `busybox seq 0 $ncpus`; do
-    busybox echo 1 > /sys/block/zram$i/reset;
-done;
-sleep 1;
-busybox modprobe -rf zram;
+local cpus=1;
+if busybox [ "`busybox grep zram /proc/swaps`" != "" ]; then
+    ncpus=`busybox expr $cpus - 1`;
+    for i in `busybox seq 0 $ncpus`; do
+        if busybox [ "`busybox grep zram$i /proc/swaps`" != "" ]; then
+            busybox swapoff /dev/block/zram$i;
+        fi;
+    done;
+    sleep 0.5;
+    for i in `busybox seq 0 $ncpus`; do
+        busybox echo 1 > /sys/block/zram$i/reset;
+    done;
+    sleep 0.5;
+    if busybox [ -f /system/lib/modules/zram.ko ]; then
+        busybox modprobe -rf zram;
+    fi;
+fi;
 return;
 }
