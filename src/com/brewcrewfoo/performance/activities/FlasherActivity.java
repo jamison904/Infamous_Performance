@@ -111,11 +111,11 @@ public class FlasherActivity extends Activity implements Constants, ActivityThem
         Boolean gasit=false;
         InputStream f;
 
-        final String fn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/devices.xml";
+        final String fn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/devices.xml";
         try {
             if (new File(fn).exists()){
                 f = new BufferedInputStream(new FileInputStream(fn));
-                Log.i(TAG,"external /PerformanceControl/devices.xml in use");
+                Log.i(TAG,"external /"+TAG+"/devices.xml in use");
             }
             else{
                 f = getResources().openRawResource(R.raw.devices);

@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import com.brewcrewfoo.performance.widget.PCWidget;
@@ -181,7 +182,7 @@ public class Helpers implements Constants {
     }
 
     public static Boolean GovernorExist(String gov) {
-        return readOneLine(GOVERNORS_LIST_PATH).indexOf(gov) > -1;
+        return readOneLine(GOVERNORS_LIST_PATH).contains(gov);
     }
 
     public static int getNumOfCpus() {
@@ -365,16 +366,18 @@ public class Helpers implements Constants {
         }
     }
     public static String shExec(StringBuilder s,Context c,Boolean su){
+        final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
         get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
-        CMDProcessor.CommandResult cr;
+        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
+        CMDProcessor.CommandResult cr=null;
         if(su)
-            //cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > "+ Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/logs/run.log 2>&1");
-            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
+            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            //cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
         else
             cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
         if(cr.success()){return cr.stdout;}
-        else{Log.d(TAG, "execute: "+cr.stderr);return null;}
+        else{Log.d(TAG, "execute run: "+cr.stderr);return null;}
     }
 
     public static String readCPU(Context context,int i){

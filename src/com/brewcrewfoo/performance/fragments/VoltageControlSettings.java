@@ -41,7 +41,6 @@ import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Voltage;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;

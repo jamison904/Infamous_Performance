@@ -61,7 +61,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
     private String[] oggs={};
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/buildprop";
+    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/buildprop";
     private String buildname="build";
 
     @Override

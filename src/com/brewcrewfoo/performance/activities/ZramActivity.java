@@ -66,7 +66,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
 
         mdisksize = (SeekBar) findViewById(R.id.val1);
         mdisksize.setOnSeekBarChangeListener(this);
-        mdisksize.setMax(100);
+        mdisksize.setMax(50);
         final int percent=Math.round(curdisk * 100 / maxdisk);
         mdisksize.setProgress(percent);
         tval1=(TextView)findViewById(R.id.tval1);
@@ -97,11 +97,12 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         prev.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                curcpu=mod(curcpu+1,ncpus);
-                if (showinfo) {
+                if(curcpu>=(ncpus-1)) curcpu=0;
+                else curcpu++;
+                /*if (showinfo) {
                     Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
                     showinfo=false;
-                }
+                }*/
                 return true;
             }
         });
@@ -113,7 +114,6 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
                 showinfo=false;
             }
-
         }
         else {
             start_btn.setText(getString(R.string.mt_start));
@@ -219,7 +219,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     };
     public boolean is_zram_on(){
         CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox cat /proc/swaps | busybox grep zram`");
-        return (cr.success() && !cr.stdout.equals(""));
+        return (cr.success() && cr.stdout.contains("zram"));
     }
 
     private int getDiskSize() {
@@ -335,10 +335,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         protected void onProgressUpdate(Void... values) {
         }
     }
-    private int mod(int x, int y){
-        int result = x % y;
-        return result < 0? result + y : result;
-    }
+
     public void set_values(){
         t1.setText(Helpers.ReadableByteCount(0));
         t2.setText("0");

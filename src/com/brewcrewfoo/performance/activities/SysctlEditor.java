@@ -62,7 +62,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private PropAdapter adapter=null;
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/sysctl";
+    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/sysctl";
 
     private final String syspath="/system/etc/";
     private final String SYSCTL="/proc/sys/";
@@ -85,7 +85,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/sysctl.conf" );
         }
         else{
-            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
+            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by "+TAG+"\n\" > "+dn+"/sysctl.conf" );
         }
         Helpers.get_assetsScript("utils",context,"","");
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
@@ -183,11 +183,11 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                                             new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/"+nf );
                                             final StringBuilder sb = new StringBuilder();
                                             sb.append("mount -o rw,remount /system;\n");
-                                            sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
+                                            sb.append("busybox echo \"# created by "+TAG+"\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
                                             sb.append("mount -o ro,remount /system;\n");
                                             Helpers.shExec(sb,context,true);
                                         }
-                                        new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
+                                        new CMDProcessor().sh.runWaitFor("busybox echo \"# created by "+TAG+"\n\" > "+dn+"/sysctl.conf" );
                                     }
                 }).create().show();
                 break;
