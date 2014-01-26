@@ -203,22 +203,23 @@ public class Helpers implements Constants {
     }
 
     public static boolean voltageFileExists() {
-        if (new File(UV_MV_PATH).exists()) {
-            setVoltagePath(UV_MV_PATH);
-            return true;
-        }
-        else if (new File(VDD_PATH).exists()) {
+        if (new File(VDD_PATH).exists()) {
             setVoltagePath(VDD_PATH);
-            return true;
-        }
-        else if (new File(VDD_SYSFS_PATH).exists()) {
-            setVoltagePath(VDD_SYSFS_PATH);
             return true;
         }
         else if (new File(COMMON_VDD_PATH).exists()) {
             setVoltagePath(COMMON_VDD_PATH);
             return true;
         }
+        else if (new File(UV_MV_PATH).exists()) {
+            setVoltagePath(UV_MV_PATH);
+            return true;
+        }
+        /*else if (new File(VDD_SYSFS_PATH).exists()) {
+            setVoltagePath(VDD_SYSFS_PATH);
+            return true;
+        }
+*/
         return false;
     }
 
@@ -226,7 +227,6 @@ public class Helpers implements Constants {
         Log.d(TAG, "UV table path detected: "+voltageFile);
         mVoltagePath = voltageFile;
     }
-
 
     public static String getVoltagePath() {
         return mVoltagePath;
