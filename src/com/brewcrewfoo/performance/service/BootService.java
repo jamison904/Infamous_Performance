@@ -316,14 +316,15 @@ public class BootService extends Service implements Constants {
 
             if (new File(ksmpath).exists()) {
                 if (preferences.getBoolean(KSM_SOB, false)) {
+                    sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
+                    sb.append("busybox echo 2 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
                     sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
                     sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
                     if (preferences.getBoolean(PREF_RUN_KSM, false)) {
                         sb.append("busybox echo 1 > ").append(ksmpath).append(";\n");
                     }
                     else{
-                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
-                        sb.append("busybox echo 2 > ").append(ksmpath).append(";\n");
+                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n");
                     }
                 }
             }
