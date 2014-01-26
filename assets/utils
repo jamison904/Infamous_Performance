@@ -9,7 +9,7 @@ mount -o ro,remount /system
 }
 get_prop(){
 local d="$1";
-for i in `busybox find $d -type f -perm -600 `; do
+for i in `busybox find $d -type f -prune -perm -600 `; do
     v=`busybox cat $i`;
     busybox echo "$i::$v";
 done;
