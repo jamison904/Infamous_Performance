@@ -296,7 +296,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private class StartZramOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            long v=(long)(curdisk/ncpus)*1024*1024;
+            long v=(long)(curdisk*1024*1024);
             final StringBuilder sb = new StringBuilder();
             sb.append("zramstart \"").append(ncpus).append("\" \"").append(v).append("\";\n");
             Helpers.shExec(sb,context,true);

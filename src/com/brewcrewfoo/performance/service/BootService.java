@@ -73,6 +73,7 @@ public class BootService extends Service implements Constants {
             VibratorClass vib=new VibratorClass();
             final String BLN_PATH=Helpers.bln_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
+            final float maxdisk = Helpers.getMem("MemTotal") / 1024;
 
 
             int ksm=0;
@@ -330,20 +331,20 @@ public class BootService extends Service implements Constants {
             }
 
             if (preferences.getBoolean(GOV_SOB, false)) {
-                    final String gn = preferences.getString(GOV_NAME, "");
-                    if (gn.equals(gov)) {
-                        final String gs = preferences.getString(GOV_SETTINGS, null);
-                        if(gs != null){
-                            String p[]=gs.split(";");
-                            for (String aP : p) {
-                                if(!aP.equals("") && aP!=null){
-                                    final String pn[]=aP.split(":");
-                                    sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(gov).append("/").append(pn[0]).append(";\n");
-                                }
+                final String gn = preferences.getString(GOV_NAME, "");
+                if (gn.equals(gov)) {
+                    final String gs = preferences.getString(GOV_SETTINGS, null);
+                    if(gs != null){
+                        String p[]=gs.split(";");
+                        for (String aP : p) {
+                            if(!aP.equals("") && aP!=null){
+                                final String pn[]=aP.split(":");
+                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(gov).append("/").append(pn[0]).append(";\n");
                             }
                         }
                     }
-             }
+                }
+            }
             if (preferences.getBoolean(TOUCHSCREEN_SOB, false)) {
                 if (new File(SLIDE2WAKE).exists()) {
                     sb.append("busybox echo ").append(preferences.getString(PREF_SLIDE2WAKE, Helpers.readOneLine(SLIDE2WAKE))).append(" > ").append(SLIDE2WAKE).append(";\n");
@@ -384,8 +385,8 @@ public class BootService extends Service implements Constants {
             if (preferences.getBoolean(ZRAM_SOB, false)){
                 sb.append("zramstop ").append(ncpus).append(";\n");
                 if (preferences.getBoolean(ZRAM_ON, false)) {
-                    int curdisk = preferences.getInt(PREF_ZRAM,(int) Helpers.getMem("MemTotal")/2048);
-                    long v = (long)(curdisk/ncpus)*1024*1024;
+                    int curdisk = preferences.getInt(PREF_ZRAM,Math.round(maxdisk*18/100));
+                    long v = (long)(curdisk*1024*1024);
                     sb.append("zramstart \"").append(ncpus).append("\" \"").append(v).append("\";\n");
                 }
             }
