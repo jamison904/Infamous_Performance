@@ -359,15 +359,15 @@
     <string name="applied_ok">Значения были успешно применены</string>
 <<<<<<< HEAD
 =======
-    <string name="chk_update">Checking for updates in progress…</string>
-    <string name="is_update">New update available! Tap for download.</string>
-    <string name="no_update">No updates found.</string>
+    <string name="chk_update">Проверка обновлений…</string>
+    <string name="is_update">Доступнно обновление! Нажмите для загрузки.</string>
+    <string name="no_update">Обновлений нет.</string>
 
-    <string name="no_param">No parameters</string>
-    <string name="no_download_manager">Download Manager not available!</string>
-    <string name="btn_download">Download</string>
-    <string name="pt_update">What\'s new</string>
-    <string name="ps_zram_info">Zram must be stopped in order to change disk size</string>
+    <string name="no_param">Без параметров</string>
+    <string name="no_download_manager">Менеджер Загрузок недоступен!</string>
+    <string name="btn_download">Загрузка</string>
+    <string name="pt_update">Что нового?</string>
+    <string name="ps_zram_info">Zram будет остановлен чтобы изменить размер диска</string>
 >>>>>>> 0f07f6f881fdb96b6f2d3ef23de32fc0c41ceecc
     <!-- beta2-->
 </resources>
