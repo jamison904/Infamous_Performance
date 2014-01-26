@@ -357,8 +357,7 @@
         <item name="low">Низкий</item>
     </string-array>
     <string name="applied_ok">Значения были успешно применены</string>
-<<<<<<< HEAD
-=======
+
     <string name="chk_update">Проверка обновлений…</string>
     <string name="is_update">Доступнно обновление! Нажмите для загрузки.</string>
     <string name="no_update">Обновлений нет.</string>
@@ -368,6 +367,6 @@
     <string name="btn_download">Загрузка</string>
     <string name="pt_update">Что нового?</string>
     <string name="ps_zram_info">Zram будет остановлен чтобы изменить размер диска</string>
->>>>>>> 0f07f6f881fdb96b6f2d3ef23de32fc0c41ceecc
+
     <!-- beta2-->
 </resources>
