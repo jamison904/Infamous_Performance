@@ -16,7 +16,7 @@ fi;
 start mpdecision `busybox grep 'service.*mpdecision' /*.rc | busybox grep -m 1 -o '\-\-.*'`;
 }
 zramstart(){
-local cpus=$1;
+local cpus=1;
 local val=$2;
 if busybox [ -f /system/lib/modules/zram.ko ]; then
     if busybox [ -z "`busybox lsmod | busybox grep zram`" ]; then
@@ -27,30 +27,28 @@ fi;
 ncpus=`busybox expr $cpus - 1`;
 for i in `busybox seq 0 $ncpus`; do
     busybox echo $val > /sys/block/zram$i/disksize;
-done;
-for i in `busybox seq 0 $ncpus`; do
     busybox mkswap /dev/block/zram$i;
-done;
-for i in `busybox seq 0 $ncpus`; do
     busybox swapon /dev/block/zram$i;
 done;
 return;
 }
 zramstop(){
-local cpus=$1;
+local cpus=1;
 if busybox [ "`busybox grep zram /proc/swaps`" != "" ]; then
     ncpus=`busybox expr $cpus - 1`;
     for i in `busybox seq 0 $ncpus`; do
-        #if busybox [ "`busybox grep zram$i /proc/swaps`" != "" ]; then
+        if busybox [ "`busybox grep zram$i /proc/swaps`" != "" ]; then
             busybox swapoff /dev/block/zram$i;
-        #fi;
+        fi;
     done;
     sleep 0.5;
     for i in `busybox seq 0 $ncpus`; do
         busybox echo 1 > /sys/block/zram$i/reset;
     done;
     sleep 0.5;
-    busybox modprobe -rf zram;
+    if busybox [ -f /system/lib/modules/zram.ko ]; then
+        busybox modprobe -rf zram;
+    fi;
 fi;
 return;
 }
