@@ -157,12 +157,11 @@ public class BootService extends Service implements Constants {
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
                 if(Helpers.voltageFileExists()){
                     final List<Voltage> volts = VoltageControlSettings.getVolts(preferences);
-                    final String vdd=Helpers.getVoltagePath();
-                    if (vdd.equals(VDD_PATH)) {
+                    if (Helpers.getVoltagePath().equals(VDD_PATH)) {
                         for (final Voltage volt : volts) {
                             if(!volt.getSavedMV().equals(volt.getCurrentMv())){
                                 for (byte i = 0; i < ncpus; i++) {
-                                    sb.append("busybox echo \"").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append("\" > ").append(vdd.replace("cpu0", "cpu" + i)).append(";\n");
+                                    sb.append("busybox echo \"").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append("\" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
                                 }
                             }
                         }
@@ -173,12 +172,12 @@ public class BootService extends Service implements Constants {
                         for (final Voltage volt : volts) {
                             b.append(volt.getSavedMV()).append(" ");
                         }
-                        if(vdd.equals(COMMON_VDD_PATH)){
-                            sb.append("busybox echo \"").append(b.toString()).append("\" > ").append(vdd).append(";\n");
+                        if(Helpers.getVoltagePath().equals(COMMON_VDD_PATH)){
+                            sb.append("busybox echo \"").append(b.toString()).append("\" > ").append(Helpers.getVoltagePath()).append(";\n");
                         }
                         else{
                             for (byte i = 0; i < ncpus; i++) {
-                                sb.append("busybox echo \"").append(b.toString()).append("\" > ").append(vdd.replace("cpu0", "cpu" + i)).append(";\n");
+                                sb.append("busybox echo \"").append(b.toString()).append("\" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(";\n");
                             }
                         }
                     }

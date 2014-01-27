@@ -227,55 +227,55 @@ public class VoltageControlSettings extends Fragment implements Constants {
         mVoltages.addAll(volts);
         mAdapter.notifyDataSetChanged();
     }
-    
-    
+
     public static List<Voltage> getVolts(final SharedPreferences preferences) {
         final List<Voltage> volts = new ArrayList<Voltage>();
         try {
-		BufferedReader br = new BufferedReader(new FileReader(Helpers.getVoltagePath()), 256);
-		String line = "";
-		//if (Helpers.getVoltagePath().equals(VDD_PATH)) {
-			while ((line = br.readLine()) != null) {
-				//line = line.replaceAll("\\s","");
-				//if (!line.equals("")) {
-                if (line.contains(":")) {
-					final String[] values = line.split(":");
-					String freq = values[0].trim();
-                    if(freq.contains("mhz")){
-                        freq = values[0].replace("mhz", "").trim();
-                        freq=String.valueOf(Integer.parseInt(freq)*1000);
+            final String tablevdd = Helpers.readFileViaShell(Helpers.getVoltagePath(), false);
+            //BufferedReader br = new BufferedReader(new FileReader(Helpers.getVoltagePath()), 256);
+            //String line = "";
+            //if (Helpers.getVoltagePath().equals(VDD_PATH)) {
+                //while ((line = br.readLine()) != null) {
+                for (final String line : tablevdd.split("\n")) {
+                    //line = line.replaceAll("\\s","");
+                    //if (!line.equals("")) {
+                    if (line.contains(":")) {
+                        final String[] values = line.split(":");
+                        String freq = values[0].trim();
+                        if(freq.contains("mhz")){
+                            freq = values[0].replace("mhz", "").trim();
+                            freq=String.valueOf(Integer.parseInt(freq)*1000);
+                        }
+                        final String currentMv = values[1].replace("mV", "").trim();
+                        final String savedMv = preferences.getString(freq,currentMv);
+                        final Voltage voltage = new Voltage();
+                        voltage.setFreq(freq);
+                        voltage.setCurrentMV(currentMv);
+                        voltage.setSavedMV(savedMv);
+                        volts.add(voltage);
                     }
-					final String currentMv = values[1].replace("mV", "").trim();
-					final String savedMv = preferences.getString(freq,currentMv);
-					final Voltage voltage = new Voltage();
-					voltage.setFreq(freq);
-					voltage.setCurrentMV(currentMv);
-					voltage.setSavedMV(savedMv);
-					volts.add(voltage);
-				}
-			}
-		//}
-		/*else{
-			while ((line = br.readLine()) != null) {
-                if (line.contains(":")) {
-				final String[] values = line.split(":");
-                    final String freq = values[0].replace("mhz", "").trim();
-                    final String currentMv = values[1].replace("mV", "").trim();
-                    final String savedMv = preferences.getString(freq,currentMv);
-                    final Voltage voltage = new Voltage();
-                    voltage.setFreq(freq);
-                    voltage.setCurrentMV(currentMv);
-                    voltage.setSavedMV(savedMv);
-                    volts.add(voltage);
-				}
-			}
-		}*/
-		br.close();
-        } catch (FileNotFoundException e) {
-            Log.d(TAG, Helpers.getVoltagePath() + " does not exist");
-        } catch (IOException e) {
-            Log.d(TAG, "Error reading " + Helpers.getVoltagePath());
+                }
+            //}
+            /*else{
+                while ((line = br.readLine()) != null) {
+                    if (line.contains(":")) {
+                    final String[] values = line.split(":");
+                        final String freq = values[0].replace("mhz", "").trim();
+                        final String currentMv = values[1].replace("mV", "").trim();
+                        final String savedMv = preferences.getString(freq,currentMv);
+                        final Voltage voltage = new Voltage();
+                        voltage.setFreq(freq);
+                        voltage.setCurrentMV(currentMv);
+                        voltage.setSavedMV(savedMv);
+                        volts.add(voltage);
+                    }
+                }
+            }*/
+		    //br.close();
+        } catch (Exception e) {
+            Log.d(TAG, Helpers.getVoltagePath() + " error reading");
         }
+
         return volts;
    }
 
