@@ -40,10 +40,6 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Voltage;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -246,6 +242,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
                             freq = values[0].replace("mhz", "").trim();
                             freq=String.valueOf(Integer.parseInt(freq)*1000);
                         }
+
                         final String currentMv = values[1].replace("mV", "").trim();
                         final String savedMv = preferences.getString(freq,currentMv);
                         final Voltage voltage = new Voltage();
@@ -272,7 +269,8 @@ public class VoltageControlSettings extends Fragment implements Constants {
                 }
             }*/
 		    //br.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Log.d(TAG, Helpers.getVoltagePath() + " error reading");
         }
 
