@@ -244,16 +244,6 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         return (float) ((float)getOriginalDataSize() / (float)getDiskSize());
     }
 
-    public void setDiskSize(long v){
-        v=(long)(v/ncpus);
-        final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < ncpus; i++) {
-            sb.append("busybox echo ").append(String.valueOf(v * 1024 * 1024)).append(" > ").append(ZRAM_SIZE_PATH.replace("zram0", "zram" + i));
-        }
-        Helpers.shExec(sb,context,true);
-    }
-
-
     private class StopZramOperation extends AsyncTask<String, Void, String> {
 
         @Override
