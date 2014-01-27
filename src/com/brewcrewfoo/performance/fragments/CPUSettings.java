@@ -409,7 +409,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         public void run() {
             try {
                 while (!mInterrupt) {
-                    sleep(400);
+                    sleep(600);
                     if(new File(CUR_CPU_PATH.replace("cpu0","cpu"+MainActivity.curcpu)).exists()){
                         mCurCPUHandler.sendMessage(mCurCPUHandler.obtainMessage(0,Helpers.readOneLine(CUR_CPU_PATH.replace("cpu0","cpu"+MainActivity.curcpu))));
                     }
