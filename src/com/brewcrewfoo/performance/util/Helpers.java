@@ -43,7 +43,7 @@ public class Helpers implements Constants {
 
     public static boolean checkSu() {
         if (!new File("/system/bin/su").exists() && !new File("/system/xbin/su").exists()) {
-            Log.e(TAG, "su does not exist!!!");
+            Log.e(TAG, " su does not exist!!!");
             return false; // tell caller to bail...
         }
         try {
@@ -60,38 +60,6 @@ public class Helpers implements Constants {
             Log.e(TAG, e.getMessage());
             return false;
         }
-    }
-
-    public static String[] getMounts(final String path) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("/proc/mounts"), 256);
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                if (line.contains(path)) {
-                    return line.split(" ");
-                }
-            }
-            br.close();
-        } catch (FileNotFoundException e) {
-            Log.d(TAG, "/proc/mounts does not exist");
-        } catch (IOException e) {
-            Log.d(TAG, "Error reading /proc/mounts");
-        }
-        return null;
-    }
-
-    public static boolean getMount(final String mount) {
-        final CMDProcessor cmd = new CMDProcessor();
-        final String mounts[] = getMounts("/system");
-        if (mounts != null && mounts.length >= 3) {
-            final String device = mounts[0];
-            final String path = mounts[1];
-            final String point = mounts[2];
-            if (cmd.su.runWaitFor("mount -o " + mount + ",remount -t " + point + " " + device+ " " + path).success()) {
-                return true;
-            }
-        }
-        return (cmd.su.runWaitFor("mount -o "+mount+",remount /system").success());
     }
 
     public static String readOneLine(String fname) {
@@ -223,12 +191,10 @@ public class Helpers implements Constants {
 */
         return false;
     }
-
     public static void setVoltagePath(String voltageFile) {
         Log.d(TAG, "UV table path detected: "+voltageFile);
         mVoltagePath = voltageFile;
     }
-
     public static String getVoltagePath() {
         return mVoltagePath;
     }
@@ -247,7 +213,6 @@ public class Helpers implements Constants {
         activity.overridePendingTransition(enter_anim, exit_anim);
         activity.startActivity(activity.getIntent());
     }
-
 
     public static void updateAppWidget(Context context) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -347,7 +312,6 @@ public class Helpers implements Constants {
                 Log.d(TAG, "error write "+fn+" file");
                 e.printStackTrace();
             }
-
         }
         catch (IOException e) {
             Log.d(TAG, "error read "+fn+" file");
@@ -367,12 +331,11 @@ public class Helpers implements Constants {
                 fos = c.openFileOutput(fn, Context.MODE_PRIVATE);
                 fos.write(buffer);
                 fos.close();
-
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 Log.d(TAG, "error write "+fn+" file");
                 e.printStackTrace();
             }
-
         }
         catch (IOException e) {
             Log.d(TAG, "error read "+fn+" file");
@@ -383,13 +346,9 @@ public class Helpers implements Constants {
         final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
         get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
-        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
         CMDProcessor.CommandResult cr=null;
-        if(su)
-            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
-            //cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
-        else
-            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
+        if(su) cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+        else cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
         if(cr.success()){return cr.stdout;}
         else{Log.d(TAG, "execute run: "+cr.stderr);return null;}
     }
