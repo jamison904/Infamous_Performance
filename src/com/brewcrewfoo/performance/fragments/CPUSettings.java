@@ -44,8 +44,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private TextView mCurCpu;
     private Resources res;
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
