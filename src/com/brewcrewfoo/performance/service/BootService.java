@@ -153,7 +153,6 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo 1 > ").append(ECO_MODE).append(";\n");
                 }
             }
-
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
                 if(Helpers.voltageFileExists()){
                     final List<Voltage> volts = VoltageControlSettings.getVolts(preferences);
@@ -183,7 +182,6 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-
             if (preferences.getBoolean(PREF_READ_AHEAD_BOOT, false)) {
                 final String values = preferences.getString(PREF_READ_AHEAD,Helpers.readOneLine(READ_AHEAD_PATH));
                 for(byte i=0;i<2;i++){
@@ -191,7 +189,6 @@ public class BootService extends Service implements Constants {
                         sb.append("busybox echo ").append(values).append(" > ").append(READ_AHEAD_PATH.replace("mmcblk0","mmcblk"+i)).append(";\n");
                 }
             }
-
             if (FASTCHARGE_PATH!=null) {
                 if(preferences.getBoolean(PREF_FASTCHARGE, false)){
                     sb.append("busybox echo 1 > ").append(FASTCHARGE_PATH).append(";\n");
@@ -287,7 +284,6 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getInt(PREF_DIRTY_WRITEBACK_SUSPEND, Integer.parseInt(Helpers.readOneLine(DIRTY_WRITEBACK_SUSPEND_PATH)))).append(" > ").append(DIRTY_WRITEBACK_SUSPEND_PATH).append(";\n");
                 }
             }
-
             if (preferences.getBoolean(PREF_MINFREE_BOOT, false)) {
                     sb.append("busybox echo ").append(preferences.getString(PREF_MINFREE, Helpers.readOneLine(MINFREE_PATH))).append(" > ").append(MINFREE_PATH).append(";\n");
             }
@@ -313,7 +309,6 @@ public class BootService extends Service implements Constants {
                         }
                     }
             }
-
             if (new File(ksmpath).exists()) {
                 if (preferences.getBoolean(KSM_SOB, false)) {
                     sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
@@ -328,7 +323,6 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-
             if (preferences.getBoolean(GOV_SOB, false)) {
                 final String gn = preferences.getString(GOV_NAME, "");
                 if (gn.equals(gov)) {
@@ -380,7 +374,6 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getString(PREF_TOUCH2WAKE, Helpers.readOneLine(touch2wakepath))).append(" > ").append(touch2wakepath).append(";\n");
                 }
             }
-
             if (preferences.getBoolean(ZRAM_SOB, false)){
                 sb.append("zramstop ").append(ncpus).append(";\n");
                 if (preferences.getBoolean(ZRAM_ON, false)) {
@@ -415,7 +408,6 @@ public class BootService extends Service implements Constants {
                     nm.notify(1337, n);
                 }
             }
-            //Helpers.updateAppWidget(c);
             servicesStarted = true;
             stopSelf();
         }
