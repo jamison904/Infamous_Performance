@@ -301,7 +301,21 @@ public class Helpers implements Constants {
         }
         return v;
     }
-
+    public static long getSwap() {
+        long v=0;
+        for (int i = 0; i < getNumOfCpus(); i++) {
+            CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep zram"+i+" /proc/meminfo`");
+            if(cr.success() && cr.stdout!=null && cr.stdout.contains("zram"+i)){
+                try{
+                    v = v+ (long) Integer.parseInt(cr.stdout.split(" ")[2]);//kb
+                }
+                catch (NumberFormatException e) {
+                    Log.d(TAG, " swap conversion err: "+e);
+                }
+            }
+        }
+        return v;
+    }
     public static boolean showBattery() {
 	    return ((new File(BLX_PATH).exists()) || (fastcharge_path()!=null));
     }
