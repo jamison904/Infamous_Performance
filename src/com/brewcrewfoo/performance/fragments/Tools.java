@@ -80,6 +80,8 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.layout.tools);
 
+        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
+
         mResidualFiles= findPreference(RESIDUAL_FILES);
         mOptimDB= findPreference(PREF_OPTIM_DB);
 

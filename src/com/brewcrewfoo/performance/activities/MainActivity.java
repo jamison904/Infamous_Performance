@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
@@ -35,7 +34,6 @@ import android.widget.Toast;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.fragments.*;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
-import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
@@ -56,14 +54,12 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public static String[] mMinFreqSetting=new String[nCpus];
     public static String[] mCPUon=new String[nCpus];
     public static int curcpu=0;
-    final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
     private Context c=this;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
         setTheme();
 
         if(savedInstanceState!=null) {

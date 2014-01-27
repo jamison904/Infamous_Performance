@@ -344,6 +344,7 @@ public class Helpers implements Constants {
     }
     public static String shExec(StringBuilder s,Context c,Boolean su){
         final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
+        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
         get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
         CMDProcessor.CommandResult cr=null;
