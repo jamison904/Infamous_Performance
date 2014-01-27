@@ -56,7 +56,7 @@ public class PCWidget extends AppWidgetProvider implements Constants {
         int nCpus=Helpers.getNumOfCpus();
 
         for (int awi : appWidgetIds) {
-            if((MainActivity.mMinFreqSetting[i]==null)||(MainActivity.mMaxFreqSetting[i]==null) || (MainActivity.mCurGovernor[i]==null) || (MainActivity.mCurIO[i]==null)){
+            if((MainActivity.mMinFreqSetting[i]==null) || (MainActivity.mMaxFreqSetting[i]==null) || (MainActivity.mCurGovernor[i]==null) || (MainActivity.mCurIO[i]==null)){
                 final String r=Helpers.readCPU(context,nCpus);
                 if(r!=null)
                     onUpdateWidget(context, appWidgetManager, awi, Helpers.toMHz(r.split(":")[i*5+1]), Helpers.toMHz(r.split(":")[i*5]), r.split(":")[i*5+2], r.split(":")[i*5+3],(i+1));
