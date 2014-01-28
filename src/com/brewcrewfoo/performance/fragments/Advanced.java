@@ -120,6 +120,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
             mMenuBackFirstErrWait.setSummary(Helpers.readOneLine(PFK_MENUBACK_FIRST_ERR_WAIT));
             mMenuBackLastErrWait.setSummary(Helpers.readOneLine(PFK_MENUBACK_LAST_ERR_WAIT));
         }
+
         if (!new File(BL_TIMEOUT_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("bltimeout");
             getPreferenceScreen().removePreference(hideCat);
@@ -127,6 +128,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         else{
             mBltimeout.setSummary(Helpers.readOneLine(BL_TIMEOUT_PATH));
         }
+
         if (!new File(BL_TOUCH_ON_PATH).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("bltouch");
             getPreferenceScreen().removePreference(hideCat);
@@ -134,6 +136,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         else{
             mBltouch.setChecked(Helpers.readOneLine(BL_TOUCH_ON_PATH).equals("1"));
         }
+
         BLN_PATH=Helpers.bln_path();
         if (BLN_PATH==null) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("bln");
@@ -142,6 +145,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         else{
             mBln.setChecked(Helpers.readOneLine(BLN_PATH).equals("1"));
         }
+
         if (no_touchscreen()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("touch_scr");
             getPreferenceScreen().removePreference(hideCat);
