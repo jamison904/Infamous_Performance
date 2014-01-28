@@ -70,10 +70,12 @@ public class Helpers implements Constants {
 	            br = new BufferedReader(new FileReader(fname), 512);
 	            try {
 	                line = br.readLine();
-	            } finally {
+	            }
+                finally {
 	                br.close();
 	            }
-	        } catch (Exception e) {
+	        }
+            catch (Exception e) {
 	            //Log.e(TAG, "IO Exception when reading sys file", e);
 	            // attempt to do magic!
 	            return readFileViaShell(fname, true);
@@ -92,23 +94,6 @@ public class Helpers implements Constants {
         if (cr.success())
             return cr.stdout;
         return null;
-    }
-
-    public static boolean writeOneLine(String fname, String value) {
-    	if (!new File(fname).exists()) {return false;}
-        try {
-            FileWriter fw = new FileWriter(fname);
-            try {
-                fw.write(value);
-            } finally {
-                fw.close();
-            }
-        } catch (IOException e) {
-            String Error = "Error writing to " + fname + ". Exception: ";
-            Log.e(TAG, Error, e);
-            return false;
-        }
-        return true;
     }
 
     public static String[] getAvailableIOSchedulers() {
@@ -192,7 +177,7 @@ public class Helpers implements Constants {
         return false;
     }
     public static void setVoltagePath(String voltageFile) {
-        Log.d(TAG, "UV table path detected: "+voltageFile);
+        Log.d(TAG, "Voltage table path detected: "+voltageFile);
         mVoltagePath = voltageFile;
     }
     public static String getVoltagePath() {
