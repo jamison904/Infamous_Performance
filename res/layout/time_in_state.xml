@@ -31,6 +31,19 @@ Copyright (C) 2012  James Roberts
             android:orientation="vertical">
 
         <TextView
+                android:id="@+id/ui_header_total_state_time"
+                style="?android:attr/listSeparatorTextViewStyle"
+                android:text="@string/total_state_time"/>
+
+        <TextView
+                android:id="@+id/ui_total_state_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="7dp"
+                android:textSize="25sp"/>
+
+        <TextView
                 style="?android:attr/listSeparatorTextViewStyle"
                 android:text="@string/time_in_state"/>
 
@@ -64,18 +77,6 @@ Copyright (C) 2012  James Roberts
                 android:padding="6dp"
                 android:visibility="gone"/>
 
-        <TextView
-                android:id="@+id/ui_header_total_state_time"
-                style="?android:attr/listSeparatorTextViewStyle"
-                android:text="@string/total_state_time"/>
-
-        <TextView
-                android:id="@+id/ui_total_state_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:padding="7dp"
-                android:textSize="25sp"/>
     </LinearLayout>
 
 </ScrollView>
