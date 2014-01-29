@@ -404,7 +404,7 @@ public class BootService extends Service implements Constants {
                             .setSmallIcon(R.drawable.ic_notify)
                             .setWhen(System.currentTimeMillis()).getNotification();
                     NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.notify(1337, n);
+                    nm.notify(1337, n);//1337
                 }
             }
             servicesStarted = true;

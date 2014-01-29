@@ -21,6 +21,8 @@ package com.brewcrewfoo.performance.fragments;
 import android.app.AlertDialog;
 import android.app.Fragment;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -205,35 +207,25 @@ public class BatteryInfo extends Fragment implements SeekBar.OnSeekBarChangeList
                 @Override
                 public void onCheckedChanged(CompoundButton v,boolean checked) {
                     mPreferences.edit().putBoolean(PREF_FASTCHARGE,checked).apply();
-
                     if (checked){
-                     String warningMessage = getString(R.string.fast_charge_warning);
-                    //----------------
-                    String cancel = getString(R.string.cancel);
-                    String ok = getString(R.string.ok);
-                    //-----------------
-                    new AlertDialog.Builder(context)
-                            .setMessage(warningMessage)
-                            .setNegativeButton(cancel,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog,int which) {
-                                            mPreferences.edit().putBoolean(PREF_FASTCHARGE,false).apply();
-                                            mFastchargeOnBoot.setChecked(false);
-                                        }
-                                    })
-                            .setPositiveButton(ok,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog,int which) {
-                                            new CMDProcessor().su.runWaitFor("busybox echo 1 > " + mFastChargePath);
-                                        }
-                                    }).create().show();
+                        new CMDProcessor().su.runWaitFor("busybox echo 1 > " + mFastChargePath);
+                        CharSequence contentTitle = context.getText(R.string.fast_charge_notification_title);
+                        CharSequence contentText = context.getText(R.string.fast_charge_notification_message);
+                        Notification n = new Notification.Builder(context)
+                                .setAutoCancel(true)
+                                .setContentTitle(contentTitle)
+                                .setContentText(contentText)
+                                .setSmallIcon(R.drawable.ic_notify)
+                                .setWhen(System.currentTimeMillis()).getNotification();
+                        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        nm.notify(1337, n);//1337
                     }
                     else{
                         new CMDProcessor().su.runWaitFor("busybox echo 0 > " + mFastChargePath);
+                        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        nm.cancel(1337);
                     }
-                 }
+                }
             });
         }
          else{
