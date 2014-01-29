@@ -49,8 +49,9 @@ Copyright (C) 2012  James Roberts
                     android:id="@+id/batt_volt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="60sp"
-                android:visibility="gone" />
+                    android:textSize="50sp"
+                android:visibility="gone"
+                android:layout_marginBottom="6dip" />
             <TextView
                     android:id="@+id/batt_percent"
                     android:layout_width="wrap_content"

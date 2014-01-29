@@ -44,7 +44,7 @@ Copyright (C) 2012  James Roberts
                 android:id="@+id/current_speed"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textSize="60sp"
+                android:textSize="50sp"
             android:gravity="center_horizontal"
             android:layout_weight="0.9" />
 
