@@ -34,7 +34,8 @@ Copyright (C) 2012  James Roberts
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+            android:textStyle="bold" />
 
         <TextView
                 android:id="@+id/ui_duration_text"
