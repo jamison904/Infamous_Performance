@@ -232,10 +232,11 @@ public class VoltageControlSettings extends Fragment implements Constants {
             //String line = "";
             //if (Helpers.getVoltagePath().equals(VDD_PATH)) {
                 //while ((line = br.readLine()) != null) {
+            if(tablevdd!=null){
                 for (final String line : tablevdd.split("\n")) {
                     //line = line.replaceAll("\\s","");
                     //if (!line.equals("")) {
-                    if (line.contains(":")) {
+                    if (line!=null && line.contains(":")) {
                         final String[] values = line.split(":");
                         String freq = values[0].trim();
                         if(freq.contains("mhz")){
@@ -252,6 +253,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
                         volts.add(voltage);
                     }
                 }
+            }
             //}
             /*else{
                 while ((line = br.readLine()) != null) {

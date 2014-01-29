@@ -374,6 +374,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     }
     public void load_prop(String s){
         props.clear();
+        if(s==null) return;
         final String p[]=s.split("\n");
         for (String aP : p) {
             try{

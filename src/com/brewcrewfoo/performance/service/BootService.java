@@ -324,18 +324,17 @@ public class BootService extends Service implements Constants {
                 }
             }
             if (preferences.getBoolean(GOV_SOB, false)) {
-                final String gn = preferences.getString(GOV_NAME, "");
-                if (gn.equals(gov)) {
-                    final String gs = preferences.getString(GOV_SETTINGS, null);
-                    if(gs != null){
-                        String p[]=gs.split(";");
-                        for (String aP : p) {
-                            if(!aP.equals("") && aP!=null){
-                                final String pn[]=aP.split(":");
-                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(gov).append("/").append(pn[0]).append(";\n");
-                            }
+                final String gn = preferences.getString(gov, "");
+                if (!gn.equals("")) {
+                    sb.append("if busybox [ -d ").append(GOV_SETTINGS_PATH).append(gov).append(" ]; then\n");
+                    String p[]=gn.split(";");
+                    for (String aP : p) {
+                        if(aP!=null && aP.contains(":")){
+                            final String pn[]=aP.split(":");
+                            sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(gov).append("/").append(pn[0]).append(";\n");
                         }
                     }
+                    sb.append("fi;\n");
                 }
             }
             if (preferences.getBoolean(TOUCHSCREEN_SOB, false)) {

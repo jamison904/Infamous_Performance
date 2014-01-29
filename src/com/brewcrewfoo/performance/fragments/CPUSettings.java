@@ -274,9 +274,19 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             for (int i = 0; i < MainActivity.nCpus; i++){
                 sb.append("set_val \"").append(GOVERNOR_PATH.replace("cpu0", "cpu" + MainActivity.curcpu)).append("\" \"").append(selected).append("\";\n");
             }
+            final String s=mPreferences.getString(selected,"");
+            if(!s.equals("")){
+                String p[]=s.split(";");
+                for (String aP : p) {
+                    if(aP!=null && aP.contains(":")){
+                        final String pn[]=aP.split(":");
+                        sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(selected).append("/").append(pn[0]).append(";\n");
+                    }
+                }
+            }
             updateSharedPrefs(PREF_GOV, selected);
             // reset gov settings
-            mPreferences.edit().remove(GOV_SETTINGS).remove(GOV_NAME).apply();
+            //mPreferences.edit().remove(GOV_SETTINGS).remove(GOV_NAME).apply();
             Helpers.shExec(sb,context,true);
             MainActivity.mCurGovernor[MainActivity.curcpu]=selected;
         }
