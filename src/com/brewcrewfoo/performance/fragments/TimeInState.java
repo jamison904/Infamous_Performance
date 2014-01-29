@@ -25,6 +25,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.view.*;
@@ -53,7 +55,7 @@ public class TimeInState extends Fragment implements Constants {
     private TextView mHeaderTotalStateTime;
     private TextView mStatesWarning;
     private boolean mUpdatingData = false;
-
+    private CurThread mCurThread;
     private CPUStateMonitor monitor = new CPUStateMonitor();
     private Context context;
     SharedPreferences preferences;
@@ -95,11 +97,53 @@ public class TimeInState extends Fragment implements Constants {
 
     @Override
     public void onResume() {
-        refreshData();
+        if (mCurThread == null) {
+            mCurThread = new CurThread();
+            mCurThread.start();
+        }
+        //refreshData();
         super.onResume();
 
     }
+    @Override
+    public void onDestroy() {
+        if (mCurThread != null) {
+            if (mCurThread.isAlive()) {
+                mCurThread.interrupt();
+                try {
+                    mCurThread.join();
+                }
+                catch (InterruptedException e) {
+                }
+            }
+        }
+        super.onDestroy();
+    }
+    protected class CurThread extends Thread {
+        private boolean mInterrupt = false;
 
+        public void interrupt() {
+            mInterrupt = true;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (!mInterrupt) {
+                    sleep(1200);
+                    mCurHandler.sendMessage(mCurHandler.obtainMessage(0,null));
+                }
+            }
+            catch (InterruptedException e) {
+                //return;
+            }
+        }
+    }
+    protected Handler mCurHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            refreshData();
+        }
+    };
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.time_in_state_menu, menu);
@@ -286,4 +330,5 @@ public class TimeInState extends Fragment implements Constants {
         }
         editor.putString(PREF_OFFSETS, str).commit();
     }
+
 }
