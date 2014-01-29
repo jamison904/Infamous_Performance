@@ -85,20 +85,21 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-                final String s=mPreferences.getString(GOV_SETTINGS,"");
+                //final String s=mPreferences.getString(GOV_SETTINGS,"");
+                final String s=mPreferences.getString(curgov,"");
 
                 if(!s.equals("")){
-                    String p[]=s.split("\\;");
+                    String p[]=s.split(";");
                     for (String aP : p) {
-                        if(!aP.equals("")&& aP!=null){
-                            final String pn[]=aP.split("\\:");
+                        if(aP.contains(":")){
+                            final String pn[]=aP.split(":");
                             sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(pn[0]).append(";\n");
                         }
                     }
-                    Helpers.shExec(sb,context,true);
-                    Toast.makeText(context, getString(R.string.applied_ok), Toast.LENGTH_SHORT).show();
+                    final String r=Helpers.shExec(sb,context,true);
+                    if((r==null)||!r.equals("nok"))
+                        Toast.makeText(context, getString(R.string.applied_ok), Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -153,12 +154,9 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             }
         }
         @Override
-        protected void onPreExecute() {
-
-        }
+        protected void onPreExecute() {}
         @Override
-        protected void onProgressUpdate(Void... values) {
-        }
+        protected void onProgressUpdate(Void... values) {}
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,long row) {
@@ -189,7 +187,8 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        mPreferences.edit().remove(GOV_SETTINGS).apply();
+                                        //mPreferences.edit().remove(GOV_SETTINGS).apply();
+                                        mPreferences.edit().remove(curgov).apply();
                                     }
                                 }).create().show();
             }
@@ -244,22 +243,25 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     }
 
     public void set_pref(String n, String v){
-        final String s=mPreferences.getString(GOV_SETTINGS,"");
+        //final String s=mPreferences.getString(GOV_SETTINGS,"");
+        final String s=mPreferences.getString(curgov,"");
         final StringBuilder sb = new StringBuilder();
         if(!s.equals("")){
-            String p[]=s.split("\\;");
+            String p[]=s.split(";");
             for (String aP : p) {
                 if(aP!=null && aP.contains(":")){
-                    final String pn[]=aP.split("\\:");
+                    final String pn[]=aP.split(":");
                     if(!pn[0].equals(n)) sb.append(pn[0]).append(':').append(pn[1]).append(';');
                 }
             }
         }
         sb.append(n).append(':').append(v).append(';');
-        mPreferences.edit().putString(GOV_NAME, curgov).putString(GOV_SETTINGS, sb.toString()).commit();
+        mPreferences.edit().putString(curgov, sb.toString()).commit();
+        //mPreferences.edit().putString(GOV_NAME, curgov).putString(GOV_SETTINGS, sb.toString()).commit();
     }
     public void load_prop(String s){
         props.clear();
+        if(s==null) return;
         final String p[]=s.split("\n");
         for (String aP : p) {
             try{

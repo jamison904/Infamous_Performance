@@ -105,7 +105,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 if(!s.equals("")){
                     String p[]=s.split(";");
                     for (String aP : p) {
-                        if(!aP.equals("")&& aP!=null){
+                        if(aP.contains(":")){
                             final String pn[]=aP.split(":");
                             sb.append("busybox echo ").append(pn[1]).append(" > ").append(VM_PATH).append(pn[0]).append(";\n");
                         }
@@ -311,6 +311,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     }
     public void load_prop(String s){
         props.clear();
+        if(s==null) return;
         final String p[]=s.split("\n");
         for (String aP : p) {
             try{

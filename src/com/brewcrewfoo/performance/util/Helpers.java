@@ -333,10 +333,19 @@ public class Helpers implements Constants {
         get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
         CMDProcessor.CommandResult cr=null;
-        if(su) cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
-        else cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
-        if(cr.success()){return cr.stdout;}
-        else{Log.d(TAG, "execute run: "+cr.stderr);return null;}
+        if(su){
+            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+        }
+        else{
+            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+        }
+        if(cr.success()){
+            return cr.stdout;
+        }
+        else{
+            Log.d(TAG, "execute run error: "+cr.stderr);
+            return "nok";
+        }
     }
 
     public static String readCPU(Context context,int i){
