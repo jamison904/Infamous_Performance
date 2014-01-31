@@ -341,7 +341,7 @@ Translation by DaniPhii
     <string name="ics_color">Holo</string>
 
     <!-- beta 2 -->
-    <string name="reset_msg">Se borrarán los valores actuales y los predeterminados ​​se aplicarán tras el reinicio. ¿Desea continuar?</string>
+    <string name="reset_msg">Se borrarán los valores actuales y los predeterminados se aplicarán tras el reinicio. ¿Desea continuar?</string>
 
     <string name="prefcat_logs">Volcar registro de eventos</string>
     <string name="logcat_title">Logcat</string>
@@ -372,7 +372,7 @@ Translation by DaniPhii
         <item name="high">Alta</item>
         <item name="low">Baja</item>
     </string-array>
-    <string name="applied_ok">Los valores ​​se han aplicado correctamente.</string>
+    <string name="applied_ok">Los valores se han aplicado correctamente.</string>
     <string name="chk_update">Comprobando si hay actualizaciones…</string>
     <string name="is_update">¡Actualización disponible! Toca para descargar.</string>
     <string name="no_update">No se encontraron actualizaciones.</string>
