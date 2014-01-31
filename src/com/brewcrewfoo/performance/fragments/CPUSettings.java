@@ -276,6 +276,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             }
             final String s=mPreferences.getString(selected,"");
             if(!s.equals("")){
+                sb.append("if busybox [ -d ").append(GOV_SETTINGS_PATH).append(selected).append(" ]; then\n");
                 String p[]=s.split(";");
                 for (String aP : p) {
                     if(aP!=null && aP.contains(":")){
@@ -283,6 +284,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                         sb.append("busybox echo ").append(pn[1]).append(" > ").append(GOV_SETTINGS_PATH).append(selected).append("/").append(pn[0]).append(";\n");
                     }
                 }
+                sb.append("fi;\n");
             }
             updateSharedPrefs(PREF_GOV, selected);
             // reset gov settings

@@ -330,7 +330,7 @@ Translation by Laurentiu1996
     <!-- beta2-->
     <string name="reset_msg">Valorile curente vor fi șterse și vor fi aplicate valorile iniţiale după repornire. Continuaţi?</string>
 
-    <string name="prefcat_logs">Salvează Log-uri</string>
+    <string name="prefcat_logs">SALVARE LOG-URI</string>
     <string name="logcat_title">Logcat</string>
     <string name="logcat_msg">Logcat va fi salvat în %s. Continue?</string>
     <string name="dmesg_title">Dmesg</string>
@@ -342,7 +342,7 @@ Translation by Laurentiu1996
 
     <string name="prefcat_touchscr">TOUCHSCREEN</string>
     <string name="ps_touchscr">TouchScreen Control</string>
-    <string name="ps_touchscr_boot">If enabled will restore all touchcreen settings on reboot</string>
+    <string name="ps_touchscr_boot">Dacă este activată, va restabili toate setările la repornire</string>
     <string name="toucht1">Slide to Wake</string>
     <string name="toucht2">Sweep to Wake</string>
     <string name="toucht21">Sweep to Sleep</string>
@@ -353,11 +353,11 @@ Translation by Laurentiu1996
     <string name="toucht7">Pocket Detect</string>
     <string name="toucht8">Pick to Wake</string>
     <string name="toucht9">Flick to Sleep</string>
-    <string name="toucht9s">Sensitivity</string>
+    <string name="toucht9s">Sensibilitate</string>
     <string name="toucht10">Touch to Wake</string>
     <string-array name="asens">
-        <item name="high">High</item>
-        <item name="low">Low</item>
+        <item name="high">Crescută</item>
+        <item name="low">Scazută</item>
     </string-array>
     <string name="applied_ok">Valorile au fost salvate cu succes</string>
     <string name="chk_update">Căutare actualizări in curs…</string>

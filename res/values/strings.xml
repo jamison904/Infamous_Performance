@@ -359,7 +359,7 @@ Copyright (C) 2012  James Roberts
     <!-- beta2-->
     <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
 
-    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="prefcat_logs">DUMP LOG EVENTS</string>
     <string name="logcat_title">Logcat</string>
     <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
     <string name="dmesg_title">Dmesg</string>

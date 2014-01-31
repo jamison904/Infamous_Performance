@@ -343,7 +343,7 @@ Translation by DaniPhii
     <!-- beta 2 -->
     <string name="reset_msg">Se borrarán los valores actuales y los predeterminados ​​se aplicarán tras el reinicio. ¿Desea continuar?</string>
 
-    <string name="prefcat_logs">Volcar registro de eventos</string>
+    <string name="prefcat_logs">VOLCAR REGISTRO DE EVENTOS</string>
     <string name="logcat_title">Logcat</string>
     <string name="logcat_msg">Logcat se volcará en %s. ¿Desea continuar?</string>
     <string name="dmesg_title">Dmesg</string>
