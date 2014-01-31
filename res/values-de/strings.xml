@@ -338,46 +338,46 @@ Translation by Rhonin86 & Evisceration
     <string name="ics_color">Standart</string>
 
     <!-- beta2-->
-    <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
+    <string name="reset_msg">Aktuelle Daten werden gelöscht und der Standard wird nach dem Neustart wieder hergestellt. Weiter?</string>
 
-    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="prefcat_logs">SCHREIBE LOGS</string>
     <string name="logcat_title">Logcat</string>
-    <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
+    <string name="logcat_msg">Logcat wird auf %s geschrieben. Weiter?</string>
     <string name="dmesg_title">Dmesg</string>
-    <string name="dmesg_msg">Dmesg will be dumped on %s. Continue?</string>
-    <string name="ps_logs">Dump log on %s.</string>
+    <string name="dmesg_msg">Dmesg wird auf %s geschrieben. Weiter?</string>
+    <string name="ps_logs">Erzeuge den Log auf %s.</string>
 
     <string name="mpdecision">MPDECISION</string>
-    <string name="pt_mpdecision">Enable MPDecision</string>
+    <string name="pt_mpdecision">Aktiviere MPDecision</string>
 
     <string name="prefcat_touchscr">TOUCHSCREEN</string>
     <string name="ps_touchscr">TouchScreen Control</string>
-    <string name="ps_touchscr_boot">If enabled will restore all touchcreen settings on reboot</string>
-    <string name="toucht1">Slide to Wake</string>
-    <string name="toucht2">Sweep to Wake</string>
-    <string name="toucht21">Sweep to Sleep</string>
-    <string name="toucht3">Home to Wake</string>
-    <string name="toucht4">Logo to Wake</string>
-    <string name="toucht5">Logo to Menu</string>
-    <string name="toucht6">Double Tap to Wake</string>
-    <string name="toucht7">Pocket Detect</string>
-    <string name="toucht8">Pick to Wake</string>
-    <string name="toucht9">Flick to Sleep</string>
-    <string name="toucht9s">Sensitivity</string>
-    <string name="toucht10">Touch to Wake</string>
+    <string name="ps_touchscr_boot">Stellt alle TouchScreen Einstellungen nach einem Neustart wieder her, wenn aktiviert.</string>
+    <string name="toucht1">Aufwecken durch Schieben</string>
+    <string name="toucht2">Aufwecken durch Streichen</string>
+    <string name="toucht21">StandBy durch Streichen</string>
+    <string name="toucht3">Aufwecken durch Home</string>
+    <string name="toucht4">Aufwecken durch Logo</string>
+    <string name="toucht5">Über Logo ins Menu</string>
+    <string name="toucht6">Aufwecken durch Doppeltes Tippen</string>
+    <string name="toucht7">Tasche erkennen</string>
+    <string name="toucht8">Aufwecken durch Wählen</string>
+    <string name="toucht9">StandBy durch Schütteln</string>
+    <string name="toucht9s">Empfindlichkeit</string>
+    <string name="toucht10">Aufwecken durch Berühren</string>
     <string-array name="asens">
-        <item name="high">High</item>
-        <item name="low">Low</item>
+        <item name="high">Hoch</item>
+        <item name="low">Tief</item>
     </string-array>
-    <string name="applied_ok">Values ​​were applied successfully</string>
-    <string name="chk_update">Checking for updates in progress…</string>
-    <string name="is_update">New update available! Tap for download.</string>
-    <string name="no_update">No updates found.</string>
+    <string name="applied_ok">Eingaben wurden erfolgreich übernommen</string>
+    <string name="chk_update">Suche neue Updates…</string>
+    <string name="is_update">Neues Update erhältlich! Berühre um den Download zu starten.</string>
+    <string name="no_update">Kein Update gefunden.</string>
 
-    <string name="no_param">No parameters</string>
-    <string name="no_download_manager">Download Manager not available!</string>
+    <string name="no_param">Keine Parameter</string>
+    <string name="no_download_manager">Download Manager nicht verfügbar!</string>
     <string name="btn_download">Download</string>
-    <string name="pt_update">What\'s new</string>
-    <string name="ps_zram_info">Zram must be stopped in order to change disk size</string>
+    <string name="pt_update">Was ist neu</string>
+    <string name="ps_zram_info">Zram muss angehalten werden um die Partitionsgröße zu ändern.</string>
     <!-- beta2-->
 </resources>
