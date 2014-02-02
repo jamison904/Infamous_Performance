@@ -424,13 +424,26 @@ public class Helpers implements Constants {
             return null;
         }
     }
-
     public static String touch2wake_path() {
         if (new File("/sys/module/lge_touch_core/parameters/doubletap_to_wake").exists()) {
             return "/sys/module/lge_touch_core/parameters/doubletap_to_wake";
         }
         else if (new File("/sys/module/lge_touch_core/parameters/touch_to_wake").exists()) {
             return "/sys/module/lge_touch_core/parameters/touch_to_wake";
+        }
+        else{
+            return null;
+        }
+    }
+    public static String wifipm_path() {
+        if (new File("/sys/module/bcmdhd/parameters/wifi_pm").exists()) {
+            return "/sys/module/bcmdhd/parameters/wifi_pm";
+        }
+        else if (new File("/sys/module/bcmdhd/parameters/wifi_fast").exists()) {
+            return "/sys/module/bcmdhd/parameters/wifi_fast";
+        }
+        else if (new File("/sys/module/dhd/parameters/wifi_pm").exists()) {
+            return "/sys/module/dhd/parameters/wifi_pm";
         }
         else{
             return null;

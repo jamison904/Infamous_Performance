@@ -318,17 +318,17 @@ public class TouchScreenSettings extends Activity implements Constants, Activity
         else{
             final String touch2wakepath=Helpers.touch2wake_path();
             mPreferences.edit().putString(PREF_TOUCH2WAKE, Helpers.readOneLine(touch2wakepath)).commit();
-            mt10.setChecked(mPreferences.getString(PREF_TOUCH2WAKE, Helpers.readOneLine(touch2wakepath)).equals("Y"));
+            mt10.setChecked(mPreferences.getString(PREF_TOUCH2WAKE, Helpers.readOneLine(touch2wakepath)).equals("1"));
             mt10.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v, boolean checked) {
                     if(checked){
-                        new CMDProcessor().su.runWaitFor("busybox echo \"Y\" > " + touch2wakepath);
-                        mPreferences.edit().putString(PREF_TOUCH2WAKE,"Y").commit();
+                        new CMDProcessor().su.runWaitFor("busybox echo 1 > " + touch2wakepath);
+                        mPreferences.edit().putString(PREF_TOUCH2WAKE,"1").commit();
                     }
                     else{
-                        new CMDProcessor().su.runWaitFor("busybox echo \"N\" > " +touch2wakepath);
-                        mPreferences.edit().putString(PREF_TOUCH2WAKE, "N").commit();
+                        new CMDProcessor().su.runWaitFor("busybox echo 0 > " +touch2wakepath);
+                        mPreferences.edit().putString(PREF_TOUCH2WAKE, "0").commit();
                     }
                 }
             });

@@ -400,4 +400,8 @@ Copyright (C) 2012  James Roberts
     <string name="pt_update">What\'s new</string>
     <string name="ps_zram_info">Zram must be stopped in order to change disk size</string>
     <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <!-- 2.1.10-->
 </resources>

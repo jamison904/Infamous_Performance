@@ -55,12 +55,12 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
 	private Preference mBltimeout,mViber,mPFK,mDynamicWriteBackActive,mDynamicWriteBackSuspend,mVM,mTouchScr;
 	private CheckBoxPreference mBltouch;
 
-    private CheckBoxPreference mBln,mDynamicWriteBackOn,mDsync;
+    private CheckBoxPreference mBln,mDynamicWriteBackOn,mDsync,mWifiPM;
 	private ListPreference mReadAhead;
 	private int mSeekbarProgress;
 	private EditText settingText;
 	private String sreadahead;
-    private String BLN_PATH,VIBE_PATH;
+    private String BLN_PATH,VIBE_PATH,WIFIPM_PATH;
     private Context context;
     VibratorClass vib=new VibratorClass();
 
@@ -78,6 +78,7 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         mBltimeout= findPreference(PREF_BLTIMEOUT);
         mBltouch=(CheckBoxPreference) findPreference(PREF_BLTOUCH);
         mBln=(CheckBoxPreference) findPreference(PREF_BLN);
+        mWifiPM=(CheckBoxPreference) findPreference("pref_wifi_pm");
         mTouchScr=findPreference("touchscr_settings");
         mViber= findPreference("pref_viber");
         mVM= findPreference("vm_settings");
@@ -153,6 +154,14 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
             mDynamicWriteBackOn.setChecked(ison);
             mDynamicWriteBackActive.setSummary(Helpers.readOneLine(DIRTY_WRITEBACK_ACTIVE_PATH));
             mDynamicWriteBackSuspend.setSummary(Helpers.readOneLine(DIRTY_WRITEBACK_SUSPEND_PATH));
+        }
+        WIFIPM_PATH=Helpers.wifipm_path();
+        if (WIFIPM_PATH==null) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("wifi_pm");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            mWifiPM.setChecked(Helpers.readOneLine(WIFIPM_PATH).equals("1"));
         }
 		final String readahead=Helpers.readOneLine(READ_AHEAD_PATH);
 	    mReadAhead.setValue(readahead);
@@ -262,6 +271,15 @@ public class Advanced extends PreferenceFragment implements OnSharedPreferenceCh
         else if (preference == mVM) {
             Intent intent = new Intent(context, VMSettings.class);
             startActivity(intent);
+            return true;
+        }
+        else if (preference == mWifiPM){
+            if (Helpers.readOneLine(WIFIPM_PATH).equals("0")){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + WIFIPM_PATH);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + WIFIPM_PATH);
+            }
             return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);

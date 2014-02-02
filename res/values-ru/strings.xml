@@ -368,6 +368,9 @@
     <string name="btn_download">Загрузка</string>
     <string name="pt_update">Что нового?</string>
     <string name="ps_zram_info">Zram будет остановлен чтобы изменить размер диска</string>
-
     <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <!-- 2.1.10-->
 </resources>

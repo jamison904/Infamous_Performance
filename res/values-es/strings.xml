@@ -383,4 +383,8 @@ Translation by DaniPhii
     <string name="pt_update">Novedades:</string>
     <string name="ps_zram_info">El servicio ZRAM debe detenerse para cambiar el tamaño del disco</string>
     <!-- beta 2 -->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <!-- 2.1.10-->
 </resources>

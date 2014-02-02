@@ -370,4 +370,8 @@ Translation by Laurentiu1996
     <string name="pt_update">Ce e nou</string>
     <string name="ps_zram_info">Zram trebuie oprit pentru a ajusta valoarea</string>
     <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <!-- 2.1.10-->
 </resources>

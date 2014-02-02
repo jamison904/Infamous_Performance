@@ -384,4 +384,8 @@ translation by Stefano187
     <string name="pt_update">Novità</string>
     <string name="ps_zram_info">Zram deve essere interrotto per cambiare la dimensione del disco</string>
     <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <!-- 2.1.10-->
 </resources>

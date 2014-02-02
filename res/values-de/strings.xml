@@ -380,4 +380,8 @@ Translation by Rhonin86 & Evisceration
     <string name="pt_update">Was ist neu</string>
     <string name="ps_zram_info">Zram muss angehalten werden um die Partitionsgröße zu ändern.</string>
     <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <!-- 2.1.10-->
 </resources>

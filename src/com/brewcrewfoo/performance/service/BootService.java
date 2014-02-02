@@ -71,7 +71,9 @@ public class BootService extends Service implements Constants {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
             final StringBuilder sb = new StringBuilder();
             VibratorClass vib=new VibratorClass();
+            final String VIBE_PATH=vib.get_path();
             final String BLN_PATH=Helpers.bln_path();
+            final String WIFIPM_PATH=Helpers.wifipm_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
             final float maxdisk = Helpers.getMem("MemTotal") / 1024;
 
@@ -228,7 +230,14 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo 0 > ").append(BLN_PATH).append(";\n");
                 }
             }
-            final String VIBE_PATH=vib.get_path();
+            if (WIFIPM_PATH!=null) {
+                if (preferences.getBoolean("pref_wifi_pm", false)) {
+                    sb.append("busybox echo 1 > ").append(WIFIPM_PATH).append(";\n");
+                }
+                else{
+                    sb.append("busybox echo 0 > ").append(WIFIPM_PATH).append(";\n");
+                }
+            }
             if (VIBE_PATH!=null) {
                 if (preferences.getBoolean("viber_sob", false)) {
                     sb.append("busybox echo ").append(preferences.getInt("pref_viber", Integer.parseInt(vib.get_val(VIBE_PATH)))).append(" > ").append(VIBE_PATH).append(";\n");

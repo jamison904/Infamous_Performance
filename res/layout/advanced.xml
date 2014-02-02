@@ -129,6 +129,15 @@
             android:key="vm_settings"
             android:title="@string/pt_vm"/>
     </PreferenceCategory>
-
+    <!-- wifi pm -->
+    <PreferenceCategory
+        android:key="wifi_pm"
+        android:title="@string/prefcat_wifi_pm">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_wifi_pm"
+            android:summary="@string/ps_dsync"
+            android:title="@string/pt_wifi_pm"/>
+    </PreferenceCategory>
 </PreferenceScreen>
 
