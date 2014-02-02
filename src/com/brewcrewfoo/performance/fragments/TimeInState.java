@@ -142,22 +142,22 @@ public class TimeInState extends Fragment implements Constants {
         for (CpuState state : monitor.getStates()) {
             if (state.duration > 0) {
                 generateStateRow(state, mStatesView);
-            } else {
+            }
+            else {
                 if (state.freq == 0) {
                     extraStates.add(getString(R.string.deep_sleep));
-                } else {
+                }
+                else {
                     extraStates.add(state.freq / 1000 + " MHz");
                 }
             }
         }
-
         if (monitor.getStates().size() == 0) {
             mStatesWarning.setVisibility(View.VISIBLE);
             mHeaderTotalStateTime.setVisibility(View.GONE);
             mTotalStateTime.setVisibility(View.GONE);
             mStatesView.setVisibility(View.GONE);
         }
-
         long totTime = monitor.getTotalStateTime() / 100;
         mTotalStateTime.setText(toString(totTime));
 
@@ -254,7 +254,12 @@ public class TimeInState extends Fragment implements Constants {
 
         @Override
         protected void onPostExecute(Void v) {
-            updateView();
+            try{
+                updateView();
+            }
+            catch (Exception e){
+
+            }
             mUpdatingData = false;
         }
     }
