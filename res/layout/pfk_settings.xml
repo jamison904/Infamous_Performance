@@ -24,15 +24,16 @@
 
             <RelativeLayout
                 android:id="@+id/lhome1"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:gravity="left">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/ps_home_enabled"
                     android:id="@+id/ihome"
@@ -40,7 +41,8 @@
                     android:textSize="17sp"
                     android:layout_toLeftOf="@+id/hview"
                     android:layout_alignParentStart="true"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginRight="20dp"
+                    android:gravity="left" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -54,20 +56,22 @@
 
             <RelativeLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lhome2"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:gravity="left">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/home_allowed_irq_title"
                     android:id="@+id/hval1"
                     android:textSize="17sp"
                     android:layout_alignParentStart="true"
                     android:layout_toLeftOf="@+id/hview1"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginRight="20dp"
+                    android:gravity="left" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -81,22 +85,22 @@
 
             <RelativeLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
                 android:id="@+id/lhome3"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:gravity="left">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/home_report_wait_title"
                     android:id="@+id/hval2"
                     android:textSize="17sp"
                     android:layout_marginRight="20dp"
                     android:layout_alignParentStart="true"
-                    android:layout_toLeftOf="@+id/hview2" />
+                    android:layout_toLeftOf="@+id/hview2"
+                    android:gravity="left" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -123,16 +127,17 @@
                 android:textColor="@color/pc_white" />
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lmenu1"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:paddingRight="10dp"
-                android:paddingBottom="10dp">
+                android:paddingBottom="10dp"
+                android:gravity="left">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/ps_menuback_enabled"
                     android:id="@+id/imenu"
@@ -140,7 +145,8 @@
                     android:textSize="17sp"
                     android:layout_toLeftOf="@+id/mview"
                     android:layout_alignParentStart="true"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginRight="20dp"
+                    android:gravity="left" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -154,22 +160,22 @@
 
             <RelativeLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
                 android:id="@+id/lmenu2"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:gravity="left">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/menuback_interrupt_checks_title"
                     android:id="@+id/mval1"
                     android:textSize="17sp"
                     android:layout_marginRight="20dp"
                     android:layout_alignParentStart="true"
-                    android:layout_toLeftOf="@+id/mview1" />
+                    android:layout_toLeftOf="@+id/mview1"
+                    android:gravity="left" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -183,22 +189,22 @@
 
             <RelativeLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
                 android:id="@+id/lmenu3"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:gravity="left">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/menuback_first_err_wait_title"
                     android:id="@+id/mval2"
                     android:textSize="17sp"
                     android:layout_toLeftOf="@+id/mview2"
                     android:layout_alignParentStart="true"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginRight="20dp"
+                    android:gravity="left" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -212,22 +218,22 @@
 
             <RelativeLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
                 android:id="@+id/lmenu4"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:gravity="left">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/menuback_last_err_wait_title"
                     android:id="@+id/mval3"
                     android:textSize="17sp"
                     android:layout_marginRight="20dp"
                     android:layout_alignParentStart="true"
-                    android:layout_toLeftOf="@+id/mview3" />
+                    android:layout_toLeftOf="@+id/mview3"
+                    android:gravity="left" />
 
                 <TextView
                     android:layout_width="wrap_content"
