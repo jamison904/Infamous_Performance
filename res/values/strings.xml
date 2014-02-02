@@ -412,5 +412,7 @@ Copyright (C) 2012  James Roberts
     <!-- 2.1.10-->
     <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
     <string name="pt_wifi_pm">WiFi PM</string>
+    <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
+    <string name="pt_mc_ps">Multicore Power Saving</string>
     <!-- 2.1.10-->
 </resources>

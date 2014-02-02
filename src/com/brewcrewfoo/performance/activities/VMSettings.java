@@ -53,8 +53,8 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     Resources res;
     private ListView packList;
     private LinearLayout linlaHeaderProgress;
-    private LinearLayout nofiles;
-    private RelativeLayout tools,search;
+    private LinearLayout nofiles,search;
+    private RelativeLayout tools;
     private PropAdapter adapter=null;
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
@@ -78,9 +78,10 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
+
         nofiles = (LinearLayout) findViewById(R.id.nofiles);
         tools = (RelativeLayout) findViewById(R.id.tools);
-        search = (RelativeLayout) findViewById(R.id.search);
+        search = (LinearLayout) findViewById(R.id.search);
         filterText = (EditText) findViewById(R.id.filtru);
         filterText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -124,8 +125,8 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 mPreferences.edit().putBoolean(VM_SOB, isChecked).apply();
             }
         });
-        tools.setVisibility(View.GONE);
-        search.setVisibility(View.GONE);
+        tools.setVisibility(RelativeLayout.GONE);
+        search.setVisibility(LinearLayout.GONE);
         isdyn= (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists() && Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH).equals("1"));
 
         new GetPropOperation().execute();
@@ -186,18 +187,18 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         protected void onPostExecute(String result) {
 
             if(result.equals("nok")) {
-                linlaHeaderProgress.setVisibility(View.GONE);
-                nofiles.setVisibility(View.VISIBLE);
+                linlaHeaderProgress.setVisibility(LinearLayout.GONE);
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
-                linlaHeaderProgress.setVisibility(View.GONE);
+                linlaHeaderProgress.setVisibility(LinearLayout.GONE);
                 if(props.isEmpty()){
-                    nofiles.setVisibility(View.VISIBLE);
+                    nofiles.setVisibility(LinearLayout.VISIBLE);
                 }
                 else{
                     Collections.sort(props);
-                    nofiles.setVisibility(View.GONE);
-                    tools.setVisibility(View.VISIBLE);
+                    nofiles.setVisibility(LinearLayout.GONE);
+                    tools.setVisibility(RelativeLayout.VISIBLE);
                     adapter = new PropAdapter(VMSettings.this, R.layout.prop_item, props);
                     packList.setAdapter(adapter);
                 }
@@ -205,9 +206,9 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         }
         @Override
         protected void onPreExecute() {
-            linlaHeaderProgress.setVisibility(View.VISIBLE);
-            nofiles.setVisibility(View.GONE);
-            tools.setVisibility(View.GONE);
+            linlaHeaderProgress.setVisibility(LinearLayout.VISIBLE);
+            nofiles.setVisibility(LinearLayout.GONE);
+            tools.setVisibility(RelativeLayout.GONE);
         }
         @Override
         protected void onProgressUpdate(Void... values) {

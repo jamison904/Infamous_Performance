@@ -55,8 +55,8 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     Resources res;
     private ListView packList;
     private LinearLayout linlaHeaderProgress;
-    private LinearLayout nofiles;
-    private RelativeLayout tools,search;
+    private LinearLayout nofiles,search;
+    private RelativeLayout tools;
     private PropAdapter adapter=null;
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
@@ -95,7 +95,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         nofiles = (LinearLayout) findViewById(R.id.nofiles);
         tools = (RelativeLayout) findViewById(R.id.tools);
-        search = (RelativeLayout) findViewById(R.id.search);
+        search = (LinearLayout) findViewById(R.id.search);
         filterText = (EditText) findViewById(R.id.filtru);
         filterText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -137,11 +137,11 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                 break;
             case R.id.search_prop:
                 if(search.isShown()){
-                    search.setVisibility(RelativeLayout.GONE);
+                    search.setVisibility(LinearLayout.GONE);
                     filterText.setText("");
                 }
                 else{
-                    search.setVisibility(RelativeLayout.VISIBLE);
+                    search.setVisibility(LinearLayout.VISIBLE);
                 }
                 break;
             case R.id.restore_prop:
@@ -154,7 +154,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     @Override
     public void onBackPressed(){
         if(search.isShown()){
-            search.setVisibility(RelativeLayout.GONE);
+            search.setVisibility(LinearLayout.GONE);
             filterText.setText("");
         }
         else{

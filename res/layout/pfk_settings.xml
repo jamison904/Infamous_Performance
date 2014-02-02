@@ -18,7 +18,9 @@
                 android:layout_marginRight="10dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:background="@color/pc_cat_gray"
+                android:textColor="@color/pc_white" />
 
             <RelativeLayout
                 android:id="@+id/lhome1"
@@ -116,7 +118,9 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:background="@color/pc_cat_gray"
+                android:textColor="@color/pc_white" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
