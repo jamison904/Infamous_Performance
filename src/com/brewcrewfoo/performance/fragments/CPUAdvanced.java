@@ -31,7 +31,7 @@ import java.io.File;
 public class CPUAdvanced extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,Constants {
 
     SharedPreferences mPreferences;
-    private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode;
+    private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode,mMcPS;
     private ListPreference mSOmax,mSOmin;
     private String pso="";
     private Context context;
@@ -54,6 +54,7 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
         mMpdecision = (CheckBoxPreference) findPreference("pref_mpdecision");
         mIntelliplug = (CheckBoxPreference) findPreference("pref_intelliplug");
         mEcomode = (CheckBoxPreference) findPreference("pref_ecomode");
+        mMcPS = (CheckBoxPreference) findPreference("pref_mc_ps");
 
         if (!new File(SO_MAX_FREQ).exists() || !new File(SO_MIN_FREQ).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("so_min_max");
@@ -98,6 +99,13 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
         }
         else{
             mEcomode.setChecked(Helpers.readOneLine(ECO_MODE).equals("1"));
+        }
+        if (!new File(MC_PS).exists()) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("prefcat_mc_ps");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            mMcPS.setChecked(Helpers.readOneLine(MC_PS).equals("1"));
         }
     }
 
@@ -153,6 +161,15 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             }
             else{
                 new CMDProcessor().su.runWaitFor("busybox echo 0 > " + ECO_MODE);
+            }
+            return true;
+        }
+        else if(preference==mMcPS) {
+            if (Helpers.readOneLine(MC_PS).equals("0")){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + MC_PS);
+            }
+            else{
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + MC_PS);
             }
             return true;
         }

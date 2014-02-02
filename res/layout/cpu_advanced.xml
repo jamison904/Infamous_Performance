@@ -57,5 +57,13 @@
             android:summary="@string/ps_dsync"
             android:title="@string/pt_ecomode"/>
     </PreferenceCategory>
-
+    <PreferenceCategory
+        android:key="mc_ps"
+        android:title="@string/prefcat_mc_ps">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_mc_ps"
+            android:summary="@string/ps_dsync"
+            android:title="@string/pt_mc_ps"/>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -149,10 +149,24 @@ public class BootService extends Service implements Constants {
                 if(preferences.getBoolean("pref_intelliplug", false)){
                     sb.append("busybox echo 1 > ").append(INTELLI_PLUG).append(";\n");
                 }
+                else{
+                    sb.append("busybox echo 0 > ").append(INTELLI_PLUG).append(";\n");
+                }
             }
             if (new File(ECO_MODE).exists()) {
                 if(preferences.getBoolean("pref_ecomode", false)){
                     sb.append("busybox echo 1 > ").append(ECO_MODE).append(";\n");
+                }
+                else{
+                    sb.append("busybox echo 0 > ").append(ECO_MODE).append(";\n");
+                }
+            }
+            if (new File(MC_PS).exists()) {
+                if(preferences.getBoolean("pref_mc_ps", false)){
+                    sb.append("busybox echo 1 > ").append(MC_PS).append(";\n");
+                }
+                else{
+                    sb.append("busybox echo 0 > ").append(MC_PS).append(";\n");
                 }
             }
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
@@ -194,6 +208,9 @@ public class BootService extends Service implements Constants {
             if (FASTCHARGE_PATH!=null) {
                 if(preferences.getBoolean(PREF_FASTCHARGE, false)){
                     sb.append("busybox echo 1 > ").append(FASTCHARGE_PATH).append(";\n");
+                }
+                else{
+                    sb.append("busybox echo 0 > ").append(FASTCHARGE_PATH).append(";\n");
                 }
             }
             if (new File(BLX_PATH).exists()) {
