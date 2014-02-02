@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
@@ -66,7 +67,7 @@ public class PFKActivity extends Activity implements ActivityThemeChangeInterfac
         mh2 = (TextView) findViewById(R.id.hview2);
         mh2.setText(Helpers.readOneLine(PFK_HOME_REPORT_WAIT));
 
-        RelativeLayout r1 = (RelativeLayout) findViewById(R.id.lhome2);
+        final RelativeLayout r1 = (RelativeLayout) findViewById(R.id.lhome2);
         r1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +77,7 @@ public class PFKActivity extends Activity implements ActivityThemeChangeInterfac
             }
         });
 
-        RelativeLayout r2 = (RelativeLayout) findViewById(R.id.lhome3);
+        final RelativeLayout r2 = (RelativeLayout) findViewById(R.id.lhome3);
         r2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +107,7 @@ public class PFKActivity extends Activity implements ActivityThemeChangeInterfac
         mh6 = (TextView) findViewById(R.id.mview3);
         mh6.setText(Helpers.readOneLine(PFK_MENUBACK_LAST_ERR_WAIT));
 
-        RelativeLayout r3 = (RelativeLayout) findViewById(R.id.lmenu2);
+        final RelativeLayout r3 = (RelativeLayout) findViewById(R.id.lmenu2);
         r3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +116,7 @@ public class PFKActivity extends Activity implements ActivityThemeChangeInterfac
                 openDialog(currentProgress, title, 1, 10, PFK_MENUBACK_INTERRUPT_CHECKS, PREF_MENUBACK_INTERRUPT_CHECKS, mh4);
             }
         });
-        RelativeLayout r4 = (RelativeLayout) findViewById(R.id.lmenu3);
+        final RelativeLayout r4 = (RelativeLayout) findViewById(R.id.lmenu3);
         r4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,7 +125,7 @@ public class PFKActivity extends Activity implements ActivityThemeChangeInterfac
                 openDialog(currentProgress, title, 50, 1000, PFK_MENUBACK_FIRST_ERR_WAIT, PREF_MENUBACK_FIRST_ERR_WAIT, mh5);
             }
         });
-        RelativeLayout r5 = (RelativeLayout) findViewById(R.id.lmenu4);
+        final RelativeLayout r5 = (RelativeLayout) findViewById(R.id.lmenu4);
         r5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +134,7 @@ public class PFKActivity extends Activity implements ActivityThemeChangeInterfac
                 openDialog(currentProgress, title, 50, 100, PFK_MENUBACK_LAST_ERR_WAIT, PREF_MENUBACK_LAST_ERR_WAIT, mh6);
             }
         });
-        Switch m1 = (Switch) findViewById(R.id.switchhome);
+        final Switch m1 = (Switch) findViewById(R.id.switchhome);
         m1.setChecked(mPreferences.getBoolean(PFK_HOME_ON, Helpers.readOneLine(PFK_HOME_ENABLED).equals("1")));
         m1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -147,7 +148,7 @@ public class PFKActivity extends Activity implements ActivityThemeChangeInterfac
                 }
             }
         });
-        Switch m2 = (Switch) findViewById(R.id.switchmenu);
+        final Switch m2 = (Switch) findViewById(R.id.switchmenu);
         m2.setChecked(mPreferences.getBoolean(PFK_MENUBACK_ON, Helpers.readOneLine(PFK_MENUBACK_ENABLED).equals("1")));
         m2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

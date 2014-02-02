@@ -26,4 +26,5 @@ Copyright (C) 2012  James Roberts
     <color name="pc_white">#ffffffff</color>
     <color name="pc_black">#ff141414</color>
     <color name="pc_red">#ffff0000</color>
+    <color name="pc_hover">#409f9f9f</color>
 </resources>

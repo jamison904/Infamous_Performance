@@ -60,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lhome2"
                 android:padding="10dp"
+                android:background="@drawable/clickable"
                 android:gravity="left">
 
                 <TextView
@@ -89,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lhome3"
                 android:padding="10dp"
+                android:background="@drawable/clickable"
                 android:gravity="left">
 
                 <TextView
@@ -164,6 +166,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lmenu2"
                 android:padding="10dp"
+                android:background="@drawable/clickable"
                 android:gravity="left">
 
                 <TextView
@@ -193,6 +196,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lmenu3"
                 android:padding="10dp"
+                android:background="@drawable/clickable"
                 android:gravity="left">
 
                 <TextView
@@ -222,6 +226,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lmenu4"
                 android:padding="10dp"
+                android:background="@drawable/clickable"
                 android:gravity="left">
 
                 <TextView
