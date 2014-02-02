@@ -120,7 +120,7 @@ Translation by DaniPhii
     <string name="ps_home_enabled">Ignorar pulsación: %s</string>
     <string name="home_allowed_irq_title">Interrupciones máximas</string>
     <string name="home_report_wait_title">Tiempo de espera del informe (ms)</string>
-
+    <string name="pkf_settings">Ajustes PKF</string>
     <string name="pt_menuback_enabled">Botones Menú/Atrás</string>
     <string name="ps_menuback_enabled">Ignorar pulsación: %s</string>
     <string name="menuback_interrupt_checks_title">Comprobar interrupciones</string>

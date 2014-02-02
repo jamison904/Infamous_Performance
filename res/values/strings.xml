@@ -136,7 +136,7 @@ Copyright (C) 2012  James Roberts
    <string name="ps_home_enabled">Ignored key pressed: %s</string>
    <string name="home_allowed_irq_title">Max allowed interrupts</string>
    <string name="home_report_wait_title">Report wait time (ms)</string>
-	
+   <string name="pkf_settings">PKF Settings</string>
    <string name="pt_menuback_enabled">Menu/Back keys filter</string>
    <string name="ps_menuback_enabled">Ignored key pressed: %s</string>
    <string name="menuback_interrupt_checks_title">Interrupts checks</string>

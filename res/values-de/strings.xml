@@ -118,7 +118,7 @@ Translation by Rhonin86 & Evisceration
     <string name="ps_home_enabled">Ignorierte Tastendrücke: %s</string>
     <string name="home_allowed_irq_title">Max. erlaubte Interrupts</string>
     <string name="home_report_wait_title">Berichtswartezeit (ms)</string>
-
+    <string name="pkf_settings">PKF Einstellungen</string>
     <string name="pt_menuback_enabled">Menü/Zurück Tasten Filter</string>
     <string name="ps_menuback_enabled">Ignorierte Tastendrücke: %s</string>
     <string name="menuback_interrupt_checks_title">Interrupt Überprüfungen</string>

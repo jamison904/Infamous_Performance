@@ -45,7 +45,7 @@ translation by Stefano187
     <string name="prefcat_misc_short">MISC</string>
     <string name="prefcat_read_ahead">SD READ AHEAD</string>
     <string name="prefcat_vm_settings">IMPOSTAZIONI VM</string>
-    <string name="pt_vm">Informazioni VM</string>
+    <string name="pt_vm">Impostazioni VM</string>
     <string name="dt_free_memory">Minfree Taskkiller</string>
     <string name="dt_read_ahead">SD Read Ahead</string>
     <string name="pt_free_memory">Memoria Libera</string>
@@ -121,7 +121,7 @@ translation by Stefano187
     <string name="ps_home_enabled">Pressioni ignorate: %s</string>
     <string name="home_allowed_irq_title">Massimo di interrupt consentiti</string>
     <string name="home_report_wait_title">Tempo di attesa (ms)</string>
-
+    <string name="pkf_settings">Impostazioni PKF</string>
     <string name="pt_menuback_enabled">Filtro tasti Menu/Indietro</string>
     <string name="ps_menuback_enabled">Pressioni ignorate: %s</string>
     <string name="menuback_interrupt_checks_title">Controlli sugli interrupt</string>

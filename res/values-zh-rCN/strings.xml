@@ -136,7 +136,7 @@ Copyright (C) 2012  James Roberts
    <string name="ps_home_enabled">已忽略按键：%s</string>
    <string name="home_allowed_irq_title">最大允许中断数</string>
    <string name="home_report_wait_title">报告等待时间 (ms)</string>
-	
+    <string name="pkf_settings">PKF设置</string>
    <string name="pt_menuback_enabled">Menu/Back 按键过滤</string>
    <string name="ps_menuback_enabled">已忽略按键: %s</string>
    <string name="menuback_interrupt_checks_title">中断检查</string>

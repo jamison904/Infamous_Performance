@@ -115,7 +115,7 @@ Translation by Laurentiu1996
     <string name="ps_home_enabled">Atingerile ignorate: %s</string>
     <string name="home_allowed_irq_title">Numărul maxim de întreruperi</string>
     <string name="home_report_wait_title">Raportarea timpului de aşteptare (ms)</string>
-
+    <string name="pkf_settings">Setări PKF</string>
     <string name="pt_menuback_enabled">Filtru pentru tastele Meniu/Înapoi</string>
     <string name="ps_menuback_enabled">Atingerile ignorate: %s</string>
     <string name="menuback_interrupt_checks_title">Întreruperi verificate</string>

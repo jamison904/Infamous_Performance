@@ -41,6 +41,9 @@
         <activity android:name="com.brewcrewfoo.performance.activities.ZramActivity"
             android:windowSoftInputMode="stateHidden"/>
 
+        <activity android:name="com.brewcrewfoo.performance.activities.PFKActivity"
+            android:windowSoftInputMode="stateHidden"/>
+
         <activity android:name="com.brewcrewfoo.performance.activities.FreezerActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize"/>
 

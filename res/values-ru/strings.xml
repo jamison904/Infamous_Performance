@@ -111,6 +111,7 @@
     <string name="ps_home_enabled">Игнорировать нажатие кнопки: %s</string>
     <string name="home_allowed_irq_title">Максимально разрешённые прерывания</string>
     <string name="home_report_wait_title">Уведомить о времени ожидания (мс)</string>
+    <string name="pkf_settings">Настройки PKF</string>
     <string name="pt_menuback_enabled">Фильтр кнопок Меню/Назад</string>
     <string name="ps_menuback_enabled">Игнорировать нажатие кнопки: %s</string>
     <string name="menuback_interrupt_checks_title">Проверка прерываний</string>
