@@ -89,7 +89,7 @@ public class PFKActivity extends Activity implements ActivityThemeChangeInterfac
         mt =(TextView)findViewById(R.id.imenu);
         mt.setText(getString(R.string.ps_menuback_enabled, ""));
         mh3 = (TextView) findViewById(R.id.mview);
-        mh3.setText(Helpers.readOneLine(PFK_MENUBACK_ENABLED));
+        mh3.setText(Helpers.readOneLine(PFK_MENUBACK_IGNORED_KP));
 
         mt =(TextView)findViewById(R.id.mval1);
         mt.setText(getString(R.string.menuback_interrupt_checks_title));
