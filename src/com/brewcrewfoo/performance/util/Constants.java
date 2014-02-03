@@ -41,6 +41,9 @@ public interface Constants {
     public static final String GOVERNORS_LIST_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors";
     public static final String GOVERNOR_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor";
     public static final String IO_SCHEDULER_PATH = "/sys/block/mmcblk0/queue/scheduler";
+    public static final String IO_TUNABLE_PATH = "/sys/block/mmcblk0/queue/iosched";
+    public static final String IO_SOB = "io_settings_sob";
+
     //Dynamic frequency scaling
     public static final String DYN_MAX_FREQ_PATH = "/sys/power/cpufreq_max_limit";
     public static final String DYN_MIN_FREQ_PATH = "/sys/power/cpufreq_min_limit";
@@ -53,8 +56,6 @@ public interface Constants {
     public static final String PREF_IO = "pref_io";
     public static final String CPU_SOB = "cpu_sob";
     public static final String GOV_SOB = "gov_settings_sob";
-    public static final String GOV_SETTINGS = "gov_settings";
-    public static final String GOV_NAME = "gov_name";
     public static final String GOV_SETTINGS_PATH = "/sys/devices/system/cpu/cpufreq/";
 
     public static final String MC_PS="/sys/devices/system/cpu/sched_mc_power_savings";//multi core power saving
@@ -80,8 +81,7 @@ public interface Constants {
     public static final String MINFREE_ADJ_PATH = "/sys/module/lowmemorykiller/parameters/adj";
     public static final String READ_AHEAD_PATH ="/sys/block/mmcblk0/queue/read_ahead_kb";
     //"/sys/devices/virtual/bdi/default/read_ahead_kb"
-    
-    public static final String INTENT_ACTION_FASTCHARGE = "com.aokp.romcontrol.FCHARGE_CHANGED";
+
     public static final String PREF_MINFREE = "pref_minfree";
     public static final String PREF_MINFREE_BOOT = "pref_minfree_boot";
     public static final String PREF_READ_AHEAD = "pref_read_ahead";

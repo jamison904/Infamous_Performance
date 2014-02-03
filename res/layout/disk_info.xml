@@ -2,25 +2,27 @@
 
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp">
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 <LinearLayout
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <RelativeLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/system"
-            android:layout_marginTop="10dip"
-            android:clickable="true"
-            android:visibility="gone">
+        android:clickable="true"
+        android:paddingTop="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:background="@drawable/clickable"
+        android:visibility="gone">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -76,9 +78,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/data"
-            android:layout_marginTop="10dip"
-            android:clickable="true"
-            android:visibility="gone">
+        android:clickable="true"
+        android:paddingTop="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:background="@drawable/clickable"
+        android:visibility="gone">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -133,9 +138,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cache"
-            android:layout_marginTop="10dip"
-            android:clickable="true"
-            android:visibility="gone">
+        android:clickable="true"
+            android:visibility="gone"
+        android:paddingTop="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:background="@drawable/clickable">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -192,7 +200,11 @@
             android:id="@+id/sd1"
             android:layout_marginTop="10dip"
             android:clickable="true"
-            android:visibility="gone">
+            android:visibility="gone"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:paddingRight="4dp"
+        android:background="@drawable/clickable">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -248,7 +260,11 @@
             android:id="@+id/sd2"
             android:layout_marginTop="10dip"
             android:clickable="true"
-            android:visibility="gone">
+            android:visibility="gone"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:paddingRight="4dp"
+        android:background="@drawable/clickable">
 
         <TextView
                 android:layout_width="wrap_content"
