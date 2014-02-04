@@ -414,5 +414,6 @@ Copyright (C) 2012  James Roberts
     <string name="pt_wifi_pm">WiFi PM</string>
     <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
     <string name="pt_mc_ps">Multicore Power Saving</string>
+    <string name="mt_io_ctrl">IO Scheduler Settings</string>
     <!-- 2.1.10-->
 </resources>

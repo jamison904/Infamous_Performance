@@ -50,6 +50,9 @@
         <activity android:name="com.brewcrewfoo.performance.activities.GovSetActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 
+        <activity android:name="com.brewcrewfoo.performance.activities.IOSetActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
         <activity android:name="com.brewcrewfoo.performance.activities.VMSettings"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 

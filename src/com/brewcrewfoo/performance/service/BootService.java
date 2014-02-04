@@ -75,6 +75,7 @@ public class BootService extends Service implements Constants {
             final String BLN_PATH=Helpers.bln_path();
             final String WIFIPM_PATH=Helpers.wifipm_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
+            final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
             final float maxdisk = Helpers.getMem("MemTotal") / 1024;
 
 
@@ -130,7 +131,6 @@ public class BootService extends Service implements Constants {
                 }
                 for(byte i=0;i<2; i++){
                     if (new File(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).exists()){
-                        final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
                         sb.append("busybox echo ").append(io).append(" > ").append(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).append(";\n");
                     }
                 }
@@ -350,7 +350,7 @@ public class BootService extends Service implements Constants {
                 }
             }
             if (preferences.getBoolean(GOV_SOB, false)) {
-                final String gn = preferences.getString(gov, "");
+                final String gn = preferences.getString(gov.replace(" ","_"), "");
                 if (!gn.equals("")) {
                     sb.append("if busybox [ -d ").append(GOV_SETTINGS_PATH).append(gov).append(" ]; then\n");
                     String p[]=gn.split(";");
@@ -361,6 +361,22 @@ public class BootService extends Service implements Constants {
                         }
                     }
                     sb.append("fi;\n");
+                }
+            }
+            if (preferences.getBoolean(IO_SOB, false)) {
+                final String s=preferences.getString(io.replace(" ","_"),"");
+                if(!s.equals("")){
+                    String p[]=s.split(";");
+                    for(byte i=0;i<2; i++){
+                        if (new File(IO_TUNABLE_PATH.replace("mmcblk0","mmcblk"+i)).exists()){
+                            for (String aP : p) {
+                                if(aP!=null && aP.contains(":")){
+                                    final String pn[]=aP.split(":");
+                                    sb.append("busybox echo ").append(pn[1]).append(" > ").append(IO_TUNABLE_PATH.replace("mmcblk0","mmcblk"+i)).append("/").append(pn[0]).append(";\n");
+                                }
+                            }
+                        }
+                    }
                 }
             }
             if (preferences.getBoolean(TOUCHSCREEN_SOB, false)) {
@@ -418,9 +434,6 @@ public class BootService extends Service implements Constants {
             if (FASTCHARGE_PATH!=null) {
                 if(Helpers.readOneLine(FASTCHARGE_PATH).equals("1")){
                     // add notification to warn user they can only charge
-                    //Intent i = new Intent();
-                    //i.setAction(INTENT_ACTION_FASTCHARGE);
-                    //c.sendBroadcast(i);
                     CharSequence contentTitle = c.getText(R.string.fast_charge_notification_title);
                     CharSequence contentText = c.getText(R.string.fast_charge_notification_message);
                     Notification n = new Notification.Builder(c)

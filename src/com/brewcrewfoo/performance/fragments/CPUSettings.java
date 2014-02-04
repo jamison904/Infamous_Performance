@@ -16,6 +16,7 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.GovSetActivity;
+import com.brewcrewfoo.performance.activities.IOSetActivity;
 import com.brewcrewfoo.performance.activities.MainActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.util.Constants;
@@ -221,6 +222,13 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                     }
                 }
                 break;
+            case R.id.io_settings:
+                if(new File(IO_TUNABLE_PATH).exists()){
+                    intent = new Intent(context, IOSetActivity.class);
+                    intent.putExtra("curio", MainActivity.mCurIO[MainActivity.curcpu]);
+                    startActivity(intent);
+                }
+                break;
         }
         return true;
     }
@@ -274,7 +282,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             for (int i = 0; i < MainActivity.nCpus; i++){
                 sb.append("set_val \"").append(GOVERNOR_PATH.replace("cpu0", "cpu" + MainActivity.curcpu)).append("\" \"").append(selected).append("\";\n");
             }
-            final String s=mPreferences.getString(selected,"");
+            //restore gov tunable
+            final String s=mPreferences.getString(selected.replace(" ","_"),"");
             if(!s.equals("")){
                 sb.append("if busybox [ -d ").append(GOV_SETTINGS_PATH).append(selected).append(" ]; then\n");
                 String p[]=s.split(";");
@@ -286,10 +295,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 }
                 sb.append("fi;\n");
             }
-            updateSharedPrefs(PREF_GOV, selected);
-            // reset gov settings
-            //mPreferences.edit().remove(GOV_SETTINGS).remove(GOV_NAME).apply();
             Helpers.shExec(sb,context,true);
+            updateSharedPrefs(PREF_GOV, selected);
             MainActivity.mCurGovernor[MainActivity.curcpu]=selected;
         }
         public void onNothingSelected(AdapterView<?> parent) {
@@ -305,6 +312,21 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 if (new File(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).exists())
 				    sb.append("busybox echo ").append(selected).append(" > ").append(IO_SCHEDULER_PATH.replace("mmcblk0","mmcblk"+i)).append(";\n");
 			}
+            //restore io tunable
+            final String s=mPreferences.getString(selected.replace(" ","_"),"");
+            if(!s.equals("")){
+                String p[]=s.split(";");
+                for(byte i=0;i<2; i++){
+                    if (new File(IO_TUNABLE_PATH.replace("mmcblk0","mmcblk"+i)).exists()){
+                        for (String aP : p) {
+                            if(aP!=null && aP.contains(":")){
+                                final String pn[]=aP.split(":");
+                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(IO_TUNABLE_PATH.replace("mmcblk0","mmcblk"+i)).append("/").append(pn[0]).append(";\n");
+                            }
+                        }
+                    }
+                }
+            }
 			Helpers.shExec(sb,context,true);
             updateSharedPrefs(PREF_IO, selected);
             MainActivity.mCurIO[MainActivity.curcpu]=selected;
