@@ -370,10 +370,10 @@
     <string name="ps_zram_info">Zram будет остановлен чтобы изменить размер диска</string>
     <!-- beta2-->
     <!-- 2.1.10-->
-    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="prefcat_wifi_pm">РЕЖИМ ПИТАНИЯ WiFi SLEEP</string>
     <string name="pt_wifi_pm">WiFi PM</string>
-    <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
-    <string name="pt_mc_ps">Multicore Power Saving</string>
-    <string name="mt_io_ctrl">IO Scheduler Settings</string>
+    <string name="prefcat_mc_ps">МНОГОЯДЕРНОЕ ЭНЕРГОСБЕРЕЖЕНИЕ</string>
+    <string name="pt_mc_ps">Многоядерное Энергосбережение</string>
+    <string name="mt_io_ctrl">Настройки планировщика IO</string>
     <!-- 2.1.10-->
 </resources>
