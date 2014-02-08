@@ -101,7 +101,7 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             mEcomode.setChecked(Helpers.readOneLine(ECO_MODE).equals("1"));
         }
         if (!new File(MC_PS).exists()) {
-            PreferenceCategory hideCat = (PreferenceCategory) findPreference("prefcat_mc_ps");
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("mc_ps");
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
