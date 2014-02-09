@@ -184,10 +184,8 @@
     <string name="first_run_title">Сначала проверьте права root</string>
     <string name="su_success_title">Выполнено!</string>
     <string name="su_failed_title">Ой!</string>
-    <string name="first_run_message">Приложение проверит права ROOT и наличие Busybox. Нажмите OK чтобы продолжить.</string>
-    <string name="su_success_message">Приложению удалось получить root доступ и найти Busybox. Поехали!</string>
-    <string name="su_cancel_message">Вы выбрали не проверять ROOT доступ и Busybox. Большинство функций не доступны без этого!</string>
-    <string name="su_failed_su_or_busybox">Нет доступа Root или не установлен Busybox. Большинство функций недоступны</string>
+    <string name="first_run_message">Приложение проверит права ROOT и наличие Busybox.</string>
+    <string name="su_failed_su_or_busybox">Нет доступа Root или не установлен Busybox.</string>
     <!-- Tools -->
     <string name="prefcat_sh">КАСТОМНАЯ КОММАНДНАЯ СТРОКА</string>
     <string name="sh_title">Редактировать команду</string>

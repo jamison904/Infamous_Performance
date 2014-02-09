@@ -178,13 +178,8 @@ Translation by Laurentiu1996
     <string name="first_run_title">Verificarea root-ului pentru prima dată</string>
     <string name="su_success_title">Succes!</string>
     <string name="su_failed_title">Oops!</string>
-    <string name="first_run_message">Aplicaţia trebuie sa verifie accesul la root şi busybox. Apăsaţi OK pentru continuare.</string>
-    <string name="su_success_message">Aplicaţia a primit accesul la root şi a găsit busybox. Ready to rock!</string>
-    <string name="su_cancel_message">Ai ales să nu se verifice root-ul şi busybox.
-        Cele mai multe opţiuni nu vor putea fi folosite fară accesul la root. Ne pare rău!
-    </string>
-    <string name="su_failed_su_or_busybox">Accesul la root a eşuat sau busybox nu a fost găsit. Cele mai multe opţiuni nu vor putea fi folosite fară accesul la root. Ne pare rău!
-    </string>
+    <string name="first_run_message">Aplicaţia trebuie sa verifie accesul la root şi busybox.</string>
+    <string name="su_failed_su_or_busybox">Accesul la root a eşuat sau busybox nu a fost găsit.</string>
 
     <!-- Tools -->
     <string name="prefcat_sh">COMANDĂ SHELL</string>

@@ -74,9 +74,7 @@ Copyright (C) 2012  James Roberts
     </string>
 
     <string name="ps_fast_charge_boot">Fast charge</string>
-    <string name="fast_charge_warning">YOU WILL NOT BE ABLE TO CONNECT TO YOUR PC AFTER
-        EACH REBOOT!\n\nWhile Fast Charge is ON, you can *only* charge your phone!
-    </string>
+    <string name="fast_charge_warning">YOU WILL NOT BE ABLE TO CONNECT TO YOUR PC AFTER EACH REBOOT!\n\nWhile Fast Charge is ON, you can *only* charge your phone!</string>
     <string name="fast_charge_notification_title">Fast Charge is ON!</string>
     <string name="fast_charge_notification_message">Phone is in charge-only mode!</string>
 
@@ -202,18 +200,8 @@ Copyright (C) 2012  James Roberts
     <string name="first_run_title">First check for root</string>
     <string name="su_success_title">Success!</string>
     <string name="su_failed_title">Oops!</string>
-    <string name="first_run_message">The application needs to check for root access and
-        busybox. Press OK to continue.
-    </string>
-    <string name="su_success_message">Performance Control was able to get root access and
-        find busybox. Ready to rock!
-    </string>
-    <string name="su_cancel_message">You have chosen to not check for root and busybox.
-        Most options will not work without root access. Sorry!
-    </string>
-    <string name="su_failed_su_or_busybox">Root access failed or busybox was not found. Most
-        options will not work without root access. Sorry!
-    </string>
+    <string name="first_run_message">The application needs to check for root access and busybox.</string>
+    <string name="su_failed_su_or_busybox">Root access failed or busybox was not found.</string>
     
     <!-- Tools -->
     <string name="prefcat_sh">CUSTOM SHELL COMMAND</string>

@@ -202,18 +202,8 @@ Copyright (C) 2012  James Roberts
     <string name="first_run_title">首先检查 ROOT 状态</string>
     <string name="su_success_title">成功！</string>
     <string name="su_failed_title">啊呀！</string>
-    <string name="first_run_message">本应用需要检查是否有 ROOT 权限和安装 busybox。
-	    按“确认”继续。
-    </string>
-    <string name="su_success_message">性能控制能够得到 ROOT 权限并已找到了 busybox。
-        万事俱备！
-    </string>
-    <string name="su_cancel_message">你选择不检查 ROOT 权限并搜索 busybox，
-        大部分功能都将不可用，抱歉！
-    </string>
-    <string name="su_failed_su_or_busybox">无法获得 ROOT 权限或找不到 busybox，
-        大部分功能都将不可用，抱歉！
-    </string>
+    <string name="first_run_message">本应用需要检查是否有 ROOT 权限和安装 busybox</string>
+    <string name="su_failed_su_or_busybox">无法获得 ROOT 权限或找不到 busybox</string>
     
     <!-- Tools -->
     <string name="prefcat_sh">定制 SHELL 命令</string>

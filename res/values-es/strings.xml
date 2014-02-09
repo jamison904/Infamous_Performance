@@ -186,18 +186,8 @@ Translation by DaniPhii
     <string name="first_run_title">Comprobando permisos de superusuario…</string>
     <string name="su_success_title">¡Correcto!</string>
     <string name="su_failed_title">¡Algo fue mal!</string>
-    <string name="first_run_message">La aplicación necesita comprobar los permisos de superusuario y
-        la versión de BusyBox. Pulsa Aceptar para continuar. Pulsa Cancelar si no quieres dar pemisos.
-    </string>
-    <string name="su_success_message">Performance Control tiene permisos de superusuario y ha encontrado
-        BusyBox en el sistema. ¡Todo correcto!
-    </string>
-    <string name="su_cancel_message">Has decidido no otorgar permisos de superusuario a la aplicación.
-        La mayoría de funcionalidades no estarán disponibles. ¡Lo siento!
-    </string>
-    <string name="su_failed_su_or_busybox">No fue posible conseguir los permisos o no se encontró BusyBox.
-        La mayoría de funcionalidades no estarán disponibles. ¡Lo siento!
-    </string>
+    <string name="first_run_message">La aplicación necesita comprobar los permisos de superusuario y la versión de BusyBox.</string>
+    <string name="su_failed_su_or_busybox">No fue posible conseguir los permisos o no se encontró BusyBox.</string>
 
     <!-- Herramientas -->
     <string name="prefcat_sh">LÍNEA DE COMANDOS PERSONALIZADA</string>

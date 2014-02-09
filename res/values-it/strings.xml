@@ -187,18 +187,8 @@ translation by Stefano187
     <string name="first_run_title">Verifica del root</string>
     <string name="su_success_title">Riuscita!</string>
     <string name="su_failed_title">Oops!</string>
-    <string name="first_run_message">L\'applicazione deve verificare l\'accesso come root e la presenza di
-        busybox. Premi OK per continuare.
-    </string>
-    <string name="su_success_message">Performance Control ha ottenuto l\'accesso come root ed
-        ha trovato busybox. Pronto per il rock!
-    </string>
-    <string name="su_cancel_message">Hai deciso di non verificare l\'accesso come root e la presenza di busybox.
-        Gran parte delle opzioni non funzioneranno. Ci dispiace!
-    </string>
-    <string name="su_failed_su_or_busybox">Accesso come root fallito o busibox non trovato. Gran parte
-        delle opzioni non funzioneranno. Ci dispiace!
-    </string>
+    <string name="first_run_message">L\'applicazione deve verificare l\'accesso come root e la presenza di busybox.</string>
+    <string name="su_failed_su_or_busybox">Accesso come root fallito o busibox non trovato.</string>
 
     <!-- Tools -->
     <string name="prefcat_sh">COMANDO SHELL PERSONALIZZATO</string>

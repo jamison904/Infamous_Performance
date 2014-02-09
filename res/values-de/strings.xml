@@ -183,18 +183,8 @@ Translation by Rhonin86 & Evisceration
     <string name="first_run_title">Rootberechtigung überprüfen</string>
     <string name="su_success_title">Erfolgreich!</string>
     <string name="su_failed_title">Upps!</string>
-    <string name="first_run_message">Die Anwendung überprüft den Rootzugriff und
-        BusyBox.\n\nDrücke OK um weiter zu machen.
-    </string>
-    <string name="su_success_message">"Performance Control hat Root Zugang und hat BusyBox
-        gefunden. Los geht's!"
-    </string>
-    <string name="su_cancel_message">Du hast Dich entschieden der Anwendung keinen Rootzugang zu gewähren.
-        Die meisten Funktionen benötigen aber Root Zugang.\n\nTut mir leid!
-    </string>
-    <string name="su_failed_su_or_busybox">Kein Root Zugang oder BusyBox nicht gefunden. Die meisten
-        Funktionen benötigen aber Root Zugang.\n\nTut mir leid!
-    </string>
+    <string name="first_run_message">Die Anwendung überprüft den Rootzugriff und BusyBox.</string>
+    <string name="su_failed_su_or_busybox">Kein Root Zugang oder BusyBox nicht gefunden.</string>
 
     <!-- Tools -->
     <string name="prefcat_sh">Individueller Shell Befehl</string>
