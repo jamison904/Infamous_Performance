@@ -222,7 +222,7 @@ public interface Constants {
     public static final String HOME2WAKE="/sys/android_touch/home2wake";
     public static final String LOGO2WAKE="/sys/android_touch/logo2wake";
     public static final String LOGO2MENU="/sys/android_touch/logo2menu";
-    public static final String POCKET_DETECT=" /sys/android_touch/pocket_detect";
+    public static final String POCKET_DETECT="/sys/android_touch/pocket_detect";
     public static final String PICK2WAKE="/sys/devices/virtual/htc_g_sensor/g_sensor/pick2wake";
     public static final String FLICK2SLEEP="/sys/devices/virtual/htc_g_sensor/g_sensor/flick2sleep";
     public static final String DOUBLETAP2WAKE="/sys/android_touch/doubletap2wake";
