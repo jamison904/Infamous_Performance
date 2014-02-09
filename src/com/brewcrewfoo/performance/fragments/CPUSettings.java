@@ -280,7 +280,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             final StringBuilder sb = new StringBuilder();
             String selected = parent.getItemAtPosition(pos).toString();
             for (int i = 0; i < MainActivity.nCpus; i++){
-                sb.append("set_val \"").append(GOVERNOR_PATH.replace("cpu0", "cpu" + MainActivity.curcpu)).append("\" \"").append(selected).append("\";\n");
+                //sb.append("busybox echo ").append(selected).append(" > ").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
+                sb.append("set_val \"").append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append("\" \"").append(selected).append("\";\n");
             }
             //restore gov tunable
             final String s=mPreferences.getString(selected.replace(" ","_"),"");
