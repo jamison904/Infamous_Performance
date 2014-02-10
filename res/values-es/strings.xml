@@ -17,7 +17,6 @@ Translation by DaniPhii
         <item>Estadísticas</item>
         <item>Memoria</item>
         <item>Herramientas</item>
-        <item>Información general</item>
     </string-array>
 
     <string name="menu_tab">Pestañas</string>
@@ -74,13 +73,13 @@ Translation by DaniPhii
     <string name="title_empty_app">Vaciar aplicaciones</string>
     <string name="prefcat_oom_predefines">AJUSTES PREESTABLECIDOS</string>
     <string name="pt_oom">Ajustes preestablecidos del matador de procesos</string>
-
-    <string name="pt_verylight">Muy ligero</string>
-    <string name="pt_light">Ligero</string>
-    <string name="pt_medium">Medio</string>
-    <string name="pt_aggressive">Agresivo</string>
-    <string name="pt_veryaggressive">Muy agresivo</string>
-
+    <string-array name="oom_values">
+        <item>Muy ligero</item>
+        <item>Ligero</item>
+        <item>Medio</item>
+        <item>Agresivo</item>
+        <item>Muy agresivo</item>
+    </string-array>
     <!-- Procesos inmortales -->
     <string name="prefcat_user_proc">PROCESOS DE USUARIO INMORTALES</string>
     <string name="prefcat_sys_proc">PROCESOS DE SISTEMA INMORTALES</string>
@@ -182,7 +181,6 @@ Translation by DaniPhii
     <!-- Información de CPU -->
     <string name="kernel_info">INFORMACIÓN DEL KERNEL LINUX</string>
     <string name="cpu_info">INFORMACIÓN DE CPU</string>
-    <string name="mem_info">INFORMACIÓN DE LA MEMORIA</string>
     <string name="first_run_title">Comprobando permisos de superusuario…</string>
     <string name="su_success_title">¡Correcto!</string>
     <string name="su_failed_title">¡Algo fue mal!</string>
@@ -379,5 +377,10 @@ Translation by DaniPhii
     <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
     <string name="pt_mc_ps">Multicore Power Saving</string>
     <string name="mt_io_ctrl">IO Scheduler Settings</string>
-    <!-- 2.1.10-->
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="pt_thermal_th">Thermal Throttling</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
 </resources>

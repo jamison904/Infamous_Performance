@@ -31,7 +31,6 @@ Copyright (C) 2012  James Roberts
         <item>Time In State</item>
         <item>Disk Info</item>
         <item>Tools</item>
-        <item>General Info</item>
     </string-array>
 
 
@@ -89,11 +88,13 @@ Copyright (C) 2012  James Roberts
    <string name="prefcat_oom_predefines">PRESETS</string>
    <string name="pt_oom">Minfree Taskkiller Presets</string>
 
-   <string name="pt_verylight">Very Light</string>
-   <string name="pt_light">Light</string>
-   <string name="pt_medium">Medium</string>
-   <string name="pt_aggressive">Aggressive</string>
-   <string name="pt_veryaggressive">Very Aggressive</string>
+    <string-array name="oom_values">
+        <item>Very Light</item>
+        <item>Light</item>
+        <item>Medium</item>
+        <item>Aggressive</item>
+        <item>Very Aggressive</item>
+    </string-array>
 
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">NOT KILLABLE USER PROCESSES</string>
@@ -196,7 +197,6 @@ Copyright (C) 2012  James Roberts
     <!-- CPU info -->
     <string name="kernel_info">LINUX KERNEL INFORMATION</string>
     <string name="cpu_info">CPU INFORMATION</string>
-    <string name="mem_info">MEMORY INFORMATION</string>
     <string name="first_run_title">First check for root</string>
     <string name="su_success_title">Success!</string>
     <string name="su_failed_title">Oops!</string>
@@ -403,5 +403,11 @@ Copyright (C) 2012  James Roberts
     <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
     <string name="pt_mc_ps">Multicore Power Saving</string>
     <string name="mt_io_ctrl">IO Scheduler Settings</string>
-    <!-- 2.1.10-->
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="pt_thermal_th">Thermal Throttling</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
+
 </resources>

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.brewcrewfoo.performance"
           android:versionCode="4"
-          android:versionName="2.1.11">
+          android:versionName="2.1.12">
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19"/>
 
@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.brewcrewfoo.performance.activities.checkSU"/>
+
+        <activity android:name="com.brewcrewfoo.performance.activities.MemUsageActivity"/>
+
         <activity android:name="com.brewcrewfoo.performance.activities.PCSettings"/>
 
         <activity android:name="com.brewcrewfoo.performance.activities.PackActivity"/>
@@ -46,6 +50,9 @@
 
         <activity android:name="com.brewcrewfoo.performance.activities.FreezerActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <activity android:name="com.brewcrewfoo.performance.activities.HotplugActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <activity android:name="com.brewcrewfoo.performance.activities.GovSetActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>

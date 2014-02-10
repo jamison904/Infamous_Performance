@@ -17,7 +17,6 @@ Translation by Laurentiu1996
         <item>Timp de lucru</item>
         <item>Informatii Disk</item>
         <item>Utile</item>
-        <item>Informaţii Generale</item>
     </string-array>
 
     <string name="menu_tab">Tab-uri</string>
@@ -69,13 +68,13 @@ Translation by Laurentiu1996
     <string name="title_empty_app">Aplicaţii Goale</string>
     <string name="prefcat_oom_predefines">PRESETĂRI</string>
     <string name="pt_oom">Presetări Minfree Taskkiller</string>
-
-    <string name="pt_verylight">Foarte Uşor</string>
-    <string name="pt_light">Uşor</string>
-    <string name="pt_medium">Mediu</string>
-    <string name="pt_aggressive">Agresiv</string>
-    <string name="pt_veryaggressive">Foarte Agresiv</string>
-
+    <string-array name="oom_values">
+        <item>Foarte Uşor</item>
+        <item>Uşor</item>
+        <item>Mediu</item>
+        <item>Agresiv</item>
+        <item>Foarte Agresiv</item>
+    </string-array>
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">PROCESELE UTILIZATORULUI CARE NU POT FI ÎNCHISE</string>
     <string name="prefcat_sys_proc">PROCESELE SISTEMULUI CARE NU POT FI ÎNCHISE</string>
@@ -174,7 +173,6 @@ Translation by Laurentiu1996
     <!-- CPU info -->
     <string name="kernel_info">INFORMAŢII DESPRE LINUX KERNEL</string>
     <string name="cpu_info">INFORMAŢII CPU</string>
-    <string name="mem_info">INFORMAŢII MEMORIE</string>
     <string name="first_run_title">Verificarea root-ului pentru prima dată</string>
     <string name="su_success_title">Succes!</string>
     <string name="su_failed_title">Oops!</string>
@@ -371,5 +369,10 @@ Translation by Laurentiu1996
     <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
     <string name="pt_mc_ps">Multicore Power Saving</string>
     <string name="mt_io_ctrl">IO Scheduler Settings</string>
-    <!-- 2.1.10-->
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="pt_thermal_th">Thermal Throttling</string>
+    <string name="mt_mem_usage">Utilizare Memorie</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
 </resources>

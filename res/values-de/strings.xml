@@ -15,7 +15,6 @@ Translation by Rhonin86 & Evisceration
         <item>Frequenzverteilung</item>
         <item>Disk Informationen</item>
         <item>Tools</item>
-        <item>Allgemeine Informationen</item>
     </string-array>
 
     <string name="menu_tab">Tab</string>
@@ -72,13 +71,13 @@ Translation by Rhonin86 & Evisceration
     <string name="title_empty_app">Leere Applikationen</string>
     <string name="prefcat_oom_predefines">Voreinstellungen</string>
     <string name="pt_oom">Mindestverfügbarer Speicher Voreinstellungen</string>
-
-    <string name="pt_verylight">Sehr Mild</string>
-    <string name="pt_light">Mild</string>
-    <string name="pt_medium">Mittel</string>
-    <string name="pt_aggressive">Aggressiv</string>
-    <string name="pt_veryaggressive">Sehr Aggressiv</string>
-
+    <string-array name="oom_values">
+        <item>Sehr Mild</item>
+        <item>Mild</item>
+        <item>Mittel</item>
+        <item>Aggressiv</item>
+        <item>Sehr Aggressiv</item>
+    </string-array>
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">Speicherresistente Benutzerprozesse</string>
     <string name="prefcat_sys_proc">Speicherresistente Systemprozesse</string>
@@ -179,7 +178,6 @@ Translation by Rhonin86 & Evisceration
     <!-- CPU info -->
     <string name="kernel_info">Linux Kernel Information</string>
     <string name="cpu_info">CPU Information</string>
-    <string name="mem_info">Speicher Information</string>
     <string name="first_run_title">Rootberechtigung überprüfen</string>
     <string name="su_success_title">Erfolgreich!</string>
     <string name="su_failed_title">Upps!</string>
@@ -376,5 +374,10 @@ Translation by Rhonin86 & Evisceration
     <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
     <string name="pt_mc_ps">Multicore Power Saving</string>
     <string name="mt_io_ctrl">IO Scheduler Settings</string>
-    <!-- 2.1.10-->
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="pt_thermal_th">Thermal Throttling</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
 </resources>

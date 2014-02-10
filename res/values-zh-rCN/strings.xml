@@ -31,7 +31,6 @@ Copyright (C) 2012  James Roberts
         <item>状态时间统计</item>
         <item>存储信息</item>
         <item>工具</item>
-        <item>基本信息</item>
     </string-array>
 
 
@@ -90,12 +89,13 @@ Copyright (C) 2012  James Roberts
    <string name="title_empty_app">空应用</string>
    <string name="prefcat_oom_predefines">预设</string>
    <string name="pt_oom">最小空闲内存预设</string>
-
-   <string name="pt_verylight">很轻度</string>
-   <string name="pt_light">轻度</string>
-   <string name="pt_medium">中等</string>
-   <string name="pt_aggressive">激进</string>
-   <string name="pt_veryaggressive">很激进</string>
+    <string-array name="oom_values">
+        <item>很轻度</item>
+        <item>轻度</item>
+        <item>中等</item>
+        <item>激进</item>
+        <item>很激进</item>
+    </string-array>
 
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">不可杀死的用户进程</string>
@@ -198,7 +198,6 @@ Copyright (C) 2012  James Roberts
     <!-- CPU info -->
     <string name="kernel_info">LINUX 内核信息</string>
     <string name="cpu_info">CPU 信息</string>
-    <string name="mem_info">MEMORY 信息</string>
     <string name="first_run_title">首先检查 ROOT 状态</string>
     <string name="su_success_title">成功！</string>
     <string name="su_failed_title">啊呀！</string>
@@ -396,5 +395,10 @@ Copyright (C) 2012  James Roberts
     <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
     <string name="pt_mc_ps">Multicore Power Saving</string>
     <string name="mt_io_ctrl">IO Scheduler Settings</string>
-    <!-- 2.1.10-->
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="pt_thermal_th">Thermal Throttling</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
 </resources>

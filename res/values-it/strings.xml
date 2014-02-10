@@ -17,7 +17,6 @@ translation by Stefano187
         <item>Frequenza e Tempo</item>
         <item>Informazioni Disco</item>
         <item>Strumenti</item>
-        <item>Informazioni Generali</item>
     </string-array>
 
     <string name="menu_tab">Tabs</string>
@@ -75,13 +74,13 @@ translation by Stefano187
     <string name="title_empty_app">Applicazioni Vuote</string>
     <string name="prefcat_oom_predefines">PREIMPOSTATI</string>
     <string name="pt_oom">Minfree Taskkiller Preimpostati</string>
-
-    <string name="pt_verylight">Molto Lieve</string>
-    <string name="pt_light">Lieve</string>
-    <string name="pt_medium">Medio</string>
-    <string name="pt_aggressive">Aggressivo</string>
-    <string name="pt_veryaggressive">Molto aggressivo</string>
-
+    <string-array name="oom_values">
+        <item>Molto Lieve</item>
+        <item>Lieve</item>
+        <item>Medio</item>
+        <item>Aggressivo</item>
+        <item>Molto aggressivo</item>
+    </string-array>
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">PROCESSI UTENTE NON TERMINABILI</string>
     <string name="prefcat_sys_proc">PROCESSI DI SISTEMA NON TERMINABILI</string>
@@ -183,7 +182,6 @@ translation by Stefano187
     <!-- CPU info -->
     <string name="kernel_info">INFORMAZIONI KERNEL LINUX</string>
     <string name="cpu_info">INFORMAZIONI CPU</string>
-    <string name="mem_info">INFORMAZIONI MEMORIA</string>
     <string name="first_run_title">Verifica del root</string>
     <string name="su_success_title">Riuscita!</string>
     <string name="su_failed_title">Oops!</string>
@@ -364,7 +362,7 @@ translation by Stefano187
         <item name="low">Basso</item>
     </string-array>
     <string name="applied_ok">Valori applicati correttamente</string>
-    <string name="chk_update">Controllo aggiornamenti in corso...</string>
+    <string name="chk_update">Controllo aggiornamenti in corso…</string>
     <string name="is_update">Nuovo aggiornamento disponibile! Tocca per scaricare.</string>
     <string name="no_update">Nessun aggiornamento trovato.</string>
 
@@ -380,5 +378,10 @@ translation by Stefano187
     <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
     <string name="pt_mc_ps">Multicore Power Saving</string>
     <string name="mt_io_ctrl">IO Scheduler Settings</string>
-    <!-- 2.1.10-->
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="pt_thermal_th">Thermal Throttling</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
 </resources>

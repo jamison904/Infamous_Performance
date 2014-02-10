@@ -13,7 +13,6 @@
         <item>Время в Действии</item>
         <item>О Диске</item>
         <item>Инструменты</item>
-        <item>Общая информация</item>
     </string-array>
 
     <string name="menu_tab">Вкладки</string>
@@ -53,10 +52,9 @@
         Текущий: %s
     </string>
     <string name="ps_fast_charge_boot">Быстрая Зарядка</string>
-    <string name="fast_charge_warning">Вы не сможете подключаться к ПК после каждой перезагрузки пока режим "Быстрой зарядки" включён. В этом режиме Вы можете только заряжать телефон!
-    </string>
+    <string name="fast_charge_warning">Вы не сможете подключаться к ПК после каждой перезагрузки пока режим "Быстрой зарядки" включён. В этом режиме Вы можете только заряжать телефон!</string>
     <string name="fast_charge_notification_title">Быстрая Зарядка Включена!</string>
-    <string name="fast_charge_notification_message">Телефон в режиме "Быстрая зарядка"! </string>
+    <string name="fast_charge_notification_message">Телефон в режиме "Быстрая зарядка"!</string>
     <!-- minfree -->
     <string name="prefcat_oom">МЕНЕДЖЕР ЗАДАЧ MINFREE</string>
     <string name="title_foreground_app">Активные Приложения</string>
@@ -67,11 +65,13 @@
     <string name="title_empty_app">Пустые Приложения</string>
     <string name="prefcat_oom_predefines">Предустановленные</string>
     <string name="pt_oom">Пресеты Minfree</string>
-    <string name="pt_verylight">Очень Легкий</string>
-    <string name="pt_light">Легкий</string>
-    <string name="pt_medium">Средний</string>
-    <string name="pt_aggressive">Аггресивный</string>
-    <string name="pt_veryaggressive">Очень Аггресивный</string>
+    <string-array name="oom_values">
+        <item>Очень Легкий</item>
+        <item>Легкий</item>
+        <item>Средний</item>
+        <item>Аггресивный</item>
+        <item>Очень Аггресивный</item>
+    </string-array>
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">НЕ УБИВАЕМЫЕ ПРОЦЕССЫ</string>
     <string name="prefcat_sys_proc">НЕУБИВАЕМЫЕ СИСТЕМНЫЕ ПРОЦЕССЫ</string>
@@ -368,10 +368,15 @@
     <string name="ps_zram_info">Zram будет остановлен чтобы изменить размер диска</string>
     <!-- beta2-->
     <!-- 2.1.10-->
-    <string name="prefcat_wifi_pm">РЕЖИМ ПИТАНИЯ WiFi SLEEP</string>
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
     <string name="pt_wifi_pm">WiFi PM</string>
-    <string name="prefcat_mc_ps">МНОГОЯДЕРНОЕ ЭНЕРГОСБЕРЕЖЕНИЕ</string>
-    <string name="pt_mc_ps">Многоядерное Энергосбережение</string>
-    <string name="mt_io_ctrl">Настройки планировщика IO</string>
-    <!-- 2.1.10-->
+    <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
+    <string name="pt_mc_ps">Multicore Power Saving</string>
+    <string name="mt_io_ctrl">IO Scheduler Settings</string>
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="pt_thermal_th">Thermal Throttling</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
 </resources>
