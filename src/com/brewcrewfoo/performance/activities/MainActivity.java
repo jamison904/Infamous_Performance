@@ -22,14 +22,13 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.fragments.*;
@@ -61,20 +60,23 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme();
+        setContentView(R.layout.activity_main);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
+        mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
+        mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
+        mPagerTabStrip.setDrawFullUnderline(true);
 
         if(savedInstanceState!=null) {
-            setContentView(R.layout.activity_main);
-            mViewPager = (ViewPager) findViewById(R.id.viewpager);
             TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
             mViewPager.setAdapter(titleAdapter);
             mViewPager.setCurrentItem(0);
-            mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
-            mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
-            mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
-            mPagerTabStrip.setDrawFullUnderline(true);
         }
         else{
-            new TestSU().execute();
+            checkForSu();
+            TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
+            mViewPager.setAdapter(titleAdapter);
+            mViewPager.setCurrentItem(0);
         }
     }
     @Override
@@ -120,9 +122,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
                             break;
                         case 8:
                             frags[j] = new Tools();
-                            break;
-                        case 9:
-                            frags[j] = new CPUInfo();
                             break;
                     }
                     j++;
@@ -185,39 +184,33 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         setTheme(is_light_theme ? R.style.Theme_Light : R.style.Theme_Dark);
     }
 
-    private class TestSU extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            final Boolean canSu = Helpers.checkSu();
-            final Boolean canBb = !Helpers.binExist("busybox").equals(NOT_FOUND);
-            if (canSu && canBb) return "ok";
-            else return "nok";
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            if (result.equals("ok")){
-                setContentView(R.layout.activity_main);
-                mViewPager = (ViewPager) findViewById(R.id.viewpager);
-                TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
-                mViewPager.setAdapter(titleAdapter);
-                mViewPager.setCurrentItem(0);
-
-                mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
-                mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
-                mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
-                mPagerTabStrip.setDrawFullUnderline(true);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                String r= data.getStringExtra("r");
+                if(r==null || r.equals("nok")) finish();
             }
             else{
-                final String message = getString(R.string.su_failed_su_or_busybox);
-                Toast.makeText(c, message, Toast.LENGTH_LONG).show();
                 finish();
             }
         }
-        @Override
-        protected void onPreExecute() {
+        else{
+            finish();
         }
-        @Override
-        protected void onProgressUpdate(Void... values) {
+    }
+    private void checkForSu() {
+        boolean firstrun = mPreferences.getBoolean("firstrun", true);
+        if (firstrun) {
+           // mPreferences.edit().putBoolean("firstrun", false).commit();
+            Intent intent = new Intent(MainActivity.this, checkSU.class);
+            startActivityForResult(intent, 1);
+        }
+        else{
+            if(!Helpers.checkSu()) {
+                Intent intent = new Intent(MainActivity.this, checkSU.class);
+                startActivityForResult(intent, 1);
+            }
         }
     }
 }
