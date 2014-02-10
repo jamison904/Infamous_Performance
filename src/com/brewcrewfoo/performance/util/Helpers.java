@@ -382,7 +382,7 @@ public class Helpers implements Constants {
     }
 
     public static boolean is_Tab_available(int i){
-        if(i==1) return (Helpers.getNumOfCpus()>1);
+        if(i==1) return (Helpers.getNumOfCpus()>=2);
         else if(i==2) return Helpers.showBattery();
         else if(i==4) return Helpers.voltageFileExists();
         return true;
@@ -444,6 +444,24 @@ public class Helpers implements Constants {
         }
         else if (new File("/sys/module/dhd/parameters/wifi_pm").exists()) {
             return "/sys/module/dhd/parameters/wifi_pm";
+        }
+        else{
+            return null;
+        }
+    }
+    public static String hotplug_path() {
+        if (new File("/sys/devices/virtual/misc/mako_hotplug_control").exists()) {
+            return "/sys/devices/virtual/misc/mako_hotplug_control";
+            ///sys/class/misc/mako_hotplug_control?????
+        }
+        else if (new File("/sys/module/auto_hotplug/parameters").exists()) {
+            return "/sys/module/auto_hotplug/parameters";
+        }
+        else if (new File("/sys/module/dyn_hotplug/parameters").exists()) {
+            return "/sys/module/dyn_hotplug/parameters";
+        }
+        else if (new File("/sys/class/misc/tegra_hotplug_control").exists()) {
+            return "/sys/class/misc/tegra_hotplug_control";
         }
         else{
             return null;

@@ -32,9 +32,11 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
 
     SharedPreferences mPreferences;
     private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode,mMcPS;
+    private Preference mHotplug;
     private ListPreference mSOmax,mSOmin;
     private String pso="";
     private Context context;
+    private String hotpath=Helpers.hotplug_path();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
         mIntelliplug = (CheckBoxPreference) findPreference("pref_intelliplug");
         mEcomode = (CheckBoxPreference) findPreference("pref_ecomode");
         mMcPS = (CheckBoxPreference) findPreference("pref_mc_ps");
+        mHotplug = (Preference) findPreference("pref_hotplug");
 
         if (!new File(SO_MAX_FREQ).exists() || !new File(SO_MIN_FREQ).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("so_min_max");
@@ -72,8 +75,8 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
                 final String readsomin=Helpers.readOneLine(SO_MIN_FREQ);
                 mSOmax.setValue(readsomax);
                 mSOmin.setValue(readsomin);
-                mSOmax.setSummary(pso+ readsomax+" Hz");
-                mSOmin.setSummary(pso+ readsomin+" Hz");
+                mSOmax.setSummary(pso+ readsomax+" kHz");
+                mSOmin.setSummary(pso+ readsomin+" kHz");
             }
         }
 
@@ -92,6 +95,10 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
         }
         else{
             mIntelliplug.setChecked(Helpers.readOneLine(INTELLI_PLUG).equals("1"));
+        }
+        if(hotpath==null){
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("hotplug");
+            getPreferenceScreen().removePreference(hideCat);
         }
         if (!new File(ECO_MODE).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("ecomode");
@@ -146,6 +153,9 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             }
             return true;
         }
+        else if(preference==mHotplug) {
+
+        }
         else if(preference==mIntelliplug) {
             if (Helpers.readOneLine(INTELLI_PLUG).equals("0")){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + INTELLI_PLUG);
@@ -183,14 +193,14 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             if (!values.equals(Helpers.readOneLine(SO_MAX_FREQ))){
                 new CMDProcessor().su.runWaitFor("busybox echo "+values+" > " + SO_MAX_FREQ);
             }
-            mSOmax.setSummary(pso + values + " Hz");
+            mSOmax.setSummary(pso + values + " kHz");
         }
         else if (key.equals("pref_so_min")) {
             final String values = mSOmin.getValue();
             if (!values.equals(Helpers.readOneLine(SO_MIN_FREQ))){
                 new CMDProcessor().su.runWaitFor("busybox echo "+values+" > " + SO_MIN_FREQ);
             }
-            mSOmin.setSummary(pso + values + " Hz");
+            mSOmin.setSummary(pso + values + " kHz");
         }
 
     }

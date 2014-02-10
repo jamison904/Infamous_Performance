@@ -77,6 +77,7 @@ public class BootService extends Service implements Constants {
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
             final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
             final float maxdisk = Helpers.getMem("MemTotal") / 1024;
+            final String hotpath=Helpers.hotplug_path();
 
 
             int ksm=0;
@@ -144,6 +145,20 @@ public class BootService extends Service implements Constants {
                 if (new File(SO_MIN_FREQ).exists()) {
                     final String v=preferences.getString("pref_so_min", Helpers.readOneLine(SO_MIN_FREQ));
                     sb.append("busybox echo ").append(v).append(" > ").append(SO_MIN_FREQ).append(";\n");
+                }
+            }
+            if(hotpath!=null){
+                if (preferences.getBoolean(HOTPLUG_SOB, false)) {
+                    final String gn = preferences.getString("hotplug", "");
+                    if (!gn.equals("")) {
+                        String p[]=gn.split(";");
+                        for (String aP : p) {
+                            if(aP!=null && aP.contains(":")){
+                                final String pn[]=aP.split(":");
+                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(hotpath).append("/").append(pn[0]).append(";\n");
+                            }
+                        }
+                    }
                 }
             }
             if (new File(INTELLI_PLUG).exists()) {

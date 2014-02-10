@@ -40,6 +40,14 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="hotplug"
+        android:title="@string/hotplug">
+        <Preference
+            android:key="pref_hotplug"
+            android:title="@string/pt_hotplug"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="intelliplug"
         android:title="@string/intelliplug">
         <CheckBoxPreference
