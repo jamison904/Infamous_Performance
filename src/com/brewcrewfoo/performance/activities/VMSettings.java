@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -36,6 +35,7 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
+import com.brewcrewfoo.performance.util.PropUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +50,6 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
-    Resources res;
     private ListView packList;
     private LinearLayout linlaHeaderProgress;
     private LinearLayout nofiles,search;
@@ -67,7 +66,6 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         super.onCreate(savedInstanceState);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
 
@@ -271,37 +269,19 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                         if (pp!=null) {
                             if ((tv.getText().toString()!= null)&&(tv.getText().toString().length() > 0)){
                                 pp.setVal(tv.getText().toString().trim());
-                                set_pref(tn.getText().toString().trim(),tv.getText().toString().trim());
+                                PropUtil.set_pref(tn.getText().toString().trim(),tv.getText().toString().trim(),PREF_VM,mPreferences);
                             }
                         }
                         else {
                             if (tv.getText().toString() != null && tn.getText().toString() != null && tn.getText().toString().trim().length() > 0){
                                 props.add(new Prop(tn.getText().toString().trim(),tv.getText().toString().trim()));
-                                set_pref(tn.getText().toString().trim(),tv.getText().toString().trim());
+                                PropUtil.set_pref(tn.getText().toString().trim(),tv.getText().toString().trim(),PREF_VM,mPreferences);
                             }
                         }
                         Collections.sort(props);
                         adapter.notifyDataSetChanged();
                     }
                 }).create().show();
-    }
-
-    public void set_pref(String n, String v){
-        final String s=mPreferences.getString(PREF_VM,"");
-        final StringBuilder sb = new StringBuilder();
-        if(!s.equals("")){
-            String p[]=s.split(";");
-            for (String aP : p) {
-                if(aP!=null && aP.contains(":")){
-                    final String pn[]=aP.split(":");
-                    if(!pn[0].equals(n)){
-                        sb.append(pn[0]).append(':').append(pn[1]).append(';');
-                    }
-                }
-            }
-        }
-        sb.append(n).append(':').append(v).append(';');
-        mPreferences.edit().putString(PREF_VM, sb.toString()).commit();
     }
 
     public boolean testprop(String s){

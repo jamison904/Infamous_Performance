@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -35,6 +34,7 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
+import com.brewcrewfoo.performance.util.PropUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +48,6 @@ public class IOSetActivity  extends Activity implements Constants, AdapterView.O
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
-    Resources res;
     private List<Prop> props = new ArrayList<Prop>();
     private ListView packList;
     private LinearLayout linlaHeaderProgress,nofiles;
@@ -61,7 +60,6 @@ public class IOSetActivity  extends Activity implements Constants, AdapterView.O
         super.onCreate(savedInstanceState);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
 
@@ -130,7 +128,7 @@ public class IOSetActivity  extends Activity implements Constants, AdapterView.O
             CMDProcessor.CommandResult cr =null;
             cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+IO_TUNABLE_PATH+"/*\"");
             if(cr.success()){
-                load_prop(cr.stdout);
+                props= PropUtil.load_prop(cr.stdout);
                 return "ok";
             }
             else{
@@ -225,7 +223,7 @@ public class IOSetActivity  extends Activity implements Constants, AdapterView.O
         tn.setText(pp.getName());
 
         new AlertDialog.Builder(this)
-                .setTitle(curio)
+                .setTitle(curio.toUpperCase())
                 .setView(editDialog)
                 .setNegativeButton(getString(R.string.cancel),
                         new DialogInterface.OnClickListener() {
@@ -238,42 +236,11 @@ public class IOSetActivity  extends Activity implements Constants, AdapterView.O
                     public void onClick(DialogInterface dialog, int which) {
                         if ((tv.getText().toString() != null) && (tv.getText().toString().length() > 0)) {
                             pp.setVal(tv.getText().toString().trim());
-                            set_pref(tn.getText().toString().trim(), tv.getText().toString().trim());
+                            PropUtil.set_pref(tn.getText().toString().trim(), tv.getText().toString().trim(),curio.replace(" ","_"),mPreferences);
                         }
                         adapter.notifyDataSetChanged();
                     }
                 }).create().show();
     }
 
-    public void set_pref(String n, String v){
-        final String s=mPreferences.getString(curio.replace(" ","_"),"");
-        final StringBuilder sb = new StringBuilder();
-        if(!s.equals("")){
-            String p[]=s.split(";");
-            for (String aP : p) {
-                if(aP!=null && aP.contains(":")){
-                    final String pn[]=aP.split(":");
-                    if(!pn[0].equals(n)) sb.append(pn[0]).append(':').append(pn[1]).append(';');
-                }
-            }
-        }
-        sb.append(n).append(':').append(v).append(';');
-        mPreferences.edit().putString(curio.replace(" ","_"), sb.toString()).commit();
-    }
-    public void load_prop(String s){
-        props.clear();
-        if(s==null) return;
-        final String p[]=s.split("\n");
-        for (String aP : p) {
-            try{
-                if(aP!=null && aP.contains("::")){
-                    String pn=aP.split("::")[0];
-                    pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
-                    props.add(new Prop(pn,aP.split("::")[1].trim()));
-                }
-            }
-            catch (Exception e){
-            }
-        }
-    }
 }
