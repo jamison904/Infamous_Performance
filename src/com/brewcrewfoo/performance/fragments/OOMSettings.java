@@ -40,6 +40,7 @@ import android.widget.TextView;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.KSMActivity;
+import com.brewcrewfoo.performance.activities.MemUsageActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.activities.PackActivity;
 import com.brewcrewfoo.performance.activities.ZramActivity;
@@ -62,18 +63,10 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 	private Preference mContentProviders;
 	private Preference mEmptyApp;
 
-    private Preference mVerylight;
-    private Preference mLight;
-    private Preference mMedium;
-    private Preference mAggressive;
-    private Preference mVeryaggressive;
-	
-	final private String Verylight="512,1024,1280,2048,3072,4096";
-	final private String Light="1024,2048,2560,4096,6144,8192";
-	final private String Medium="1024,2048,4096,8192,12288,16384";
-	final private String Aggressive="2048,4096,8192,16384,24576,32768";
-	final private String Veryaggressive="4096,8192,16384,32768,49152,65536";
-	
+    private ListPreference mPresets;
+
+    final private CharSequence[] ventries ={"512,1024,1280,2048,3072,4096","1024,2048,2560,4096,6144,8192","1024,2048,4096,8192,12288,16384","2048,4096,8192,16384,24576,32768","4096,8192,16384,32768,49152,65536"};
+
 	private String values[];
 
     private CheckBoxPreference mUserON;
@@ -109,17 +102,13 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         mContentProviders= findPreference(OOM_CONTENT_PROVIDERS);
         mEmptyApp= findPreference(OOM_EMPTY_APP);
 
-        mVerylight= findPreference("oom_verylight");
-        mVerylight.setSummary(Verylight);
-        mLight= findPreference("oom_light");
-        mLight.setSummary( Light);
-        mMedium= findPreference("oom_medium");
-        mMedium.setSummary(Medium);
-        mAggressive= findPreference("oom_aggressive");
-        mAggressive.setSummary(Aggressive);
-        mVeryaggressive= findPreference("oom_veryaggressive");
-        mVeryaggressive.setSummary(Veryaggressive);
-
+        mPresets= (ListPreference) findPreference("oom_presets");
+        mPresets.setEntryValues(ventries);
+        String s=getResources().getStringArray(R.array.oom_values)[0]+"\n"+ventries[0].toString();
+        for(int i=1;i<getResources().getStringArray(R.array.oom_values).length;i++){
+            s+="\n"+getResources().getStringArray(R.array.oom_values)[i]+"\n"+ventries[i].toString();
+        }
+        mPresets.setSummary(s);
         updateOOM(values);
 
         mUserON=(CheckBoxPreference) findPreference(PREF_USER_PROC);
@@ -201,7 +190,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.mem_menu, menu);
     }
 
     @Override
@@ -212,6 +201,10 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                 break;
             case R.id.app_settings:
                 Intent intent = new Intent(getActivity(), PCSettings.class);
+                startActivity(intent);
+                break;
+            case R.id.mem_usage:
+                intent = new Intent(getActivity(), MemUsageActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -257,41 +250,6 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 			openDialog(5,currentProgress, title, oomConv(values[4]),256, preference, MINFREE_PATH, PREF_MINFREE);
 			return true;
 		}
-		else if (preference.equals(mVerylight)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Verylight + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Verylight).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
-		else if (preference.equals(mLight)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Light + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Light).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
-		else if (preference.equals(mMedium)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Medium + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Medium).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
-		else if (preference.equals(mAggressive)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Aggressive + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Aggressive).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
-		else if (preference.equals(mVeryaggressive)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Veryaggressive + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Veryaggressive).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
         else if (preference.equals(mUserON)){
             if (Integer.parseInt(Helpers.readOneLine(USER_PROC_PATH))==0){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + USER_PROC_PATH);
@@ -317,7 +275,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                 startActivity(getpacks);
             }
             else{
-                ProcEditDialog(key,getString(R.string.pt_user_names_proc),"",USER_PROC_NAMES_PATH,false);
+                ProcEditDialog(key, getString(R.string.pt_user_names_proc), "", USER_PROC_NAMES_PATH, false);
             }
         }
         else if (preference.equals(mSysNames)){
@@ -343,8 +301,6 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             startActivityForResult(new Intent(getActivity(), KSMActivity.class), 1);
         }
         else if (preference.equals(mZRAMsettings)){
-
-            //startActivityForResult(new Intent(getActivity(), ZramActivity.class), 1);
             Intent intent = new Intent(getActivity(), ZramActivity.class);
             intent.putExtra("curdisk", curdisk);
             startActivityForResult(intent,1);
@@ -369,6 +325,12 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             else{
                 sharedPreferences.edit().remove(PREF_ZRAM).apply();
             }
+        }
+        else if(key.equals("oom_presets")){
+            new CMDProcessor().su.runWaitFor("busybox echo " + mPresets.getValue() + " > " + MINFREE_PATH);
+            mPreferences.edit().putString(PREF_MINFREE, mPresets.getValue()).apply();
+            values = Helpers.readOneLine(MINFREE_PATH).split(",");
+            updateOOM(values);
         }
     }
     @Override
