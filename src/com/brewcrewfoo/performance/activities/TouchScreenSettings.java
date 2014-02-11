@@ -57,8 +57,9 @@ public class TouchScreenSettings extends Activity implements Constants, Activity
             mPreferences.edit().remove(PREF_SLIDE2WAKE).commit();
         }
         else{
-            mPreferences.edit().putString(PREF_SLIDE2WAKE, Helpers.readOneLine(SLIDE2WAKE)).commit();
-            mt1.setChecked(mPreferences.getString(PREF_SWIPE2WAKE, Helpers.readOneLine(SLIDE2WAKE)).equals("1"));
+            final String b=Helpers.readOneLine(SLIDE2WAKE);
+            mPreferences.edit().putString(PREF_SLIDE2WAKE, b).commit();
+            mt1.setChecked(mPreferences.getString(PREF_SWIPE2WAKE, b).equals("1"));
             mt1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v, boolean checked) {
@@ -83,8 +84,9 @@ public class TouchScreenSettings extends Activity implements Constants, Activity
             mPreferences.edit().remove(PREF_SWIPE2WAKE).commit();
         }
         else{
-            mPreferences.edit().putString(PREF_SWIPE2WAKE, Helpers.readOneLine(SWIPE2WAKE)).commit();
             final String b=Helpers.readOneLine(SWIPE2WAKE);
+            mPreferences.edit().putString(PREF_SWIPE2WAKE, b).commit();
+
             if(b.equals("2")){
                     mt2.setChecked(false);
                     mt21.setChecked(true);
@@ -140,8 +142,9 @@ public class TouchScreenSettings extends Activity implements Constants, Activity
             mPreferences.edit().remove(PREF_HOME2WAKE).commit();
         }
         else{
-            mPreferences.edit().putString(PREF_HOME2WAKE, Helpers.readOneLine(HOME2WAKE)).commit();
-            mt3.setChecked(mPreferences.getString(PREF_HOME2WAKE, Helpers.readOneLine(HOME2WAKE)).equals("1"));
+            final String b= Helpers.readOneLine(HOME2WAKE);
+            mPreferences.edit().putString(PREF_HOME2WAKE,b).commit();
+            mt3.setChecked(mPreferences.getString(PREF_HOME2WAKE, b).equals("1"));
             mt3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v, boolean checked) {
@@ -162,8 +165,9 @@ public class TouchScreenSettings extends Activity implements Constants, Activity
             mPreferences.edit().remove(PREF_LOGO2WAKE).commit();
         }
         else{
-            mPreferences.edit().putString(PREF_LOGO2WAKE, Helpers.readOneLine(LOGO2WAKE)).commit();
-            mt4.setChecked(mPreferences.getString(PREF_LOGO2WAKE, Helpers.readOneLine(LOGO2WAKE)).equals("1"));
+            final String b=Helpers.readOneLine(LOGO2WAKE);
+            mPreferences.edit().putString(PREF_LOGO2WAKE, b).commit();
+            mt4.setChecked(mPreferences.getString(PREF_LOGO2WAKE, b).equals("1"));
             mt4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v, boolean checked) {
@@ -184,8 +188,9 @@ public class TouchScreenSettings extends Activity implements Constants, Activity
             mPreferences.edit().remove(PREF_LOGO2MENU).commit();
         }
         else{
-            mPreferences.edit().putString(PREF_LOGO2MENU, Helpers.readOneLine(LOGO2MENU)).commit();
-            mt5.setChecked(mPreferences.getString(PREF_LOGO2MENU, Helpers.readOneLine(LOGO2MENU)).equals("1"));
+            final String b=Helpers.readOneLine(LOGO2MENU);
+            mPreferences.edit().putString(PREF_LOGO2MENU, b).commit();
+            mt5.setChecked(mPreferences.getString(PREF_LOGO2MENU, b).equals("1"));
             mt5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v, boolean checked) {
@@ -206,18 +211,31 @@ public class TouchScreenSettings extends Activity implements Constants, Activity
             mPreferences.edit().remove(PREF_DOUBLETAP2WAKE).commit();
         }
         else{
-            mPreferences.edit().putString(PREF_DOUBLETAP2WAKE, Helpers.readOneLine(DOUBLETAP2WAKE)).commit();
-            mt6.setChecked(mPreferences.getString(PREF_DOUBLETAP2WAKE, Helpers.readOneLine(DOUBLETAP2WAKE)).equals("1"));
+            final String b=Helpers.readOneLine(DOUBLETAP2WAKE);
+            mPreferences.edit().putString(PREF_DOUBLETAP2WAKE, b).commit();
+            mt6.setChecked(mPreferences.getString(PREF_DOUBLETAP2WAKE,b).equals("1")||mPreferences.getString(PREF_DOUBLETAP2WAKE,b).equals("Y"));
             mt6.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton v, boolean checked) {
                     if(checked){
-                        new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DOUBLETAP2WAKE);
-                        mPreferences.edit().putString(PREF_DOUBLETAP2WAKE,"1").commit();
+                        if(b.equals("0")||b.equals("1")){
+                            new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DOUBLETAP2WAKE);
+                            mPreferences.edit().putString(PREF_DOUBLETAP2WAKE,"1").commit();
+                        }
+                        else{
+                            new CMDProcessor().su.runWaitFor("busybox echo \"Y\" > " + DOUBLETAP2WAKE);
+                            mPreferences.edit().putString(PREF_DOUBLETAP2WAKE,"Y").commit();
+                        }
                     }
                     else{
-                        new CMDProcessor().su.runWaitFor("busybox echo 0 > " +DOUBLETAP2WAKE);
-                        mPreferences.edit().putString(PREF_DOUBLETAP2WAKE, "0").commit();
+                        if(b.equals("0")||b.equals("1")){
+                            new CMDProcessor().su.runWaitFor("busybox echo 0 > " +DOUBLETAP2WAKE);
+                            mPreferences.edit().putString(PREF_DOUBLETAP2WAKE, "0").commit();
+                        }
+                        else{
+                            new CMDProcessor().su.runWaitFor("busybox echo \"N\" > " +DOUBLETAP2WAKE);
+                            mPreferences.edit().putString(PREF_DOUBLETAP2WAKE, "N").commit();
+                        }
                     }
                 }
             });
