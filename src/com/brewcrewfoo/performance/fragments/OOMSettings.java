@@ -49,6 +49,8 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
 import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class OOMSettings extends PreferenceFragment implements OnSharedPreferenceChangeListener,Constants {
     SharedPreferences mPreferences;
@@ -64,9 +66,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 	private Preference mEmptyApp;
 
     private ListPreference mPresets;
-
     final private CharSequence[] ventries ={"512,1024,1280,2048,3072,4096","1024,2048,2560,4096,6144,8192","1024,2048,4096,8192,12288,16384","2048,4096,8192,16384,24576,32768","4096,8192,16384,32768,49152,65536"};
-
 	private String values[];
 
     private CheckBoxPreference mUserON;
@@ -103,12 +103,19 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         mEmptyApp= findPreference(OOM_EMPTY_APP);
 
         mPresets= (ListPreference) findPreference("oom_presets");
-        mPresets.setEntryValues(ventries);
-        String s=getResources().getStringArray(R.array.oom_values)[0]+"\n"+ventries[0].toString();
-        for(int i=1;i<getResources().getStringArray(R.array.oom_values).length;i++){
-            s+="\n"+getResources().getStringArray(R.array.oom_values)[i]+"\n"+ventries[i].toString();
+
+        Map<String,String> oom=new LinkedHashMap<String, String>();
+        final String s=mPreferences.getString(MINFREE_DEFAULT,"");
+        if(!s.equals("")){
+            oom.put(getResources().getString(R.string.oom_default),s);
         }
-        mPresets.setSummary(s);
+
+        for(int i=0;i<getResources().getStringArray(R.array.oom_values).length;i++){
+            oom.put(getResources().getStringArray(R.array.oom_values)[i],ventries[i].toString());
+        }
+        mPresets.setEntryValues(oom.values().toArray(new CharSequence[oom.size()]));
+        mPresets.setEntries(oom.keySet().toArray(new CharSequence[oom.size()]));
+
         updateOOM(values);
 
         mUserON=(CheckBoxPreference) findPreference(PREF_USER_PROC);

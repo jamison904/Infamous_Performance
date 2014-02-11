@@ -78,7 +78,7 @@ public class BootService extends Service implements Constants {
             final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
             final float maxdisk = Helpers.getMem("MemTotal") / 1024;
             final String hotpath=Helpers.hotplug_path();
-
+            String s;
 
             int ksm=0;
             String ksmpath=KSM_RUN_PATH;
@@ -139,19 +139,19 @@ public class BootService extends Service implements Constants {
             }
             if (preferences.getBoolean("so_minmax_boot", false)) {
                 if (new File(SO_MAX_FREQ).exists()) {
-                    final String v=preferences.getString("pref_so_max", Helpers.readOneLine(SO_MAX_FREQ));
-                    sb.append("busybox echo ").append(v).append(" > ").append(SO_MAX_FREQ).append(";\n");
+                    s=preferences.getString("pref_so_max", Helpers.readOneLine(SO_MAX_FREQ));
+                    sb.append("busybox echo ").append(s).append(" > ").append(SO_MAX_FREQ).append(";\n");
                 }
                 if (new File(SO_MIN_FREQ).exists()) {
-                    final String v=preferences.getString("pref_so_min", Helpers.readOneLine(SO_MIN_FREQ));
-                    sb.append("busybox echo ").append(v).append(" > ").append(SO_MIN_FREQ).append(";\n");
+                    s=preferences.getString("pref_so_min", Helpers.readOneLine(SO_MIN_FREQ));
+                    sb.append("busybox echo ").append(s).append(" > ").append(SO_MIN_FREQ).append(";\n");
                 }
             }
             if(hotpath!=null){
                 if (preferences.getBoolean(HOTPLUG_SOB, false)) {
-                    final String gn = preferences.getString("hotplug", "");
-                    if (!gn.equals("")) {
-                        String p[]=gn.split(";");
+                    s = preferences.getString("hotplug", "");
+                    if (!s.equals("")) {
+                        String p[]=s.split(";");
                         for (String aP : p) {
                             if(aP!=null && aP.contains(":")){
                                 final String pn[]=aP.split(":");
@@ -215,10 +215,10 @@ public class BootService extends Service implements Constants {
                 }
             }
             if (preferences.getBoolean(PREF_READ_AHEAD_BOOT, false)) {
-                final String values = preferences.getString(PREF_READ_AHEAD,Helpers.readOneLine(READ_AHEAD_PATH));
+                s = preferences.getString(PREF_READ_AHEAD,Helpers.readOneLine(READ_AHEAD_PATH));
                 for(byte i=0;i<2;i++){
                     if(new File(READ_AHEAD_PATH.replace("mmcblk0","mmcblk"+i)).exists())
-                        sb.append("busybox echo ").append(values).append(" > ").append(READ_AHEAD_PATH.replace("mmcblk0","mmcblk"+i)).append(";\n");
+                        sb.append("busybox echo ").append(s).append(" > ").append(READ_AHEAD_PATH.replace("mmcblk0","mmcblk"+i)).append(";\n");
                 }
             }
             if (FASTCHARGE_PATH!=null) {
@@ -303,9 +303,9 @@ public class BootService extends Service implements Constants {
                 }
             }
             if (preferences.getBoolean(VM_SOB, false)) {
-                final String gs = preferences.getString(PREF_VM, null);
-                if(gs != null){
-                    String p[]=gs.split(";");
+                s = preferences.getString(PREF_VM, null);
+                if(s != null){
+                    String p[]=s.split(";");
                     for (String aP : p) {
                         if(!aP.equals("") && aP!=null){
                             final String pn[]=aP.split(":");
@@ -326,8 +326,10 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getInt(PREF_DIRTY_WRITEBACK_SUSPEND, Integer.parseInt(Helpers.readOneLine(DIRTY_WRITEBACK_SUSPEND_PATH)))).append(" > ").append(DIRTY_WRITEBACK_SUSPEND_PATH).append(";\n");
                 }
             }
+            s=Helpers.readOneLine(MINFREE_PATH);
+            preferences.edit().putString(MINFREE_DEFAULT,s).apply();
             if (preferences.getBoolean(PREF_MINFREE_BOOT, false)) {
-                    sb.append("busybox echo ").append(preferences.getString(PREF_MINFREE, Helpers.readOneLine(MINFREE_PATH))).append(" > ").append(MINFREE_PATH).append(";\n");
+                    sb.append("busybox echo ").append(preferences.getString(PREF_MINFREE, s)).append(" > ").append(MINFREE_PATH).append(";\n");
             }
             if (new File(USER_PROC_PATH).exists()) {
                     if (preferences.getBoolean(USER_PROC_SOB, false)) {
@@ -366,10 +368,10 @@ public class BootService extends Service implements Constants {
                 }
             }
             if (preferences.getBoolean(GOV_SOB, false)) {
-                final String gn = preferences.getString(gov.replace(" ","_"), "");
-                if (!gn.equals("")) {
+                s = preferences.getString(gov.replace(" ","_"), "");
+                if (!s.equals("")) {
                     sb.append("if busybox [ -d ").append(GOV_SETTINGS_PATH).append(gov).append(" ]; then\n");
-                    String p[]=gn.split(";");
+                    String p[]=s.split(";");
                     for (String aP : p) {
                         if(aP!=null && aP.contains(":")){
                             final String pn[]=aP.split(":");
@@ -380,7 +382,7 @@ public class BootService extends Service implements Constants {
                 }
             }
             if (preferences.getBoolean(IO_SOB, false)) {
-                final String s=preferences.getString(io.replace(" ","_"),"");
+                s=preferences.getString(io.replace(" ","_"),"");
                 if(!s.equals("")){
                     String p[]=s.split(";");
                     for(byte i=0;i<2; i++){
@@ -427,8 +429,8 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getString(PREF_FLICK2SLEEP_SENSITIVE, "0")).append(" > ").append(FLICK2SLEEP_SENSITIVE).append(";\n");
                 }
                 if (Helpers.touch2wake_path()!=null) {
-                    final String touch2wakepath=Helpers.touch2wake_path();
-                    sb.append("busybox echo ").append(preferences.getString(PREF_TOUCH2WAKE, Helpers.readOneLine(touch2wakepath))).append(" > ").append(touch2wakepath).append(";\n");
+                    s=Helpers.touch2wake_path();
+                    sb.append("busybox echo ").append(preferences.getString(PREF_TOUCH2WAKE, Helpers.readOneLine(s))).append(" > ").append(s).append(";\n");
                 }
             }
             if (preferences.getBoolean(ZRAM_SOB, false)){

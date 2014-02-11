@@ -55,7 +55,6 @@ Copyright (C) 2012  James Roberts
             android:dialogTitle="@string/pt_oom"
             android:key="oom_presets"
             android:persistent="true"
-            android:entries="@array/oom_values"
             android:title="@string/pt_oom"/>
     </PreferenceCategory>
 
