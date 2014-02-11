@@ -18,6 +18,7 @@ import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.GovSetActivity;
 import com.brewcrewfoo.performance.activities.IOSetActivity;
 import com.brewcrewfoo.performance.activities.MainActivity;
+import com.brewcrewfoo.performance.activities.MemUsageActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
@@ -228,6 +229,11 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                     intent.putExtra("curio", MainActivity.mCurIO[MainActivity.curcpu]);
                     startActivity(intent);
                 }
+                break;
+            case R.id.cpu_info:
+                intent = new Intent(getActivity(), MemUsageActivity.class);
+                intent.putExtra("tip","cpu");
+                startActivity(intent);
                 break;
         }
         return true;

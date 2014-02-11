@@ -380,4 +380,5 @@ Translation by Rhonin86 & Evisceration
     <string name="pt_thermal_th">Thermal Throttling</string>
     <string name="mt_mem_usage">Memory Usage</string>
     <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
 </resources>

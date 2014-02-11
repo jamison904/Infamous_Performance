@@ -12,7 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/prop"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_alignParentLeft="true"
+        android:gravity="left" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,5 +22,8 @@
         android:id="@+id/pval"
         android:layout_alignParentRight="true"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_toRightOf="@+id/prop"
+        android:gravity="right"
+        android:layout_marginLeft="20dp" />
 </RelativeLayout>

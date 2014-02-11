@@ -180,7 +180,7 @@ Translation by DaniPhii
     <string name="deep_sleep">"Sueño profundo"</string>
     <!-- Información de CPU -->
     <string name="kernel_info">INFORMACIÓN DEL KERNEL LINUX</string>
-    <string name="cpu_info">INFORMACIÓN DE CPU</string>
+    <string name="cpu_info">Información de CPU</string>
     <string name="first_run_title">Comprobando permisos de superusuario…</string>
     <string name="su_success_title">¡Correcto!</string>
     <string name="su_failed_title">¡Algo fue mal!</string>
@@ -383,4 +383,5 @@ Translation by DaniPhii
     <string name="pt_thermal_th">Thermal Throttling</string>
     <string name="mt_mem_usage">Memory Usage</string>
     <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
 </resources>

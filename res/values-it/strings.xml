@@ -181,7 +181,7 @@ translation by Stefano187
     <string name="deep_sleep">"Deep Sleep"</string>
     <!-- CPU info -->
     <string name="kernel_info">INFORMAZIONI KERNEL LINUX</string>
-    <string name="cpu_info">INFORMAZIONI CPU</string>
+    <string name="cpu_info">Informazioni CPU</string>
     <string name="first_run_title">Verifica del root</string>
     <string name="su_success_title">Riuscita!</string>
     <string name="su_failed_title">Oops!</string>
@@ -384,4 +384,5 @@ translation by Stefano187
     <string name="pt_thermal_th">Thermal Throttling</string>
     <string name="mt_mem_usage">Memory Usage</string>
     <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
 </resources>

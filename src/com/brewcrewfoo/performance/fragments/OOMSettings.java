@@ -212,6 +212,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                 break;
             case R.id.mem_usage:
                 intent = new Intent(getActivity(), MemUsageActivity.class);
+                intent.putExtra("tip","mem");
                 startActivity(intent);
                 break;
         }

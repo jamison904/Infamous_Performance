@@ -172,7 +172,7 @@ Translation by Laurentiu1996
     <string name="deep_sleep">"Deep Sleep"</string>
     <!-- CPU info -->
     <string name="kernel_info">INFORMAŢII DESPRE LINUX KERNEL</string>
-    <string name="cpu_info">INFORMAŢII CPU</string>
+    <string name="cpu_info">Informaţii CPU</string>
     <string name="first_run_title">Verificarea root-ului pentru prima dată</string>
     <string name="su_success_title">Succes!</string>
     <string name="su_failed_title">Oops!</string>
@@ -375,4 +375,5 @@ Translation by Laurentiu1996
     <string name="pt_thermal_th">Thermal Throttling</string>
     <string name="mt_mem_usage">Utilizare Memorie</string>
     <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
 </resources>

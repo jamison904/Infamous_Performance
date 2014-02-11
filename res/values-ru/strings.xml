@@ -179,7 +179,7 @@
     <string name="deep_sleep">"Сон"</string>
     <!-- CPU info -->
     <string name="kernel_info">ИНФОРМАЦИЯ О ЯДРЕ</string>
-    <string name="cpu_info">ИНФОРМАЦИЯ О ПРОЦЕССОРЕ</string>
+    <string name="cpu_info">Информация о процессоре</string>
     <string name="mem_info">ИНФОРМАЦИЯ О ПАМЯТИ</string>
     <string name="first_run_title">Сначала проверьте права root</string>
     <string name="su_success_title">Выполнено!</string>
@@ -379,4 +379,5 @@
     <string name="pt_thermal_th">Thermal Throttling</string>
     <string name="mt_mem_usage">Memory Usage</string>
     <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
 </resources>

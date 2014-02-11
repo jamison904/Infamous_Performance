@@ -1,6 +1,7 @@
 package com.brewcrewfoo.performance.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,8 @@ import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -33,16 +36,30 @@ public class MemUsageActivity extends Activity implements  ActivityThemeChangeIn
     private List<Prop> props = new ArrayList<Prop>();
     private PropAdapter adapter;
     private CurThread mCurThread;
+    private String path;
+    private String titlu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme();
+        Intent intent=getIntent();
+        final String tip=intent.getStringExtra("tip");
+        if(tip.equals("mem")){
+            path=MEM_INFO_PATH;
+            titlu=getString(R.string.mt_mem_usage);
+        }
+        else{
+            path=CPU_INFO_PATH;
+            titlu=getString(R.string.cpu_info);
+        }
+
         setContentView(R.layout.mem_usage);
+        TextView t=(TextView) findViewById(R.id.infotxt);
+        t.setText(titlu);
         packList = (ListView) findViewById(R.id.memlist);
-        readFile(MEM_INFO_PATH);
-        //readFile(mCPUInfo, CPU_INFO_PATH);
+        readFile(path);
         adapter = new PropAdapter(MemUsageActivity.this, R.layout.mem_item, props);
         packList.setAdapter(adapter);
     }
@@ -103,7 +120,7 @@ public class MemUsageActivity extends Activity implements  ActivityThemeChangeIn
     }
     protected Handler mCurHandler = new Handler() {
         public void handleMessage(Message msg) {
-            readFile(MEM_INFO_PATH);
+            readFile(path);
             adapter.notifyDataSetChanged();
         }
     };
@@ -115,8 +132,8 @@ public class MemUsageActivity extends Activity implements  ActivityThemeChangeIn
             BufferedReader br = new BufferedReader(fr);
             String line = br.readLine();
             while (null != line) {
-                line=line.replace("\\s+","");
-                props.add(new Prop(line.split(":")[0],line.split(":")[1]));
+                if(line!=null && line.contains(":"))
+                    props.add(new Prop(line.split(":")[0].trim(),line.split(":")[1].trim()));
                 line = br.readLine();
             }
         }
