@@ -115,6 +115,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         }
         mPresets.setEntryValues(oom.values().toArray(new CharSequence[oom.size()]));
         mPresets.setEntries(oom.keySet().toArray(new CharSequence[oom.size()]));
+        mPresets.setValue(Helpers.readOneLine(MINFREE_PATH));
 
         updateOOM(values);
 
