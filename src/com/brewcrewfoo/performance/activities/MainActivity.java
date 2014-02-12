@@ -189,20 +189,13 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
                 String r= data.getStringExtra("r");
-                if(r==null || r.equals("nok")) finish();
-            }
-            else{
-                finish();
+                if(r!=null && r.equals("ok")) return;
             }
         }
-        else{
-            finish();
-        }
+        finish();
     }
     private void checkForSu() {
-        boolean firstrun = mPreferences.getBoolean("firstrun", true);
-        if (firstrun) {
-           // mPreferences.edit().putBoolean("firstrun", false).commit();
+        if (mPreferences.getBoolean("firstrun", true)) {
             Intent intent = new Intent(MainActivity.this, checkSU.class);
             startActivityForResult(intent, 1);
         }
