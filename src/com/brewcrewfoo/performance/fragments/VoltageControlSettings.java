@@ -76,8 +76,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
         }
 
         setOnBoot.setChecked(mPreferences.getBoolean(VOLTAGE_SOB, false));
-        setOnBoot
-                .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        setOnBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                         mPreferences.edit().putBoolean(VOLTAGE_SOB,isChecked).apply();
@@ -205,7 +204,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
     private void ResetVolt() {
         for (final Voltage volt : mVoltages) {
             SharedPreferences.Editor editor = mPreferences.edit();
-                    editor.remove(volt.getFreq()).commit();
+            editor.remove(volt.getFreq()).commit();
         }
         final List<Voltage> volts = getVolts(mPreferences);
         mVoltages.clear();
@@ -216,7 +215,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
         for (final Voltage volt : mVoltages) {
             String value=Integer.toString( Integer.parseInt(volt.getSavedMV())+pas);
             SharedPreferences.Editor editor = mPreferences.edit();
-                    editor.putString(volt.getFreq(), value).commit();
+            editor.putString(volt.getFreq(), value).commit();
         }
         final List<Voltage> volts = getVolts(mPreferences);
         mVoltages.clear();
