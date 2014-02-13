@@ -126,7 +126,7 @@ public class IOSetActivity  extends Activity implements Constants, AdapterView.O
             Helpers.get_assetsScript("utils",context,"","");
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
             CMDProcessor.CommandResult cr =null;
-            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+IO_TUNABLE_PATH+"/*\"");
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+IO_TUNABLE_PATH+"/*\" \"1\"");
             if(cr.success()){
                 props= PropUtil.load_prop(cr.stdout);
                 return "ok";

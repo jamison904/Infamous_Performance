@@ -21,9 +21,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.brewcrewfoo.performance.R;
+import com.brewcrewfoo.performance.activities.HotplugActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
+import com.brewcrewfoo.performance.util.GPUClass;
 import com.brewcrewfoo.performance.util.Helpers;
 
 import java.io.File;
@@ -31,12 +33,14 @@ import java.io.File;
 public class CPUAdvanced extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,Constants {
 
     SharedPreferences mPreferences;
-    private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode,mMcPS;
-    private Preference mHotplug;
-    private ListPreference mSOmax,mSOmin;
+    private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode,mMcPS,mGenHP;
+    private Preference mHotplugset;
+    private ListPreference mSOmax,mSOmin,lmcps,lcpuq,lgpufmax;
     private String pso="";
     private Context context;
     private String hotpath=Helpers.hotplug_path();
+    final private CharSequence[] vmcps={"0","1","2"};
+    private GPUClass gpu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,11 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
         mIntelliplug = (CheckBoxPreference) findPreference("pref_intelliplug");
         mEcomode = (CheckBoxPreference) findPreference("pref_ecomode");
         mMcPS = (CheckBoxPreference) findPreference("pref_mc_ps");
-        mHotplug = (Preference) findPreference("pref_hotplug");
+        lmcps = (ListPreference) findPreference("pref_mcps");
+        lcpuq = (ListPreference) findPreference("pref_cpuquiet");
+        mHotplugset = findPreference("pref_hotplug");
+        mGenHP = (CheckBoxPreference) findPreference("pref_hp");
+        lgpufmax = (ListPreference) findPreference("pref_gpu_fmax");
 
         if (!new File(SO_MAX_FREQ).exists() || !new File(SO_MIN_FREQ).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("so_min_max");
@@ -97,7 +105,7 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             mIntelliplug.setChecked(Helpers.readOneLine(INTELLI_PLUG).equals("1"));
         }
         if(hotpath==null){
-            PreferenceCategory hideCat = (PreferenceCategory) findPreference("hotplug");
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("hotplugset");
             getPreferenceScreen().removePreference(hideCat);
         }
         if (!new File(ECO_MODE).exists()) {
@@ -112,7 +120,43 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
-            mMcPS.setChecked(Helpers.readOneLine(MC_PS).equals("1"));
+            lmcps.setEntries(getResources().getStringArray(R.array.mc_ps_array));
+            lmcps.setEntryValues(vmcps);
+            lmcps.setValue(Helpers.readOneLine(MC_PS));
+            lmcps.setSummary(getString(R.string.ps_mc_ps,lmcps.getEntry().toString()));
+        }
+        if(!new File(GEN_HP).exists()){
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("hp");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            mGenHP.setChecked(Helpers.readOneLine(GEN_HP).equals("1"));
+            mGenHP.setSummary(getString(R.string.ps_hp)+" | "+getString(R.string.ps_dsync));
+        }
+        if(!new File(CPU_QUIET_GOV).exists()){
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("cpuq");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            final String cur_cpuq_gov=Helpers.readOneLine(CPU_QUIET_GOV);
+            final String s=Helpers.readOneLine(CPU_QUIET_CUR);
+            final CharSequence[] govs=cur_cpuq_gov.split(" ");
+            lcpuq.setEntries(govs);
+            lcpuq.setEntryValues(govs);
+            lcpuq.setValue(s);
+            lcpuq.setSummary(getString(R.string.ps_cpuquiet,s));
+        }
+        gpu = new GPUClass();
+        if(gpu.gpuclk_path()==null){
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("gpu_max_clk");
+            getPreferenceScreen().removePreference(hideCat);
+        }
+        else{
+            lgpufmax.setEntries(gpu.gpuclk_names());
+            lgpufmax.setEntryValues(gpu.gpuclk_values());
+            final String s=Helpers.readOneLine(gpu.gpuclk_path());
+            lgpufmax.setValue(s);
+            lgpufmax.setSummary(getString(R.string.ps_gpu_fmax,Helpers.toMHz(String.valueOf(Integer.parseInt(s.toString()) / 1000))));
         }
     }
 
@@ -153,8 +197,9 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             }
             return true;
         }
-        else if(preference==mHotplug) {
-
+        else if(preference==mHotplugset) {
+            Intent i = new Intent(getActivity(), HotplugActivity.class);
+            startActivity(i);
         }
         else if(preference==mIntelliplug) {
             if (Helpers.readOneLine(INTELLI_PLUG).equals("0")){
@@ -174,12 +219,12 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             }
             return true;
         }
-        else if(preference==mMcPS) {
-            if (Helpers.readOneLine(MC_PS).equals("0")){
-                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + MC_PS);
+        else if(preference==mGenHP) {
+            if (Helpers.readOneLine(GEN_HP).equals("0")){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + ECO_MODE);
             }
             else{
-                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + MC_PS);
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + ECO_MODE);
             }
             return true;
         }
@@ -202,7 +247,27 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             }
             mSOmin.setSummary(pso + values + " kHz");
         }
-
+        else if(key.equals("pref_mcps")){
+            final String values = lmcps.getValue();
+            if (!values.equals(Helpers.readOneLine(MC_PS))){
+                new CMDProcessor().su.runWaitFor("busybox echo "+values+" > " + MC_PS);
+            }
+            lmcps.setSummary(getString(R.string.ps_mc_ps,lmcps.getEntry()));
+        }
+        else if(key.equals("pref_cpuquiet")){
+            final String values = lcpuq.getValue();
+            if (!values.equals(Helpers.readOneLine(CPU_QUIET_CUR))){
+                new CMDProcessor().su.runWaitFor("busybox echo "+values+" > " + CPU_QUIET_CUR);
+            }
+            lcpuq.setSummary(getString(R.string.ps_cpuquiet,values));
+        }
+        else if(key.equals("pref_gpu_fmax")){
+            final String values = lgpufmax.getValue();
+            if (!values.equals(Helpers.readOneLine(gpu.gpuclk_path()))){
+                new CMDProcessor().su.runWaitFor("busybox echo "+values+" > " + gpu.gpuclk_path());
+            }
+            lgpufmax.setSummary(getString(R.string.ps_gpu_fmax,Helpers.toMHz(String.valueOf(Integer.parseInt(values) / 1000))));
+        }
     }
 
 

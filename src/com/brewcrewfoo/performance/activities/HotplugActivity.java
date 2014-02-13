@@ -118,7 +118,7 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
             Helpers.get_assetsScript("utils",context,"","");
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
             CMDProcessor.CommandResult cr =null;
-            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+path+"/*\"");
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+path+"/*\" \"1\"");
             if(cr.success()){
                 props=PropUtil.load_prop(cr.stdout);
                 return "ok";

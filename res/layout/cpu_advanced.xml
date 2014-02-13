@@ -17,7 +17,6 @@
             android:key="pref_so_min"
             android:persistent="true"
             android:title="@string/pt_so_min"/>
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="so_minmax_boot"
@@ -40,11 +39,37 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="hotplug"
-        android:title="@string/hotplug">
+        android:key="hp"
+        android:title="@string/pt_hp">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_hp"
+            android:summary="@string/ps_hp"
+            android:title="@string/pt_hp"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="hotplugset"
+        android:title="@string/pt_hotplug">
         <Preference
             android:key="pref_hotplug"
             android:title="@string/pt_hotplug"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="cpuq"
+        android:title="@string/pt_cpuquiet">
+        <ListPreference
+            android:dialogTitle="@string/pt_cpuquiet"
+            android:key="pref_cpuquiet"
+            android:persistent="true"
+            android:summary="@string/ps_cpuquiet"
+            android:title="@string/pt_cpuquiet"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="cpuq_boot"
+            android:summary="@string/ps_restore_boot"
+            android:title="@string/sob"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -56,6 +81,7 @@
             android:summary="@string/ps_dsync"
             android:title="@string/pt_intelliplug"/>
     </PreferenceCategory>
+
     <PreferenceCategory
         android:key="ecomode"
         android:title="@string/ecomode">
@@ -65,13 +91,36 @@
             android:summary="@string/ps_dsync"
             android:title="@string/pt_ecomode"/>
     </PreferenceCategory>
+
     <PreferenceCategory
         android:key="mc_ps"
         android:title="@string/prefcat_mc_ps">
+        <ListPreference
+            android:dialogTitle="@string/pt_mc_ps"
+            android:key="pref_mcps"
+            android:persistent="true"
+            android:summary="@string/ps_mc_ps"
+            android:title="@string/pt_mc_ps"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_mc_ps"
-            android:summary="@string/ps_dsync"
-            android:title="@string/pt_mc_ps"/>
+            android:summary="@string/ps_blx_boot"
+            android:title="@string/sob"/>
+    </PreferenceCategory>
+    <!-- -GPU- -->
+    <PreferenceCategory
+        android:key="gpu_max_clk"
+        android:title="@string/pt_gpu_fmax">
+        <ListPreference
+            android:dialogTitle="@string/pt_gpu_fmax"
+            android:key="pref_gpu_fmax"
+            android:persistent="true"
+            android:summary="@string/ps_gpu_fmax"
+            android:title="@string/pt_gpu_fmax"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="gpu_fmax_boot"
+            android:summary="@string/ps_blx_boot"
+            android:title="@string/sob"/>
     </PreferenceCategory>
 </PreferenceScreen>

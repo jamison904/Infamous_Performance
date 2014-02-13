@@ -171,7 +171,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
             Helpers.get_assetsScript("utils",context,"","");
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
             CMDProcessor.CommandResult cr =null;
-            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+VM_PATH+"/*\"");
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+VM_PATH+"/*\" \"1\"");
             if(cr.success()){
                 load_prop(cr.stdout);
                 return "ok";

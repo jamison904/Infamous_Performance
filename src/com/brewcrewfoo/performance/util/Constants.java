@@ -230,6 +230,9 @@ public interface Constants {
     public static final String FLICK2SLEEP_SENSITIVE="/sys/devices/virtual/htc_g_sensor/g_sensor/f2w_sensitivity_values";
 
     public static final String HOTPLUG_SOB = "hotplug_sob";
+    public static final String CPU_QUIET_GOV = "/sys/devices/system/cpu/cpuquiet/available_governors";
+    public static final String CPU_QUIET_CUR = "/sys/devices/system/cpu/cpuquiet/current_governor";
+    public static final String GPU_MAX_FREQ = "/sys/devices/system/gpu/max_freq";
 
     // PC Settings
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";

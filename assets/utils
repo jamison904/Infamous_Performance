@@ -9,10 +9,17 @@ mount -o ro,remount /system
 }
 get_prop(){
 local d="$1";
-for i in `busybox find $d -type f -prune -perm -600 `; do
+local n="$2";
+if busybox [ "X$n"=="X" ]; then
+    niv="";
+else
+    niv="-maxdepth $n";
+fi;
+for i in `busybox find $d -type f -prune -perm -600 $niv`; do
     v=`busybox cat $i`;
     busybox echo "$i::$v";
 done;
+
 }
 set_prop() {
 	local prop_key=$(busybox echo "$1" | cut -d'=' -f1);

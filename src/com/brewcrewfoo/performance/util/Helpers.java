@@ -382,7 +382,7 @@ public class Helpers implements Constants {
     }
 
     public static boolean is_Tab_available(int i){
-        if(i==1) return (Helpers.getNumOfCpus()>=2);
+        if(i==1) return (Helpers.getNumOfCpus()>=1);
         else if(i==2) return Helpers.showBattery();
         else if(i==4) return Helpers.voltageFileExists();
         return true;
@@ -452,7 +452,9 @@ public class Helpers implements Constants {
     public static String hotplug_path() {
         if (new File("/sys/devices/virtual/misc/mako_hotplug_control").exists()) {
             return "/sys/devices/virtual/misc/mako_hotplug_control";
-            ///sys/class/misc/mako_hotplug_control?????
+        }
+        else if (new File("/sys/class/misc/mako_hotplug_control").exists()) {
+            return "/sys/class/misc/mako_hotplug_control";
         }
         else if (new File("/sys/module/auto_hotplug/parameters").exists()) {
             return "/sys/module/auto_hotplug/parameters";
@@ -467,4 +469,31 @@ public class Helpers implements Constants {
             return null;
         }
     }
+    public static String gpu_gov_path() {
+        if (new File("/sys/kernel/pvr_simple_gov/simple_governor").exists()) {
+            return "/sys/kernel/pvr_simple_gov/simple_governor";
+        }
+        else if (new File("/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor").exists()) {
+            return "/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor";
+        }
+        else if (new File("/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor").exists()) {
+            return "/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor";
+        }
+        else{
+            return null;
+        }
+    }
+    public static String gpu_gov_param_path() {
+        if (new File("/sys/module/msm_kgsl_core/parameters").exists()) {
+            return "/sys/module/msm_kgsl_core/parameters";
+        }
+        else if (new File("/sys/kernel/debug/tegra_host/scaling").exists()) {
+            return "/sys/kernel/debug/tegra_host/scaling";
+        }
+        else{
+            return null;
+        }
+    }
+
 }
+

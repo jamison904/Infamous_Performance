@@ -405,9 +405,22 @@ Copyright (C) 2012  James Roberts
     <string name="mt_io_ctrl">IO Scheduler Settings</string>
     <!-- 2.1.11-->
     <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hp">Generic Hotplug</string>
+    <string name="ps_hp">Disable one core when screen is off</string>
+    <string name="pt_cpuquiet">CPUQuiet Governor</string>
+    <string name="ps_cpuquiet">Controls which CPU cores are available and when | Current: %s</string>
     <string name="pt_hotplug">Hotplug Control</string>
-    <string name="pt_thermal_th">Thermal Throttling</string>
+    <string name="thermal">THERMAL</string>
+    <string name="pt_thermal">Thermal Control</string>
     <string name="mt_mem_usage">Memory Usage</string>
     <string name="pt_drop_caches">Clean drop caches</string>
     <string name="oom_default">Default values</string>
+    <string name="ps_mc_ps">Try to group tasks into the least cores possible | Current: %s</string>
+    <string-array name="mc_ps_array">
+        <item>Off</item>
+        <item>On</item>
+        <item>Agressive</item>
+    </string-array>
+    <string name="pt_gpu_fmax">GPU maxim frequency</string>
+    <string name="ps_gpu_fmax">Current: %s</string>
 </resources>

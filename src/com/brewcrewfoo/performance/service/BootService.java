@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
 import com.brewcrewfoo.performance.util.Constants;
+import com.brewcrewfoo.performance.util.GPUClass;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.VibratorClass;
 import com.brewcrewfoo.performance.util.Voltage;
@@ -78,6 +79,7 @@ public class BootService extends Service implements Constants {
             final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
             final float maxdisk = Helpers.getMem("MemTotal") / 1024;
             final String hotpath=Helpers.hotplug_path();
+            final GPUClass gpu=new GPUClass();
             String s;
 
             int ksm=0;
@@ -161,6 +163,20 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
+            if (new File(GEN_HP).exists()) {
+                if(preferences.getBoolean("pref_hp", false)){
+                    sb.append("busybox echo 1 > ").append(GEN_HP).append(";\n");
+                }
+                else{
+                    sb.append("busybox echo 0 > ").append(GEN_HP).append(";\n");
+                }
+            }
+            if(new File(CPU_QUIET_GOV).exists()){
+                if(preferences.getBoolean("cpuq_boot", false)){
+                    s=preferences.getString("pref_cpuquiet", Helpers.readOneLine(CPU_QUIET_CUR));
+                    sb.append("busybox echo ").append(s).append(" > ").append(CPU_QUIET_CUR).append(";\n");
+                }
+            }
             if (new File(INTELLI_PLUG).exists()) {
                 if(preferences.getBoolean("pref_intelliplug", false)){
                     sb.append("busybox echo 1 > ").append(INTELLI_PLUG).append(";\n");
@@ -179,10 +195,12 @@ public class BootService extends Service implements Constants {
             }
             if (new File(MC_PS).exists()) {
                 if(preferences.getBoolean("pref_mc_ps", false)){
-                    sb.append("busybox echo 1 > ").append(MC_PS).append(";\n");
+                    sb.append("busybox echo "+preferences.getString("pref_mcps",Helpers.readOneLine(MC_PS))+" > ").append(MC_PS).append(";\n");
                 }
-                else{
-                    sb.append("busybox echo 0 > ").append(MC_PS).append(";\n");
+            }
+            if(gpu.gpuclk_path()!=null){
+                if(preferences.getBoolean("gpu_fmax_boot",false)){
+                    sb.append("busybox echo "+preferences.getString("pref_gpu_fmax",Helpers.readOneLine(gpu.gpuclk_path()))+" > ").append(gpu.gpuclk_path()).append(";\n");
                 }
             }
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
@@ -326,8 +344,10 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(preferences.getInt(PREF_DIRTY_WRITEBACK_SUSPEND, Integer.parseInt(Helpers.readOneLine(DIRTY_WRITEBACK_SUSPEND_PATH)))).append(" > ").append(DIRTY_WRITEBACK_SUSPEND_PATH).append(";\n");
                 }
             }
+            //read & save default values
             s=Helpers.readOneLine(MINFREE_PATH);
             preferences.edit().putString(MINFREE_DEFAULT,s).apply();
+
             if (preferences.getBoolean(PREF_MINFREE_BOOT, false)) {
                     sb.append("busybox echo ").append(preferences.getString(PREF_MINFREE, s)).append(" > ").append(MINFREE_PATH).append(";\n");
             }
