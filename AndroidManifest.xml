@@ -51,7 +51,7 @@
         <activity android:name="com.brewcrewfoo.performance.activities.FreezerActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize"/>
 
-        <activity android:name="com.brewcrewfoo.performance.activities.HotplugActivity"
+        <activity android:name="com.brewcrewfoo.performance.activities.ParamActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <activity android:name="com.brewcrewfoo.performance.activities.GovSetActivity"

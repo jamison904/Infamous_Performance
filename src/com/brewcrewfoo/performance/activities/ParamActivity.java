@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -42,7 +43,7 @@ import java.util.List;
  * Created by h0rn3t on 09.02.2014.
  * http://forum.xda-developers.com/member.php?u=4674443
  */
-public class HotplugActivity extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
+public class ParamActivity extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
@@ -51,7 +52,7 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
     private LinearLayout linlaHeaderProgress,nofiles;
     private RelativeLayout tools;
     private PropAdapter adapter;
-    private String path=Helpers.hotplug_path();
+    private String path,sob,pref;
 
 
     @Override
@@ -62,6 +63,10 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
         setTheme();
         setContentView(R.layout.prop_view);
 
+        Intent intent=getIntent();
+        path=intent.getStringExtra("path");
+        sob=intent.getStringExtra("sob");
+        pref=intent.getStringExtra("pref");
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
@@ -75,13 +80,13 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
 
         Button applyBtn = (Button) findViewById(R.id.applyBtn);
         Switch setOnBoot = (Switch) findViewById(R.id.applyAtBoot);
-        setOnBoot.setChecked(mPreferences.getBoolean(GOV_SOB, false));
+        setOnBoot.setChecked(mPreferences.getBoolean(sob, false));
 
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-                final String s=mPreferences.getString("hotplug","");
+                final String s=mPreferences.getString(pref,"");
                 if(!s.equals("")){
                     String p[]=s.split(";");
                     for (String aP : p) {
@@ -100,7 +105,7 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
         setOnBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mPreferences.edit().putBoolean(HOTPLUG_SOB, isChecked).apply();
+                mPreferences.edit().putBoolean(sob, isChecked).apply();
             }
         });
 
@@ -124,7 +129,7 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
                 return "ok";
             }
             else{
-                Log.d(TAG, "Hotplug Settings error: " + cr.stderr);
+                Log.d(TAG, pref+" settings error: " + cr.stderr);
                 return "nok";
             }
         }
@@ -142,7 +147,7 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
                 else{
                     nofiles.setVisibility(LinearLayout.GONE);
                     tools.setVisibility(RelativeLayout.VISIBLE);
-                    adapter = new PropAdapter(HotplugActivity.this, R.layout.prop_item, props);
+                    adapter = new PropAdapter(ParamActivity.this, R.layout.prop_item, props);
                     packList.setAdapter(adapter);
                 }
             }
@@ -181,7 +186,7 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        mPreferences.edit().remove("hotplug").apply();
+                                        mPreferences.edit().remove(pref).apply();
                                     }
                                 }).create().show();
             }
@@ -228,7 +233,7 @@ public class HotplugActivity extends Activity implements Constants, AdapterView.
                     public void onClick(DialogInterface dialog, int which) {
                         if ((tv.getText().toString() != null) && (tv.getText().toString().length() > 0)) {
                             pp.setVal(tv.getText().toString().trim());
-                            PropUtil.set_pref(tn.getText().toString().trim(), tv.getText().toString().trim(),"hotplug",mPreferences);
+                            PropUtil.set_pref(tn.getText().toString().trim(), tv.getText().toString().trim(),pref,mPreferences);
                         }
                         adapter.notifyDataSetChanged();
                     }

@@ -483,17 +483,7 @@ public class Helpers implements Constants {
             return null;
         }
     }
-    public static String gpu_gov_param_path() {
-        if (new File("/sys/module/msm_kgsl_core/parameters").exists()) {
-            return "/sys/module/msm_kgsl_core/parameters";
-        }
-        else if (new File("/sys/kernel/debug/tegra_host/scaling").exists()) {
-            return "/sys/kernel/debug/tegra_host/scaling";
-        }
-        else{
-            return null;
-        }
-    }
+
 
 }
 

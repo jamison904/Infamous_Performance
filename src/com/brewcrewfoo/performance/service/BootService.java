@@ -203,6 +203,20 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo "+preferences.getString("pref_gpu_fmax",Helpers.readOneLine(gpu.gpuclk_path()))+" > ").append(gpu.gpuclk_path()).append(";\n");
                 }
             }
+            if(gpu.gpugovset_path()!=null){
+                if (preferences.getBoolean(GPU_PARAM_SOB, false)) {
+                    s = preferences.getString("gpuparam", "");
+                    if (!s.equals("")) {
+                        String p[]=s.split(";");
+                        for (String aP : p) {
+                            if(aP!=null && aP.contains(":")){
+                                final String pn[]=aP.split(":");
+                                sb.append("busybox echo ").append(pn[1]).append(" > ").append(gpu.gpugovset_path()).append("/").append(pn[0]).append(";\n");
+                            }
+                        }
+                    }
+                }
+            }
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
                 if(Helpers.voltageFileExists()){
                     final List<Voltage> volts = VoltageControlSettings.getVolts(preferences);

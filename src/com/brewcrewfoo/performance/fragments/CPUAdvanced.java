@@ -21,7 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.brewcrewfoo.performance.R;
-import com.brewcrewfoo.performance.activities.HotplugActivity;
+import com.brewcrewfoo.performance.activities.ParamActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
@@ -34,7 +34,7 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
 
     SharedPreferences mPreferences;
     private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode,mMcPS,mGenHP;
-    private Preference mHotplugset;
+    private Preference mHotplugset,mGpuGovset;
     private ListPreference mSOmax,mSOmin,lmcps,lcpuq,lgpufmax;
     private String pso="";
     private Context context;
@@ -66,6 +66,7 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
         mHotplugset = findPreference("pref_hotplug");
         mGenHP = (CheckBoxPreference) findPreference("pref_hp");
         lgpufmax = (ListPreference) findPreference("pref_gpu_fmax");
+        mGpuGovset = findPreference("pref_gpugov_set");
 
         if (!new File(SO_MAX_FREQ).exists() || !new File(SO_MIN_FREQ).exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("so_min_max");
@@ -156,7 +157,11 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             lgpufmax.setEntryValues(gpu.gpuclk_values());
             final String s=Helpers.readOneLine(gpu.gpuclk_path());
             lgpufmax.setValue(s);
-            lgpufmax.setSummary(getString(R.string.ps_gpu_fmax,Helpers.toMHz(String.valueOf(Integer.parseInt(s.toString()) / 1000))));
+            lgpufmax.setSummary(getString(R.string.ps_gpu_fmax, Helpers.toMHz(String.valueOf(Integer.parseInt(s.toString()) / 1000))));
+        }
+        if(gpu.gpugovset_path()==null){
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("gpugovset");
+            getPreferenceScreen().removePreference(hideCat);
         }
     }
 
@@ -198,7 +203,10 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
             return true;
         }
         else if(preference==mHotplugset) {
-            Intent i = new Intent(getActivity(), HotplugActivity.class);
+            Intent i = new Intent(getActivity(), ParamActivity.class);
+            i.putExtra("path",hotpath);
+            i.putExtra("sob",HOTPLUG_SOB);
+            i.putExtra("pref","hotplug");
             startActivity(i);
         }
         else if(preference==mIntelliplug) {
@@ -227,6 +235,13 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
                 new CMDProcessor().su.runWaitFor("busybox echo 0 > " + ECO_MODE);
             }
             return true;
+        }
+        else if(preference==mGpuGovset) {
+            Intent i = new Intent(getActivity(), ParamActivity.class);
+            i.putExtra("path",gpu.gpugovset_path());
+            i.putExtra("sob",GPU_PARAM_SOB);
+            i.putExtra("pref","gpuparam");
+            startActivity(i);
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }

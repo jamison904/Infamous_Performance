@@ -123,4 +123,12 @@
             android:summary="@string/ps_blx_boot"
             android:title="@string/sob"/>
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="gpugovset"
+        android:title="@string/pt_gpugov_set">
+        <Preference
+            android:key="pref_gpugov_set"
+            android:title="@string/pt_gpugov_set"/>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -423,4 +423,5 @@ Copyright (C) 2012  James Roberts
     </string-array>
     <string name="pt_gpu_fmax">GPU maxim frequency</string>
     <string name="ps_gpu_fmax">Current: %s</string>
+    <string name="pt_gpugov_set">GPU Control</string>
 </resources>

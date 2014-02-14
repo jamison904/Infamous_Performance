@@ -29,6 +29,9 @@ public class GPUClass implements Constants{
         }
         return v;
     }
+    public String gpugovset_path(){
+        return gpu_gov_param_path();
+    }
     private void gpu_clk() {
         CMDProcessor.CommandResult cr = null;
         if (new File("/sys/class/kgsl/kgsl-3d0/max_gpuclk").exists()) {
@@ -66,5 +69,15 @@ public class GPUClass implements Constants{
         }
 
     }
-
+    private String gpu_gov_param_path() {
+        if (new File("/sys/module/msm_kgsl_core/parameters").exists()) {
+            return "/sys/module/msm_kgsl_core/parameters";
+        }
+        else if (new File("/sys/kernel/debug/tegra_host/scaling").exists()) {
+            return "/sys/kernel/debug/tegra_host/scaling";
+        }
+        else{
+            return null;
+        }
+    }
 }

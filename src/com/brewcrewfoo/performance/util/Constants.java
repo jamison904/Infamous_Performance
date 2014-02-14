@@ -233,6 +233,7 @@ public interface Constants {
     public static final String CPU_QUIET_GOV = "/sys/devices/system/cpu/cpuquiet/available_governors";
     public static final String CPU_QUIET_CUR = "/sys/devices/system/cpu/cpuquiet/current_governor";
     public static final String GPU_MAX_FREQ = "/sys/devices/system/gpu/max_freq";
+    public static final String GPU_PARAM_SOB = "gpu_param_sob";
 
     // PC Settings
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";
