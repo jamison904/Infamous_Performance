@@ -51,12 +51,12 @@ public class checkSU extends Activity implements Constants, ActivityThemeChangeI
             setResult(RESULT_OK,returnIntent);
 
             if(result.equals("nok")){
-                mPreferences.edit().putBoolean("firstrun", false).commit();
+                mPreferences.edit().putBoolean("firstrun", true).commit();
                 info.setText(getString(R.string.su_failed_su_or_busybox));
                 wait.setVisibility(View.GONE);
             }
             else{
-                mPreferences.edit().putBoolean("firstrun", true).commit();
+                mPreferences.edit().putBoolean("firstrun", false).commit();
                 finish();
             }
 
