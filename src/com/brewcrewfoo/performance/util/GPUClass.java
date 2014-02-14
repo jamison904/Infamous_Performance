@@ -80,4 +80,18 @@ public class GPUClass implements Constants{
             return null;
         }
     }
+    private String gpu_gov_path() {
+        if (new File("/sys/kernel/pvr_simple_gov/simple_governor").exists()) {
+            return "/sys/kernel/pvr_simple_gov/simple_governor";
+        }
+        else if (new File("/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor").exists()) {
+            return "/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor";
+        }
+        else if (new File("/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor").exists()) {
+            return "/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor";
+        }
+        else{
+            return null;
+        }
+    }
 }

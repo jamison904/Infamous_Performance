@@ -18,7 +18,7 @@ public class PropUtil implements Constants {
         final String p[]=s.split("\n");
         for (String aP : p) {
             try{
-                if(aP!=null && aP.contains("::") && !aP.contains("uevent")){
+                if(aP!=null && aP.contains("::") && !aP.contains("uevent") && !aP.contains("debug")){
                     String pn=aP.split("::")[0];
                     pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
                     props.add(new Prop(pn,aP.split("::")[1].trim()));
