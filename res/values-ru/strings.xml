@@ -368,30 +368,30 @@
     <string name="ps_zram_info">Zram будет остановлен чтобы изменить размер диска</string>
     <!-- beta2-->
     <!-- 2.1.10-->
-    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
-    <string name="pt_wifi_pm">WiFi PM</string>
-    <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
-    <string name="pt_mc_ps">Multicore Power Saving</string>
-    <string name="mt_io_ctrl">IO Scheduler Settings</string>
+    <string name="prefcat_wifi_pm">ЭнергоСбережительный WiFi</string>
+    <string name="pt_wifi_pm">WiFi ЭС</string>
+    <string name="prefcat_mc_ps">МНОГОЯДРЕННОЕ СБЕРЕЖЕНИЕ ЭНЕРГИИ</string>
+    <string name="pt_mc_ps">Многоядерное Сбережение Энергии</string>
+    <string name="mt_io_ctrl">Настройки IO Планировщика</string>
     <!-- 2.1.11-->
-    <string name="hotplug">HOTPLUG</string>
-    <string name="pt_hp">Generic Hotplug</string>
-    <string name="ps_hp">Disable one core when screen is off</string>
-    <string name="pt_cpuquiet">CPUQuiet Governor</string>
-    <string name="ps_cpuquiet">Controls which CPU cores are available and when | Current: %s</string>
-    <string name="pt_hotplug">Hotplug Control</string>
-    <string name="thermal">THERMAL</string>
-    <string name="pt_thermal">Thermal Control</string>
-    <string name="mt_mem_usage">Memory Usage</string>
-    <string name="pt_drop_caches">Clean drop caches</string>
-    <string name="oom_default">Default values</string>
-    <string name="ps_mc_ps">Try to group tasks into the least cores possible | Current: %s</string>
+    <string name="hotplug">ГОРЯЧИЕ ПОДКЛЮЧЕНИЯ</string>
+    <string name="pt_hp">Общие Горячие Подключения</string>
+    <string name="ps_hp">Отключить одно ядро когда экран выключен</string>
+    <string name="pt_cpuquiet">Говернор CPUQuiet</string>
+    <string name="ps_cpuquiet">Управляет какие ядра доступны и когда | Текущий: %s</string>
+    <string name="pt_hotplug">Управление Горячими Подключениями</string>
+    <string name="thermal">ТЕМПЕРАТУРА</string>
+    <string name="pt_thermal">Настройки Температуры</string>
+    <string name="mt_mem_usage">Использование Памяти</string>
+    <string name="pt_drop_caches">Очистить Кэш</string>
+    <string name="oom_default">Стандартные Значения</string>
+    <string name="ps_mc_ps">Сгрупируйте задания для найменьшей нагрузки ядер | Текущий: %s</string>
     <string-array name="mc_ps_array">
-        <item>Off</item>
-        <item>On</item>
-        <item>Agressive</item>
+        <item>Выкл</item>
+        <item>Вкл</item>
+        <item>Агрессивный</item>
     </string-array>
-    <string name="pt_gpu_fmax">GPU maxim frequency</string>
-    <string name="ps_gpu_fmax">Current: %s</string>
-    <string name="pt_gpugov_set">GPU Control</string>
+    <string name="pt_gpu_fmax">Максимальная Частота GPU</string>
+    <string name="ps_gpu_fmax">Текущий: %s</string>
+    <string name="pt_gpugov_set">Управление GPU</string>
 </resources>
