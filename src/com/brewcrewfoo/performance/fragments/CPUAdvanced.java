@@ -33,7 +33,7 @@ import java.io.File;
 public class CPUAdvanced extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,Constants {
 
     SharedPreferences mPreferences;
-    private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode,mMcPS,mGenHP;
+    private CheckBoxPreference mMpdecision,mIntelliplug,mEcomode,mGenHP;
     private Preference mHotplugset,mGpuGovset;
     private ListPreference mSOmax,mSOmin,lmcps,lcpuq,lgpufmax;
     private String pso="";
@@ -60,7 +60,7 @@ public class CPUAdvanced extends PreferenceFragment implements SharedPreferences
         mMpdecision = (CheckBoxPreference) findPreference("pref_mpdecision");
         mIntelliplug = (CheckBoxPreference) findPreference("pref_intelliplug");
         mEcomode = (CheckBoxPreference) findPreference("pref_ecomode");
-        mMcPS = (CheckBoxPreference) findPreference("pref_mc_ps");
+        //mMcPS = (CheckBoxPreference) findPreference("pref_mc_ps");
         lmcps = (ListPreference) findPreference("pref_mcps");
         lcpuq = (ListPreference) findPreference("pref_cpuquiet");
         mHotplugset = findPreference("pref_hotplug");
