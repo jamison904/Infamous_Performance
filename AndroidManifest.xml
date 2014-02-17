@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.brewcrewfoo.performance"
           android:versionCode="4"
-          android:versionName="2.1.9 beta3">
+          android:versionName="2.1.12">
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19"/>
 
@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
             android:allowBackup="true"
@@ -23,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.brewcrewfoo.performance.activities.checkSU"/>
+
+        <activity android:name="com.brewcrewfoo.performance.activities.MemUsageActivity"/>
 
         <activity android:name="com.brewcrewfoo.performance.activities.PCSettings"/>
 
@@ -40,10 +45,19 @@
         <activity android:name="com.brewcrewfoo.performance.activities.ZramActivity"
             android:windowSoftInputMode="stateHidden"/>
 
+        <activity android:name="com.brewcrewfoo.performance.activities.PFKActivity"
+            android:windowSoftInputMode="stateHidden"/>
+
         <activity android:name="com.brewcrewfoo.performance.activities.FreezerActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize"/>
 
+        <activity android:name="com.brewcrewfoo.performance.activities.ParamActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
         <activity android:name="com.brewcrewfoo.performance.activities.GovSetActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <activity android:name="com.brewcrewfoo.performance.activities.IOSetActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <activity android:name="com.brewcrewfoo.performance.activities.VMSettings"

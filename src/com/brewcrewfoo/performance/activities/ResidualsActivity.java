@@ -162,8 +162,7 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
             final String[] rinfos = res.getStringArray(R.array.residual_info);
             Log.d(TAG,"residual files: "+result);
             if(result!=null){
-                final String fls[]=result.split(":");
-
+                final String fls[]=result.split("::");
                 for(int i=0;i<fls.length;i++){
                     if(!fls[i].equals("0")){
                         dir.add(new Item(residualfiles[i],rinfos[i],fls[i]+" "+getString(R.string.filesstr),null,"dir"));

@@ -215,7 +215,7 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
         @Override
         protected String doInBackground(String... params) {
             final StringBuilder sb = new StringBuilder();
-            final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/tmp";
+            final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/tmp";
 
             if(tip.equalsIgnoreCase("kernel")){
                 sb.append("busybox rm -rf /data/dalvik-cache/*;\n");

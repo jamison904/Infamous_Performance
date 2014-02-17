@@ -15,7 +15,6 @@ Translation by Rhonin86 & Evisceration
         <item>Frequenzverteilung</item>
         <item>Disk Informationen</item>
         <item>Tools</item>
-        <item>Allgemeine Informationen</item>
     </string-array>
 
     <string name="menu_tab">Tab</string>
@@ -72,13 +71,13 @@ Translation by Rhonin86 & Evisceration
     <string name="title_empty_app">Leere Applikationen</string>
     <string name="prefcat_oom_predefines">Voreinstellungen</string>
     <string name="pt_oom">Mindestverfügbarer Speicher Voreinstellungen</string>
-
-    <string name="pt_verylight">Sehr Mild</string>
-    <string name="pt_light">Mild</string>
-    <string name="pt_medium">Mittel</string>
-    <string name="pt_aggressive">Aggressiv</string>
-    <string name="pt_veryaggressive">Sehr Aggressiv</string>
-
+    <string-array name="oom_values">
+        <item>Sehr Mild</item>
+        <item>Mild</item>
+        <item>Mittel</item>
+        <item>Aggressiv</item>
+        <item>Sehr Aggressiv</item>
+    </string-array>
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">Speicherresistente Benutzerprozesse</string>
     <string name="prefcat_sys_proc">Speicherresistente Systemprozesse</string>
@@ -107,7 +106,7 @@ Translation by Rhonin86 & Evisceration
     <!-- bl_timeout -->
     <string name="prefcat_bltimeout">LED Timeout</string>
     <string name="ps_bltimeout">%s ms</string>
-    <string name="bltimeout_title">@string/prefcat_bltimeout</string>
+    <string name="bltimeout_title">Backlight timeout (ms)</string>
     <!-- bl_touch -->
     <string name="prefcat_bltouch">Hintergrundbeleuchtung des Touchscreens</string>
     <string name="pt_bltouch">Hintergrundbeleuchtung des Touchscreens</string>
@@ -117,13 +116,13 @@ Translation by Rhonin86 & Evisceration
     <string name="pt_home_enabled">Home Tasten Filter</string>
     <string name="ps_home_enabled">Ignorierte Tastendrücke: %s</string>
     <string name="home_allowed_irq_title">Max. erlaubte Interrupts</string>
-    <string name="home_report_wait_title">Berichtswartezeit </string>
-
+    <string name="home_report_wait_title">Berichtswartezeit (ms)</string>
+    <string name="pkf_settings">PKF Einstellungen</string>
     <string name="pt_menuback_enabled">Menü/Zurück Tasten Filter</string>
     <string name="ps_menuback_enabled">Ignorierte Tastendrücke: %s</string>
     <string name="menuback_interrupt_checks_title">Interrupt Überprüfungen</string>
-    <string name="menuback_first_err_wait_title">Wartezeit nach erstem Fehler</string>
-    <string name="menuback_last_err_wait_title">Wartezeit nach letztem Fehler</string>
+    <string name="menuback_first_err_wait_title">Wartezeit nach erstem Fehler (ms)</string>
+    <string name="menuback_last_err_wait_title">Wartezeit nach letztem Fehler (ms)</string>
     <string name="ps_pfk_set_on_boot">Wenn aktiviert werden die PKF-Einstellungen nach einem Neustart wieder hergestellt</string>
     <!-- dynamic write back -->
     <string name="dynamic_writeback_info">Dynamic Dirty Page Writebacks \nAuthor Cristoforo Cataldo (Christopher83)</string>
@@ -179,22 +178,11 @@ Translation by Rhonin86 & Evisceration
     <!-- CPU info -->
     <string name="kernel_info">Linux Kernel Information</string>
     <string name="cpu_info">CPU Information</string>
-    <string name="mem_info">Speicher Information</string>
     <string name="first_run_title">Rootberechtigung überprüfen</string>
     <string name="su_success_title">Erfolgreich!</string>
     <string name="su_failed_title">Upps!</string>
-    <string name="first_run_message">Die Anwendung überprüft den Rootzugriff und
-        BusyBox.\n\nDrücke OK um weiter zu machen.
-    </string>
-    <string name="su_success_message">"Performance Control hat Root Zugang und hat BusyBox
-        gefunden. Los geht's!"
-    </string>
-    <string name="su_cancel_message">Du hast Dich entschieden der Anwendung keinen Rootzugang zu gewähren.
-        Die meisten Funktionen benötigen aber Root Zugang.\n\nTut mir leid!
-    </string>
-    <string name="su_failed_su_or_busybox">Kein Root Zugang oder BusyBox nicht gefunden. Die meisten
-        Funktionen benötigen aber Root Zugang.\n\nTut mir leid!
-    </string>
+    <string name="first_run_message">Die Anwendung überprüft den Rootzugriff und BusyBox.</string>
+    <string name="su_failed_su_or_busybox">Kein Root Zugang oder BusyBox nicht gefunden.</string>
 
     <!-- Tools -->
     <string name="prefcat_sh">Individueller Shell Befehl</string>
@@ -338,37 +326,73 @@ Translation by Rhonin86 & Evisceration
     <string name="ics_color">Standart</string>
 
     <!-- beta2-->
-    <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
+    <string name="reset_msg">Aktuelle Daten werden gelöscht und der Standard wird nach dem Neustart wieder hergestellt. Weiter?</string>
 
-    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="prefcat_logs">SCHREIBE LOGS</string>
     <string name="logcat_title">Logcat</string>
-    <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
+    <string name="logcat_msg">Logcat wird auf %s geschrieben. Weiter?</string>
     <string name="dmesg_title">Dmesg</string>
-    <string name="dmesg_msg">Dmesg will be dumped on %s. Continue?</string>
-    <string name="ps_logs">Dump log on %s.</string>
+    <string name="dmesg_msg">Dmesg wird auf %s geschrieben. Weiter?</string>
+    <string name="ps_logs">Erzeuge den Log auf %s.</string>
 
     <string name="mpdecision">MPDECISION</string>
-    <string name="pt_mpdecision">Enable MPDecision</string>
-    <string name="ps_mpdecision"></string>
+    <string name="pt_mpdecision">Aktiviere MPDecision</string>
 
     <string name="prefcat_touchscr">TOUCHSCREEN</string>
     <string name="ps_touchscr">TouchScreen Control</string>
-    <string name="ps_touchscr_boot">If enabled will restore all touchcreen settings on reboot</string>
-    <string name="toucht1">Slide to Wake</string>
-    <string name="toucht2">Sweep to Wake</string>
-    <string name="toucht21">Sweep to Sleep</string>
-    <string name="toucht3">Home to Wake</string>
-    <string name="toucht4">Logo to Wake</string>
-    <string name="toucht5">Logo to Menu</string>
-    <string name="toucht6">Double Tap to Wake</string>
-    <string name="toucht7">Pocket Detect</string>
-    <string name="toucht8">Pick to Wake</string>
-    <string name="toucht9">Flick to Sleep</string>
-    <string name="toucht9s">Sensitivity</string>
-    <string name="toucht10">Touch to Wake</string>
+    <string name="ps_touchscr_boot">Stellt alle TouchScreen Einstellungen nach einem Neustart wieder her, wenn aktiviert.</string>
+    <string name="toucht1">Aufwecken durch Schieben</string>
+    <string name="toucht2">Aufwecken durch Streichen</string>
+    <string name="toucht21">StandBy durch Streichen</string>
+    <string name="toucht3">Aufwecken durch Home</string>
+    <string name="toucht4">Aufwecken durch Logo</string>
+    <string name="toucht5">Über Logo ins Menu</string>
+    <string name="toucht6">Aufwecken durch Doppeltes Tippen</string>
+    <string name="toucht7">Tasche erkennen</string>
+    <string name="toucht8">Aufwecken durch Wählen</string>
+    <string name="toucht9">StandBy durch Schütteln</string>
+    <string name="toucht9s">Empfindlichkeit</string>
+    <string name="toucht10">Aufwecken durch Berühren</string>
     <string-array name="asens">
-        <item name="high">High</item>
-        <item name="low">Low</item>
+        <item name="high">Hoch</item>
+        <item name="low">Tief</item>
     </string-array>
+    <string name="applied_ok">Eingaben wurden erfolgreich übernommen</string>
+    <string name="chk_update">Suche neue Updates…</string>
+    <string name="is_update">Neues Update erhältlich! Berühre um den Download zu starten.</string>
+    <string name="no_update">Kein Update gefunden.</string>
+
+    <string name="no_param">Keine Parameter</string>
+    <string name="no_download_manager">Download Manager nicht verfügbar!</string>
+    <string name="btn_download">Download</string>
+    <string name="pt_update">Was ist neu</string>
+    <string name="ps_zram_info">Zram muss angehalten werden um die Partitionsgröße zu ändern.</string>
     <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
+    <string name="pt_mc_ps">Multicore Power Saving</string>
+    <string name="mt_io_ctrl">IO Scheduler Settings</string>
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hp">Generic Hotplug</string>
+    <string name="ps_hp">Disable one core when screen is off</string>
+    <string name="pt_cpuquiet">CPUQuiet Governor</string>
+    <string name="ps_cpuquiet">Controls which CPU cores are available and when | Current: %s</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="thermal">THERMAL</string>
+    <string name="pt_thermal">Thermal Control</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
+    <string name="ps_mc_ps">Try to group tasks into the least cores possible | Current: %s</string>
+    <string-array name="mc_ps_array">
+        <item>Off</item>
+        <item>On</item>
+        <item>Agressive</item>
+    </string-array>
+    <string name="pt_gpu_fmax">GPU maxim frequency</string>
+    <string name="ps_gpu_fmax">Current: %s</string>
+    <string name="pt_gpugov_set">GPU Control</string>
 </resources>

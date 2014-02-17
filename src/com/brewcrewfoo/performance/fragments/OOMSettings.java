@@ -40,6 +40,7 @@ import android.widget.TextView;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.KSMActivity;
+import com.brewcrewfoo.performance.activities.MemUsageActivity;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.activities.PackActivity;
 import com.brewcrewfoo.performance.activities.ZramActivity;
@@ -48,6 +49,8 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
 import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class OOMSettings extends PreferenceFragment implements OnSharedPreferenceChangeListener,Constants {
     SharedPreferences mPreferences;
@@ -62,18 +65,8 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 	private Preference mContentProviders;
 	private Preference mEmptyApp;
 
-    private Preference mVerylight;
-    private Preference mLight;
-    private Preference mMedium;
-    private Preference mAggressive;
-    private Preference mVeryaggressive;
-	
-	final private String Verylight="512,1024,1280,2048,3072,4096";
-	final private String Light="1024,2048,2560,4096,6144,8192";
-	final private String Medium="1024,2048,4096,8192,12288,16384";
-	final private String Aggressive="2048,4096,8192,16384,24576,32768";
-	final private String Veryaggressive="4096,8192,16384,32768,49152,65536";
-	
+    private ListPreference mPresets;
+    final private CharSequence[] ventries ={"512,1024,1280,2048,3072,4096","1024,2048,2560,4096,6144,8192","1024,2048,4096,8192,12288,16384","2048,4096,8192,16384,24576,32768","4096,8192,16384,32768,49152,65536"};
 	private String values[];
 
     private CheckBoxPreference mUserON;
@@ -87,6 +80,9 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     private Boolean ispm;
     private int ksm=0;
     private String ksmpath=KSM_RUN_PATH;
+    private float maxdisk = Helpers.getMem("MemTotal") / 1024;
+    private int swap = Math.round(Helpers.getSwap() / 1024);
+    private int curdisk=0;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,16 +102,20 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         mContentProviders= findPreference(OOM_CONTENT_PROVIDERS);
         mEmptyApp= findPreference(OOM_EMPTY_APP);
 
-        mVerylight= findPreference("oom_verylight");
-        mVerylight.setSummary(Verylight);
-        mLight= findPreference("oom_light");
-        mLight.setSummary( Light);
-        mMedium= findPreference("oom_medium");
-        mMedium.setSummary(Medium);
-        mAggressive= findPreference("oom_aggressive");
-        mAggressive.setSummary(Aggressive);
-        mVeryaggressive= findPreference("oom_veryaggressive");
-        mVeryaggressive.setSummary(Veryaggressive);
+        mPresets= (ListPreference) findPreference("oom_presets");
+
+        Map<String,String> oom=new LinkedHashMap<String, String>();
+        final String s=mPreferences.getString(MINFREE_DEFAULT,"");
+        if(!s.equals("")){
+            oom.put(getResources().getString(R.string.oom_default),s);
+        }
+
+        for(int i=0;i<getResources().getStringArray(R.array.oom_values).length;i++){
+            oom.put(getResources().getStringArray(R.array.oom_values)[i],ventries[i].toString());
+        }
+        mPresets.setEntryValues(oom.values().toArray(new CharSequence[oom.size()]));
+        mPresets.setEntries(oom.keySet().toArray(new CharSequence[oom.size()]));
+        mPresets.setValue(Helpers.readOneLine(MINFREE_PATH));
 
         updateOOM(values);
 
@@ -128,6 +128,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
         mKSMsettings= findPreference("ksm_settings");
 
         mZRAMsettings= findPreference("zram_settings");
+        CheckBoxPreference mZRAMboot=(CheckBoxPreference) findPreference("zram_boot");
 
         String names="";
         if (!new File(USER_PROC_PATH).exists()) {
@@ -176,9 +177,17 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
-            int maxdisk = (int) Helpers.getTotMem() / 1024;
-            int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
-            mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
+            int percent=0;
+            if(swap>0){
+                percent=Math.round(swap * 100 / maxdisk);
+                curdisk=Math.round(maxdisk*percent/100);
+                if(mZRAMboot.isChecked()) mPreferences.edit().putInt(PREF_ZRAM,curdisk).apply();
+            }
+            else{
+                curdisk=mPreferences.getInt(PREF_ZRAM, Math.round(maxdisk*18/100));
+                percent=Math.round(curdisk * 100 / maxdisk);
+            }
+            mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024))+" ("+String.valueOf(percent)+"%)");
         }
     }
 
@@ -189,7 +198,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.mem_menu, menu);
     }
 
     @Override
@@ -200,6 +209,11 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                 break;
             case R.id.app_settings:
                 Intent intent = new Intent(getActivity(), PCSettings.class);
+                startActivity(intent);
+                break;
+            case R.id.mem_usage:
+                intent = new Intent(getActivity(), MemUsageActivity.class);
+                intent.putExtra("tip","mem");
                 startActivity(intent);
                 break;
         }
@@ -245,41 +259,6 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 			openDialog(5,currentProgress, title, oomConv(values[4]),256, preference, MINFREE_PATH, PREF_MINFREE);
 			return true;
 		}
-		else if (preference.equals(mVerylight)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Verylight + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Verylight).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
-		else if (preference.equals(mLight)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Light + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Light).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
-		else if (preference.equals(mMedium)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Medium + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Medium).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
-		else if (preference.equals(mAggressive)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Aggressive + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Aggressive).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
-		else if (preference.equals(mVeryaggressive)) {
-			new CMDProcessor().su.runWaitFor("busybox echo " + Veryaggressive + " > " + MINFREE_PATH);
-			mPreferences.edit().putString(PREF_MINFREE, Veryaggressive).apply();
-			values = Helpers.readOneLine(MINFREE_PATH).split(",");		
-			updateOOM(values);
-			return true;
-		}
         else if (preference.equals(mUserON)){
             if (Integer.parseInt(Helpers.readOneLine(USER_PROC_PATH))==0){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + USER_PROC_PATH);
@@ -305,7 +284,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                 startActivity(getpacks);
             }
             else{
-                ProcEditDialog(key,getString(R.string.pt_user_names_proc),"",USER_PROC_NAMES_PATH,false);
+                ProcEditDialog(key, getString(R.string.pt_user_names_proc), "", USER_PROC_NAMES_PATH, false);
             }
         }
         else if (preference.equals(mSysNames)){
@@ -319,7 +298,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             }
         }
         else if (preference.equals(mKSM)){
-            if (Integer.parseInt(Helpers.readOneLine(ksmpath))==0){
+            if ((Integer.parseInt(Helpers.readOneLine(ksmpath))==0)||(Integer.parseInt(Helpers.readOneLine(ksmpath))==2)){
                 new CMDProcessor().su.runWaitFor("busybox echo 1 > " + ksmpath);
             }
             else{
@@ -331,8 +310,9 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             startActivityForResult(new Intent(getActivity(), KSMActivity.class), 1);
         }
         else if (preference.equals(mZRAMsettings)){
-
-            startActivityForResult(new Intent(getActivity(), ZramActivity.class), 1);
+            Intent intent = new Intent(getActivity(), ZramActivity.class);
+            intent.putExtra("curdisk", curdisk);
+            startActivityForResult(intent,1);
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
@@ -347,7 +327,20 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
     			sharedPreferences.edit().remove(PREF_MINFREE).apply();
     		}
 	    }
-
+        else if(key.equals(ZRAM_SOB)){
+            if(sharedPreferences.getBoolean(key,false)){
+                sharedPreferences.edit().putInt(PREF_ZRAM,curdisk).apply();
+            }
+            else{
+                sharedPreferences.edit().remove(PREF_ZRAM).apply();
+            }
+        }
+        else if(key.equals("oom_presets")){
+            new CMDProcessor().su.runWaitFor("busybox echo " + mPresets.getValue() + " > " + MINFREE_PATH);
+            mPreferences.edit().putString(PREF_MINFREE, mPresets.getValue()).apply();
+            values = Helpers.readOneLine(MINFREE_PATH).split(",");
+            updateOOM(values);
+        }
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -356,15 +349,14 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             if(resultCode == Activity.RESULT_OK){
                 final int r=data.getIntExtra("result",0);
                 Log.d(TAG, "input = "+r);
-                //mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+r.split(":")[0]+" | "+getString(R.string.ksm_sleep)+" "+r.split(":")[1]);
                 switch(r){
                     case 1:
                         mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
                         break;
                     case 2:
-                        int maxdisk = (int) Helpers.getTotMem() / 1024;
-                        int curdisk=mPreferences.getInt(PREF_ZRAM,maxdisk /2);
-                        mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
+                        curdisk=mPreferences.getInt(PREF_ZRAM, Math.round(maxdisk*18/100));
+                        final int percent=Math.round(curdisk * 100 / maxdisk);
+                        mZRAMsettings.setSummary(getString(R.string.ps_zram)+" | "+getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024))+" ("+String.valueOf(percent)+"%)");
                         break;
                 }
             }
@@ -497,7 +489,8 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 							val=max;
 						}
 						seekbar.setProgress(val);
-					} catch (NumberFormatException ex) {
+					}
+                    catch (NumberFormatException ex) {
 					}
 			}
         });

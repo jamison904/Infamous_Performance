@@ -40,10 +40,6 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Voltage;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,8 +76,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
         }
 
         setOnBoot.setChecked(mPreferences.getBoolean(VOLTAGE_SOB, false));
-        setOnBoot
-                .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        setOnBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                         mPreferences.edit().putBoolean(VOLTAGE_SOB,isChecked).apply();
@@ -114,11 +109,12 @@ public class VoltageControlSettings extends Fragment implements Constants {
 			@Override
 			public void onClick(View arg0) {
 			final StringBuilder sb = new StringBuilder();
-    		if (Helpers.getVoltagePath().equals(VDD_PATH)) {
+            final String vdd=Helpers.getVoltagePath();
+    		if (vdd.equals(VDD_PATH)) {
 				for (final Voltage volt : mVoltages) {
 					if(!volt.getSavedMV().equals(volt.getCurrentMv())){
 						for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-							sb.append("busybox echo ").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(" \n");
+                            sb.append("busybox echo \"").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append("\" > ").append(vdd.replace("cpu0", "cpu" + i)).append(";\n");
 						}
 					}
 				}
@@ -128,9 +124,14 @@ public class VoltageControlSettings extends Fragment implements Constants {
 				for (final Voltage volt : mVoltages) {
 					b.append(volt.getSavedMV()).append(" ");
 				}
-				for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-					sb.append("busybox echo ").append(b.toString()).append(" > ").append(Helpers.getVoltagePath().replace("cpu0", "cpu" + i)).append(" \n");
-				}
+                if(vdd.equals(COMMON_VDD_PATH)){
+                    sb.append("busybox echo \"").append(b.toString()).append("\" > ").append(vdd).append(";\n");
+                }
+                else{
+                    for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
+                        sb.append("busybox echo \"").append(b.toString()).append("\" > ").append(vdd.replace("cpu0", "cpu" + i)).append(";\n");
+                    }
+                }
 			}
 			Helpers.shExec(sb,context,true);
 
@@ -203,7 +204,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
     private void ResetVolt() {
         for (final Voltage volt : mVoltages) {
             SharedPreferences.Editor editor = mPreferences.edit();
-                    editor.remove(volt.getFreq()).commit();
+            editor.remove(volt.getFreq()).commit();
         }
         final List<Voltage> volts = getVolts(mPreferences);
         mVoltages.clear();
@@ -214,59 +215,66 @@ public class VoltageControlSettings extends Fragment implements Constants {
         for (final Voltage volt : mVoltages) {
             String value=Integer.toString( Integer.parseInt(volt.getSavedMV())+pas);
             SharedPreferences.Editor editor = mPreferences.edit();
-                    editor.putString(volt.getFreq(), value).commit();
+            editor.putString(volt.getFreq(), value).commit();
         }
         final List<Voltage> volts = getVolts(mPreferences);
         mVoltages.clear();
         mVoltages.addAll(volts);
         mAdapter.notifyDataSetChanged();
     }
-    
-    
+
     public static List<Voltage> getVolts(final SharedPreferences preferences) {
         final List<Voltage> volts = new ArrayList<Voltage>();
         try {
-		BufferedReader br = new BufferedReader(new FileReader(Helpers.getVoltagePath()), 256);
-		String line = "";
-		if (Helpers.getVoltagePath().equals(VDD_PATH)) {
-			while ((line = br.readLine()) != null) {
-				line = line.replaceAll("\\s","");
-				if (!line.equals("")) {
-					final String[] values = line.split(":");
-					final String freq = values[0];
-					final String currentMv = values[1];
-					final String savedMv = preferences.getString(freq,currentMv);
-					final Voltage voltage = new Voltage();
-					voltage.setFreq(freq);
-					voltage.setCurrentMV(currentMv);
-					voltage.setSavedMV(savedMv);
-					volts.add(voltage);
-				}
-			}
-		}
-		else{
-			while ((line = br.readLine()) != null) {
-				final String[] values = line.split("\\s+");
-				if (values != null) {
-					if (values.length >= 2) {
-						final String freq = values[0].replace("mhz:", "");
-						final String currentMv = values[1];
-						final String savedMv = preferences.getString(freq,currentMv);
-						final Voltage voltage = new Voltage();
-						voltage.setFreq(freq);
-						voltage.setCurrentMV(currentMv);
-						voltage.setSavedMV(savedMv);
-						volts.add(voltage);
-					}
-				}
-			}
-		}
-		br.close();
-        } catch (FileNotFoundException e) {
-            Log.d(TAG, Helpers.getVoltagePath() + " does not exist");
-        } catch (IOException e) {
-            Log.d(TAG, "Error reading " + Helpers.getVoltagePath());
+            final String tablevdd = Helpers.readFileViaShell(Helpers.getVoltagePath(), false);
+            //BufferedReader br = new BufferedReader(new FileReader(Helpers.getVoltagePath()), 256);
+            //String line = "";
+            //if (Helpers.getVoltagePath().equals(VDD_PATH)) {
+                //while ((line = br.readLine()) != null) {
+            if(tablevdd!=null){
+                for (final String line : tablevdd.split("\n")) {
+                    //line = line.replaceAll("\\s","");
+                    //if (!line.equals("")) {
+                    if (line!=null && line.contains(":")) {
+                        final String[] values = line.split(":");
+                        String freq = values[0].trim();
+                        if(freq.contains("mhz")){
+                            freq = values[0].replace("mhz", "").trim();
+                            freq=String.valueOf(Integer.parseInt(freq)*1000);
+                        }
+
+                        final String currentMv = values[1].replace("mV", "").trim();
+                        final String savedMv = preferences.getString(freq,currentMv);
+                        final Voltage voltage = new Voltage();
+                        voltage.setFreq(freq);
+                        voltage.setCurrentMV(currentMv);
+                        voltage.setSavedMV(savedMv);
+                        volts.add(voltage);
+                    }
+                }
+            }
+            //}
+            /*else{
+                while ((line = br.readLine()) != null) {
+                    if (line.contains(":")) {
+                    final String[] values = line.split(":");
+                        final String freq = values[0].replace("mhz", "").trim();
+                        final String currentMv = values[1].replace("mV", "").trim();
+                        final String savedMv = preferences.getString(freq,currentMv);
+                        final Voltage voltage = new Voltage();
+                        voltage.setFreq(freq);
+                        voltage.setCurrentMV(currentMv);
+                        voltage.setSavedMV(savedMv);
+                        volts.add(voltage);
+                    }
+                }
+            }*/
+		    //br.close();
         }
+        catch (Exception e) {
+            Log.d(TAG, Helpers.getVoltagePath() + " error reading");
+        }
+
         return volts;
    }
 

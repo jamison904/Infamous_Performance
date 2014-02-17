@@ -6,7 +6,6 @@ package com.brewcrewfoo.performance.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
@@ -220,35 +219,32 @@ public class DiskInfo extends Fragment implements Constants {
 
     public static long Freebytes(File f) {
         StatFs stat = new StatFs(f.getPath());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return stat.getFreeBytes();
-        }
-        else {
-            return (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
-        }
-
+        return (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
     }
     public static long Totalbytes(File f) {
         StatFs stat = new StatFs(f.getPath());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return stat.getTotalBytes();
-        }
-        else {
-            return (long)stat.getBlockSize() * (long)stat.getBlockCount();
-        }
+        return (long)stat.getBlockSize() * (long)stat.getBlockCount();
     }
 
     public Boolean set_part_info(String part,String titlu,TextView t1,TextView t2,TextView t3,TextView t4,ProgressBar b,RelativeLayout l){
         if(new File(part).exists()){
             final long v1=Totalbytes(new File(part));
-            t1.setText(titlu);
-            t2.setText(Helpers.ReadableByteCount(v1));
-            final long v2=Freebytes(new File(part));
-            t3.setText(getString(R.string.used,Helpers.ReadableByteCount(v1-v2)));
-            t4.setText(getString(R.string.free,Helpers.ReadableByteCount(v2)));
-            b.setProgress(Math.round(((v1-v2)*100)/v1));
-            l.setVisibility(RelativeLayout.VISIBLE);
-            return true;
+            if(v1>0){
+                t1.setText(titlu);
+                t2.setText(Helpers.ReadableByteCount(v1));
+
+                final long v2=Freebytes(new File(part));
+                t4.setText(getString(R.string.free,Helpers.ReadableByteCount(v2)));
+                t3.setText(getString(R.string.used,Helpers.ReadableByteCount(v1-v2)));
+                b.setProgress(Math.round(((v1-v2)*100)/v1));
+
+                l.setVisibility(RelativeLayout.VISIBLE);
+                return true;
+            }
+            else{
+                l.setVisibility(RelativeLayout.GONE);
+                return false;
+            }
         }
         else{
             l.setVisibility(RelativeLayout.GONE);
@@ -283,7 +279,7 @@ public class DiskInfo extends Fragment implements Constants {
             final String externalstorage[]=System.getenv("SECONDARY_STORAGE").split(":");
             for ( final String dirs : externalstorage ) {
                 final File dir= new File(dirs);
-                if ( dir.isDirectory() && dir.canRead() && (dir.listFiles().length > 0) ) {
+                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() ) {
                     externalsd=dirs;
                     Log.d(TAG, "SDCard 2: " + externalsd );
                     break;
@@ -294,11 +290,15 @@ public class DiskInfo extends Fragment implements Constants {
             }
         }
         else{
-            final File dir= new File("/storage/sdcard1");
-            if ( dir.isDirectory() && dir.canRead() && (dir.listFiles().length > 0) ) {
-                externalsd="/storage/sdcard1";
-                Log.d(TAG, "SDCard 2: " + externalsd );
-                set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
+            final String supported[]={"/mnt/extSdCard","/storage/sdcard1","/mnt/external_sd"};
+            for ( final String dirs : supported) {
+                final File dir= new File(dirs);
+                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() ) {
+                    externalsd=dirs;
+                    Log.d(TAG, "SDCard 2: " + externalsd );
+                    set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
+                    break;
+                }
             }
         }
 

@@ -53,7 +53,6 @@ public class TimeInState extends Fragment implements Constants {
     private TextView mHeaderTotalStateTime;
     private TextView mStatesWarning;
     private boolean mUpdatingData = false;
-
     private CPUStateMonitor monitor = new CPUStateMonitor();
     private Context context;
     SharedPreferences preferences;
@@ -99,6 +98,10 @@ public class TimeInState extends Fragment implements Constants {
         super.onResume();
 
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -115,12 +118,8 @@ public class TimeInState extends Fragment implements Constants {
                 refreshData();
                 break;
             case R.id.reset:
-                try {
-                    monitor.setOffsets();
-                }
-                catch (Exception e) {
-                    // not good
-                }
+                try {monitor.setOffsets();}
+                catch (Exception e) {}
                 saveOffsets();
                 updateView();
                 break;
@@ -134,7 +133,6 @@ public class TimeInState extends Fragment implements Constants {
                 startActivity(intent);
                 break;
         }
-
         return true;
     }
 
@@ -144,22 +142,22 @@ public class TimeInState extends Fragment implements Constants {
         for (CpuState state : monitor.getStates()) {
             if (state.duration > 0) {
                 generateStateRow(state, mStatesView);
-            } else {
+            }
+            else {
                 if (state.freq == 0) {
                     extraStates.add(getString(R.string.deep_sleep));
-                } else {
+                }
+                else {
                     extraStates.add(state.freq / 1000 + " MHz");
                 }
             }
         }
-
         if (monitor.getStates().size() == 0) {
             mStatesWarning.setVisibility(View.VISIBLE);
             mHeaderTotalStateTime.setVisibility(View.GONE);
             mTotalStateTime.setVisibility(View.GONE);
             mStatesView.setVisibility(View.GONE);
         }
-
         long totTime = monitor.getTotalStateTime() / 100;
         mTotalStateTime.setText(toString(totTime));
 
@@ -256,7 +254,12 @@ public class TimeInState extends Fragment implements Constants {
 
         @Override
         protected void onPostExecute(Void v) {
-            updateView();
+            try{
+                updateView();
+            }
+            catch (Exception e){
+
+            }
             mUpdatingData = false;
         }
     }
@@ -267,14 +270,12 @@ public class TimeInState extends Fragment implements Constants {
         if (prefs == null || prefs.length() < 1) {
             return;
         }
-
         Map<Integer, Long> offsets = new HashMap<Integer, Long>();
         String[] sOffsets = prefs.split(",");
         for (String offset : sOffsets) {
             String[] parts = offset.split(" ");
             offsets.put(Integer.parseInt(parts[0]), Long.parseLong(parts[1]));
         }
-
         monitor.setOffsets(offsets);
     }
 
@@ -286,4 +287,5 @@ public class TimeInState extends Fragment implements Constants {
         }
         editor.putString(PREF_OFFSETS, str).commit();
     }
+
 }

@@ -13,7 +13,6 @@
         <item>Время в Действии</item>
         <item>О Диске</item>
         <item>Инструменты</item>
-        <item>Общая информация</item>
     </string-array>
 
     <string name="menu_tab">Вкладки</string>
@@ -53,10 +52,9 @@
         Текущий: %s
     </string>
     <string name="ps_fast_charge_boot">Быстрая Зарядка</string>
-    <string name="fast_charge_warning">Вы не сможете подключаться к ПК после каждой перезагрузки пока режим "Быстрой зарядки" включён. В этом режиме Вы можете только заряжать телефон!
-    </string>
+    <string name="fast_charge_warning">Вы не сможете подключаться к ПК после каждой перезагрузки пока режим "Быстрой зарядки" включён. В этом режиме Вы можете только заряжать телефон!</string>
     <string name="fast_charge_notification_title">Быстрая Зарядка Включена!</string>
-    <string name="fast_charge_notification_message">Телефон в режиме "Быстрая зарядка"! </string>
+    <string name="fast_charge_notification_message">Телефон в режиме "Быстрая зарядка"!</string>
     <!-- minfree -->
     <string name="prefcat_oom">МЕНЕДЖЕР ЗАДАЧ MINFREE</string>
     <string name="title_foreground_app">Активные Приложения</string>
@@ -67,11 +65,13 @@
     <string name="title_empty_app">Пустые Приложения</string>
     <string name="prefcat_oom_predefines">Предустановленные</string>
     <string name="pt_oom">Пресеты Minfree</string>
-    <string name="pt_verylight">Очень Легкий</string>
-    <string name="pt_light">Легкий</string>
-    <string name="pt_medium">Средний</string>
-    <string name="pt_aggressive">Аггресивный</string>
-    <string name="pt_veryaggressive">Очень Аггресивный</string>
+    <string-array name="oom_values">
+        <item>Очень Легкий</item>
+        <item>Легкий</item>
+        <item>Средний</item>
+        <item>Аггресивный</item>
+        <item>Очень Аггресивный</item>
+    </string-array>
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">НЕ УБИВАЕМЫЕ ПРОЦЕССЫ</string>
     <string name="prefcat_sys_proc">НЕУБИВАЕМЫЕ СИСТЕМНЫЕ ПРОЦЕССЫ</string>
@@ -100,7 +100,7 @@
     <!-- bl_timeout -->
     <string name="prefcat_bltimeout">Тайм-аут подсветки </string>
     <string name="ps_bltimeout">%s мс</string>
-    <string name="bltimeout_title">Тайм-аут подсветки</string>
+    <string name="bltimeout_title">Тайм-аут подсветки (мс)</string>
     <!-- bl_touch -->
     <string name="prefcat_bltouch">Подсветка Дисплеем</string>
     <string name="pt_bltouch">Подсветка Дисплеем</string>
@@ -110,12 +110,13 @@
     <string name="pt_home_enabled">Фильтр кнопки "Домой"</string>
     <string name="ps_home_enabled">Игнорировать нажатие кнопки: %s</string>
     <string name="home_allowed_irq_title">Максимально разрешённые прерывания</string>
-    <string name="home_report_wait_title">Уведомить о времени ожидания</string>
+    <string name="home_report_wait_title">Уведомить о времени ожидания (мс)</string>
+    <string name="pkf_settings">Настройки PKF</string>
     <string name="pt_menuback_enabled">Фильтр кнопок Меню/Назад</string>
     <string name="ps_menuback_enabled">Игнорировать нажатие кнопки: %s</string>
     <string name="menuback_interrupt_checks_title">Проверка прерываний</string>
-    <string name="menuback_first_err_wait_title">Время ожидания первой ошибки</string>
-    <string name="menuback_last_err_wait_title">Время ожидания последней ошибки</string>
+    <string name="menuback_first_err_wait_title">Время ожидания первой ошибки (мс)</string>
+    <string name="menuback_last_err_wait_title">Время ожидания последней ошибки (мс)</string>
     <string name="ps_pfk_set_on_boot">Все ФСНК настройки будут восстановлены при перезагрузке, если этот параметр активирован</string>
     <!-- dynamic write back -->
     <string name="dynamic_writeback_info">Динамическое управление\nАвтор Cristoforo Cataldo (Christopher83)</string>
@@ -178,15 +179,13 @@
     <string name="deep_sleep">"Сон"</string>
     <!-- CPU info -->
     <string name="kernel_info">ИНФОРМАЦИЯ О ЯДРЕ</string>
-    <string name="cpu_info">ИНФОРМАЦИЯ О ПРОЦЕССОРЕ</string>
+    <string name="cpu_info">Информация о процессоре</string>
     <string name="mem_info">ИНФОРМАЦИЯ О ПАМЯТИ</string>
     <string name="first_run_title">Сначала проверьте права root</string>
     <string name="su_success_title">Выполнено!</string>
     <string name="su_failed_title">Ой!</string>
-    <string name="first_run_message">Приложение проверит права ROOT и наличие Busybox. Нажмите OK чтобы продолжить.</string>
-    <string name="su_success_message">Приложению удалось получить root доступ и найти Busybox. Поехали!</string>
-    <string name="su_cancel_message">Вы выбрали не проверять ROOT доступ и Busybox. Большинство функций не доступны без этого!</string>
-    <string name="su_failed_su_or_busybox">Нет доступа Root или не установлен Busybox. Большинство функций недоступны</string>
+    <string name="first_run_message">Приложение проверит права ROOT и наличие Busybox.</string>
+    <string name="su_failed_su_or_busybox">Нет доступа Root или не установлен Busybox.</string>
     <!-- Tools -->
     <string name="prefcat_sh">КАСТОМНАЯ КОММАНДНАЯ СТРОКА</string>
     <string name="sh_title">Редактировать команду</string>
@@ -336,7 +335,6 @@
 
     <string name="mpdecision">MPDECISION</string>
     <string name="pt_mpdecision">Включить MPDecision</string>
-    <string name="ps_mpdecision"></string>
 
     <string name="prefcat_touchscr">ТАЧСКРИН</string>
     <string name="ps_touchscr">ТачСкрин Контроль</string>
@@ -357,5 +355,43 @@
         <item name="high">Высокий</item>
         <item name="low">Низкий</item>
     </string-array>
+    <string name="applied_ok">Значения были успешно применены</string>
+
+    <string name="chk_update">Проверка обновлений…</string>
+    <string name="is_update">Доступнно обновление! Нажмите для загрузки.</string>
+    <string name="no_update">Обновлений нет.</string>
+
+    <string name="no_param">Без параметров</string>
+    <string name="no_download_manager">Менеджер Загрузок недоступен!</string>
+    <string name="btn_download">Загрузка</string>
+    <string name="pt_update">Что нового?</string>
+    <string name="ps_zram_info">Zram будет остановлен чтобы изменить размер диска</string>
     <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">ЭнергоСбережительный WiFi</string>
+    <string name="pt_wifi_pm">WiFi ЭС</string>
+    <string name="prefcat_mc_ps">МНОГОЯДРЕННОЕ СБЕРЕЖЕНИЕ ЭНЕРГИИ</string>
+    <string name="pt_mc_ps">Многоядерное Сбережение Энергии</string>
+    <string name="mt_io_ctrl">Настройки IO Планировщика</string>
+    <!-- 2.1.11-->
+    <string name="hotplug">ГОРЯЧИЕ ПОДКЛЮЧЕНИЯ</string>
+    <string name="pt_hp">Общие Горячие Подключения</string>
+    <string name="ps_hp">Отключить одно ядро когда экран выключен</string>
+    <string name="pt_cpuquiet">Говернор CPUQuiet</string>
+    <string name="ps_cpuquiet">Управляет какие ядра доступны и когда | Текущий: %s</string>
+    <string name="pt_hotplug">Управление Горячими Подключениями</string>
+    <string name="thermal">ТЕМПЕРАТУРА</string>
+    <string name="pt_thermal">Настройки Температуры</string>
+    <string name="mt_mem_usage">Использование Памяти</string>
+    <string name="pt_drop_caches">Очистить Кэш</string>
+    <string name="oom_default">Стандартные Значения</string>
+    <string name="ps_mc_ps">Сгрупируйте задания для найменьшей нагрузки ядер | Текущий: %s</string>
+    <string-array name="mc_ps_array">
+        <item>Выкл</item>
+        <item>Вкл</item>
+        <item>Агрессивный</item>
+    </string-array>
+    <string name="pt_gpu_fmax">Максимальная Частота GPU</string>
+    <string name="ps_gpu_fmax">Текущий: %s</string>
+    <string name="pt_gpugov_set">Управление GPU</string>
 </resources>

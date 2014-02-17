@@ -10,6 +10,10 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,6 +37,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -49,24 +54,27 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class SysctlEditor extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
+public class SysctlEditor extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface,SensorEventListener {
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
     Resources res;
     private ListView packList;
     private LinearLayout linlaHeaderProgress;
-    private LinearLayout nofiles;
-    private RelativeLayout tools,search;
+    private LinearLayout nofiles,search;
+    private RelativeLayout tools;
     private PropAdapter adapter=null;
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/sysctl";
+    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/sysctl";
 
     private final String syspath="/system/etc/";
+    private final String SYSCTL="/proc/sys/";
     private String sob=SYSCTL_SOB;
     private String[] tcp={};
 
+    SensorManager mSensorManager;
+    Sensor mproximity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +91,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/sysctl.conf" );
         }
         else{
-            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
+            new CMDProcessor().sh.runWaitFor("busybox echo \"# created by "+TAG+"\n\" > "+dn+"/sysctl.conf" );
         }
         Helpers.get_assetsScript("utils",context,"","");
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
@@ -93,7 +101,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         nofiles = (LinearLayout) findViewById(R.id.nofiles);
         tools = (RelativeLayout) findViewById(R.id.tools);
-        search = (RelativeLayout) findViewById(R.id.search);
+        search = (LinearLayout) findViewById(R.id.search);
         filterText = (EditText) findViewById(R.id.filtru);
         filterText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,6 +127,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                 sb.append("mount -o ro,remount /system;\n");
                 sb.append("busybox sysctl -p ").append("/system/etc/").append("sysctl.conf").append(";\n");
                 Helpers.shExec(sb,context,true);
+                Toast.makeText(context, getString(R.string.applied_ok), Toast.LENGTH_SHORT).show();
             }
         });
         final Switch setOnBoot = (Switch) findViewById(R.id.applyAtBoot);
@@ -132,7 +141,23 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         tools.setVisibility(View.GONE);
         search.setVisibility(View.GONE);
 
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mproximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+
         new GetPropOperation().execute();
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.values[0]>0){
+            packList.smoothScrollByOffset(4);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
@@ -152,11 +177,11 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         switch(item.getItemId()){
             case R.id.search_prop:
                 if(search.isShown()){
-                    search.setVisibility(RelativeLayout.GONE);
+                    search.setVisibility(LinearLayout.GONE);
                     filterText.setText("");
                 }
                 else{
-                    search.setVisibility(RelativeLayout.VISIBLE);
+                    search.setVisibility(LinearLayout.VISIBLE);
                 }
                 break;
             case R.id.reset:
@@ -180,11 +205,11 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                                             new CMDProcessor().sh.runWaitFor("busybox cp /system/etc/sysctl.conf"+" "+dn+"/"+nf );
                                             final StringBuilder sb = new StringBuilder();
                                             sb.append("mount -o rw,remount /system;\n");
-                                            sb.append("busybox echo \"# created by PerformanceControl\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
+                                            sb.append("busybox echo \"# created by "+TAG+"\n\" >").append(" /system/etc/").append("sysctl.conf").append(";\n");
                                             sb.append("mount -o ro,remount /system;\n");
                                             Helpers.shExec(sb,context,true);
                                         }
-                                        new CMDProcessor().sh.runWaitFor("busybox echo \"# created by PerformanceControl\n\" > "+dn+"/sysctl.conf" );
+                                        new CMDProcessor().sh.runWaitFor("busybox echo \"# created by "+TAG+"\n\" > "+dn+"/sysctl.conf" );
                                     }
                 }).create().show();
                 break;
@@ -195,7 +220,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     @Override
     public void onBackPressed(){
         if(search.isShown()){
-            search.setVisibility(RelativeLayout.GONE);
+            search.setVisibility(LinearLayout.GONE);
             filterText.setText("");
         }
         else{
@@ -206,37 +231,44 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
+            Helpers.get_assetsScript("utils",context,"","");
+            new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+
             CMDProcessor.CommandResult cr;
             cr=new CMDProcessor().sh.runWaitFor("busybox echo `sysctl -n net.ipv4.tcp_available_congestion_control`");
             if(cr.success()){
                 tcp=cr.stdout.split(" ");
             }
-            cr=new CMDProcessor().sh.runWaitFor("busybox find /proc/sys/* -type f -perm -644 -print0");
+            //cr=new CMDProcessor().sh.runWaitFor("busybox find "+SYSCTL+"* -type f -perm -600 -print0");
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+SYSCTL+"*\"");
             if(cr.success()){
-                return cr.stdout;
+                load_prop(cr.stdout);
+                return "ok";
             }
             else{
                 Log.d(TAG, "sysctl error: " + cr.stderr);
-                return null;
+                return "nok";
             }
         }
         @Override
         protected void onPostExecute(String result) {
-            if((result==null)||(result.length()<=0)) {
-                finish();
+            if(result.equals("nok")) {
+                linlaHeaderProgress.setVisibility(View.GONE);
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
-                load_prop(result);
-                Collections.sort(props);
                 linlaHeaderProgress.setVisibility(View.GONE);
+
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
                 }
                 else{
+                    Collections.sort(props);
                     nofiles.setVisibility(View.GONE);
                     tools.setVisibility(View.VISIBLE);
                     adapter = new PropAdapter(SysctlEditor.this, R.layout.prop_item, props);
                     packList.setAdapter(adapter);
+
                 }
             }
         }
@@ -270,6 +302,12 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     @Override
     public void onResume() {
         super.onResume();
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_UI);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
     }
     private void editPropDialog(Prop p) {
         final Prop pp = p;
@@ -363,19 +401,22 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                     }
                 }).create().show();
     }
-
     public void load_prop(String s){
         props.clear();
-        String p[]=s.split("\0");
+        if(s==null) return;
+        final String p[]=s.split("\n");
         for (String aP : p) {
-            if(aP.trim().length()>0 && aP!=null){
-
-                final String pv=Helpers.readOneLine(aP).trim();
-                final String pn=aP.trim().replace("/",".").substring(10, aP.length());
-                if(!pn.startsWith("vm"))
-                    props.add(new Prop(pn,pv));
+            try{
+                if(aP!=null && aP.contains("::") && !aP.contains("/vm/")){
+                    String pn=aP.split("::")[0];
+                    pn=pn.replace(SYSCTL,"").replace("/",".").trim();
+                    props.add(new Prop(pn,aP.split("::")[1].trim()));
+                }
+            }
+            catch (Exception e){
             }
         }
     }
+
 
 }

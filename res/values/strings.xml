@@ -31,7 +31,6 @@ Copyright (C) 2012  James Roberts
         <item>Time In State</item>
         <item>Disk Info</item>
         <item>Tools</item>
-        <item>General Info</item>
     </string-array>
 
 
@@ -74,9 +73,7 @@ Copyright (C) 2012  James Roberts
     </string>
 
     <string name="ps_fast_charge_boot">Fast charge</string>
-    <string name="fast_charge_warning">YOU WILL NOT BE ABLE TO CONNECT TO YOUR PC AFTER
-        EACH REBOOT!\n\nWhile Fast Charge is ON, you can *only* charge your phone!
-    </string>
+    <string name="fast_charge_warning">YOU WILL NOT BE ABLE TO CONNECT TO YOUR PC AFTER EACH REBOOT!\n\nWhile Fast Charge is ON, you can *only* charge your phone!</string>
     <string name="fast_charge_notification_title">Fast Charge is ON!</string>
     <string name="fast_charge_notification_message">Phone is in charge-only mode!</string>
 
@@ -91,11 +88,13 @@ Copyright (C) 2012  James Roberts
    <string name="prefcat_oom_predefines">PRESETS</string>
    <string name="pt_oom">Minfree Taskkiller Presets</string>
 
-   <string name="pt_verylight">Very Light</string>
-   <string name="pt_light">Light</string>
-   <string name="pt_medium">Medium</string>
-   <string name="pt_aggressive">Aggressive</string>
-   <string name="pt_veryaggressive">Very Aggressive</string>
+    <string-array name="oom_values">
+        <item>Very Light</item>
+        <item>Light</item>
+        <item>Medium</item>
+        <item>Aggressive</item>
+        <item>Very Aggressive</item>
+    </string-array>
 
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">NOT KILLABLE USER PROCESSES</string>
@@ -125,7 +124,7 @@ Copyright (C) 2012  James Roberts
     <!-- bl_timeout -->
    <string name="prefcat_bltimeout">BACKLIGHT TIMEOUT</string>
    <string name="ps_bltimeout">%s ms</string>
-   <string name="bltimeout_title">Backlight timeout</string>
+   <string name="bltimeout_title">Backlight timeout (ms)</string>
     <!-- bl_touch -->
    <string name="prefcat_bltouch">BACKLIGHT ON TOUCHSCREEN</string>
    <string name="pt_bltouch">Backlight on touchscreen</string>	
@@ -135,13 +134,13 @@ Copyright (C) 2012  James Roberts
    <string name="pt_home_enabled">Home key filter</string>
    <string name="ps_home_enabled">Ignored key pressed: %s</string>
    <string name="home_allowed_irq_title">Max allowed interrupts</string>
-   <string name="home_report_wait_title">Report wait time</string>
-	
+   <string name="home_report_wait_title">Report wait time (ms)</string>
+   <string name="pkf_settings">PKF Settings</string>
    <string name="pt_menuback_enabled">Menu/Back keys filter</string>
    <string name="ps_menuback_enabled">Ignored key pressed: %s</string>
    <string name="menuback_interrupt_checks_title">Interrupts checks</string>
-   <string name="menuback_first_err_wait_title">First error wait time</string>
-   <string name="menuback_last_err_wait_title">Last error wait time</string>
+   <string name="menuback_first_err_wait_title">First error wait time (ms)</string>
+   <string name="menuback_last_err_wait_title">Last error wait time (ms)</string>
    <string name="ps_pfk_set_on_boot">If enabled will restore all pkf settings on reboot</string>
     <!-- dynamic write back -->
    <string name="dynamic_writeback_info">Dynamic Dirty Page Writebacks feature\nAuthor Cristoforo Cataldo (Christopher83)</string>
@@ -197,23 +196,12 @@ Copyright (C) 2012  James Roberts
     <string name="deep_sleep">"Deep Sleep"</string>
     <!-- CPU info -->
     <string name="kernel_info">LINUX KERNEL INFORMATION</string>
-    <string name="cpu_info">CPU INFORMATION</string>
-    <string name="mem_info">MEMORY INFORMATION</string>
+    <string name="cpu_info">CPU Information</string>
     <string name="first_run_title">First check for root</string>
     <string name="su_success_title">Success!</string>
     <string name="su_failed_title">Oops!</string>
-    <string name="first_run_message">The application needs to check for root access and
-        busybox. Press OK to continue.
-    </string>
-    <string name="su_success_message">Performance Control was able to get root access and
-        find busybox. Ready to rock!
-    </string>
-    <string name="su_cancel_message">You have chosen to not check for root and busybox.
-        Most options will not work without root access. Sorry!
-    </string>
-    <string name="su_failed_su_or_busybox">Root access failed or busybox was not found. Most
-        options will not work without root access. Sorry!
-    </string>
+    <string name="first_run_message">The application needs to check for root access and busybox.</string>
+    <string name="su_failed_su_or_busybox">Root access failed or busybox was not found.</string>
     
     <!-- Tools -->
     <string name="prefcat_sh">CUSTOM SHELL COMMAND</string>
@@ -359,7 +347,7 @@ Copyright (C) 2012  James Roberts
     <!-- beta2-->
     <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
 
-    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="prefcat_logs">DUMP LOG EVENTS</string>
     <string name="logcat_title">Logcat</string>
     <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
     <string name="dmesg_title">Dmesg</string>
@@ -368,7 +356,15 @@ Copyright (C) 2012  James Roberts
 
     <string name="mpdecision">MPDECISION</string>
     <string name="pt_mpdecision">Enable MPDecision</string>
-    <string name="ps_mpdecision"></string>
+
+    <string name="intelliplug">INTELLIPLUG</string>
+    <string name="pt_intelliplug">Enable Intelliplug</string>
+    <string name="ecomode">ECOMODE</string>
+    <string name="pt_ecomode">Enable EcoMode</string>
+    <string name="so_min_max">SCREEN OFF FREQUENCIES</string>
+    <string name="pt_so_max">Screen off maximum frequency</string>
+    <string name="ps_so_minmax">Current value: </string>
+    <string name="pt_so_min">Screen off minimum frequency</string>
 
     <string name="prefcat_touchscr">TOUCHSCREEN</string>
     <string name="ps_touchscr">TouchScreen Control</string>
@@ -389,6 +385,43 @@ Copyright (C) 2012  James Roberts
         <item name="high">High</item>
         <item name="low">Low</item>
     </string-array>
-    <!-- beta2-->
 
+    <string name="applied_ok">Values ​​were applied successfully</string>
+    <string name="chk_update">Checking for updates in progress…</string>
+    <string name="is_update">New update available! Tap for download.</string>
+    <string name="no_update">No updates found.</string>
+
+    <string name="no_param">No parameters</string>
+    <string name="no_download_manager">Download Manager not available!</string>
+    <string name="btn_download">Download</string>
+    <string name="pt_update">What\'s new</string>
+    <string name="ps_zram_info">Zram must be stopped in order to change disk size</string>
+    <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
+    <string name="pt_mc_ps">Multicore Power Saving</string>
+    <string name="mt_io_ctrl">IO Scheduler Settings</string>
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hp">Generic Hotplug</string>
+    <string name="ps_hp">Disable one core when screen is off</string>
+    <string name="pt_cpuquiet">CPUQuiet Governor</string>
+    <string name="ps_cpuquiet">Controls which CPU cores are available and when | Current: %s</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="thermal">THERMAL</string>
+    <string name="pt_thermal">Thermal Control</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
+    <string name="ps_mc_ps">Try to group tasks into the least cores possible | Current: %s</string>
+    <string-array name="mc_ps_array">
+        <item>Off</item>
+        <item>On</item>
+        <item>Agressive</item>
+    </string-array>
+    <string name="pt_gpu_fmax">GPU maxim frequency</string>
+    <string name="ps_gpu_fmax">Current: %s</string>
+    <string name="pt_gpugov_set">GPU Control</string>
 </resources>

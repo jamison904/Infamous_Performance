@@ -52,8 +52,7 @@ public class CMDProcessor implements Constants {
             this(exit_value_in, null, null);
         }
 
-        CommandResult(final Integer exit_value_in, final String stdout_in,
-                      final String stderr_in) {
+        CommandResult(final Integer exit_value_in, final String stdout_in,final String stderr_in) {
             exit_value = exit_value_in;
             stdout = stdout_in;
             stderr = stderr_in;
@@ -98,14 +97,11 @@ public class CMDProcessor implements Constants {
             Process process = null;
             try {
                 process = Runtime.getRuntime().exec(SHELL);
-                final DataOutputStream toProcess = new DataOutputStream(
-                        process.getOutputStream());
+                final DataOutputStream toProcess = new DataOutputStream(process.getOutputStream());
                 toProcess.writeBytes("exec " + s + "\n");
                 toProcess.flush();
             } catch (final Exception e) {
-                Log.e(TAG,
-                        "Exception while trying to run: '" + s + "' "
-                                + e.getMessage());
+                Log.e(TAG,"Exception while trying to run: '" + s + "' " + e.getMessage());
                 process = null;
             }
             return process;

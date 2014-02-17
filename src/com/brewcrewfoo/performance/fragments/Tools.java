@@ -69,7 +69,7 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
     private Preference mResidualFiles,mOptimDB,mlogcat;
     private Context context;
     private String nf;
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/PerformanceControl/logs";
+    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
     private final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
     @Override

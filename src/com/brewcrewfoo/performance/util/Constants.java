@@ -21,12 +21,16 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.9 beta3";
+    public static final String VERSION_NUM = "2.1.12";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
     public static final Boolean NO_FLASH = false;
-
+    public static final Boolean NO_UPDATE = false;
+    //hide builtin update
+    // NO_UPDATE=true > hide update
+    // NO_UPDATE=false > show update
+    public static final String URL = "http://m.softutil.ro/pc/";
     // CPU settings
     public static final String CPU_ON_PATH = "/sys/devices/system/cpu/cpu0/online";
     public static final String CUR_CPU_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
@@ -37,6 +41,9 @@ public interface Constants {
     public static final String GOVERNORS_LIST_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors";
     public static final String GOVERNOR_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor";
     public static final String IO_SCHEDULER_PATH = "/sys/block/mmcblk0/queue/scheduler";
+    public static final String IO_TUNABLE_PATH = "/sys/block/mmcblk0/queue/iosched";
+    public static final String IO_SOB = "io_settings_sob";
+
     //Dynamic frequency scaling
     public static final String DYN_MAX_FREQ_PATH = "/sys/power/cpufreq_max_limit";
     public static final String DYN_MIN_FREQ_PATH = "/sys/power/cpufreq_min_limit";
@@ -49,15 +56,14 @@ public interface Constants {
     public static final String PREF_IO = "pref_io";
     public static final String CPU_SOB = "cpu_sob";
     public static final String GOV_SOB = "gov_settings_sob";
-    public static final String GOV_SETTINGS = "gov_settings";
-    public static final String GOV_NAME = "gov_name";
     public static final String GOV_SETTINGS_PATH = "/sys/devices/system/cpu/cpufreq/";
 
-    public static final String ECO_MODE="/sys/module/intelli_plug/parameters/eco_mode_active";
     public static final String MC_PS="/sys/devices/system/cpu/sched_mc_power_savings";//multi core power saving
     public static final String INTELLI_PLUG="/sys/module/intelli_plug/parameters/intelli_plug_active";
+    public static final String ECO_MODE="/sys/module/intelli_plug/parameters/eco_mode_active";
     public static final String GEN_HP="/sys/module/omap2plus_cpufreq/parameters/generic_hotplug";//generic hotplug
-
+    public static final String SO_MAX_FREQ="/sys/devices/system/cpu/cpu0/cpufreq/screen_off_max_freq";
+    public static final String SO_MIN_FREQ="/sys/devices/system/cpu/cpu0/cpufreq/screen_on_min_freq";
 
     // CPU info
     public static String KERNEL_INFO_PATH = "/proc/version";
@@ -71,12 +77,12 @@ public interface Constants {
     public static final String BAT_VOLT_PATH = "/sys/class/power_supply/battery/voltage_now";
 
     // Other settings
+    public static final String MINFREE_DEFAULT = "oom_default";
     public static final String MINFREE_PATH = "/sys/module/lowmemorykiller/parameters/minfree";
     public static final String MINFREE_ADJ_PATH = "/sys/module/lowmemorykiller/parameters/adj";
     public static final String READ_AHEAD_PATH ="/sys/block/mmcblk0/queue/read_ahead_kb";
     //"/sys/devices/virtual/bdi/default/read_ahead_kb"
-    
-    public static final String INTENT_ACTION_FASTCHARGE = "com.aokp.romcontrol.FCHARGE_CHANGED";
+
     public static final String PREF_MINFREE = "pref_minfree";
     public static final String PREF_MINFREE_BOOT = "pref_minfree_boot";
     public static final String PREF_READ_AHEAD = "pref_read_ahead";
@@ -187,10 +193,7 @@ public interface Constants {
 
     //zRam
     public static final String ISZRAM = "busybox echo `busybox zcat /proc/config.gz | busybox grep ZRAM | busybox grep -v '^#'`";
-    public static final String ZRAM_DEV = "/dev/block/zram0";
-    public static final String ZRAM_SYS = "/sys/block/zram0";
     public static final String ZRAM_SIZE_PATH = "/sys/block/zram0/disksize";
-    public static final String ZRAM_RESET_PATH = "/sys/block/zram0/reset";
     public static final String ZRAM_COMPR_PATH = "/sys/block/zram0/compr_data_size";
     public static final String ZRAM_ORIG_PATH = "/sys/block/zram0/orig_data_size";
     public static final String ZRAM_MEMTOT_PATH = "/sys/block/zram0/mem_used_total";
@@ -220,12 +223,17 @@ public interface Constants {
     public static final String HOME2WAKE="/sys/android_touch/home2wake";
     public static final String LOGO2WAKE="/sys/android_touch/logo2wake";
     public static final String LOGO2MENU="/sys/android_touch/logo2menu";
-    public static final String POCKET_DETECT=" /sys/android_touch/pocket_detect";
+    public static final String POCKET_DETECT="/sys/android_touch/pocket_detect";
     public static final String PICK2WAKE="/sys/devices/virtual/htc_g_sensor/g_sensor/pick2wake";
     public static final String FLICK2SLEEP="/sys/devices/virtual/htc_g_sensor/g_sensor/flick2sleep";
     public static final String DOUBLETAP2WAKE="/sys/android_touch/doubletap2wake";
     public static final String FLICK2SLEEP_SENSITIVE="/sys/devices/virtual/htc_g_sensor/g_sensor/f2w_sensitivity_values";
 
+    public static final String HOTPLUG_SOB = "hotplug_sob";
+    public static final String CPU_QUIET_GOV = "/sys/devices/system/cpu/cpuquiet/available_governors";
+    public static final String CPU_QUIET_CUR = "/sys/devices/system/cpu/cpuquiet/current_governor";
+    public static final String GPU_MAX_FREQ = "/sys/devices/system/gpu/max_freq";
+    public static final String GPU_PARAM_SOB = "gpu_param_sob";
 
     // PC Settings
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";

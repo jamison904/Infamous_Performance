@@ -17,7 +17,6 @@ Translation by DaniPhii
         <item>Estadísticas</item>
         <item>Memoria</item>
         <item>Herramientas</item>
-        <item>Información general</item>
     </string-array>
 
     <string name="menu_tab">Pestañas</string>
@@ -74,13 +73,13 @@ Translation by DaniPhii
     <string name="title_empty_app">Vaciar aplicaciones</string>
     <string name="prefcat_oom_predefines">AJUSTES PREESTABLECIDOS</string>
     <string name="pt_oom">Ajustes preestablecidos del matador de procesos</string>
-
-    <string name="pt_verylight">Muy ligero</string>
-    <string name="pt_light">Ligero</string>
-    <string name="pt_medium">Medio</string>
-    <string name="pt_aggressive">Agresivo</string>
-    <string name="pt_veryaggressive">Muy agresivo</string>
-
+    <string-array name="oom_values">
+        <item>Muy ligero</item>
+        <item>Ligero</item>
+        <item>Medio</item>
+        <item>Agresivo</item>
+        <item>Muy agresivo</item>
+    </string-array>
     <!-- Procesos inmortales -->
     <string name="prefcat_user_proc">PROCESOS DE USUARIO INMORTALES</string>
     <string name="prefcat_sys_proc">PROCESOS DE SISTEMA INMORTALES</string>
@@ -109,7 +108,7 @@ Translation by DaniPhii
     <!-- Tiempo de suspensión -->
     <string name="prefcat_bltimeout">MODO DE SUSPENSIÓN</string>
     <string name="ps_bltimeout">%s ms</string>
-    <string name="bltimeout_title">Modo de suspensión</string>
+    <string name="bltimeout_title">Modo de suspensión (ms)</string>
     <!-- Iluminar pantalla -->
     <string name="prefcat_bltouch">ILUMINAR PANTALLA</string>
     <string name="pt_bltouch">Iluminar al tocar pantalla</string>
@@ -119,13 +118,13 @@ Translation by DaniPhii
     <string name="pt_home_enabled">Botón HOME</string>
     <string name="ps_home_enabled">Ignorar pulsación: %s</string>
     <string name="home_allowed_irq_title">Interrupciones máximas</string>
-    <string name="home_report_wait_title">Tiempo de espera del informe</string>
-
+    <string name="home_report_wait_title">Tiempo de espera del informe (ms)</string>
+    <string name="pkf_settings">Ajustes PKF</string>
     <string name="pt_menuback_enabled">Botones Menú/Atrás</string>
     <string name="ps_menuback_enabled">Ignorar pulsación: %s</string>
     <string name="menuback_interrupt_checks_title">Comprobar interrupciones</string>
-    <string name="menuback_first_err_wait_title">Tiempo de espera del primer error</string>
-    <string name="menuback_last_err_wait_title">Tiempo de espera del último error</string>
+    <string name="menuback_first_err_wait_title">Tiempo de espera del primer error (ms)</string>
+    <string name="menuback_last_err_wait_title">Tiempo de espera del último error (ms)</string>
     <string name="ps_pfk_set_on_boot">Si se activa, se aplicarán los valores actuales del PKF al arranque</string>
     <!-- Dynamic Dirty Page Writebacks -->
     <string name="dynamic_writeback_info">Sobre la funcionalidad Dynamic Dirty Page Writebacks\nAutor: Cristoforo Cataldo (@Christopher83)</string>
@@ -181,23 +180,12 @@ Translation by DaniPhii
     <string name="deep_sleep">"Sueño profundo"</string>
     <!-- Información de CPU -->
     <string name="kernel_info">INFORMACIÓN DEL KERNEL LINUX</string>
-    <string name="cpu_info">INFORMACIÓN DE CPU</string>
-    <string name="mem_info">INFORMACIÓN DE LA MEMORIA</string>
+    <string name="cpu_info">Información de CPU</string>
     <string name="first_run_title">Comprobando permisos de superusuario…</string>
     <string name="su_success_title">¡Correcto!</string>
     <string name="su_failed_title">¡Algo fue mal!</string>
-    <string name="first_run_message">La aplicación necesita comprobar los permisos de superusuario y
-        la versión de BusyBox. Pulsa Aceptar para continuar. Pulsa Cancelar si no quieres dar pemisos.
-    </string>
-    <string name="su_success_message">Performance Control tiene permisos de superusuario y ha encontrado
-        BusyBox en el sistema. ¡Todo correcto!
-    </string>
-    <string name="su_cancel_message">Has decidido no otorgar permisos de superusuario a la aplicación.
-        La mayoría de funcionalidades no estarán disponibles. ¡Lo siento!
-    </string>
-    <string name="su_failed_su_or_busybox">No fue posible conseguir los permisos o no se encontró BusyBox.
-        La mayoría de funcionalidades no estarán disponibles. ¡Lo siento!
-    </string>
+    <string name="first_run_message">La aplicación necesita comprobar los permisos de superusuario y la versión de BusyBox.</string>
+    <string name="su_failed_su_or_busybox">No fue posible conseguir los permisos o no se encontró BusyBox.</string>
 
     <!-- Herramientas -->
     <string name="prefcat_sh">LÍNEA DE COMANDOS PERSONALIZADA</string>
@@ -340,38 +328,74 @@ Translation by DaniPhii
     <string name="set">OK</string>
     <string name="ics_color">Holo</string>
 
-    <!-- beta2-->
-    <string name="reset_msg">Current values will be deleted and the default values ​​will be applied after reboot. Continue?</string>
+    <!-- beta 2 -->
+    <string name="reset_msg">Se borrarán los valores actuales y los predeterminados se aplicarán tras el reinicio. ¿Desea continuar?</string>
 
-    <string name="prefcat_logs">Dump Log Events</string>
+    <string name="prefcat_logs">VOLCAR REGISTRO DE EVENTOS</string>
     <string name="logcat_title">Logcat</string>
-    <string name="logcat_msg">Logcat will be dumped on %s. Continue?</string>
+    <string name="logcat_msg">Logcat se volcará en %s. ¿Desea continuar?</string>
     <string name="dmesg_title">Dmesg</string>
-    <string name="dmesg_msg">Dmesg will be dumped on %s. Continue?</string>
-    <string name="ps_logs">Dump log on %s.</string>
+    <string name="dmesg_msg">Dmesg se volcará en %s. ¿Desea continuar?</string>
+    <string name="ps_logs">Se volcará el registro en %s.</string>
 
     <string name="mpdecision">MPDECISION</string>
-    <string name="pt_mpdecision">Enable MPDecision</string>
-    <string name="ps_mpdecision"></string>
+    <string name="pt_mpdecision">Activar MPDecision</string>
 
-    <string name="prefcat_touchscr">TOUCHSCREEN</string>
-    <string name="ps_touchscr">TouchScreen Control</string>
-    <string name="ps_touchscr_boot">If enabled will restore all touchcreen settings on reboot</string>
-    <string name="toucht1">Slide to Wake</string>
-    <string name="toucht2">Sweep to Wake</string>
-    <string name="toucht21">Sweep to Sleep</string>
-    <string name="toucht3">Home to Wake</string>
-    <string name="toucht4">Logo to Wake</string>
-    <string name="toucht5">Logo to Menu</string>
-    <string name="toucht6">Double Tap to Wake</string>
-    <string name="toucht7">Pocket Detect</string>
-    <string name="toucht8">Pick to Wake</string>
-    <string name="toucht9">Flick to Sleep</string>
-    <string name="toucht9s">Sensitivity</string>
-    <string name="toucht10">Touch to Wake</string>
+    <string name="prefcat_touchscr">PANTALLA TÁCTIL</string>
+    <string name="ps_touchscr">Control de la pantalla táctil</string>
+    <string name="ps_touchscr_boot">Si se activa, se restaurará toda la configuración al reiniciar</string>
+    <string name="toucht1">Deslizar para reanudar</string>
+    <string name="toucht2">Barrer para reanudar</string>
+    <string name="toucht21">Barrer para suspender</string>
+    <string name="toucht3">Home para reanudar</string>
+    <string name="toucht4">Logo para reanudar</string>
+    <string name="toucht5">Logo para el menú</string>
+    <string name="toucht6">Doble toque para reanudar</string>
+    <string name="toucht7">Detectar bolsillo</string>
+    <string name="toucht8">Toque para reanudar</string>
+    <string name="toucht9">Giro rápido para suspender</string>
+    <string name="toucht9s">Sensibilidad</string>
+    <string name="toucht10">Tocar para reanudar</string>
     <string-array name="asens">
-        <item name="high">High</item>
-        <item name="low">Low</item>
+        <item name="high">Alta</item>
+        <item name="low">Baja</item>
     </string-array>
-    <!-- beta2-->
+    <string name="applied_ok">Los valores se han aplicado correctamente.</string>
+    <string name="chk_update">Comprobando si hay actualizaciones…</string>
+    <string name="is_update">¡Actualización disponible! Toca para descargar.</string>
+    <string name="no_update">No se encontraron actualizaciones.</string>
+
+    <string name="no_param">Sin parámetros</string>
+    <string name="no_download_manager">¡El administrador de descargas no está disponible!</string>
+    <string name="btn_download">Descargar</string>
+    <string name="pt_update">Novedades:</string>
+    <string name="ps_zram_info">El servicio ZRAM debe detenerse para cambiar el tamaño del disco</string>
+    <!-- beta 2 -->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
+    <string name="pt_mc_ps">Multicore Power Saving</string>
+    <string name="mt_io_ctrl">IO Scheduler Settings</string>
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hp">Generic Hotplug</string>
+    <string name="ps_hp">Disable one core when screen is off</string>
+    <string name="pt_cpuquiet">CPUQuiet Governor</string>
+    <string name="ps_cpuquiet">Controls which CPU cores are available and when | Current: %s</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="thermal">THERMAL</string>
+    <string name="pt_thermal">Thermal Control</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
+    <string name="ps_mc_ps">Try to group tasks into the least cores possible | Current: %s</string>
+    <string-array name="mc_ps_array">
+        <item>Off</item>
+        <item>On</item>
+        <item>Agressive</item>
+    </string-array>
+    <string name="pt_gpu_fmax">GPU maxim frequency</string>
+    <string name="ps_gpu_fmax">Current: %s</string>
+    <string name="pt_gpugov_set">GPU Control</string>
 </resources>

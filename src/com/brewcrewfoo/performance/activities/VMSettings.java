@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -27,6 +26,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -35,6 +35,7 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
+import com.brewcrewfoo.performance.util.PropUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,11 +50,10 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
-    Resources res;
     private ListView packList;
     private LinearLayout linlaHeaderProgress;
-    private LinearLayout nofiles;
-    private RelativeLayout tools,search;
+    private LinearLayout nofiles,search;
+    private RelativeLayout tools;
     private PropAdapter adapter=null;
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
@@ -66,10 +66,8 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         super.onCreate(savedInstanceState);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
-
 
         if (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists()){
             isdyn=Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH).equals("1");
@@ -78,9 +76,10 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
+
         nofiles = (LinearLayout) findViewById(R.id.nofiles);
         tools = (RelativeLayout) findViewById(R.id.tools);
-        search = (RelativeLayout) findViewById(R.id.search);
+        search = (LinearLayout) findViewById(R.id.search);
         filterText = (EditText) findViewById(R.id.filtru);
         filterText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,18 +99,18 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
             @Override
             public void onClick(View arg0) {
                 final StringBuilder sb = new StringBuilder();
-
                 final String s=mPreferences.getString(PREF_VM,"");
 
                 if(!s.equals("")){
                     String p[]=s.split(";");
                     for (String aP : p) {
-                        if(!aP.equals("")&& aP!=null){
+                        if(aP.contains(":")){
                             final String pn[]=aP.split(":");
                             sb.append("busybox echo ").append(pn[1]).append(" > ").append(VM_PATH).append(pn[0]).append(";\n");
                         }
                     }
                     Helpers.shExec(sb,context,true);
+                    Toast.makeText(context, getString(R.string.applied_ok), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -124,8 +123,8 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 mPreferences.edit().putBoolean(VM_SOB, isChecked).apply();
             }
         });
-        tools.setVisibility(View.GONE);
-        search.setVisibility(View.GONE);
+        tools.setVisibility(RelativeLayout.GONE);
+        search.setVisibility(LinearLayout.GONE);
         isdyn= (new File(DYNAMIC_DIRTY_WRITEBACK_PATH).exists() && Helpers.readOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH).equals("1"));
 
         new GetPropOperation().execute();
@@ -169,30 +168,35 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox find "+VM_PATH+"* -type f -perm -644 -print0");
+            Helpers.get_assetsScript("utils",context,"","");
+            new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+            CMDProcessor.CommandResult cr =null;
+            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+VM_PATH+"/*\" \"1\"");
             if(cr.success()){
-                return cr.stdout;
+                load_prop(cr.stdout);
+                return "ok";
             }
             else{
                 Log.d(TAG, "VMSettings error: " + cr.stderr);
-                return null;
+                return "nok";
             }
         }
         @Override
         protected void onPostExecute(String result) {
-            if((result==null)||(result.length()<=0)) {
-                finish();
+
+            if(result.equals("nok")) {
+                linlaHeaderProgress.setVisibility(LinearLayout.GONE);
+                nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
-                load_prop(result);
-                Collections.sort(props);
-                linlaHeaderProgress.setVisibility(View.GONE);
+                linlaHeaderProgress.setVisibility(LinearLayout.GONE);
                 if(props.isEmpty()){
-                    nofiles.setVisibility(View.VISIBLE);
+                    nofiles.setVisibility(LinearLayout.VISIBLE);
                 }
                 else{
-                    nofiles.setVisibility(View.GONE);
-                    tools.setVisibility(View.VISIBLE);
+                    Collections.sort(props);
+                    nofiles.setVisibility(LinearLayout.GONE);
+                    tools.setVisibility(RelativeLayout.VISIBLE);
                     adapter = new PropAdapter(VMSettings.this, R.layout.prop_item, props);
                     packList.setAdapter(adapter);
                 }
@@ -200,9 +204,9 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         }
         @Override
         protected void onPreExecute() {
-            linlaHeaderProgress.setVisibility(View.VISIBLE);
-            nofiles.setVisibility(View.GONE);
-            tools.setVisibility(View.GONE);
+            linlaHeaderProgress.setVisibility(LinearLayout.VISIBLE);
+            nofiles.setVisibility(LinearLayout.GONE);
+            tools.setVisibility(RelativeLayout.GONE);
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -248,7 +252,7 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
         else{//add
             titlu=getString(R.string.add_prop_title);
         }
-        final String vcur=tv.getText().toString();
+
         new AlertDialog.Builder(this)
                 .setTitle(titlu)
                 .setView(editDialog)
@@ -263,15 +267,15 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                     public void onClick(DialogInterface dialog, int which) {
 
                         if (pp!=null) {
-                            if ((tv.getText().toString() != null)&&(tv.getText().toString().length() > 0)){
+                            if ((tv.getText().toString()!= null)&&(tv.getText().toString().length() > 0)){
                                 pp.setVal(tv.getText().toString().trim());
-                                set_pref(tn.getText().toString().trim(),tv.getText().toString().trim());
+                                PropUtil.set_pref(tn.getText().toString().trim(),tv.getText().toString().trim(),PREF_VM,mPreferences);
                             }
                         }
                         else {
                             if (tv.getText().toString() != null && tn.getText().toString() != null && tn.getText().toString().trim().length() > 0){
                                 props.add(new Prop(tn.getText().toString().trim(),tv.getText().toString().trim()));
-                                set_pref(tn.getText().toString().trim(),tv.getText().toString().trim());
+                                PropUtil.set_pref(tn.getText().toString().trim(),tv.getText().toString().trim(),PREF_VM,mPreferences);
                             }
                         }
                         Collections.sort(props);
@@ -280,38 +284,26 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
                 }).create().show();
     }
 
+    public boolean testprop(String s){
+        if (s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs") || isdyn && s.contains("dirty_writeback_centisecs")) {
+            return false;
+        }
+        return true;
+    }
     public void load_prop(String s){
         props.clear();
-        String p[]=s.split("\0");
+        if(s==null) return;
+        final String p[]=s.split("\n");
         for (String aP : p) {
-            if(aP.trim().length()>0 && aP!=null){
-                final String pv=Helpers.readOneLine(aP).trim();
-                final String pn=aP.substring(aP.lastIndexOf("/") + 1, aP.length());
-                if(testprop(pn)){
-                    props.add(new Prop(pn,pv));
+            try{
+                if(aP!=null && aP.contains("::")){
+                    String pn=aP.split("::")[0];
+                    pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
+                    if(testprop(pn)) props.add(new Prop(pn,aP.split("::")[1].trim()));
                 }
             }
-        }
-    }
-    public boolean testprop(String s){
-        return !(s.contains("dirty_writeback_active_centisecs") || s.contains("dynamic_dirty_writeback") || s.contains("dirty_writeback_suspend_centisecs")) && !(isdyn && s.contains("dirty_writeback_centisecs"));
-    }
-    public void set_pref(String n, String v){
-        final String s=mPreferences.getString(PREF_VM,"");
-        final StringBuilder sb = new StringBuilder();
-        if(!s.equals("")){
-            String p[]=s.split(";");
-            for (String aP : p) {
-                if(!aP.equals("") && aP!=null){
-                    final String pn[]=aP.split(":");
-                    if(!pn[0].equals(n)){
-                        sb.append(pn[0]+':'+pn[1]+';');
-                    }
-                }
+            catch (Exception e){
             }
         }
-        sb.append(n + ':' + v + ';');
-
-        mPreferences.edit().putString(PREF_VM, sb.toString()).commit();
     }
 }

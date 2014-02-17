@@ -38,33 +38,41 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private CurThread mCurThread;
     private TextView t1,t2,t3,t4,t5,tval1;
     private SeekBar mdisksize;
-    private int ncpus=0;
+    private int ncpus=Helpers.getNumOfCpus();
     private int curcpu=0;
     private int curdisk=0;
+    private float maxdisk = (Helpers.getMem("MemTotal") / 1024);
     private Button start_btn;
     private NumberFormat nf;
     private ProgressDialog progressDialog;
+    private boolean showinfo=true;
+    private int max=60;
+    private int min=10;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme();
+        if(savedInstanceState!=null) {
+            showinfo=savedInstanceState.getBoolean("showinfo");
+        }
         setContentView(R.layout.zram_settings);
 
         nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(2);
 
-        ncpus=Helpers.getNumOfCpus();
-        int maxdisk = (int) (Helpers.getTotMem() / 1024);
-        curdisk=mPreferences.getInt(PREF_ZRAM,(int) maxdisk /2);
+        Intent i=getIntent();
+        curdisk=i.getIntExtra("curdisk",mPreferences.getInt(PREF_ZRAM,Math.round(maxdisk*18/100)));
+        //curdisk=mPreferences.getInt(PREF_ZRAM,Math.round(maxdisk*18/100));
 
         mdisksize = (SeekBar) findViewById(R.id.val1);
         mdisksize.setOnSeekBarChangeListener(this);
-        mdisksize.setMax(maxdisk);
-        mdisksize.setProgress(curdisk);
+        mdisksize.setMax(max-min);
+        final int percent=Math.round(curdisk * 100 / maxdisk);
+        mdisksize.setProgress(percent-min);
         tval1=(TextView)findViewById(R.id.tval1);
-        tval1.setText(getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024)));
+        tval1.setText(getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024))+" ("+String.valueOf(percent)+"%)");
 
         t1=(TextView)findViewById(R.id.t1);
         t2=(TextView)findViewById(R.id.t2);
@@ -91,8 +99,12 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         prev.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                curcpu=mod(curcpu+1,ncpus);
-                Toast.makeText(context, "CPU "+(curcpu+1), Toast.LENGTH_SHORT).show();
+                if(curcpu>=(ncpus-1)) curcpu=0;
+                else curcpu++;
+                /*if (showinfo) {
+                    Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                    showinfo=false;
+                }*/
                 return true;
             }
         });
@@ -100,6 +112,10 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         if (is_zram_on()) {
             start_btn.setText(getString(R.string.mt_stop));
             mdisksize.setEnabled(false);
+            if (showinfo) {
+                Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                showinfo=false;
+            }
         }
         else {
             start_btn.setText(getString(R.string.mt_start));
@@ -110,11 +126,16 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
             mCurThread.start();
         }
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle saveState) {
+        super.onSaveInstanceState(saveState);
+        saveState.putBoolean("showinfo",showinfo);
+    }
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            tval1.setText(getString(R.string.zram_disk_size,Helpers.ReadableByteCount(progress*1024*1024)));
+            final int mb=Math.round((progress+min)*maxdisk/100);
+            tval1.setText(getString(R.string.zram_disk_size,Helpers.ReadableByteCount(mb*1024*1024))+" ("+String.valueOf((progress+min))+"%)");
         }
     }
 
@@ -124,12 +145,14 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         //setDiskSize(seekBar.getProgress());
-        if(seekBar.getProgress()==0){
-            seekBar.setProgress(10);
-            tval1.setText(getString(R.string.zram_disk_size,Helpers.ReadableByteCount(seekBar.getProgress()*1024*1024)));
-        }
-        mPreferences.edit().putInt(PREF_ZRAM,seekBar.getProgress()).apply();
-        curdisk=seekBar.getProgress();
+        //if(seekBar.getProgress()==0){
+        //    seekBar.setProgress(min);
+        //}
+        curdisk=Math.round((seekBar.getProgress()+min)*maxdisk/100);
+        tval1.setText(getString(R.string.zram_disk_size,Helpers.ReadableByteCount(curdisk*1024*1024))+" ("+String.valueOf(seekBar.getProgress()+min)+"%)");
+
+        mPreferences.edit().putInt(PREF_ZRAM,curdisk).apply();
+        //curdisk=seekBar.getProgress();
         Intent returnIntent = new Intent();
         returnIntent.putExtra("result",2);
         setResult(RESULT_OK,returnIntent);
@@ -197,8 +220,8 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         }
     };
     public boolean is_zram_on(){
-        CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox cat /proc/swaps | grep zram`");
-        return (cr.success() && !cr.stdout.equals(""));
+        CMDProcessor.CommandResult cr=new CMDProcessor().sh.runWaitFor("busybox echo `busybox cat /proc/swaps | busybox grep zram`");
+        return (cr.success() && cr.stdout.contains("zram"));
     }
 
     private int getDiskSize() {
@@ -223,16 +246,6 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         return (float) ((float)getOriginalDataSize() / (float)getDiskSize());
     }
 
-    public void setDiskSize(long v){
-        v=(long)(v/ncpus);
-        final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < ncpus; i++) {
-            sb.append("busybox echo ").append(String.valueOf(v * 1024 * 1024)).append(" > ").append(ZRAM_SIZE_PATH.replace("zram0", "zram" + i));
-        }
-        Helpers.shExec(sb,context,true);
-    }
-
-
     private class StopZramOperation extends AsyncTask<String, Void, String> {
 
         @Override
@@ -251,15 +264,16 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 start_btn.setText(getString(R.string.mt_stop));
                 mdisksize.setEnabled(false);
                 mPreferences.edit().putBoolean(ZRAM_ON,true).apply();
+                if (showinfo) {
+                    Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                    showinfo=false;
+                }
             }
             else {
-
                 start_btn.setText(getString(R.string.mt_start));
                 mdisksize.setEnabled(true);
                 mPreferences.edit().putBoolean(ZRAM_ON,false).apply();
-
             }
-
         }
         @Override
         protected void onPreExecute() {
@@ -274,7 +288,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
     private class StartZramOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            long v=(long)(curdisk/ncpus)*1024*1024;
+            long v=(long)(curdisk*1024*1024);
             final StringBuilder sb = new StringBuilder();
             sb.append("zramstart \"").append(ncpus).append("\" \"").append(v).append("\";\n");
             Helpers.shExec(sb,context,true);
@@ -289,6 +303,10 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
                 start_btn.setText(getString(R.string.mt_stop));
                 mdisksize.setEnabled(false);
                 mPreferences.edit().putBoolean(ZRAM_ON,true).apply();
+                if (showinfo) {
+                    Toast.makeText(context, getString(R.string.ps_zram_info), Toast.LENGTH_LONG).show();
+                    showinfo=false;
+                }
                 if (mCurThread == null) {
                     mCurThread = new CurThread();
                     mCurThread.start();
@@ -309,10 +327,7 @@ public class ZramActivity extends Activity implements Constants, SeekBar.OnSeekB
         protected void onProgressUpdate(Void... values) {
         }
     }
-    private int mod(int x, int y){
-        int result = x % y;
-        return result < 0? result + y : result;
-    }
+
     public void set_values(){
         t1.setText(Helpers.ReadableByteCount(0));
         t2.setText("0");

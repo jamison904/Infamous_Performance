@@ -31,7 +31,6 @@ Copyright (C) 2012  James Roberts
         <item>状态时间统计</item>
         <item>存储信息</item>
         <item>工具</item>
-        <item>基本信息</item>
     </string-array>
 
 
@@ -90,12 +89,13 @@ Copyright (C) 2012  James Roberts
    <string name="title_empty_app">空应用</string>
    <string name="prefcat_oom_predefines">预设</string>
    <string name="pt_oom">最小空闲内存预设</string>
-
-   <string name="pt_verylight">很轻度</string>
-   <string name="pt_light">轻度</string>
-   <string name="pt_medium">中等</string>
-   <string name="pt_aggressive">激进</string>
-   <string name="pt_veryaggressive">很激进</string>
+    <string-array name="oom_values">
+        <item>很轻度</item>
+        <item>轻度</item>
+        <item>中等</item>
+        <item>激进</item>
+        <item>很激进</item>
+    </string-array>
 
     <!-- do not kill proc -->
     <string name="prefcat_user_proc">不可杀死的用户进程</string>
@@ -125,7 +125,7 @@ Copyright (C) 2012  James Roberts
     <!-- bl_timeout -->
    <string name="prefcat_bltimeout">背光时间</string>
    <string name="ps_bltimeout">%s ms</string>
-   <string name="bltimeout_title">背光时间</string>
+   <string name="bltimeout_title">背光时间 (ms)</string>
     <!-- bl_touch -->
    <string name="prefcat_bltouch">触屏背光时间</string>
    <string name="pt_bltouch">触屏背光时间</string>	
@@ -135,13 +135,13 @@ Copyright (C) 2012  James Roberts
    <string name="pt_home_enabled">Home 键过滤</string>
    <string name="ps_home_enabled">已忽略按键：%s</string>
    <string name="home_allowed_irq_title">最大允许中断数</string>
-   <string name="home_report_wait_title">报告等待时间</string>
-	
+   <string name="home_report_wait_title">报告等待时间 (ms)</string>
+    <string name="pkf_settings">PKF设置</string>
    <string name="pt_menuback_enabled">Menu/Back 按键过滤</string>
    <string name="ps_menuback_enabled">已忽略按键: %s</string>
    <string name="menuback_interrupt_checks_title">中断检查</string>
-   <string name="menuback_first_err_wait_title">首次错误等待时间</string>
-   <string name="menuback_last_err_wait_title">末次错误等待时间</string>
+   <string name="menuback_first_err_wait_title">首次错误等待时间 (ms)</string>
+   <string name="menuback_last_err_wait_title">末次错误等待时间 (ms)</string>
    <string name="ps_pfk_set_on_boot">开启以在重启后自动恢复按键过滤器设置</string>
     <!-- dynamic write back -->
    <string name="dynamic_writeback_info">动态脏页面写回特性\n作者 Cristoforo Cataldo (Christopher83)</string>
@@ -198,22 +198,11 @@ Copyright (C) 2012  James Roberts
     <!-- CPU info -->
     <string name="kernel_info">LINUX 内核信息</string>
     <string name="cpu_info">CPU 信息</string>
-    <string name="mem_info">MEMORY 信息</string>
     <string name="first_run_title">首先检查 ROOT 状态</string>
     <string name="su_success_title">成功！</string>
     <string name="su_failed_title">啊呀！</string>
-    <string name="first_run_message">本应用需要检查是否有 ROOT 权限和安装 busybox。
-	    按“确认”继续。
-    </string>
-    <string name="su_success_message">性能控制能够得到 ROOT 权限并已找到了 busybox。
-        万事俱备！
-    </string>
-    <string name="su_cancel_message">你选择不检查 ROOT 权限并搜索 busybox，
-        大部分功能都将不可用，抱歉！
-    </string>
-    <string name="su_failed_su_or_busybox">无法获得 ROOT 权限或找不到 busybox，
-        大部分功能都将不可用，抱歉！
-    </string>
+    <string name="first_run_message">本应用需要检查是否有 ROOT 权限和安装 busybox</string>
+    <string name="su_failed_su_or_busybox">无法获得 ROOT 权限或找不到 busybox</string>
     
     <!-- Tools -->
     <string name="prefcat_sh">定制 SHELL 命令</string>
@@ -369,7 +358,6 @@ Copyright (C) 2012  James Roberts
 
     <string name="mpdecision">MPDECISION</string>
     <string name="pt_mpdecision">启用 MPDecision</string>
-    <string name="ps_mpdecision"></string>
 
     <string name="prefcat_touchscr">TOUCHSCREEN</string>
     <string name="ps_touchscr">TouchScreen Control</string>
@@ -390,5 +378,42 @@ Copyright (C) 2012  James Roberts
         <item name="high">High</item>
         <item name="low">Low</item>
     </string-array>
+    <string name="applied_ok">Values ​​were applied successfully</string>
+    <string name="chk_update">Checking for updates in progress…</string>
+    <string name="is_update">New update available! Tap for download.</string>
+    <string name="no_update">No updates found.</string>
+
+    <string name="no_param">No parameters</string>
+    <string name="no_download_manager">Download Manager not available!</string>
+    <string name="btn_download">Download</string>
+    <string name="pt_update">What\'s new</string>
+    <string name="ps_zram_info">Zram must be stopped in order to change disk size</string>
     <!-- beta2-->
+    <!-- 2.1.10-->
+    <string name="prefcat_wifi_pm">WiFi SLEEP POWER MODE</string>
+    <string name="pt_wifi_pm">WiFi PM</string>
+    <string name="prefcat_mc_ps">MULTICORE POWER SAVING</string>
+    <string name="pt_mc_ps">Multicore Power Saving</string>
+    <string name="mt_io_ctrl">IO Scheduler Settings</string>
+    <!-- 2.1.11-->
+    <string name="hotplug">HOTPLUG</string>
+    <string name="pt_hp">Generic Hotplug</string>
+    <string name="ps_hp">Disable one core when screen is off</string>
+    <string name="pt_cpuquiet">CPUQuiet Governor</string>
+    <string name="ps_cpuquiet">Controls which CPU cores are available and when | Current: %s</string>
+    <string name="pt_hotplug">Hotplug Control</string>
+    <string name="thermal">THERMAL</string>
+    <string name="pt_thermal">Thermal Control</string>
+    <string name="mt_mem_usage">Memory Usage</string>
+    <string name="pt_drop_caches">Clean drop caches</string>
+    <string name="oom_default">Default values</string>
+    <string name="ps_mc_ps">Try to group tasks into the least cores possible | Current: %s</string>
+    <string-array name="mc_ps_array">
+        <item>Off</item>
+        <item>On</item>
+        <item>Agressive</item>
+    </string-array>
+    <string name="pt_gpu_fmax">GPU maxim frequency</string>
+    <string name="ps_gpu_fmax">Current: %s</string>
+    <string name="pt_gpugov_set">GPU Control</string>
 </resources>

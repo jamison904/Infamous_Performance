@@ -21,18 +21,15 @@ package com.brewcrewfoo.performance.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
+
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.fragments.*;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
@@ -49,60 +46,42 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     ViewPager mViewPager;
     private boolean mIsLightTheme;
     public static Boolean thide=false;
-    private boolean canSu;
-    private boolean canBb;
+    public static final int nCpus=Helpers.getNumOfCpus();
+    public static String[] mCurGovernor=new String[nCpus];
+    public static String[] mCurIO=new String[nCpus];
+    public static String[] mMaxFreqSetting=new String[nCpus];
+    public static String[] mMinFreqSetting=new String[nCpus];
+    public static String[] mCPUon=new String[nCpus];
+    public static int curcpu=0;
+    private Context c=this;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme();
+        setContentView(R.layout.activity_main);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
+        mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
+        mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
+        mPagerTabStrip.setDrawFullUnderline(true);
+
         if(savedInstanceState!=null) {
-            canBb=savedInstanceState.getBoolean("BB",false);
-            canSu=savedInstanceState.getBoolean("SU",false);
-            if (canSu && canBb) {
-                setContentView(R.layout.activity_main);
-
-                mViewPager = (ViewPager) findViewById(R.id.viewpager);
-                TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
-                mViewPager.setAdapter(titleAdapter);
-                mViewPager.setCurrentItem(0);
-
-                mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
-                mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
-                mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
-                mPagerTabStrip.setDrawFullUnderline(true);
-            }
+            TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
+            mViewPager.setAdapter(titleAdapter);
+            mViewPager.setCurrentItem(0);
         }
         else{
-            canSu = Helpers.checkSu();
-            canBb = !Helpers.binExist("busybox").equals(NOT_FOUND);
-
-            if (!canSu || !canBb) {
-                final String failedTitle = getString(R.string.su_failed_title);
-                final String message = getString(R.string.su_failed_su_or_busybox);
-                suResultDialog(failedTitle, message);
-            }
-            else{
-                setContentView(R.layout.activity_main);
-
-                mViewPager = (ViewPager) findViewById(R.id.viewpager);
-                TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
-                mViewPager.setAdapter(titleAdapter);
-                mViewPager.setCurrentItem(0);
-
-                mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
-                mPagerTabStrip.setBackgroundColor(getResources().getColor(R.color.pc_light_gray));
-                mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
-                mPagerTabStrip.setDrawFullUnderline(true);
-            }
+            checkForSu();
+            TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
+            mViewPager.setAdapter(titleAdapter);
+            mViewPager.setCurrentItem(0);
         }
     }
     @Override
     public void onSaveInstanceState(Bundle saveState) {
         super.onSaveInstanceState(saveState);
-        saveState.putBoolean("BB",canBb);
-        saveState.putBoolean("SU",canSu);
     }
     class TitleAdapter extends FragmentPagerAdapter {
         String titles[] = getTitles();
@@ -144,9 +123,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
                         case 8:
                             frags[j] = new Tools();
                             break;
-                        case 9:
-                            frags[j] = new CPUInfo();
-                            break;
                     }
                     j++;
                 }
@@ -179,21 +155,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         }
     }
 
-    private void suResultDialog(String title, String message) {
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View suResultDialog = factory.inflate(R.layout.su_dialog, null);
-        TextView tv = (TextView) suResultDialog.findViewById(R.id.message);
-        tv.setText(message);
-        new ProgressDialog.Builder(this).setTitle(title).setView(suResultDialog)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                }).create().show();
-    }
-
     /**
      * Get a list of titles for the tabstrip to display depending on if the
      * @return String[] containing titles
@@ -221,6 +182,29 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
         final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
         mIsLightTheme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
         setTheme(is_light_theme ? R.style.Theme_Light : R.style.Theme_Dark);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                String r= data.getStringExtra("r");
+                if(r!=null && r.equals("ok")) return;
+            }
+        }
+        finish();
+    }
+    private void checkForSu() {
+        if (mPreferences.getBoolean("firstrun", true)) {
+            Intent intent = new Intent(MainActivity.this, checkSU.class);
+            startActivityForResult(intent, 1);
+        }
+        else{
+            if(!Helpers.checkSu()) {
+                Intent intent = new Intent(MainActivity.this, checkSU.class);
+                startActivityForResult(intent, 1);
+            }
+        }
     }
 }
 
