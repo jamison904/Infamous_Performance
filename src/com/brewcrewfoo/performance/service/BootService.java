@@ -61,15 +61,18 @@ public class BootService extends Service implements Constants {
         Context c;
         final int ncpus=Helpers.getNumOfCpus();
         final String FASTCHARGE_PATH=Helpers.fastcharge_path();
+        SharedPreferences preferences;
 
         public BootWorker(Context c) {
             this.c = c;
+            this.preferences = PreferenceManager.getDefaultSharedPreferences(c);
         }
         @SuppressWarnings("deprecation")
         @Override
         protected String doInBackground(Void... args) {
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
+            //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
+            preferences.edit().putBoolean("pc_boot",true).apply();
             final StringBuilder sb = new StringBuilder();
             VibratorClass vib=new VibratorClass();
             final String VIBE_PATH=vib.get_path();
@@ -498,6 +501,7 @@ public class BootService extends Service implements Constants {
                     nm.notify(1337, n);//1337
                 }
             }
+            preferences.edit().putBoolean("pc_boot",false).apply();
             servicesStarted = true;
             stopSelf();
         }
