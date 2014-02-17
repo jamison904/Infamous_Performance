@@ -10,6 +10,10 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -50,7 +54,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class SysctlEditor extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
+public class SysctlEditor extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface,SensorEventListener {
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
@@ -69,6 +73,8 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private String sob=SYSCTL_SOB;
     private String[] tcp={};
 
+    SensorManager mSensorManager;
+    Sensor mproximity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,7 +141,23 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         tools.setVisibility(View.GONE);
         search.setVisibility(View.GONE);
 
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mproximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+
         new GetPropOperation().execute();
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.values[0]>0){
+            packList.smoothScrollByOffset(4);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
@@ -246,6 +268,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                     tools.setVisibility(View.VISIBLE);
                     adapter = new PropAdapter(SysctlEditor.this, R.layout.prop_item, props);
                     packList.setAdapter(adapter);
+
                 }
             }
         }
@@ -279,6 +302,12 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     @Override
     public void onResume() {
         super.onResume();
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_UI);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
     }
     private void editPropDialog(Prop p) {
         final Prop pp = p;
