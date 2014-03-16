@@ -70,9 +70,6 @@ public class BootService extends Service implements Constants {
         @SuppressWarnings("deprecation")
         @Override
         protected String doInBackground(Void... args) {
-
-            //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
-            preferences.edit().putBoolean("pc_boot",true).apply();
             final StringBuilder sb = new StringBuilder();
             VibratorClass vib=new VibratorClass();
             final String VIBE_PATH=vib.get_path();
@@ -482,6 +479,10 @@ public class BootService extends Service implements Constants {
             Helpers.shExec(sb,c,true);
             return "";
         }
+        @Override
+        protected void onPreExecute() {
+            //Toast.makeText(c, TAG+ " start boot sequence", Toast.LENGTH_SHORT).show();
+        }
     	@Override
     	protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -501,7 +502,6 @@ public class BootService extends Service implements Constants {
                     nm.notify(1337, n);//1337
                 }
             }
-            preferences.edit().putBoolean("pc_boot",false).apply();
             servicesStarted = true;
             stopSelf();
         }

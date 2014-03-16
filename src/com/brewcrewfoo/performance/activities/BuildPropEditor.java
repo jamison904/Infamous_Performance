@@ -18,7 +18,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -162,6 +161,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         }
     }
 
+
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -225,6 +225,11 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     public void onResume() {
         super.onResume();
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
     private void editPropDialog(Prop p) {
         final Prop pp = p;
         String titlu="";

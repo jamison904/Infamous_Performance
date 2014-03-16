@@ -21,7 +21,6 @@ package com.brewcrewfoo.performance.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -53,7 +52,6 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public static String[] mMinFreqSetting=new String[nCpus];
     public static String[] mCPUon=new String[nCpus];
     public static int curcpu=0;
-    private Context c=this;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +81,8 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     public void onSaveInstanceState(Bundle saveState) {
         super.onSaveInstanceState(saveState);
     }
+
+
     class TitleAdapter extends FragmentPagerAdapter {
         String titles[] = getTitles();
         private Fragment frags[] = new Fragment[titles.length];
@@ -147,6 +147,10 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+    }
+    @Override
     public void onResume() {
         super.onResume();
         if (isThemeChanged() || thide) {
@@ -196,14 +200,14 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
     }
     private void checkForSu() {
         if (mPreferences.getBoolean("firstrun", true)) {
-            Intent intent = new Intent(MainActivity.this, checkSU.class);
-            startActivityForResult(intent, 1);
-        }
-        else{
-            if(!Helpers.checkSu()) {
                 Intent intent = new Intent(MainActivity.this, checkSU.class);
                 startActivityForResult(intent, 1);
-            }
+        }
+        else{
+                if(!Helpers.checkSu()) {
+                    Intent intent = new Intent(MainActivity.this, checkSU.class);
+                    startActivityForResult(intent, 1);
+                }
         }
     }
 }
