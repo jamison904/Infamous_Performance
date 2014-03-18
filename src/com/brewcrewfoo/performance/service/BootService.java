@@ -481,7 +481,7 @@ public class BootService extends Service implements Constants {
         }
         @Override
         protected void onPreExecute() {
-            //Toast.makeText(c, TAG+ " start boot sequence", Toast.LENGTH_SHORT).show();
+            Toast.makeText(c, TAG+ " start boot sequence", Toast.LENGTH_SHORT).show();
         }
     	@Override
     	protected void onPostExecute(String result) {

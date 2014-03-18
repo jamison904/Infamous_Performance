@@ -328,16 +328,18 @@ public class Helpers implements Constants {
         }
     }
     public static String shExec(StringBuilder s,Context c,Boolean su){
-        final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
-        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
+        //final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
+        //new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
         get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
         CMDProcessor.CommandResult cr=null;
         if(su){
-            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            //cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
         }
         else{
-            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            //cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
         }
         if(cr.success()){
             return cr.stdout;
