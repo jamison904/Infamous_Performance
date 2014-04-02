@@ -394,4 +394,8 @@
     <string name="pt_gpu_fmax">Максимальная Частота GPU</string>
     <string name="ps_gpu_fmax">Текущий: %s</string>
     <string name="pt_gpugov_set">Управление GPU</string>
+    <!-- 2.1.13-->
+    <string name="pt_int_sd">Внутренняя Память</string>
+    <string name="pt_ext_sd">Внешняя Память</string>
+    <string name="save_batt">Энергосбережение</string>
 </resources>
