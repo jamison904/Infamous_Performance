@@ -391,20 +391,20 @@ public class BootService extends Service implements Constants {
                 //---reset------
                 sb.append("busybox echo 0 > ").append(ksmpath).append("/run;\n").append("sleep 0.5;\n");
                 sb.append("busybox echo 2 > ").append(ksmpath).append("/run;\n").append("sleep 0.5;\n");
-                if (preferences.getBoolean(PREF_RUN_KSM, false)) {
-                    if (preferences.getBoolean(KSM_SOB, false)) {
-                        s = preferences.getString("pref_ksm", null);
-                        if (s != null) {
-                            String p[] = s.split(";");
-                            for (String aP : p) {
-                                if (!aP.equals("") && aP != null) {
-                                    final String pn[] = aP.split(":");
-                                    if(new File(ksmpath+"/"+pn[0]).exists())
-                                        sb.append("busybox echo ").append(pn[1]).append(" > ").append(ksmpath).append("/").append(pn[0]).append(";\n");
-                                }
+                if (preferences.getBoolean(KSM_SOB, false)) {
+                    s = preferences.getString("pref_ksm", null);
+                    if (s != null) {
+                        String p[] = s.split(";");
+                        for (String aP : p) {
+                            if (!aP.equals("") && aP != null) {
+                                final String pn[] = aP.split(":");
+                                if(new File(ksmpath+"/"+pn[0]).exists())
+                                    sb.append("busybox echo ").append(pn[1]).append(" > ").append(ksmpath).append("/").append(pn[0]).append(";\n");
                             }
                         }
                     }
+                }
+                if (preferences.getBoolean(PREF_RUN_KSM, false)) {
                     sb.append("busybox echo 1 > ").append(ksmpath).append("/run").append(";\n");
                 }
                 else{
