@@ -106,7 +106,7 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
                             frags[j] = new BatteryInfo();
                             break;
                         case 3:
-                            frags[j] = new OOMSettings();
+                            frags[j] = new MemSettings();
                             break;
                         case 4:
                             frags[j] = new VoltageControlSettings();

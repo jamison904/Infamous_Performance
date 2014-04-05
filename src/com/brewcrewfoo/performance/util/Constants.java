@@ -21,7 +21,7 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.12";
+    public static final String VERSION_NUM = "2.1.13 BETA";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
@@ -96,14 +96,16 @@ public interface Constants {
     public static final String OOM_CONTENT_PROVIDERS = "oom_content_providers";
     public static final String OOM_EMPTY_APP = "oom_empty_app";
     //------ KSM
-    public static final String KSM_RUN_PATH = "/sys/kernel/mm/ksm/run";
-    public static final String UKSM_RUN_PATH = "/sys/kernel/mm/uksm/run";
+    public static final String KSM_RUN_PATH = "/sys/kernel/mm/ksm";
+    public static final String UKSM_RUN_PATH = "/sys/kernel/mm/uksm";
     public static final String[] KSM_FULLSCANS_PATH = {"/sys/kernel/mm/ksm/full_scans","/sys/kernel/mm/uksm/full_scans"};
     public static final String[] KSM_PAGESSHARED_PATH = {"/sys/kernel/mm/ksm/pages_shared","/sys/kernel/mm/uksm/pages_shared"};
     public static final String[] KSM_PAGESSHARING_PATH = {"/sys/kernel/mm/ksm/pages_sharing","/sys/kernel/mm/uksm/pages_sharing"};
     public static final String[] KSM_PAGESTOSCAN_PATH = {"/sys/kernel/mm/ksm/pages_to_scan","/sys/kernel/mm/uksm/pages_to_scan"};
     public static final String[] KSM_PAGESUNSHERED_PATH = {"/sys/kernel/mm/ksm/pages_unshared","/sys/kernel/mm/uksm/pages_unshared"};
     public static final String[] KSM_PAGESVOLATILE_PATH = {"/sys/kernel/mm/ksm/pages_volatile","/sys/kernel/mm/uksm/pages_volatile"};
+    public static final String[] KSM_SLEEP_TIMES_PATH = {"/sys/kernel/mm/ksm/sleep_times","/sys/kernel/mm/uksm/sleep_times"};
+    public static final String[] KSM_PAGESSCANNED_PATH = {"/sys/kernel/mm/ksm/pages_scanned","/sys/kernel/mm/uksm/pages_scanned"};
     public static final String[] KSM_SLEEP_PATH = {"/sys/kernel/mm/ksm/sleep_millisecs","/sys/kernel/mm/uksm/sleep_millisecs"};
     public static final String PREF_RUN_KSM = "pref_run_ksm";
     public static final String KSM_SOB = "ksm_boot";

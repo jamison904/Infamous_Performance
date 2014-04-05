@@ -102,17 +102,19 @@ Copyright (C) 2012  James Roberts
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_run_ksm"
+            android:summary="@string/ps_dsync"
             android:title="@string/pt_run_ksm"/>
         <Preference
             android:key="ksm_settings"
+            android:summary=""
             android:title="@string/ksm_adv_title"/>
-
+<!--
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="ksm_boot"
             android:summary="@string/ps_restore_boot"
             android:title="@string/sob"/>
-
+-->
     </PreferenceCategory>
     <PreferenceCategory
         android:key="zram"

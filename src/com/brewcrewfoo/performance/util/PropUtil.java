@@ -3,13 +3,21 @@ package com.brewcrewfoo.performance.util;
 import android.content.SharedPreferences;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by h0rn3t on 10.02.2014.
  * http://forum.xda-developers.com/member.php?u=4674443
  */
 public class PropUtil implements Constants {
+    private static Set<String> exclude = new HashSet<String>();
+
+    public static void add_exclude(String s){
+        exclude.add(s);
+    }
 
     public static List<Prop> load_prop(String s){
         List<Prop> props = new ArrayList<Prop>();
@@ -18,10 +26,11 @@ public class PropUtil implements Constants {
         final String p[]=s.split("\n");
         for (String aP : p) {
             try{
-                if(aP!=null && aP.contains("::") && !aP.contains("uevent") && !aP.contains("debug")){
+                if(aP!=null && aP.contains("::")){
                     String pn=aP.split("::")[0];
                     pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
-                    props.add(new Prop(pn,aP.split("::")[1].trim()));
+                    if(!exclude.contains(pn))
+                        props.add(new Prop(pn,aP.split("::")[1].trim()));
                 }
             }
             catch (Exception e){

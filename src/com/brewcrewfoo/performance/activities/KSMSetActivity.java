@@ -17,12 +17,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,14 +38,15 @@ import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
 import com.brewcrewfoo.performance.util.PropUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by h0rn3t on 09.02.2014.
+ * Created by h0rn3t on 05.04.2014.
  * http://forum.xda-developers.com/member.php?u=4674443
  */
-public class ParamActivity extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
+public class KSMSetActivity extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
@@ -53,6 +56,7 @@ public class ParamActivity extends Activity implements Constants, AdapterView.On
     private RelativeLayout tools;
     private PropAdapter adapter;
     private String path,sob,pref;
+    private String[] mAvailableGovernors;
 
 
     @Override
@@ -122,16 +126,17 @@ public class ParamActivity extends Activity implements Constants, AdapterView.On
         protected String doInBackground(String... params) {
             Helpers.get_assetsScript("utils",context,"","");
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
+            if(new File(path+"/cpu_governor").exists())
+                mAvailableGovernors = Helpers.readOneLine(path+"/cpu_governor").split(" ");
             CMDProcessor.CommandResult cr =null;
             cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+path+"/*\" \"1\"");
             if(cr.success()){
-                PropUtil.add_exclude("uevent");
-                PropUtil.add_exclude("debug");
-                props=PropUtil.load_prop(cr.stdout);
+                PropUtil.add_exclude("run");
+                props= PropUtil.load_prop(cr.stdout);
                 return "ok";
             }
             else{
-                Log.d(TAG, pref+" settings error: " + cr.stderr);
+                Log.d(TAG, pref + " settings error: " + cr.stderr);
                 return "nok";
             }
         }
@@ -149,7 +154,7 @@ public class ParamActivity extends Activity implements Constants, AdapterView.On
                 else{
                     nofiles.setVisibility(LinearLayout.GONE);
                     tools.setVisibility(RelativeLayout.VISIBLE);
-                    adapter = new PropAdapter(ParamActivity.this, R.layout.prop_item, props);
+                    adapter = new PropAdapter(KSMSetActivity.this, R.layout.prop_item, props);
                     packList.setAdapter(adapter);
                 }
             }
@@ -215,11 +220,51 @@ public class ParamActivity extends Activity implements Constants, AdapterView.On
     private void editPropDialog(Prop p) {
         final Prop pp=p;
         LayoutInflater factory = LayoutInflater.from(this);
-        final View editDialog = factory.inflate(R.layout.prop_edit_dialog, null);
+
+        final View editDialog = factory.inflate(R.layout.build_prop_dialog, null);
         final EditText tv = (EditText) editDialog.findViewById(R.id.vprop);
-        final TextView tn = (TextView) editDialog.findViewById(R.id.nprop);
-        tv.setText(pp.getVal());
-        tn.setText(pp.getName());
+        final EditText tn = (EditText) editDialog.findViewById(R.id.nprop);
+        final TextView tt = (TextView) editDialog.findViewById(R.id.text1);
+        final Spinner sp = (Spinner) editDialog.findViewById(R.id.spinner);
+        final LinearLayout lpresets = (LinearLayout) editDialog.findViewById(R.id.lpresets);
+        ArrayAdapter<CharSequence> vAdapter = new ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item);
+        vAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vAdapter.clear();
+
+        if(pp!=null){
+            final String v=pp.getVal();
+            final String n=pp.getName();
+            lpresets.setVisibility(LinearLayout.GONE);
+            if(n.contains("cpu_governor")){
+                if(mAvailableGovernors.length>0){
+                    vAdapter.add(v);
+                    for (String vtcp : mAvailableGovernors) {
+                        if(!vtcp.trim().equals(v)) vAdapter.add(vtcp.trim());
+                    }
+                    lpresets.setVisibility(LinearLayout.VISIBLE);
+                    sp.setAdapter(vAdapter);
+                }
+            }
+            tv.setText(pp.getVal());
+            tn.setText(pp.getName());
+            tn.setVisibility(EditText.GONE);
+            tt.setText(pp.getName());
+        }
+        else{//add
+            lpresets.setVisibility(LinearLayout.GONE);
+            tt.setText(getString(R.string.prop_name));
+            tn.setVisibility(EditText.VISIBLE);
+        }
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                tv.setText(sp.getSelectedItem().toString().trim());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
 
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.edit_prop_title))

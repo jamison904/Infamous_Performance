@@ -11,14 +11,17 @@ get_prop(){
 local d="$1";
 local n="$2";
 if busybox [ "X$n"=="X" ]; then
-    niv="";
+    for i in `busybox find $d -type f -prune -perm -600`; do
+        v=`busybox cat $i`;
+        busybox echo "$i::$v";
+    done;
 else
-    niv="-maxdepth $n";
+    for i in `busybox find $d -type f -prune -perm -600 -maxdepth $n`; do
+        v=`busybox cat $i`;
+        busybox echo "$i::$v";
+    done;
 fi;
-for i in `busybox find $d -type f -prune -perm -600 $niv`; do
-    v=`busybox cat $i`;
-    busybox echo "$i::$v";
-done;
+
 
 }
 set_prop() {

@@ -428,4 +428,6 @@ Copyright (C) 2012  James Roberts
     <string name="pt_int_sd">Internal SD Card</string>
     <string name="pt_ext_sd">External SD Card</string>
     <string name="save_batt">Power Saving</string>
+    <string name="ksm_sleep_times">Sleep times:</string>
+    <string name="ksm_pages_scanned">Pages Scanned:</string>
 </resources>

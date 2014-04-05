@@ -84,7 +84,7 @@ public class BootService extends Service implements Constants {
 
             int ksm=0;
             String ksmpath=KSM_RUN_PATH;
-            if (new File(UKSM_RUN_PATH).exists()) {
+            if (new File(UKSM_RUN_PATH+"/run").exists()) {
                 ksm=1;
                 ksmpath=UKSM_RUN_PATH;
             }
@@ -387,18 +387,28 @@ public class BootService extends Service implements Constants {
                         }
                     }
             }
-            if (new File(ksmpath).exists()) {
-                if (preferences.getBoolean(KSM_SOB, false)) {
-                    sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
-                    sb.append("busybox echo 2 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
-                    if (preferences.getBoolean(PREF_RUN_KSM, false)) {
-                        sb.append("busybox echo 1 > ").append(ksmpath).append(";\n");
+            if (new File(ksmpath+"/run").exists()) {
+                //---reset------
+                sb.append("busybox echo 0 > ").append(ksmpath).append("/run;\n").append("sleep 0.5;\n");
+                sb.append("busybox echo 2 > ").append(ksmpath).append("/run;\n").append("sleep 0.5;\n");
+                if (preferences.getBoolean(PREF_RUN_KSM, false)) {
+                    if (preferences.getBoolean(KSM_SOB, false)) {
+                        s = preferences.getString("pref_ksm", null);
+                        if (s != null) {
+                            String p[] = s.split(";");
+                            for (String aP : p) {
+                                if (!aP.equals("") && aP != null) {
+                                    final String pn[] = aP.split(":");
+                                    if(new File(ksmpath+"/"+pn[0]).exists())
+                                        sb.append("busybox echo ").append(pn[1]).append(" > ").append(ksmpath).append("/").append(pn[0]).append(";\n");
+                                }
+                            }
+                        }
                     }
-                    else{
-                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n");
-                    }
+                    sb.append("busybox echo 1 > ").append(ksmpath).append("/run").append(";\n");
+                }
+                else{
+                    sb.append("busybox echo 0 > ").append(ksmpath).append("/run").append(";\n");
                 }
             }
             if (preferences.getBoolean(GOV_SOB, false)) {
