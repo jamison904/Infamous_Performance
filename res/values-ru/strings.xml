@@ -398,4 +398,6 @@
     <string name="pt_int_sd">Внутренняя Память</string>
     <string name="pt_ext_sd">Внешняя Память</string>
     <string name="save_batt">Энергосбережение</string>
+    <string name="ksm_sleep_times">Sleep times:</string>
+    <string name="ksm_pages_scanned">Pages Scanned:</string>
 </resources>
