@@ -111,7 +111,7 @@ public class FlasherActivity extends Activity implements Constants, ActivityThem
         Boolean gasit=false;
         InputStream f;
 
-        final String fn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/devices.xml";
+        final String fn=mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath())+"/"+TAG+"/devices.xml";
         try {
             if (new File(fn).exists()){
                 f = new BufferedInputStream(new FileInputStream(fn));

@@ -76,7 +76,7 @@ public class BootService extends Service implements Constants {
             final String BLN_PATH=Helpers.bln_path();
             final String WIFIPM_PATH=Helpers.wifipm_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
-            final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
+            final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler(IO_SCHEDULER_PATH));
             final float maxdisk = Helpers.getMem("MemTotal") / 1024;
             final String hotpath=Helpers.hotplug_path();
             final GPUClass gpu=new GPUClass();

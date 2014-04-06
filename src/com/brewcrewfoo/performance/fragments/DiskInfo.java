@@ -6,9 +6,11 @@ package com.brewcrewfoo.performance.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +33,8 @@ import com.brewcrewfoo.performance.util.Helpers;
 import java.io.File;
 
 public class DiskInfo extends Fragment implements Constants {
+
+    SharedPreferences mPreferences;
 
     private RelativeLayout lsys;
     private RelativeLayout ldata;
@@ -76,8 +80,8 @@ public class DiskInfo extends Fragment implements Constants {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=getActivity();
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         //setRetainInstance(true);
-
         setHasOptionsMenu(true);
     }
     @Override
@@ -271,36 +275,16 @@ public class DiskInfo extends Fragment implements Constants {
 
         final String state = Environment.getExternalStorageState();
         if ( Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state) ) {
-            internalsd = Environment.getExternalStorageDirectory().getAbsolutePath();
+            internalsd = mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath());
             set_part_info(internalsd,"SD card 1",sd1name,sd1total,sd1used,sd1free,sd1bar,lsd1);
             Log.d(TAG, "SDCard 1: " + internalsd);
         }
-        if(!TextUtils.isEmpty(System.getenv("SECONDARY_STORAGE"))){
-            final String externalstorage[]=System.getenv("SECONDARY_STORAGE").split(":");
-            for ( final String dirs : externalstorage ) {
-                final File dir= new File(dirs);
-                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() ) {
-                    externalsd=dirs;
-                    Log.d(TAG, "SDCard 2: " + externalsd );
-                    break;
-                }
-            }
-            if(!externalsd.equals("")){
-                set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
-            }
+        externalsd=mPreferences.getString("ext_sd_path", Helpers.extSD());
+        if(!externalsd.equals("")){
+            set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
+            Log.d(TAG, "SDCard 2: " + externalsd);
         }
-        else{
-            final String supported[]={"/mnt/extSdCard","/storage/sdcard1","/mnt/external_sd"};
-            for ( final String dirs : supported) {
-                final File dir= new File(dirs);
-                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() ) {
-                    externalsd=dirs;
-                    Log.d(TAG, "SDCard 2: " + externalsd );
-                    set_part_info(externalsd,"SD card 2",sd2name,sd2total,sd2used,sd2free,sd2bar,lsd2);
-                    break;
-                }
-            }
-        }
+
 
     }
 }

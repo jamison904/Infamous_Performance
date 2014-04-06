@@ -121,18 +121,51 @@ public class KSMSetActivity extends Activity implements Constants, AdapterView.O
         super.onConfigurationChanged(newConfig);
     }
 
+    public static List<Prop> load_prop(String s){
+        List<Prop> props = new ArrayList<Prop>();
+        props.clear();
+        if(s==null) return props;
+        final String p[]=s.split("\n");
+        for (String aP : p) {
+            try{
+                if(aP!=null && aP.contains("::")){
+                    String pn=aP.split("::")[0];
+                    pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
+                    if(!pn.equals("run")) {
+                        String v=aP.split("::")[1].trim();
+                        if(pn.equals("cpu_governor")) {
+                            String[] govs =v.split(" ");
+                            if (govs != null) {
+                                for (String gov : govs) {
+                                    if (gov.charAt(0) == '[') {
+                                        v = gov.substring(1, gov.length() - 1);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        props.add(new Prop(pn, v));
+                    }
+                }
+            }
+            catch (Exception e){
+            }
+        }
+        return props;
+    }
+
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             Helpers.get_assetsScript("utils",context,"","");
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
             if(new File(path+"/cpu_governor").exists())
-                mAvailableGovernors = Helpers.readOneLine(path+"/cpu_governor").split(" ");
+                mAvailableGovernors = Helpers.getAvailableIOSchedulers(path+"/cpu_governor");
             CMDProcessor.CommandResult cr =null;
             cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+path+"/*\" \"1\"");
             if(cr.success()){
-                PropUtil.add_exclude("run");
-                props= PropUtil.load_prop(cr.stdout);
+                //PropUtil.add_exclude("run");
+                props= load_prop(cr.stdout);
                 return "ok";
             }
             else{

@@ -425,9 +425,10 @@ Copyright (C) 2012  James Roberts
     <string name="ps_gpu_fmax">Current: %s</string>
     <string name="pt_gpugov_set">GPU Control</string>
     <!-- 2.1.13-->
-    <string name="pt_int_sd">Internal SD Card</string>
-    <string name="pt_ext_sd">External SD Card</string>
+    <string name="pt_int_sd">Override Internal SD Path</string>
+    <string name="pt_ext_sd">Override External SD Path</string>
     <string name="save_batt">Power Saving</string>
     <string name="ksm_sleep_times">Sleep times:</string>
     <string name="ksm_pages_scanned">Pages Scanned:</string>
+    <string name="info_auto_sd">Leave blank for autodetection</string>
 </resources>

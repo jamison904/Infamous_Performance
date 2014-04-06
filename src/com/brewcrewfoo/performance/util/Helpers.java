@@ -30,6 +30,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import com.brewcrewfoo.performance.widget.PCWidget;
 
@@ -96,9 +97,9 @@ public class Helpers implements Constants {
         return null;
     }
 
-    public static String[] getAvailableIOSchedulers() {
+    public static String[] getAvailableIOSchedulers(String p) {
         String[] schedulers = null;
-        String[] aux = readStringArray(IO_SCHEDULER_PATH);
+        String[] aux = readStringArray(p);
         if (aux != null) {
             schedulers = new String[aux.length];
             for (byte i = 0; i < aux.length; i++) {
@@ -120,9 +121,9 @@ public class Helpers implements Constants {
         return null;
     }
 
-    public static String getIOScheduler() {
+    public static String getIOScheduler(String p) {
         String scheduler = null;
-        String[] schedulers = readStringArray(IO_SCHEDULER_PATH);
+        String[] schedulers = readStringArray(p);
         if (schedulers != null) {
             for (String s : schedulers) {
                 if (s.charAt(0) == '[') {
@@ -470,6 +471,32 @@ public class Helpers implements Constants {
         else{
             return null;
         }
+    }
+
+    public static String extSD(){
+        String externalsd="";
+
+        if(!TextUtils.isEmpty(System.getenv("SECONDARY_STORAGE"))){
+            final String externalstorage[]=System.getenv("SECONDARY_STORAGE").split(":");
+            for ( final String dirs : externalstorage ) {
+                final File dir= new File(dirs);
+                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() ) {
+                    externalsd=dirs;
+                    break;
+                }
+            }
+        }
+        else{
+            final String supported[]={"/mnt/extSdCard","/storage/sdcard1","/mnt/external_sd"};
+            for ( final String dirs : supported) {
+                final File dir= new File(dirs);
+                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() ) {
+                    externalsd=dirs;
+                    break;
+                }
+            }
+        }
+        return externalsd;
     }
 
 

@@ -60,7 +60,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
     private String[] oggs={};
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/buildprop";
+    private String dn;
     private String buildname="build";
 
     @Override
@@ -68,6 +68,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         super.onCreate(savedInstanceState);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        dn= mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath())+"/"+TAG+"/buildprop";
         res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);

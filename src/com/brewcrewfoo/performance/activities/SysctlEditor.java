@@ -62,7 +62,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private PropAdapter adapter=null;
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/sysctl";
+    private String dn;
 
     private final String syspath="/system/etc/";
     private final String SYSCTL="/proc/sys/";
@@ -75,6 +75,7 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         super.onCreate(savedInstanceState);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        dn= mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath())+"/"+TAG+"/sysctl";
         res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);

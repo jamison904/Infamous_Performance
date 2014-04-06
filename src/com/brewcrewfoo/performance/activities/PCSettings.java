@@ -33,12 +33,19 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.*;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
+import com.brewcrewfoo.performance.util.PropUtil;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 
@@ -50,6 +57,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 
 public class PCSettings extends PreferenceActivity implements Constants, ActivityThemeChangeInterface, OnPreferenceChangeListener {
@@ -58,7 +66,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
     private CheckBoxPreference mLightThemePref;
     private ColorPickerPreference mWidgetBgColorPref;
     private ColorPickerPreference mWidgetTextColorPref;
-    private Preference mVersion;
+    private Preference mVersion,mIntSD,mExtSD;
     private Context c=this;
     private String ver="";
     private String det="";
@@ -78,7 +86,12 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
         mWidgetTextColorPref.setOnPreferenceChangeListener(this);
         mVersion = findPreference("version_info");
         mVersion.setTitle(getString(R.string.pt_ver) + VERSION_NUM);
+        mIntSD = findPreference("int_sd");
+        mExtSD = findPreference("ext_sd");
         setTheme();
+
+        mExtSD.setSummary(mPreferences.getString("ext_sd_path",Helpers.extSD()));
+        mIntSD.setSummary(mPreferences.getString("int_sd_path",Environment.getExternalStorageDirectory().getAbsolutePath()));
 
         if(!NO_UPDATE){
             mVersion.setSummary(getString(R.string.chk_update));
@@ -96,6 +109,64 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
         else if(key.equals("visible_tabs")){
             startActivity(new Intent(this, HideTabs.class));
             return true;
+        }
+        else if(key.equals("int_sd")) {
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View editDialog = factory.inflate(R.layout.prop_edit_dialog, null);
+            final EditText tv = (EditText) editDialog.findViewById(R.id.vprop);
+            final TextView tn = (TextView) editDialog.findViewById(R.id.nprop);
+            tv.setText("");
+            tn.setText(getString(R.string.info_auto_sd));
+
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.pt_int_sd))
+                    .setView(editDialog)
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String s=tv.getText().toString();
+                            if ((s != null) && (s.length() > 0)) {
+                                if (s.endsWith("/")) { s = s.substring(0, s.length() - 1);}
+                                if(!s.startsWith("/")) { s="/"+s; }
+                                final File dir= new File(s);
+                                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() )
+                                    mPreferences.edit().putString("int_sd_path",s).apply();
+                            }
+                            else{
+                                mPreferences.edit().remove("int_sd_path").apply();
+                            }
+                            mIntSD.setSummary(mPreferences.getString("int_sd_path",Environment.getExternalStorageDirectory().getAbsolutePath()));
+                        }
+                    }).create().show();
+        }
+        else if(key.equals("ext_sd")) {
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View editDialog = factory.inflate(R.layout.prop_edit_dialog, null);
+            final EditText tv = (EditText) editDialog.findViewById(R.id.vprop);
+            final TextView tn = (TextView) editDialog.findViewById(R.id.nprop);
+            tv.setText("");
+            tn.setText(getString(R.string.info_auto_sd));
+
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.pt_ext_sd))
+                    .setView(editDialog)
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String s=tv.getText().toString();
+                            if ((s != null) && (s.length() > 0)) {
+                                if (s.endsWith("/")) { s = s.substring(0, s.length() - 1); }
+                                if(!s.startsWith("/")) { s="/"+s; }
+                                final File dir= new File(s);
+                                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() )
+                                    mPreferences.edit().putString("ext_sd_path",s).apply();
+                            }
+                            else{
+                                mPreferences.edit().remove("ext_sd_path").apply();
+                            }
+                            mExtSD.setSummary(mPreferences.getString("ext_sd_path",Helpers.extSD()));
+                        }
+                    }).create().show();
         }
         else if(key.equals("version_info")){
             if(isupdate && !NO_UPDATE) {

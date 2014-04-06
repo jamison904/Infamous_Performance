@@ -67,7 +67,7 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
         part=intent1.getStringExtra("part");
         if(tip.equalsIgnoreCase("kernel")){ dtitlu=getString(R.string.kernel_img_title);}
         else{ dtitlu=getString(R.string.recovery_img_title);}
-        currentDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+        currentDir = new File(mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath()));
         fill(currentDir);
     }
 
@@ -215,7 +215,7 @@ public class FileChooser extends ListActivity implements Constants, ActivityThem
         @Override
         protected String doInBackground(String... params) {
             final StringBuilder sb = new StringBuilder();
-            final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/tmp";
+            final String dn=mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath())+"/"+TAG+"/tmp";
 
             if(tip.equalsIgnoreCase("kernel")){
                 sb.append("busybox rm -rf /data/dalvik-cache/*;\n");
