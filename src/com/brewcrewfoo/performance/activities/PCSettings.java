@@ -33,8 +33,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.*;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -45,7 +43,6 @@ import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
-import com.brewcrewfoo.performance.util.PropUtil;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 

@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -272,7 +271,7 @@ public class Helpers implements Constants {
     }
     public static boolean isZRAM() {
         CMDProcessor.CommandResult cr =new CMDProcessor().sh.runWaitFor(ISZRAM);
-        if(cr.success() && cr.stdout!=null && cr.stdout.length()>0) return true;
+        if((cr.success() && cr.stdout!=null && cr.stdout.length()>0)||(new File("/dev/block/zram0/").exists())||(new File("/sys/block/zram0/").exists())) return true;
         return false;
     }
     public static void get_assetsScript(String fn,Context c,String prefix,String postfix){
