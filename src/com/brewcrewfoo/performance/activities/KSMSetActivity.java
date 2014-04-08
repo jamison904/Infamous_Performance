@@ -125,14 +125,14 @@ public class KSMSetActivity extends Activity implements Constants, AdapterView.O
         List<Prop> props = new ArrayList<Prop>();
         props.clear();
         if(s==null) return props;
-        final String p[]=s.split("\n");
+        final String p[]=s.split("\0");
         for (String aP : p) {
             try{
-                if(aP!=null && aP.contains("::")){
-                    String pn=aP.split("::")[0];
+                if(aP!=null){
+                    String pn=aP;
                     pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
                     if(!pn.equals("run")) {
-                        String v=aP.split("::")[1].trim();
+                        String v=Helpers.readOneLine(aP).trim();
                         if(pn.equals("cpu_governor")) {
                             String[] govs =v.split(" ");
                             if (govs != null) {

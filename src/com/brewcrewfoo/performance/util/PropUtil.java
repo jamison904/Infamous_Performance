@@ -23,14 +23,15 @@ public class PropUtil implements Constants {
         List<Prop> props = new ArrayList<Prop>();
         props.clear();
         if(s==null) return props;
-        final String p[]=s.split("\n");
+        final String p[]=s.split("\0");
         for (String aP : p) {
             try{
-                if(aP!=null && aP.contains("::")){
-                    String pn=aP.split("::")[0];
+                //if(aP!=null && aP.contains("::")){
+                if(aP!=null){
+                    String pn=aP;
                     pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
                     if(!exclude.contains(pn))
-                        props.add(new Prop(pn,aP.split("::")[1].trim()));
+                        props.add(new Prop(pn,Helpers.readOneLine(aP).trim()));
                 }
             }
             catch (Exception e){

@@ -220,7 +220,6 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             if(cr.success()){
                 tcp=cr.stdout.split(" ");
             }
-            //cr=new CMDProcessor().sh.runWaitFor("busybox find "+SYSCTL+"* -type f -perm -600 -print0");
             cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+SYSCTL+"*\"");
             if(cr.success()){
                 load_prop(cr.stdout);
@@ -383,13 +382,13 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     public void load_prop(String s){
         props.clear();
         if(s==null) return;
-        final String p[]=s.split("\n");
+        final String p[]=s.split("\0");
         for (String aP : p) {
             try{
-                if(aP!=null && aP.contains("::") && !aP.contains("/vm/")){
-                    String pn=aP.split("::")[0];
+                if(aP!=null && !aP.contains("/vm/")){
+                    String pn=aP;
                     pn=pn.replace(SYSCTL,"").replace("/",".").trim();
-                    props.add(new Prop(pn,aP.split("::")[1].trim()));
+                    props.add(new Prop(pn,Helpers.readOneLine(aP).trim()));
                 }
             }
             catch (Exception e){
