@@ -42,20 +42,16 @@ Copyright (C) 2012  James Roberts
         <Preference
                 android:key="oom_empty_app"
                 android:title="@string/title_empty_app"/>
-        <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="pref_minfree_boot"
-                android:summary="@string/ps_blx_boot"
-                android:title="@string/sob"/>
-    </PreferenceCategory>
-    <PreferenceCategory
-            android:key="oom_predefines"
-            android:title="@string/prefcat_oom_predefines">
         <ListPreference
             android:dialogTitle="@string/pt_oom"
             android:key="oom_presets"
             android:persistent="true"
             android:title="@string/pt_oom"/>
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_minfree_boot"
+                android:summary="@string/ps_blx_boot"
+                android:title="@string/sob"/>
     </PreferenceCategory>
 
     <PreferenceCategory
