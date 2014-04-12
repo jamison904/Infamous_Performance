@@ -304,7 +304,7 @@ public class PCSettings extends PreferenceActivity implements Constants, Activit
     }
     public boolean testver(String v){
         int i=0;
-        final String[] sv1=VERSION_NUM.split("\\.");
+        final String[] sv1=VERSION_NUM.replace(" ",".").split("\\.");
         final String[] sv2=v.split("\\.");
         if(sv1.length!=sv2.length) return true;
         while(i<sv2.length){
