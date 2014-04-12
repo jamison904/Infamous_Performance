@@ -16,7 +16,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +42,10 @@ import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,7 +67,6 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private String dn;
 
     private final String syspath="/system/etc/";
-    private final String SYSCTL="/proc/sys/";
     private String sob=SYSCTL_SOB;
     private String[] tcp={};
 
@@ -220,18 +221,21 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             if(cr.success()){
                 tcp=cr.stdout.split(" ");
             }
-            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+SYSCTL+"*\"");
-            if(cr.success()){
-                load_prop(cr.stdout);
-                return "ok";
+            new CMDProcessor().sh.runWaitFor("busybox sysctl -a > "+dn+"/tmp.tmp");
+            try {
+                readTextFile(new File(dn + "/tmp.tmp"));
             }
-            else{
-                Log.d(TAG, "sysctl error: " + cr.stderr);
+            catch (IOException e) {
                 return "nok";
             }
+            catch (Exception e) {
+                return "nok";
+            }
+            return "ok";
         }
         @Override
         protected void onPostExecute(String result) {
+            new File(dn + "/tmp.tmp").delete();
             if(result.equals("nok")) {
                 linlaHeaderProgress.setVisibility(View.GONE);
                 nofiles.setVisibility(LinearLayout.VISIBLE);
@@ -379,22 +383,17 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                     }
                 }).create().show();
     }
-    public void load_prop(String s){
+
+    private void readTextFile(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
         props.clear();
-        if(s==null) return;
-        final String p[]=s.split("\0");
-        for (String aP : p) {
-            try{
-                if(aP!=null && !aP.contains("/vm/")){
-                    String pn=aP;
-                    pn=pn.replace(SYSCTL,"").replace("/",".").trim();
-                    props.add(new Prop(pn,Helpers.readOneLine(aP).trim()));
-                }
-            }
-            catch (Exception e){
+        while((line = reader.readLine()) != null){
+            if(line.contains("=")&&!line.contains("vm.")){
+                props.add(new Prop(line.split("=")[0].trim(),line.split("=")[1].trim()));
             }
         }
+        reader.close();
     }
-
 
 }
