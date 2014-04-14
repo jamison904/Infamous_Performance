@@ -152,7 +152,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         });
 
 
-        String[] mAvailableIo = Helpers.getAvailableIOSchedulers();
+        String[] mAvailableIo = Helpers.getAvailableIOSchedulers(IO_SCHEDULER_PATH);
         mIo = (Spinner) view.findViewById(R.id.pref_io);
 
         ArrayAdapter<CharSequence> ioAdapter = new ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item);

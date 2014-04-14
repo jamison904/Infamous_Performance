@@ -293,13 +293,13 @@ public class VMSettings extends Activity implements Constants, AdapterView.OnIte
     public void load_prop(String s){
         props.clear();
         if(s==null) return;
-        final String p[]=s.split("\n");
+        final String p[]=s.split("\0");
         for (String aP : p) {
             try{
-                if(aP!=null && aP.contains("::")){
-                    String pn=aP.split("::")[0];
+                if(aP!=null){
+                    String pn=aP;
                     pn=pn.substring(pn.lastIndexOf("/") + 1, pn.length()).trim();
-                    if(testprop(pn)) props.add(new Prop(pn,aP.split("::")[1].trim()));
+                    if(testprop(pn)) props.add(new Prop(pn,Helpers.readOneLine(aP).trim()));
                 }
             }
             catch (Exception e){

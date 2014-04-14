@@ -10,17 +10,12 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,14 +42,17 @@ import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class SysctlEditor extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface,SensorEventListener {
+public class SysctlEditor extends Activity implements Constants, AdapterView.OnItemClickListener, ActivityThemeChangeInterface {
     private boolean mIsLightTheme;
     SharedPreferences mPreferences;
     private final Context context=this;
@@ -66,21 +64,19 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     private PropAdapter adapter=null;
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/sysctl";
+    private String dn;
 
     private final String syspath="/system/etc/";
-    private final String SYSCTL="/proc/sys/";
     private String sob=SYSCTL_SOB;
     private String[] tcp={};
 
-    SensorManager mSensorManager;
-    Sensor mproximity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        dn= mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath())+"/"+TAG+"/sysctl";
         res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
@@ -141,25 +137,11 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
         tools.setVisibility(View.GONE);
         search.setVisibility(View.GONE);
 
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mproximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-
 
         new GetPropOperation().execute();
 
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if(event.values[0]>0){
-            packList.smoothScrollByOffset(4);
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -239,19 +221,21 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
             if(cr.success()){
                 tcp=cr.stdout.split(" ");
             }
-            //cr=new CMDProcessor().sh.runWaitFor("busybox find "+SYSCTL+"* -type f -perm -600 -print0");
-            cr = new CMDProcessor().su.runWaitFor(getFilesDir()+"/utils -getprop \""+SYSCTL+"*\"");
-            if(cr.success()){
-                load_prop(cr.stdout);
-                return "ok";
+            new CMDProcessor().sh.runWaitFor("busybox sysctl -a > "+dn+"/tmp.tmp");
+            try {
+                readTextFile(new File(dn + "/tmp.tmp"));
             }
-            else{
-                Log.d(TAG, "sysctl error: " + cr.stderr);
+            catch (IOException e) {
                 return "nok";
             }
+            catch (Exception e) {
+                return "nok";
+            }
+            return "ok";
         }
         @Override
         protected void onPostExecute(String result) {
+            new File(dn + "/tmp.tmp").delete();
             if(result.equals("nok")) {
                 linlaHeaderProgress.setVisibility(View.GONE);
                 nofiles.setVisibility(LinearLayout.VISIBLE);
@@ -302,12 +286,10 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
     @Override
     public void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_UI);
     }
     @Override
     public void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
     }
     private void editPropDialog(Prop p) {
         final Prop pp = p;
@@ -401,22 +383,17 @@ public class SysctlEditor extends Activity implements Constants, AdapterView.OnI
                     }
                 }).create().show();
     }
-    public void load_prop(String s){
+
+    private void readTextFile(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
         props.clear();
-        if(s==null) return;
-        final String p[]=s.split("\n");
-        for (String aP : p) {
-            try{
-                if(aP!=null && aP.contains("::") && !aP.contains("/vm/")){
-                    String pn=aP.split("::")[0];
-                    pn=pn.replace(SYSCTL,"").replace("/",".").trim();
-                    props.add(new Prop(pn,aP.split("::")[1].trim()));
-                }
-            }
-            catch (Exception e){
+        while((line = reader.readLine()) != null){
+            if(line.contains("=")&&!line.contains("vm.")){
+                props.add(new Prop(line.split("=")[0].trim(),line.split("=")[1].trim()));
             }
         }
+        reader.close();
     }
-
 
 }

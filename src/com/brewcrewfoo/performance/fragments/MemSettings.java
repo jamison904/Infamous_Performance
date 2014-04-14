@@ -52,7 +52,7 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class OOMSettings extends PreferenceFragment implements OnSharedPreferenceChangeListener,Constants {
+public class MemSettings extends PreferenceFragment implements OnSharedPreferenceChangeListener,Constants {
     SharedPreferences mPreferences;
 	
 	private int mSeekbarProgress;
@@ -91,7 +91,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mPreferences.registerOnSharedPreferenceChangeListener(this);
-        addPreferencesFromResource(R.layout.oom_settings);
+        addPreferencesFromResource(R.layout.mem_settings);
 	
         values = Helpers.readOneLine(MINFREE_PATH).split(",");
 
@@ -151,23 +151,23 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             if(names==null) names="";
             mPreferences.edit().putString(PREF_SYS_NAMES, names).apply();
         }
-        if (!new File(UKSM_RUN_PATH).exists() && !new File(KSM_RUN_PATH).exists()) {
+        if (!new File(UKSM_RUN_PATH+"/run").exists() && !new File(KSM_RUN_PATH+"/run").exists()) {
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("ksm");
             getPreferenceScreen().removePreference(hideCat);
         }
         else{
-            if(new File(UKSM_RUN_PATH).exists()){
+            if(new File(UKSM_RUN_PATH+"/run").exists()){
                 ksm=1;
                 ksmpath=UKSM_RUN_PATH;
-                mKSM.setSummary(R.string.uksm);
+                mKSMsettings.setSummary(R.string.uksm);
             }
             else{
                 ksm=0;
                 ksmpath=KSM_RUN_PATH;
-                mKSM.setSummary(null);
+                mKSMsettings.setSummary(null);
             }
-            mKSM.setChecked(Helpers.readOneLine(ksmpath).equals("1"));
-            mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
+            mKSM.setChecked(Helpers.readOneLine(ksmpath+"/run").equals("1"));
+            //mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
 
         }
         ispm=(!Helpers.binExist("pm").equals(NOT_FOUND));
@@ -298,11 +298,11 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
             }
         }
         else if (preference.equals(mKSM)){
-            if ((Integer.parseInt(Helpers.readOneLine(ksmpath))==0)||(Integer.parseInt(Helpers.readOneLine(ksmpath))==2)){
-                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + ksmpath);
+            if ((Integer.parseInt(Helpers.readOneLine(ksmpath+"/run"))==0)||(Integer.parseInt(Helpers.readOneLine(ksmpath+"/run"))==2)){
+                new CMDProcessor().su.runWaitFor("busybox echo 1 > " + ksmpath+"/run");
             }
             else{
-                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + ksmpath);
+                new CMDProcessor().su.runWaitFor("busybox echo 0 > " + ksmpath+"/run");
             }
             return true;
         }
@@ -351,7 +351,7 @@ public class OOMSettings extends PreferenceFragment implements OnSharedPreferenc
                 Log.d(TAG, "input = "+r);
                 switch(r){
                     case 1:
-                        mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
+                    //    mKSMsettings.setSummary(getString(R.string.ksm_pagtoscan)+" "+Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm])+" | "+getString(R.string.ksm_sleep)+" "+Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
                         break;
                     case 2:
                         curdisk=mPreferences.getInt(PREF_ZRAM, Math.round(maxdisk*18/100));

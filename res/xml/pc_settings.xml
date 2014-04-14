@@ -37,6 +37,13 @@ Copyright (C) 2012  James Roberts
         android:key="visible_tabs"
         android:title="@string/pt_show_tabs"/>
 
+    <Preference
+        android:key="int_sd"
+        android:title="@string/pt_int_sd"/>
+    <Preference
+        android:key="ext_sd"
+        android:title="@string/pt_ext_sd"/>
+
     <Preference android:key="version_info"/>
 
 

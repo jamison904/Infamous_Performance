@@ -18,7 +18,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +42,10 @@ import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Prop;
 import com.brewcrewfoo.performance.util.PropAdapter;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,7 +63,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     private EditText filterText = null;
     private List<Prop> props = new ArrayList<Prop>();
     private String[] oggs={};
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/buildprop";
+    private String dn;
     private String buildname="build";
 
     @Override
@@ -69,6 +71,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         super.onCreate(savedInstanceState);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        dn= mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath())+"/"+TAG+"/buildprop";
         res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
@@ -162,6 +165,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
         }
     }
 
+
     private class GetPropOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -169,29 +173,41 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
             new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+getFilesDir()+"/utils" );
             CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox find /system -type f -name \"*.ogg\" -print0");
             oggs=cr.stdout.split("\0");
-            return Helpers.readFileViaShell("/system/build.prop", false);
+            new CMDProcessor().sh.runWaitFor("busybox cp /system/build.prop "+dn+"/tmp.tmp");
+            try {
+                readTextFile(new File(dn + "/tmp.tmp"));
+            }
+            catch (IOException e) {
+                return "nok";
+            }
+            catch (Exception e) {
+                return "nok";
+            }
+            return "ok";
         }
         @Override
         protected void onPostExecute(String result) {
-
-            if((result==null)||(result.length()<=0)) {
+            new File(dn + "/tmp.tmp").delete();
+            if(result.equals("nok")) {
                 linlaHeaderProgress.setVisibility(View.GONE);
                 nofiles.setVisibility(LinearLayout.VISIBLE);
             }
             else{
-                load_builprop(result);
-                Collections.sort(props);
                 linlaHeaderProgress.setVisibility(View.GONE);
 
                 if(props.isEmpty()){
                     nofiles.setVisibility(View.VISIBLE);
                 }
                 else{
+                    Collections.sort(props);
                     nofiles.setVisibility(View.GONE);
+                    tools.setVisibility(View.VISIBLE);
                     adapter = new PropAdapter(BuildPropEditor.this, R.layout.prop_item, props);
                     packList.setAdapter(adapter);
+
                 }
             }
+
         }
         @Override
         protected void onPreExecute() {
@@ -225,6 +241,11 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
     public void onResume() {
         super.onResume();
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
     private void editPropDialog(Prop p) {
         final Prop pp = p;
         String titlu="";
@@ -407,13 +428,14 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
             }
         }
     }
-    public void load_builprop(String s){
+    private void readTextFile(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
         props.clear();
-        String p[]=s.split("\n");
-        for (String aP : p) {
-            if(!aP.contains("#") && aP.trim().length()>0 && aP!=null && aP.contains("=")){
-                aP=aP.replace("[","").replace("]","");
-                String pp[]=aP.split("=");
+        while((line = reader.readLine()) != null){
+            if(!line.contains("#") && line.contains("=")){
+                line=line.replace("[","").replace("]","");
+                String pp[]=line.split("=");
                 if(pp.length>=2){
                     String r="";
                     for(int i=2;i<pp.length;i++){
@@ -426,5 +448,7 @@ public class BuildPropEditor extends Activity implements Constants, AdapterView.
                 }
             }
         }
+        reader.close();
     }
+
 }

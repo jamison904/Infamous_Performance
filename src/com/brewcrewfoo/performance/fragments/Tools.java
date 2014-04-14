@@ -69,7 +69,7 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
     private Preference mResidualFiles,mOptimDB,mlogcat;
     private Context context;
     private String nf;
-    private final String dn= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
+    private String dn;
     private final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
     @Override
@@ -78,6 +78,7 @@ public class Tools extends PreferenceFragment implements OnSharedPreferenceChang
         context=getActivity();
   	    mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mPreferences.registerOnSharedPreferenceChangeListener(this);
+        dn= mPreferences.getString("int_sd_path", Environment.getExternalStorageDirectory().getAbsolutePath())+"/"+TAG+"/logs";
         addPreferencesFromResource(R.layout.tools);
 
         new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );

@@ -70,16 +70,13 @@ public class BootService extends Service implements Constants {
         @SuppressWarnings("deprecation")
         @Override
         protected String doInBackground(Void... args) {
-
-            //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
-            preferences.edit().putBoolean("pc_boot",true).apply();
             final StringBuilder sb = new StringBuilder();
             VibratorClass vib=new VibratorClass();
             final String VIBE_PATH=vib.get_path();
             final String BLN_PATH=Helpers.bln_path();
             final String WIFIPM_PATH=Helpers.wifipm_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
-            final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler());
+            final String io = preferences.getString(PREF_IO, Helpers.getIOScheduler(IO_SCHEDULER_PATH));
             final float maxdisk = Helpers.getMem("MemTotal") / 1024;
             final String hotpath=Helpers.hotplug_path();
             final GPUClass gpu=new GPUClass();
@@ -87,7 +84,7 @@ public class BootService extends Service implements Constants {
 
             int ksm=0;
             String ksmpath=KSM_RUN_PATH;
-            if (new File(UKSM_RUN_PATH).exists()) {
+            if (new File(UKSM_RUN_PATH+"/run").exists()) {
                 ksm=1;
                 ksmpath=UKSM_RUN_PATH;
             }
@@ -390,18 +387,28 @@ public class BootService extends Service implements Constants {
                         }
                     }
             }
-            if (new File(ksmpath).exists()) {
+            if (new File(ksmpath+"/run").exists()) {
+                //---reset------
+                sb.append("busybox echo 0 > ").append(ksmpath).append("/run;\n").append("sleep 0.5;\n");
+                sb.append("busybox echo 2 > ").append(ksmpath).append("/run;\n").append("sleep 0.5;\n");
                 if (preferences.getBoolean(KSM_SOB, false)) {
-                    sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
-                    sb.append("busybox echo 2 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_pagetoscan", Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]))).append(" > ").append(KSM_PAGESTOSCAN_PATH[ksm]).append(";\n");
-                    sb.append("busybox echo ").append(preferences.getString("pref_ksm_sleep", Helpers.readOneLine(KSM_SLEEP_PATH[ksm]))).append(" > ").append(KSM_SLEEP_PATH[ksm]).append(";\n");
-                    if (preferences.getBoolean(PREF_RUN_KSM, false)) {
-                        sb.append("busybox echo 1 > ").append(ksmpath).append(";\n");
+                    s = preferences.getString("pref_ksm", null);
+                    if (s != null) {
+                        String p[] = s.split(";");
+                        for (String aP : p) {
+                            if (!aP.equals("") && aP != null) {
+                                final String pn[] = aP.split(":");
+                                if(new File(ksmpath+"/"+pn[0]).exists())
+                                    sb.append("busybox echo ").append(pn[1]).append(" > ").append(ksmpath).append("/").append(pn[0]).append(";\n");
+                            }
+                        }
                     }
-                    else{
-                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n");
-                    }
+                }
+                if (preferences.getBoolean(PREF_RUN_KSM, false)) {
+                    sb.append("busybox echo 1 > ").append(ksmpath).append("/run").append(";\n");
+                }
+                else{
+                    sb.append("busybox echo 0 > ").append(ksmpath).append("/run").append(";\n");
                 }
             }
             if (preferences.getBoolean(GOV_SOB, false)) {
@@ -482,6 +489,10 @@ public class BootService extends Service implements Constants {
             Helpers.shExec(sb,c,true);
             return "";
         }
+        @Override
+        protected void onPreExecute() {
+            Toast.makeText(c, TAG+ " start boot sequence", Toast.LENGTH_SHORT).show();
+        }
     	@Override
     	protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -501,7 +512,6 @@ public class BootService extends Service implements Constants {
                     nm.notify(1337, n);//1337
                 }
             }
-            preferences.edit().putBoolean("pc_boot",false).apply();
             servicesStarted = true;
             stopSelf();
         }

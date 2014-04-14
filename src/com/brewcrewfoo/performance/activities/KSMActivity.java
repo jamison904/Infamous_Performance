@@ -10,40 +10,31 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
-import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
 import java.io.File;
 
-public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBarChangeListener, ActivityThemeChangeInterface {
+public class KSMActivity extends Activity implements Constants, ActivityThemeChangeInterface {
     SharedPreferences mPreferences;
     private boolean mIsLightTheme;
     final Context context = this;
-    private TextView t1,t2,t3,t4,t5;
+    private TextView t1,t2,t3,t4,t5,t6,t7;
     private CurThread mCurThread;
     private Boolean ist1=false;
     private Boolean ist2=false;
     private Boolean ist3=false;
     private Boolean ist4=false;
     private Boolean ist5=false;
-    private EditText edit1;
-    private EditText edit2;
-    private SeekBar mPage2Scan;
-    private SeekBar mSleep;
-    final private int maxPages2Scan=2048;
-    final private int maxSleep=5000;
+    private Boolean ist6=false;
+    private Boolean ist7=false;
     private int ksm=0;
     private String ksmpath=KSM_RUN_PATH;
 
@@ -58,7 +49,9 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
         t3=(TextView)findViewById(R.id.t6);
         t4=(TextView)findViewById(R.id.t8);
         t5=(TextView)findViewById(R.id.t10);
-        if(new File(UKSM_RUN_PATH).exists()){
+        t6=(TextView)findViewById(R.id.t12);
+        t7=(TextView)findViewById(R.id.t14);
+        if(new File(UKSM_RUN_PATH+"/run").exists()){
             ksm=1;
             ksmpath=UKSM_RUN_PATH;
         }
@@ -103,111 +96,32 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
             LinearLayout relativeLayout = (LinearLayout) findViewById(R.id.relativeLayout5);
             relativeLayout.setVisibility(LinearLayout.GONE);
         }
-
-        final int v1=Integer.parseInt(Helpers.readOneLine(KSM_PAGESTOSCAN_PATH[ksm]));
-        final int v2=Integer.parseInt(Helpers.readOneLine(KSM_SLEEP_PATH[ksm]));
-
-        TextView tval1 = (TextView) findViewById(R.id.tval1);
-        tval1.setText(getString(R.string.ksm_pagtoscan));
-
-        TextView tval2 = (TextView) findViewById(R.id.tval2);
-        tval2.setText(getString(R.string.ksm_sleep));
-
-        mPage2Scan = (SeekBar) findViewById(R.id.val1);
-        edit1=(EditText) findViewById(R.id.edit1);
-        mPage2Scan.setOnSeekBarChangeListener(this);
-        mPage2Scan.setMax(maxPages2Scan);
-        mPage2Scan.setProgress(v1);
-        edit1.setText(String.valueOf(v1));
-        edit1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable arg0) { }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,int arg2, int arg3) {}
-
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1,int arg2, int arg3) {
-                final String text = edit1.getText().toString();
-                try {
-                    int value = Integer.parseInt(text);
-                    if(value>maxPages2Scan){
-                        value=maxPages2Scan;
-                        edit1.setText(String.valueOf(value));
-                    }
-                    mPage2Scan.setProgress(value);
-                }
-                catch (NumberFormatException nfe) {
-                    return;
-                }
-            }
-        });
-
-        mSleep = (SeekBar) findViewById(R.id.val2);
-        edit2=(EditText) findViewById(R.id.edit2);
-        mSleep.setOnSeekBarChangeListener(this);
-        mSleep.setMax(maxSleep);
-        mSleep.setProgress(v2);
-        edit2.setText(String.valueOf(v2));
-        edit2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable arg0) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,int arg2, int arg3) {}
-
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1,int arg2, int arg3) {
-                final String text = edit2.getText().toString();
-                try {
-                    int value = Integer.parseInt(text);
-                    if(value>maxSleep){
-                        value=maxSleep;
-                        edit2.setText(String.valueOf(value));
-                    }
-                    mSleep.setProgress(value);
-
-                }
-                catch (NumberFormatException nfe) {
-                    return;
-                }
-            }
-        });
-        ((Button) findViewById(R.id.apply)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                int i1,i2;
-                try {
-                    i1 = Integer.parseInt(edit1.getText().toString());
-                    i2 = Integer.parseInt(edit2.getText().toString());
-                }
-                catch (NumberFormatException e) {
-                    return;
-                }
-
-                new CMDProcessor().su.runWaitFor("busybox echo " + i1 + " > " + KSM_PAGESTOSCAN_PATH[ksm]);
-                new CMDProcessor().su.runWaitFor("busybox echo " + i2 + " > " + KSM_SLEEP_PATH[ksm]);
-                mPreferences.edit()
-                        .putString("pref_ksm_pagetoscan", String.valueOf(i1))
-                        .putString("pref_ksm_sleep", String.valueOf(i2))
-                        .commit();
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("result",1);
-                setResult(RESULT_OK,returnIntent);
-                finish();
-            }
-        });
+        if (new File(KSM_SLEEP_TIMES_PATH[ksm]).exists()) {
+            t6.setText(Helpers.readOneLine(KSM_SLEEP_TIMES_PATH[ksm]));
+            ist6=true;
+        }
+        else{
+            LinearLayout relativeLayout = (LinearLayout) findViewById(R.id.relativeLayout6);
+            relativeLayout.setVisibility(LinearLayout.GONE);
+        }
+        if (new File(KSM_PAGESSCANNED_PATH[ksm]).exists()) {
+            t7.setText(Helpers.readOneLine(KSM_PAGESSCANNED_PATH[ksm]));
+            ist7=true;
+        }
+        else{
+            LinearLayout relativeLayout = (LinearLayout) findViewById(R.id.relativeLayout7);
+            relativeLayout.setVisibility(LinearLayout.GONE);
+        }
         ((Button) findViewById(R.id.rst)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 Runnable runnable = new Runnable() {
                     public void run() {
-                        final String vlast=Helpers.readOneLine(ksmpath);
+                        final String vlast=Helpers.readOneLine(ksmpath+"/run");
                         final StringBuilder sb = new StringBuilder();
-                        sb.append("busybox echo 0 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
-                        sb.append("busybox echo 2 > ").append(ksmpath).append(";\n").append("sleep 0.5;\n");
-                        sb.append("busybox echo ").append(vlast).append(" > ").append(ksmpath).append(";\n");
+                        sb.append("busybox echo 0 > ").append(ksmpath).append("/run;\n").append("sleep 0.5;\n");
+                        sb.append("busybox echo 2 > ").append(ksmpath).append("/run;\n").append("sleep 0.5;\n");
+                        sb.append("busybox echo ").append(vlast).append(" > ").append(ksmpath).append("/run;\n");
                         Helpers.shExec(sb,context,true);
 
                     }
@@ -215,26 +129,17 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
                 new Thread(runnable).start();
             }
         });
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (fromUser) {
-            if (seekBar.getId() == R.id.val1) {
-                edit1.setText(String.valueOf(progress));
+        ((Button) findViewById(R.id.ksm_settings)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent i = new Intent(context, KSMSetActivity.class);
+                i.putExtra("path",ksmpath);
+                i.putExtra("sob",KSM_SOB);
+                i.putExtra("pref","pref_ksm");
+                startActivity(i);
             }
-            else if (seekBar.getId() == R.id.val2) {
-                edit2.setText(String.valueOf(progress));
-            }
-        }
+        });
     }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
-
     @Override
     public void onResume() {
         if (mCurThread == null) {
@@ -297,6 +202,8 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
             if (ist3) t3.setText(Helpers.readOneLine(KSM_PAGESSHARING_PATH[ksm]));
             if (ist4) t4.setText(Helpers.readOneLine(KSM_PAGESVOLATILE_PATH[ksm]));
             if (ist5) t5.setText(Helpers.readOneLine(KSM_FULLSCANS_PATH[ksm]));
+            if (ist6) t6.setText(Helpers.readOneLine(KSM_SLEEP_TIMES_PATH[ksm]));
+            if (ist7) t7.setText(Helpers.readOneLine(KSM_PAGESSCANNED_PATH[ksm]));
         }
     };
 

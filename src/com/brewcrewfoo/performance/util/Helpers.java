@@ -28,8 +28,8 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Environment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import com.brewcrewfoo.performance.widget.PCWidget;
 
@@ -96,9 +96,9 @@ public class Helpers implements Constants {
         return null;
     }
 
-    public static String[] getAvailableIOSchedulers() {
+    public static String[] getAvailableIOSchedulers(String p) {
         String[] schedulers = null;
-        String[] aux = readStringArray(IO_SCHEDULER_PATH);
+        String[] aux = readStringArray(p);
         if (aux != null) {
             schedulers = new String[aux.length];
             for (byte i = 0; i < aux.length; i++) {
@@ -120,9 +120,9 @@ public class Helpers implements Constants {
         return null;
     }
 
-    public static String getIOScheduler() {
+    public static String getIOScheduler(String p) {
         String scheduler = null;
-        String[] schedulers = readStringArray(IO_SCHEDULER_PATH);
+        String[] schedulers = readStringArray(p);
         if (schedulers != null) {
             for (String s : schedulers) {
                 if (s.charAt(0) == '[') {
@@ -271,7 +271,7 @@ public class Helpers implements Constants {
     }
     public static boolean isZRAM() {
         CMDProcessor.CommandResult cr =new CMDProcessor().sh.runWaitFor(ISZRAM);
-        if(cr.success() && cr.stdout!=null && cr.stdout.length()>0) return true;
+        if((cr.success() && cr.stdout!=null && cr.stdout.length()>0)||(new File("/dev/block/zram0/").exists())||(new File("/sys/block/zram0/").exists())) return true;
         return false;
     }
     public static void get_assetsScript(String fn,Context c,String prefix,String postfix){
@@ -328,16 +328,18 @@ public class Helpers implements Constants {
         }
     }
     public static String shExec(StringBuilder s,Context c,Boolean su){
-        final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
-        new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
+        //final String dn=Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+TAG+"/logs";
+        //new CMDProcessor().sh.runWaitFor("busybox mkdir -p "+dn );
         get_assetsScript("run", c, "", s.toString());
         new CMDProcessor().sh.runWaitFor("busybox chmod 750 "+ c.getFilesDir()+"/run" );
         CMDProcessor.CommandResult cr=null;
         if(su){
-            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            //cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            cr=new CMDProcessor().su.runWaitFor(c.getFilesDir()+"/run");
         }
         else{
-            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            //cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run > " + dn + "/run.log 2>&1");
+            cr=new CMDProcessor().sh.runWaitFor(c.getFilesDir()+"/run");
         }
         if(cr.success()){
             return cr.stdout;
@@ -468,6 +470,32 @@ public class Helpers implements Constants {
         else{
             return null;
         }
+    }
+
+    public static String extSD(){
+        String externalsd="";
+
+        if(!TextUtils.isEmpty(System.getenv("SECONDARY_STORAGE"))){
+            final String externalstorage[]=System.getenv("SECONDARY_STORAGE").split(":");
+            for ( final String dirs : externalstorage ) {
+                final File dir= new File(dirs);
+                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() ) {
+                    externalsd=dirs;
+                    break;
+                }
+            }
+        }
+        else{
+            final String supported[]={"/mnt/extSdCard","/storage/sdcard1","/mnt/external_sd"};
+            for ( final String dirs : supported) {
+                final File dir= new File(dirs);
+                if ( dir.exists() && dir.isDirectory() && dir.canRead() && dir.canWrite() ) {
+                    externalsd=dirs;
+                    break;
+                }
+            }
+        }
+        return externalsd;
     }
 
 

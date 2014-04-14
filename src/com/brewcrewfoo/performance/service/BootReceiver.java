@@ -22,9 +22,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.brewcrewfoo.performance.util.Constants;
 
-public class BootReceiver extends BroadcastReceiver {
 
+public class BootReceiver extends BroadcastReceiver implements Constants {
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent service = new Intent(context, BootService.class);
