@@ -119,6 +119,13 @@ public class VoltageControlSettings extends Fragment implements Constants {
 					}
 				}
 			}
+            else if(vdd.equals(VDD_TABLE)) {
+                for (final Voltage volt : mVoltages) {
+                    if(!volt.getSavedMV().equals(volt.getCurrentMv())){
+                        sb.append("busybox echo \"").append(volt.getFreq()).append(" ").append(volt.getSavedMV()).append("\" > ").append(vdd).append(";\n");
+                    }
+                }
+            }
 			else{
 				final StringBuilder b = new StringBuilder();
 				for (final Voltage volt : mVoltages) {

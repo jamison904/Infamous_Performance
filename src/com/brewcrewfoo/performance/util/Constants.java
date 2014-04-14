@@ -21,7 +21,7 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.13";
+    public static final String VERSION_NUM = "2.1.14";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
@@ -175,6 +175,7 @@ public interface Constants {
     public static final String UV_MV_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/UV_mV_table";
     public static final String VDD_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/vdd_levels";
     public static final String COMMON_VDD_PATH = "/sys/devices/system/cpu/cpufreq/vdd_levels";
+    public static final String VDD_TABLE = "/sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels";
     public static final String VDD_SYSFS_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/vdd_sysfs_levels";
 
     //Tools
