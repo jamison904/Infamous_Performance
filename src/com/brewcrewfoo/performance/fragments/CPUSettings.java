@@ -303,8 +303,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 sb.append("fi;\n");
             }
             Helpers.shExec(sb,context,true);
-            updateSharedPrefs(PREF_GOV, selected);
             MainActivity.mCurGovernor[MainActivity.curcpu]=selected;
+            updateSharedPrefs(PREF_GOV, selected);
         }
         public void onNothingSelected(AdapterView<?> parent) {
             // Do nothing.
@@ -335,8 +335,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 }
             }
 			Helpers.shExec(sb,context,true);
-            updateSharedPrefs(PREF_IO, selected);
             MainActivity.mCurIO[MainActivity.curcpu]=selected;
+            updateSharedPrefs(PREF_IO, selected);
         }
         public void onNothingSelected(AdapterView<?> parent) {
             // Do nothing.
@@ -478,6 +478,16 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private void updateSharedPrefs(String var, String value) {
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(var, value).commit();
+        String def="";
+        for (int i = 0; i < MainActivity.nCpus; i++){
+            if(i==0)
+                def=MainActivity.mMinFreqSetting[i]+":"+MainActivity.mMaxFreqSetting[i]+":"+MainActivity.mCurGovernor[i];
+            else
+                def=def+":"+MainActivity.mMinFreqSetting[i]+":"+MainActivity.mMaxFreqSetting[i]+":"+MainActivity.mCurGovernor[i];
+        }
+        Intent intent = new Intent(INTENT_PP);
+        intent.putExtra("defaults", def);
+        context.sendBroadcast(intent);
         //Helpers.updateAppWidget(context);
     }
 

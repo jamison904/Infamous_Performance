@@ -243,6 +243,7 @@ public interface Constants {
     public static final String PREF_WIDGET_BG_COLOR = "widget_bg_color";
     public static final String PREF_WIDGET_TEXT_COLOR = "widget_text_color";
 
+    public static final String INTENT_PP="com.h0rn3t.performanceprofile.change_system";
 }
 
 
