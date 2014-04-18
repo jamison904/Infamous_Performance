@@ -478,15 +478,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private void updateSharedPrefs(String var, String value) {
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(var, value).commit();
-        String def="";
-        for (int i = 0; i < MainActivity.nCpus; i++){
-            if(i==0)
-                def=MainActivity.mMinFreqSetting[i]+":"+MainActivity.mMaxFreqSetting[i]+":"+MainActivity.mCurGovernor[i];
-            else
-                def=def+":"+MainActivity.mMinFreqSetting[i]+":"+MainActivity.mMaxFreqSetting[i]+":"+MainActivity.mCurGovernor[i];
-        }
+
         Intent intent = new Intent(INTENT_PP);
-        intent.putExtra("defaults", def);
+        intent.putExtra("from",TAG);
         context.sendBroadcast(intent);
         //Helpers.updateAppWidget(context);
     }

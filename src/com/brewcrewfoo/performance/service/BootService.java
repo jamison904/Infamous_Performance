@@ -43,7 +43,6 @@ import java.util.List;
 
 
 public class BootService extends Service implements Constants {
-    public static boolean servicesStarted = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -521,7 +520,10 @@ public class BootService extends Service implements Constants {
                     nm.notify(1337, n);//1337
                 }
             }
-            servicesStarted = true;
+            Intent intent = new Intent(INTENT_PP);
+            intent.putExtra("from",TAG);
+            c.sendBroadcast(intent);
+
             stopSelf();
         }
 	}
