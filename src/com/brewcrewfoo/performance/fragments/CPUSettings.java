@@ -303,8 +303,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 sb.append("fi;\n");
             }
             Helpers.shExec(sb,context,true);
-            updateSharedPrefs(PREF_GOV, selected);
             MainActivity.mCurGovernor[MainActivity.curcpu]=selected;
+            updateSharedPrefs(PREF_GOV, selected);
         }
         public void onNothingSelected(AdapterView<?> parent) {
             // Do nothing.
@@ -335,8 +335,8 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 }
             }
 			Helpers.shExec(sb,context,true);
-            updateSharedPrefs(PREF_IO, selected);
             MainActivity.mCurIO[MainActivity.curcpu]=selected;
+            updateSharedPrefs(PREF_IO, selected);
         }
         public void onNothingSelected(AdapterView<?> parent) {
             // Do nothing.
@@ -452,7 +452,11 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 while (!mInterrupt) {
                     sleep(600);
                     if(new File(CUR_CPU_PATH.replace("cpu0","cpu"+MainActivity.curcpu)).exists()){
-                        mCurCPUHandler.sendMessage(mCurCPUHandler.obtainMessage(0,Helpers.readOneLine(CUR_CPU_PATH.replace("cpu0","cpu"+MainActivity.curcpu))));
+                        final String curfreq=Helpers.readOneLine(CUR_CPU_PATH.replace("cpu0","cpu"+MainActivity.curcpu));
+                        if((curfreq!=null)&&(curfreq.length()>0))
+                            mCurCPUHandler.sendMessage(mCurCPUHandler.obtainMessage(0,curfreq));
+                        else
+                            mCurCPUHandler.sendMessage(mCurCPUHandler.obtainMessage(0,"0"));
                     }
                     else{
                         mCurCPUHandler.sendMessage(mCurCPUHandler.obtainMessage(0,"0"));
@@ -474,6 +478,10 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private void updateSharedPrefs(String var, String value) {
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(var, value).commit();
+
+        Intent intent = new Intent(INTENT_PP);
+        intent.putExtra("from",TAG);
+        context.sendBroadcast(intent);
         //Helpers.updateAppWidget(context);
     }
 

@@ -64,10 +64,8 @@ get_cpu(){
     local r="";
     local gov=`busybox cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`;
     local io=`busybox awk -F'[][]' '{print $2}' /sys/block/mmcblk0/queue/scheduler`;
-    local max=0;
-    local min=0;
-    for c in `busybox seq 0 $ncpus`; do
 
+    for c in `busybox seq 0 $ncpus`; do
         if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq ]; then
             max=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_max_freq`;
         fi;
@@ -77,6 +75,10 @@ get_cpu(){
         if busybox [ -f /sys/power/cpufreq_max_limit ]; then
             max=`busybox cat /sys/power/cpufreq_max_limit`;
         fi;
+        if busybox [ "X$max" == "X" ]; then
+            max=0;
+        fi;
+
 
         if busybox [ -f /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq ]; then
             min=`busybox cat /sys/devices/system/cpu/cpu$c/cpufreq/scaling_min_freq`;
@@ -84,10 +86,18 @@ get_cpu(){
         if busybox [ -f /sys/power/cpufreq_min_limit ]; then
             min=`busybox cat /sys/power/cpufreq_min_limit`;
         fi;
-        online=1;
-        if busybox [ -f /sys/devices/system/cpu/cpu0/online ]; then
-            online=`busybox cat /sys/devices/system/cpu/cpu0/online`;
+        if busybox [ "X$min" == "X" ]; then
+            min=0;
         fi;
+
+        local online=1;
+        if busybox [ -f /sys/devices/system/cpu/cpu$c/online ]; then
+            online=`busybox cat /sys/devices/system/cpu/cpu$c/online`;
+        fi;
+        if busybox [ "X$online" == "X" ]; then
+            online=0;
+        fi;
+
 
         if busybox [ "X$r" == "X" ]; then
             r="$min:$max:$gov:$io:$online";

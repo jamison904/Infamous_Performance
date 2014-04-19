@@ -169,6 +169,10 @@ public class Helpers implements Constants {
             setVoltagePath(UV_MV_PATH);
             return true;
         }
+        else if (new File(VDD_TABLE).exists()) {
+            setVoltagePath(VDD_TABLE);
+            return true;
+        }
         /*else if (new File(VDD_SYSFS_PATH).exists()) {
             setVoltagePath(VDD_SYSFS_PATH);
             return true;
@@ -185,7 +189,7 @@ public class Helpers implements Constants {
     }
 
     public static String toMHz(String mhzString) {
-        if(mhzString==null) return "";
+        if((mhzString==null)||(mhzString.length()<=0)) return "";
         else return String.valueOf(Integer.parseInt(mhzString) / 1000) + " MHz";
     }
 
