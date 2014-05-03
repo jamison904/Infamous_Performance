@@ -19,7 +19,7 @@ Copyright (C) 2012  James Roberts
 
 <resources>
 
-    <string name="app_name">Performance Control</string>
+    <string name="app_name">Infamous Performance</string>
     <!-- Main tabs -->
     <string-array name="tabs">
         <item>CPU Settings</item>
@@ -431,4 +431,28 @@ Copyright (C) 2012  James Roberts
     <string name="ksm_sleep_times">Sleep times:</string>
     <string name="ksm_pages_scanned">Pages Scanned:</string>
     <string name="info_auto_sd">Leave blank for autodetection</string>
+	<!--Infamous-->
+	<string name="devs">The Crew</string>
+	<string name="iokp">Infamous Open Kang Project</string>
+    <string name="iokp_website_title">IOKP Website</string>
+    <string name="iokp_website_summary">Our Forum and News</string>
+    <string name="iokp_download_title">IOKP Downloads</string>
+    <string name="iokp_download_summary">Androidfilehost.com</string>
+    <string name="iokp_changelog_title">Change Log</string>
+    <string name="iokp_changelog_summary">Link to thread</string>
+    <string name="iokp_review_title">mGerrit</string>
+    <string name="iokp_review_summary">View IOKP\'s and AOSP\'s Gerrit Review instances quickly and easily</string>
+    <string name="aokp_irc_title">Join us on IRC</string>
+    <string name="aokp_irc_summary">#teamkang @ irc.freenode.net</string>
+    <string name="about_iokp">About IOKP</string>
+    <string name="about_iokp_summary">@null</string>
+    <string name="donate_iokp">http://goo.gl/V01Vqx
+    </string>
+    <string name="github_iokp">https://github.com/IOKP</string>
+    <string name="github_midnightRider67">https://github.com/MidnightRider67</string>
+    <string name="github_djmatt604">https://github.com/djmatt604</string>
+    <string name="github_octane70">https://github.com/Octane70</string>
+    <string name="github_mgbotoe">https://github.com/mgbotoe</string>
+    <string name="github_jamison904">https://github.com/jamison904</string>
+    <string name="github_mrimp">https://github.com/mrimp</string>
 </resources>
