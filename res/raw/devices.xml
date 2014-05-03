@@ -21,9 +21,9 @@ File contain partitions layout for flashing kernel & recovery
         <recovery>/dev/block/mmcblk0p6</recovery>
         <cache>/dev/block/mmcblk0p8</cache>
     </device>
-    <!-- GALAXY S IV,NEXUS 4,XPERIA Z,Samsung Galaxy S4 SGH-M919 -->
+    <!-- GALAXY S IV,NEXUS 4,XPERIA Z,Samsung Galaxy S4 SGH-M919 SM-N900T -->
     <device>
-        <model>GT-I9505,Nexus 4,LG-E960,C6603,SGH-M919</model>
+        <model>GT-I9505,Nexus 4,LG-E960,C6603,SGH-M919,SM-N900T</model>
         <kernel>/dev/block/platform/msm_sdcc.1/by-name/boot</kernel>
         <recovery>/dev/block/platform/msm_sdcc.1/by-name/recovery</recovery>
         <cache>/dev/block/platform/msm_sdcc.1/by-name/cache</cache>
