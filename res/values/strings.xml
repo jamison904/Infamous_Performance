@@ -435,9 +435,9 @@ Copyright (C) 2012  James Roberts
 	<!--Infamous-->
 	<string name="devs">The Crew</string>
 	<string name="iokp">Infamous Open Kang Project</string>
-    <string name="iokp_website_title">IOKP Website</string>
+    <string name="iokp_website_title">Infamous Website</string>
     <string name="iokp_website_summary">Our Forum and News</string>
-    <string name="iokp_download_title">IOKP Downloads</string>
+    <string name="iokp_download_title">Downloads</string>
     <string name="iokp_download_summary">Androidfilehost.com</string>
     <string name="iokp_changelog_title">Change Log</string>
     <string name="iokp_changelog_summary">Link to thread</string>
@@ -445,7 +445,7 @@ Copyright (C) 2012  James Roberts
     <string name="iokp_review_summary">View IOKP\'s and AOSP\'s Gerrit Review instances quickly and easily</string>
     <string name="aokp_irc_title">Join us on IRC</string>
     <string name="aokp_irc_summary">#teamkang @ irc.freenode.net</string>
-    <string name="about_iokp">About IOKP</string>
+    <string name="about_iokp">About Infamous</string>
     <string name="about_iokp_summary">@null</string>
     <string name="donate_iokp">http://goo.gl/V01Vqx
     </string>
@@ -456,4 +456,12 @@ Copyright (C) 2012  James Roberts
     <string name="github_mgbotoe">https://github.com/mgbotoe</string>
     <string name="github_jamison904">https://github.com/jamison904</string>
     <string name="github_mrimp">https://github.com/mrimp</string>
+    <string name="github_jovy23">https://github.com/Jovy23</string>
+    <string name="github_inphamous36">https://github.com/inphamous36</string>
+    <string name="github_nolinuxnoparty">https://github.com/nolinuxnoparty</string>
+    <string name="github_xxWhiterhinoxx">https://github.com/XxWhiterhinoxX</string>
+    <string name="github_pr0xyman1ac">https://github.com/Pr0xyman1ac</string>
+    <string name="github_lowendgeek">https://github.com/LowEndGeek</string>
+    <string name="github_gharrington">https://github.com/gharrington</string>
+    <string name="github_pio-masaki">https://github.com/Pio-masaki</string>
 </resources>
