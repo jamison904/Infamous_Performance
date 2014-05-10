@@ -124,7 +124,7 @@ public class MainActivity extends Activity implements Constants,ActivityThemeCha
                             frags[j] = new Tools();
                             break;
 			case 9:
-                            frags[j] = new AboutInfamous();
+                            frags[j] = new About();
                             break;
                     }
                     j++;

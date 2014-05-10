@@ -465,4 +465,19 @@ Copyright (C) 2012  James Roberts
     <string name="github_gharrington">https://github.com/gharrington</string>
     <string name="github_piomasaki">https://github.com/Pio-masaki</string>
     <string name="github_zDeuce2">https://github.com/ZDeuce2</string>
+    <!-- About IOAP -->
+    <string name="about_ioap_settings_title">About IOAP</string>
+    <string name="about_ioap">About IOAP</string>
+    <string name="about_ioap_summary">@null</string>
+    <string name="contributors_title">Contributor(s)</string>
+    <string name="devs">Developer(s)</string>
+    <string name="facebook_ioap">http://www.facebook.com/Infamous</string>
+    <string name="gplus_ioap">https://plus.google.com/+Infamous</string>
+    <string name="name_ioap">IOAP</string>
+    <string name="github_ioap">https://github.com/IOAP</string>
+    <string name="email_ioap">infamous@gmail.com</string>
+    <string name="twitter_ioap">IOKP</string>
+    <string name="ioap_site_title">IOAP Website</string>
+    <string name="ioap_site_summary">Visit the IOAP website for latest news.</string>
+    <string name="google_ioap">https://plus.google.com/+Infamous/about</string>
 </resources>

@@ -1,6 +1,6 @@
 /*
  * Infamous Performance - An Android CPU Control application Copyright (C) 2014
- * Jamison904
+ * Jamison904 and Mrimp
  * 
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.net.Uri;
 import android.preference.*;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -38,6 +39,9 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.preference.Preference;
+import android.preference.PreferenceGroup;
+import android.preference.PreferenceScreen;
 
 import com.infamous.performance.R;
 import com.infamous.performance.activities.KSMActivity;
@@ -52,19 +56,56 @@ import com.infamous.performance.util.Helpers;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
-public class AboutInfamous extends PreferenceFragment implements OnSharedPreferenceChangeListener
-{
+public class About extends SettingsPreferenceFragment {
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences p1, String p2)
-	{
-		// TODO: Implement this method and add dev cards as well as links to infamous. This is only a hold
-	}
+	public static final String TAG = "About";
 
-    SharedPreferences mPreferences;
-	
-	@Override
+    Preference mSiteUrl;
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); } 
-		}
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.about_rom);
+        mSiteUrl = findPreference("ioap_site");
+
+        PreferenceGroup devsGroup = (PreferenceGroup) findPreference("devs");
+        ArrayList<Preference> devs = new ArrayList<Preference>();
+        for (int i = 0; i < devsGroup.getPreferenceCount(); i++) {
+            devs.add(devsGroup.getPreference(i));
+        }
+        devsGroup.removeAll();
+        devsGroup.setOrderingAsAdded(false);
+        Collections.shuffle(devs);
+        for(int i = 0; i < devs.size(); i++) {
+            Preference p = devs.get(i);
+            p.setOrder(i);
+
+            devsGroup.addPreference(p);
+        }
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == mSiteUrl) {
+            launchUrl("http://www.infamousdevelopment.com");
+        }
+
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
+    }
+
+    private void launchUrl(String url) {
+        Uri uriUrl = Uri.parse(url);
+        Intent donate = new Intent(Intent.ACTION_VIEW, uriUrl);
+        getActivity().startActivity(donate);
+        Intent github = new Intent(Intent.ACTION_VIEW, uriUrl);
+        getActivity().startActivity(github);
+        Intent google = new Intent(Intent.ACTION_VIEW, uriUrl);
+        getActivity().startActivity(google);
+        Intent facebook = new Intent(Intent.ACTION_VIEW, uriUrl);
+        getActivity().startActivity(facebook);
+    }
+}
